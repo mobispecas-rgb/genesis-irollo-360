@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genesis iRollo 360 — MOBIS</title>
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f2f2f7;
+  --bg2:#ffffff;
+  --bg3:#f9f9fb;
+  --tx:#1c1c1e;
+  --tx2:#3a3a3c;
+  --tx3:#8e8e93;
+  --sep:#d1d1d6;
+  --sep2:#e5e5ea;
+  --ac:#e94560;
+  --ac-soft:rgba(233,69,96,.08);
+  --ac-med:rgba(233,69,96,.18);
+  --gr:#34c759;
+  --gr-soft:rgba(52,199,89,.1);
+  --ye:#ff9500;
+  --ye-soft:rgba(255,149,0,.1);
+  --re:#ff3b30;
+  --re-soft:rgba(255,59,48,.1);
+  --bl:#007aff;
+  --bl-soft:rgba(0,122,255,.1);
+  --pu:#af52de;
+  --pu-soft:rgba(175,82,222,.1);
+  --frozen-bg:#1c1c1e;
+  --frozen-border:#3a3a3c;
+  --mono:'JetBrains Mono',monospace;
+  --r:12px;
+  --r2:16px;
+  --r3:20px;
+  --sh:0 2px 12px rgba(0,0,0,.06);
+  --sh2:0 8px 32px rgba(0,0,0,.12);
+  --sh3:0 20px 60px rgba(0,0,0,.18);
+}
+
+html,body{height:100%;font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;-webkit-font-smoothing:antialiased}
+
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes su{from{opacity:0;transform:scale(.96) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes slideRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(233,69,96,.3)}70%{box-shadow:0 0 0 10px rgba(233,69,96,0)}}
+@keyframes freezeAnim{0%{transform:scale(1)}50%{transform:scale(.95)}100%{transform:scale(1)}}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#1c1c1e 0%,#2c2c2e 40%,#1c1c1e 100%)}
+#login-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 0%,rgba(233,69,96,.15),transparent)}
+.lc{background:rgba(255,255,255,.06);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid rgba(255,255,255,.1);border-radius:28px;padding:52px;width:420px;box-shadow:0 40px 80px rgba(0,0,0,.6);animation:su .6s cubic-bezier(.16,1,.3,1);position:relative}
+.lc-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.lc-icon{width:48px;height:48px;background:linear-gradient(135deg,var(--ac),#c73652);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 8px 24px rgba(233,69,96,.4)}
+.lc h2{font-size:24px;font-weight:700;color:#fff;letter-spacing:-.5px}.lc h2 span{color:var(--ac)}
+.lc .sub{font-size:11px;color:rgba(255,255,255,.4);font-family:var(--mono);letter-spacing:2px;text-transform:uppercase;margin-bottom:32px}
+.lc label{font-size:12px;font-weight:500;color:rgba(255,255,255,.5);display:block;margin-bottom:6px;letter-spacing:.3px}
+.lc input{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:13px 16px;font-size:14px;outline:none;margin-bottom:14px;transition:all .2s;color:#fff;font-family:inherit}
+.lc input::placeholder{color:rgba(255,255,255,.25)}
+.lc input:focus{border-color:var(--ac);background:rgba(255,255,255,.1);box-shadow:0 0 0 3px rgba(233,69,96,.2)}
+.lc .err{background:rgba(255,59,48,.15);border:1px solid rgba(255,59,48,.3);color:#ff6b6b;font-size:12px;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:none}
+.lc .hint{text-align:center;font-size:11px;color:rgba(255,255,255,.3);margin-top:16px;font-family:var(--mono)}.lc .hint b{color:rgba(255,255,255,.6)}
+
+/* CLAUDE-STYLE BUTTON */
+.btn-claude{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border-radius:100px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:all .2s;text-decoration:none;white-space:nowrap;letter-spacing:-.1px}
+.btn-primary{background:linear-gradient(135deg,var(--ac) 0%,#c73652 100%);color:#fff;box-shadow:0 4px 16px rgba(233,69,96,.35)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(233,69,96,.45)}
+.btn-primary:active{transform:scale(.98)}
+.btn-claude.full{width:100%;justify-content:center}
+
+/* APP LAYOUT */
+#app{display:none;height:100vh;flex-direction:row}
+#app.on{display:flex}
+
+/* SIDEBAR NAV — Apple style */
+nav{width:260px;flex-shrink:0;background:rgba(255,255,255,.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-right:1px solid var(--sep2);display:flex;flex-direction:column;overflow:hidden}
+.logo-area{padding:20px 20px 16px;border-bottom:1px solid var(--sep2)}
+.logo-row{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--ac),#c73652);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;box-shadow:0 4px 12px rgba(233,69,96,.3)}
+.logo-name{font-size:16px;font-weight:700;letter-spacing:-.4px;color:var(--tx)}
+.logo-name span{color:var(--ac)}
+.logo-ver{font-size:10px;color:var(--tx3);font-family:var(--mono);margin-top:1px}
+
+.nav-section{padding:8px 12px 4px;font-size:11px;font-weight:600;color:var(--tx3);letter-spacing:.8px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;transition:all .15s;margin:1px 8px;color:var(--tx2);font-size:13px;font-weight:500;text-decoration:none}
+.nav-item:hover{background:rgba(0,0,0,.05)}
+.nav-item.active{background:var(--ac-soft);color:var(--ac);font-weight:600}
+.nav-item .ni{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--sep2)}
+.nav-item.active .ni{background:var(--ac-med)}
+.nav-badge{margin-left:auto;background:var(--ac);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;font-family:var(--mono)}
+
+.nav-footer{margin-top:auto;padding:16px;border-top:1px solid var(--sep2)}
+.user-row{display:flex;align-items:center;gap:10px}
+.user-av{width:36px;height:36px;background:linear-gradient(135deg,var(--ac),var(--bl));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:700;flex-shrink:0}
+.user-name{font-size:13px;font-weight:600;color:var(--tx)}
+.user-role{font-size:11px;color:var(--tx3);font-family:var(--mono)}
+.btn-logout{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--tx3);font-size:18px;transition:color .2s}.btn-logout:hover{color:var(--re)}
+
+/* MAIN AREA */
+.ab{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+
+/* TOPBAR */
+.topbar{height:56px;flex-shrink:0;background:rgba(255,255,255,.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--sep2);display:flex;align-items:center;padding:0 24px;gap:14px}
+.topbar-title{flex:1;font-size:17px;font-weight:600;letter-spacing:-.3px;color:var(--tx)}
+.topbar-title span{color:var(--ac)}
+.status-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:600;font-family:var(--mono);letter-spacing:.5px;border:1px solid transparent}
+.status-pill.on{background:var(--gr-soft);border-color:rgba(52,199,89,.25);color:#1d7a3a}
+.status-pill.off{background:var(--re-soft);border-color:rgba(255,59,48,.2);color:var(--re)}
+.status-pill.wait{background:var(--ye-soft);border-color:rgba(255,149,0,.2);color:#a05a00}
+.status-dot{width:6px;height:6px;border-radius:50%;animation:blink 2s infinite}
+.on .status-dot{background:var(--gr)}.off .status-dot{background:var(--re)}.wait .status-dot{background:var(--ye)}
+
+/* AÇÃO RÁPIDA — Claude style buttons */
+.quick-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:100px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:all .2s;letter-spacing:-.1px}
+.qb-primary{background:linear-gradient(135deg,var(--ac),#c73652);color:#fff;box-shadow:0 2px 8px rgba(233,69,96,.3)}
+.qb-primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(233,69,96,.4)}
+.qb-ghost{background:rgba(0,0,0,.05);color:var(--tx2);border:1px solid var(--sep)}
+.qb-ghost:hover{background:rgba(0,0,0,.08)}
+.qb-purple{background:linear-gradient(135deg,var(--pu),#7c3aed);color:#fff;box-shadow:0 2px 8px rgba(175,82,222,.3)}
+.qb-purple:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(175,82,222,.4)}
+.qb-green{background:linear-gradient(135deg,var(--gr),#16a34a);color:#fff;box-shadow:0 2px 8px rgba(52,199,89,.3)}
+.qb-green:hover{transform:translateY(-1px)}
+
+/* MAIN SCROLL AREA */
+main{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px}
+.page{display:none;animation:fi .3s ease}
+.page.on{display:block}
+
+/* STATS STRIP */
+.stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.stat-card{background:var(--bg2);border-radius:var(--r2);padding:16px 18px;box-shadow:var(--sh);border:1px solid var(--sep2);transition:transform .2s}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-icon{font-size:20px;margin-bottom:8px}
+.stat-val{font-size:26px;font-weight:700;letter-spacing:-1px;line-height:1;font-family:var(--mono)}
+.stat-label{font-size:10px;color:var(--tx3);letter-spacing:.8px;text-transform:uppercase;margin-top:4px;font-weight:600}
+.s-green .stat-val{color:var(--gr)}.s-blue .stat-val{color:var(--bl)}
+.s-orange .stat-val{color:var(--ye)}.s-red .stat-val{color:var(--re)}.s-purple .stat-val{color:var(--pu)}
+
+/* SEÇÃO HEADER */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.sec-title{font-size:18px;font-weight:700;letter-spacing:-.4px}
+.sec-title span{color:var(--ac)}
+.sec-sub{font-size:12px;color:var(--tx3);font-family:var(--mono);margin-top:2px}
+
+/* PRODUTO CARDS GRID */
+.produtos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+
+.prod-card{background:var(--bg2);border-radius:var(--r2);overflow:hidden;border:1.5px solid var(--sep2);box-shadow:var(--sh);cursor:pointer;transition:all .25s;position:relative}
+.prod-card:hover{transform:translateY(-3px);box-shadow:var(--sh2);border-color:var(--ac)}
+.prod-card.frozen{border-color:var(--frozen-border)}
+.prod-card.frozen::after{content:'🔒';position:absolute;top:8px;right:8px;font-size:14px;background:var(--frozen-bg);padding:4px 6px;border-radius:8px}
+.prod-card.selected{border-color:var(--ac);box-shadow:0 0 0 3px rgba(233,69,96,.15),var(--sh2)}
+
+/* Imagem do card */
+.card-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#f2f2f7,#e5e5ea);display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:contain;padding:12px}
+.card-img-placeholder{opacity:.4}
+.card-status-badge{position:absolute;top:8px;left:8px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:100px;letter-spacing:.8px;text-transform:uppercase;font-family:var(--mono)}
+.badge-rascunho{background:#e5e5ea;color:#6e6e73}
+.badge-enriquecido{background:var(--bl-soft);color:var(--bl);border:1px solid rgba(0,122,255,.2)}
+.badge-conferido{background:var(--ye-soft);color:#a05a00;border:1px solid rgba(255,149,0,.2)}
+.badge-congelado{background:#1c1c1e;color:#fff}
+
+.card-body{padding:12px}
+.card-nome{font-size:12px;font-weight:600;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--tx)}
+.card-cod{font-size:10px;color:var(--tx3);font-family:var(--mono);margin-bottom:8px}
+.card-nct{display:flex;align-items:center;gap:6px}
+.nct-bar-wrap{flex:1;height:4px;background:var(--sep2);border-radius:10px;overflow:hidden}
+.nct-bar-fill{height:100%;border-radius:10px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.nct-val{font-size:10px;font-weight:700;font-family:var(--mono)}
+
+.card-actions{display:flex;gap:6px;margin-top:10px}
+.card-btn{flex:1;padding:6px;border-radius:8px;font-size:11px;font-weight:600;border:none;cursor:pointer;transition:all .15s;font-family:inherit}
+.cb-enrich{background:var(--ac-soft);color:var(--ac)}.cb-enrich:hover{background:var(--ac-med)}
+.cb-view{background:var(--bl-soft);color:var(--bl)}.cb-view:hover{background:rgba(0,122,255,.18)}
+
+/* PAINEL LATERAL */
+#painel{position:fixed;top:0;right:0;bottom:0;width:480px;background:var(--bg2);border-left:1px solid var(--sep2);box-shadow:-20px 0 60px rgba(0,0,0,.12);z-index:200;display:flex;flex-direction:column;animation:slideRight .3s cubic-bezier(.16,1,.3,1);overflow:hidden}
+#painel.hidden{display:none}
+
+.painel-top{padding:20px 24px 16px;border-bottom:1px solid var(--sep2);display:flex;align-items:flex-start;gap:12px;flex-shrink:0}
+.painel-close{background:rgba(0,0,0,.06);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--tx3);transition:all .15s;flex-shrink:0}
+.painel-close:hover{background:var(--re-soft);color:var(--re)}
+.painel-prod-nome{font-size:16px;font-weight:700;letter-spacing:-.3px;line-height:1.3;flex:1}
+.painel-cod{font-size:11px;color:var(--tx3);font-family:var(--mono);margin-top:2px}
+
+.painel-scroll{flex:1;overflow-y:auto;padding:20px 24px}
+.painel-scroll::-webkit-scrollbar{width:4px}
+.painel-scroll::-webkit-scrollbar-track{background:transparent}
+.painel-scroll::-webkit-scrollbar-thumb{background:var(--sep);border-radius:10px}
+
+/* Imagem no painel */
+.painel-img-box{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#f2f2f7,#e5e5ea);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;font-size:64px;margin-bottom:16px;position:relative;overflow:hidden;border:1px solid var(--sep2)}
+.painel-img-box img{width:100%;height:100%;object-fit:contain;padding:16px}
+.btn-trocar-img{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:100px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);transition:all .2s;font-family:inherit}
+.btn-trocar-img:hover{background:rgba(0,0,0,.8)}
+
+/* Agentes IA */
+.agentes-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.agente-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:100px;font-size:12px;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.ag-gemini{background:linear-gradient(135deg,#4285f4,#34a853);color:#fff}
+.ag-cdc{background:linear-gradient(135deg,#ff6d00,#ff9500);color:#fff}
+.ag-bula{background:linear-gradient(135deg,#0f3460,#1565c0);color:#fff}
+.ag-aplicacao{background:linear-gradient(135deg,#6a1b9a,#9c27b0);color:#fff}
+.ag-fiscal{background:linear-gradient(135deg,#1b5e20,#388e3c);color:#fff}
+.agente-btn:hover{transform:translateY(-1px);opacity:.9}
+
+/* Campos do painel */
+.campo-grupo{margin-bottom:14px}
+.campo-label{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.campo-label .lock-icon{font-size:12px}
+.campo-wrap{position:relative;display:flex;align-items:center;gap:8px}
+.campo-input{flex:1;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;font-family:inherit;color:var(--tx);outline:none;background:#fff;transition:all .2s}
+.campo-input:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(233,69,96,.08)}
+.campo-input.frozen{background:var(--frozen-bg);color:#a0ffa0;border-color:var(--frozen-border);font-family:var(--mono);font-size:12px;cursor:not-allowed}
+.campo-input.ia-sugestao{border-color:var(--bl);background:var(--bl-soft)}
+
+/* Botão congelar campo */
+.btn-freeze-campo{background:none;border:1.5px solid var(--sep);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:14px;transition:all .2s;flex-shrink:0;color:var(--tx3)}
+.btn-freeze-campo:hover{border-color:var(--frozen-border);background:var(--frozen-bg);color:#fff}
+.btn-freeze-campo.frozen{background:var(--frozen-bg);border-color:var(--frozen-border);color:#a0ffa0;animation:freezeAnim .3s ease}
+.campo-ia-tag{font-size:9px;font-weight:700;background:var(--bl-soft);color:var(--bl);padding:2px 6px;border-radius:100px;font-family:var(--mono);letter-spacing:.5px}
+
+/* NCT no painel */
+.nct-painel{background:linear-gradient(135deg,#1c1c1e,#2c2c2e);border-radius:var(--r2);padding:18px;margin-bottom:16px;color:#fff}
+.nct-label-sm{font-size:9px;font-family:var(--mono);letter-spacing:2px;color:#8e8e93;text-transform:uppercase;margin-bottom:4px}
+.nct-score-big{font-size:36px;font-weight:700;font-family:var(--mono);line-height:1}
+.nct-barras{margin-top:12px;display:flex;flex-direction:column;gap:7px}
+.nct-linha{display:flex;align-items:center;gap:8px}
+.nct-tag{font-size:9px;color:#8e8e93;font-family:var(--mono);width:90px;text-transform:uppercase;letter-spacing:.5px}
+.nct-track{flex:1;height:4px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden}
+.nct-fill{height:100%;border-radius:10px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.nct-pct{font-size:9px;color:#8e8e93;font-family:var(--mono);width:30px;text-align:right}
+
+/* RAST-HASH */
+.hash-box{background:#0f0f0f;border:1px solid #2c2c2e;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s;margin-bottom:16px}
+.hash-box:hover{border-color:var(--pu)}
+.hash-label{font-size:9px;color:#6e6e73;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
+.hash-val{font-family:var(--mono);font-size:12px;color:var(--pu);letter-spacing:2px;flex:1}
+
+/* Botões finais do painel */
+.painel-footer{padding:16px 24px;border-top:1px solid var(--sep2);flex-shrink:0;display:flex;flex-direction:column;gap:10px;background:var(--bg3)}
+.btn-congelar-tudo{width:100%;padding:14px;border-radius:14px;font-size:15px;font-weight:700;border:none;cursor:pointer;background:linear-gradient(135deg,#1c1c1e,#3a3a3c);color:#fff;transition:all .2s;font-family:inherit;letter-spacing:-.2px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-congelar-tudo:hover{background:linear-gradient(135deg,#2c2c2e,#48484a);transform:translateY(-1px)}
+.btn-congelar-tudo.all-frozen{background:linear-gradient(135deg,#1a3a1a,#1d4a1d);color:#a0ffa0}
+.btn-salvar-bling{width:100%;padding:12px;border-radius:14px;font-size:14px;font-weight:700;border:none;cursor:pointer;background:linear-gradient(135deg,#ff6a00,#ff9500);color:#fff;transition:all .2s;font-family:inherit;letter-spacing:-.2px}
+.btn-salvar-bling:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,106,0,.35)}
+
+/* LOADING */
+.sp{width:18px;height:18px;border:2px solid var(--sep);border-top-color:var(--ac);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+.loading-area{display:flex;flex-direction:column;align-items:center;padding:80px 24px;gap:14px}
+.loading-area p{font-size:13px;color:var(--tx3);font-family:var(--mono)}
+
+/* TOAST */
+.toast-container{position:fixed;bottom:28px;right:28px;display:flex;flex-direction:column;gap:8px;z-index:9998}
+.toast{background:rgba(28,28,30,.95);backdrop-filter:blur(20px);color:#fff;border-radius:14px;padding:13px 18px;font-size:13px;max-width:340px;display:flex;align-items:center;gap:10px;box-shadow:0 12px 32px rgba(0,0,0,.3);animation:fi .3s ease;border:1px solid rgba(255,255,255,.08)}
+.toast.s{border-left:3px solid var(--gr)}.toast.e{border-left:3px solid var(--re)}
+.toast.w{border-left:3px solid var(--ye)}.toast.i{border-left:3px solid var(--bl)}
+
+/* BUSCA IMAGENS MODAL */
+.img-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);z-index:500;display:none;align-items:center;justify-content:center}
+.img-modal.on{display:flex}
+.img-modal-box{background:var(--bg2);border-radius:24px;padding:28px;width:660px;max-width:95vw;max-height:85vh;overflow-y:auto;box-shadow:var(--sh3);animation:su .3s cubic-bezier(.16,1,.3,1)}
+.img-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.img-modal-title{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.img-close{background:rgba(0,0,0,.06);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--tx3);transition:all .15s}
+.img-close:hover{background:var(--re-soft);color:var(--re)}
+.img-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.img-item{border:2px solid var(--sep2);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;aspect-ratio:1;position:relative;background:var(--bg)}
+.img-item:hover{border-color:var(--ac);transform:scale(1.02)}
+.img-item.sel{border-color:var(--gr);box-shadow:0 0 0 3px rgba(52,199,89,.2)}
+.img-item.sel::after{content:'✓';position:absolute;top:6px;right:6px;background:var(--gr);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.img-item img{width:100%;height:100%;object-fit:contain;padding:8px}
+.img-conf{position:absolute;bottom:4px;left:4px;font-size:9px;font-weight:700;background:rgba(0,0,0,.6);color:#fff;padding:2px 6px;border-radius:6px;font-family:var(--mono)}
+.img-btn-confirmar{width:100%;margin-top:16px;padding:13px;border-radius:14px;background:linear-gradient(135deg,var(--gr),#16a34a);color:#fff;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s}
+.img-btn-confirmar:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(52,199,89,.35)}
+
+/* PILL STATUS */
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-family:var(--mono)}
+.pill-gray{background:#e5e5ea;color:#6e6e73}
+.pill-blue{background:var(--bl-soft);color:var(--bl)}
+.pill-orange{background:var(--ye-soft);color:#a05a00}
+.pill-dark{background:#1c1c1e;color:#fff}
+.pill-green{background:var(--gr-soft);color:#1d7a3a}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:80px 24px;color:var(--tx3)}
+.empty-icon{font-size:56px;margin-bottom:16px;opacity:.3}
+.empty p{font-size:15px;font-weight:500}
+.empty small{font-size:13px;opacity:.7;font-family:var(--mono)}
+
+/* OVERLAY para fechar painel */
+#overlay{position:fixed;inset:0;z-index:199;display:none}
+#overlay.on{display:block}
+
+/* DIVISOR */
+.div{height:1px;background:var(--sep2);margin:16px 0}
+</style>
+</head>
+<body>
+
+<div class="toast-container" id="toasts"></div>
+
+<!-- MODAL IMAGENS -->
+<div class="img-modal" id="img-modal">
+  <div class="img-modal-box">
+    <div class="img-modal-header">
+      <div class="img-modal-title">🖼️ Escolha a melhor imagem</div>
+      <button class="img-close" onclick="fecharImgModal()">✕</button>
+    </div>
+    <div style="font-size:12px;color:var(--tx3);margin-bottom:12px">Clique na imagem para selecionar. A IA valida a relevância para o produto.</div>
+    <div class="img-grid" id="img-grid-modal"></div>
+    <button class="img-btn-confirmar" onclick="confirmarImgModal()">✅ Confirmar imagem selecionada</button>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay" onclick="fecharPainel()"></div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="lc">
+    <div class="lc-logo">
+      <div class="lc-icon">⚙️</div>
+      <div>
+        <div class="logo-name">Genesis<span>iRollo</span></div>
+        <div style="font-size:10px;color:rgba(255,255,255,.4);font-family:var(--mono);letter-spacing:1px">Motor v3.0 · MOBIS</div>
+      </div>
+    </div>
+    <div class="err" id="lerr">E-mail ou senha inválidos.</div>
+    <label>E-mail</label>
+    <input type="email" id="lem" value="mobispecas@gmail.com" placeholder="seu@email.com">
+    <label>Senha</label>
+    <input type="password" id="lpw" value="mobis2024" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn-claude btn-primary full" onclick="login()">Entrar no Genesis</button>
+    <div class="hint">Demo: <b>mobispecas@gmail.com</b> / <b>mobis2024</b></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+<!-- NAV -->
+<nav>
+  <div class="logo-area">
+    <div class="logo-row">
+      <div class="logo-icon">⚙️</div>
+      <div>
+        <div class="logo-name">Genesis<span>iRollo</span></div>
+        <div class="logo-ver">Motor v3.0 · MOBIS Peças</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="flex:1;overflow-y:auto;padding:8px 0">
+    <div class="nav-section">Principal</div>
+    <div class="nav-item active" onclick="gp('dashboard',this)"><div class="ni">📊</div>Dashboard</div>
+    <div class="nav-item" onclick="gp('produtos',this)"><div class="ni">📦</div>Produtos<span class="nav-badge" id="nb-total">—</span></div>
+
+    <div class="nav-section" style="margin-top:8px">Catalogação</div>
+    <div class="nav-item" onclick="gp('cad',this)"><div class="ni">➕</div>Cadastrar Produto</div>
+    <div class="nav-item" onclick="gp('lote',this)"><div class="ni">🚀</div>Enriquecer em Lote</div>
+    <div class="nav-item" onclick="gp('aprov',this)"><div class="ni">✅</div>Aprovação<span class="nav-badge" id="nb-pend">—</span></div>
+
+    <div class="nav-section" style="margin-top:8px">Sistema</div>
+    <div class="nav-item" onclick="gp('motor',this)"><div class="ni">🧠</div>Motor NCT</div>
+    <div class="nav-item" onclick="gp('bling',this)"><div class="ni">🟧</div>Bling ERP v3</div>
+    <div class="nav-item" onclick="gp('config',this)"><div class="ni">⚙️</div>Configurações</div>
+  </div>
+
+  <div class="nav-footer">
+    <div class="user-row">
+      <div class="user-av">JN</div>
+      <div><div class="user-name">Jose Nunes Jr.</div><div class="user-role">MOBIS Peças</div></div>
+      <button class="btn-logout" onclick="logout()" title="Sair">⏻</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ÁREA PRINCIPAL -->
+<div class="ab">
+  <div class="topbar">
+    <div class="topbar-title" id="page-title">Dashboard <span>— Genesis iRollo 360</span></div>
+    <div class="status-pill wait" id="api-status"><span class="status-dot"></span>VERIFICANDO</div>
+    <button class="quick-btn qb-purple" onclick="gp('lote')">🚀 Enriquecer Lote</button>
+    <button class="quick-btn qb-primary" onclick="gp('cad')">➕ Novo</button>
+  </div>
+
+  <main>
+
+    <!-- DASHBOARD -->
+    <div class="page on" id="pg-dashboard">
+
+      <!-- Stats -->
+      <div class="stats-strip" id="stats-strip">
+        <div class="stat-card s-blue"><div class="stat-icon">📦</div><div class="stat-val" id="s-total">—</div><div class="stat-label">Total Bling</div></div>
+        <div class="stat-card s-green"><div class="stat-icon">🔒</div><div class="stat-val" id="s-frozen">—</div><div class="stat-label">Congelados</div></div>
+        <div class="stat-card s-orange"><div class="stat-icon">⏳</div><div class="stat-val" id="s-pend">—</div><div class="stat-label">Pendentes</div></div>
+        <div class="stat-card s-purple"><div class="stat-icon">🤖</div><div class="stat-val" id="s-enrich">—</div><div class="stat-label">Enriquecidos</div></div>
+        <div class="stat-card s-red"><div class="stat-icon">📋</div><div class="stat-val" id="s-rascunho">—</div><div class="stat-label">Rascunho</div></div>
+      </div>
+
+      <!-- Cards de produtos -->
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Produtos <span>— Catálogo MOBIS</span></div>
+          <div class="sec-sub" id="dash-sub">Carregando do Bling...</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="quick-btn qb-ghost" onclick="carregarProdutos()">🔄 Atualizar</button>
+          <button class="quick-btn qb-purple" onclick="gp('lote')">🚀 Enriquecer Tudo</button>
+          <button class="quick-btn qb-primary" onclick="gp('cad')">➕ Novo Produto</button>
+        </div>
+      </div>
+
+      <!-- Filtros rápidos -->
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="quick-btn qb-ghost" id="f-todos" onclick="filtrar('todos',this)" style="border-color:var(--ac);color:var(--ac)">Todos</button>
+        <button class="quick-btn qb-ghost" id="f-rascunho" onclick="filtrar('rascunho',this)">📋 Rascunho</button>
+        <button class="quick-btn qb-ghost" id="f-enriquecido" onclick="filtrar('enriquecido',this)">🤖 Enriquecido</button>
+        <button class="quick-btn qb-ghost" id="f-congelado" onclick="filtrar('congelado',this)">🔒 Congelado</button>
+        <input id="busca-prod" style="border:1.5px solid var(--sep);border-radius:100px;padding:6px 16px;font-size:12px;outline:none;font-family:inherit;width:200px" placeholder="🔍 Buscar produto..." oninput="filtrarBusca()">
+      </div>
+
+      <div class="produtos-grid" id="produtos-grid">
+        <div style="grid-column:1/-1" class="loading-area"><div class="sp"></div><p>Carregando produtos do Bling...</p></div>
+      </div>
+    </div>
+
+    <!-- OUTRAS PÁGINAS (simplificadas) -->
+    <div class="page" id="pg-produtos">
+      <div class="sec-header"><div class="sec-title">Produtos <span>em Lista</span></div><button class="quick-btn qb-primary" onclick="gp('dashboard')">← Dashboard</button></div>
+      <div style="background:var(--bg2);border-radius:var(--r2);padding:20px;border:1px solid var(--sep2)">
+        <p style="color:var(--tx3)">Use o Dashboard para ver os produtos em cards. Clique em qualquer card para ver o perfil completo.</p>
+        <button class="quick-btn qb-primary" style="margin-top:14px" onclick="gp('dashboard')">← Ir para Dashboard</button>
+      </div>
+    </div>
+
+    <div class="page" id="pg-cad">
+      <div class="sec-header"><div class="sec-title">Cadastrar <span>Produto</span></div></div>
+      <div style="background:var(--bg2);border-radius:var(--r2);padding:28px;border:1px solid var(--sep2);max-width:600px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:5px">OEM *</label><input style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none;font-family:inherit" id="cad-oem" placeholder="BDJ0430"></div>
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:5px">NCM *</label><input style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none;font-family:inherit" id="cad-ncm" placeholder="87089900" maxlength="8"></div>
+          <div style="grid-column:1/-1"><label style="font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:5px">Nome do Produto *</label><input style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none;font-family:inherit" id="cad-nome" placeholder="Bandeja Dianteira Superior Bosch Honda Civic 2001-2006"></div>
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:5px">Preço R$</label><input type="number" style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none;font-family:inherit" id="cad-preco" placeholder="0.00"></div>
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:5px">Aplicação</label><input style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none;font-family:inherit" id="cad-aplic" placeholder="Honda Civic 2001-2006"></div>
+        </div>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <button class="quick-btn qb-primary" onclick="salvarProduto()">💾 Salvar no Bling</button>
+          <button class="quick-btn qb-ghost" onclick="enriquecerCad()">🤖 Enriquecer com IA</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="pg-lote">
+      <div class="sec-header">
+        <div><div class="sec-title">Enriquecimento <span>em Lote</span></div><div class="sec-sub">50 produtos por vez · Gemini Flash · NCT + RAST-HASH</div></div>
+        <button class="quick-btn qb-primary" id="btn-lote" onclick="iniciarLote()">🚀 Iniciar</button>
+      </div>
+      <div style="background:var(--bg2);border-radius:var(--r2);padding:24px;border:1px solid var(--sep2);margin-bottom:16px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px">
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:5px">Quantidade</label><select style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none;font-family:inherit" id="lote-qtd"><option value="10">10 produtos</option><option value="25">25 produtos</option><option value="50" selected>50 produtos</option></select></div>
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:5px">Filtro</label><select style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none;font-family:inherit" id="lote-filtro"><option>Todos</option><option>Sem NCT (prioridade)</option><option>Sem imagem</option></select></div>
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:5px">Delay</label><select style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none;font-family:inherit" id="lote-delay"><option value="1000">1 segundo</option><option value="2000" selected>2 segundos</option><option value="3000">3 segundos</option></select></div>
+        </div>
+        <div style="background:var(--bg);border-radius:var(--r);padding:14px;margin-bottom:16px;display:none" id="lote-prog-wrap">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--tx3);margin-bottom:6px;font-family:var(--mono)"><span id="lote-msg">Aguardando...</span><span id="lote-pct">0%</span></div>
+          <div style="background:var(--sep2);border-radius:100px;height:8px;overflow:hidden"><div id="lote-bar" style="height:100%;background:linear-gradient(90deg,var(--ac),var(--pu));border-radius:100px;transition:width .5s ease;width:0%"></div></div>
+          <div style="display:flex;gap:16px;margin-top:10px;font-size:12px">
+            <span>✅ <b id="lote-ok">0</b> ok</span>
+            <span>❌ <b id="lote-err">0</b> erros</span>
+            <span>⏳ <b id="lote-rest">0</b> restantes</span>
+          </div>
+        </div>
+      </div>
+      <div id="lote-lista" style="display:none;background:var(--bg2);border-radius:var(--r2);border:1px solid var(--sep2);overflow:hidden">
+        <div style="padding:14px 20px;border-bottom:1px solid var(--sep2);font-size:13px;font-weight:600">Produtos processados</div>
+        <div id="lote-items"></div>
+      </div>
+    </div>
+
+    <div class="page" id="pg-aprov">
+      <div class="sec-header"><div class="sec-title">Aprovação <span>de Cadastros</span></div></div>
+      <div id="aprov-lista"><div class="loading-area"><div class="sp"></div><p>Carregando pendentes...</p></div></div>
+    </div>
+
+    <div class="page" id="pg-motor">
+      <div class="sec-header"><div class="sec-title">Motor <span>iRollo v3.0</span></div></div>
+      <div style="background:var(--bg2);border-radius:var(--r2);padding:24px;border:1px solid var(--sep2);max-width:500px">
+        <div style="font-size:12px;color:var(--tx3);margin-bottom:16px;font-family:var(--mono)">NCT = (TF×0.50) + (FM×0.20) + (CO×0.20) + (AV×0.10)</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">TF — Triangulação OEM (50%)</label><input type="number" style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none" id="m-tf" value="0.95" step="0.01" min="0" max="1" oninput="calcMotor()"></div>
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">FM — Full-Match Nome (20%)</label><input type="number" style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none" id="m-fm" value="0.92" step="0.01" min="0" max="1" oninput="calcMotor()"></div>
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">CO — Coerência NCM (20%)</label><input type="number" style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none" id="m-co" value="1.00" step="0.01" min="0" max="1" oninput="calcMotor()"></div>
+          <div><label style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">AV — Aplicação Veicular (10%)</label><input type="number" style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none" id="m-av" value="0.88" step="0.01" min="0" max="1" oninput="calcMotor()"></div>
+        </div>
+        <div style="background:#1c1c1e;border-radius:var(--r);padding:16px;margin-top:16px;color:#fff">
+          <div style="font-size:9px;font-family:var(--mono);letter-spacing:2px;color:#8e8e93;text-transform:uppercase">NCT RESULTADO</div>
+          <div style="font-size:40px;font-weight:700;font-family:var(--mono)" id="motor-result">—</div>
+          <div style="font-size:12px;font-family:var(--mono)" id="motor-decisao">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="pg-bling">
+      <div class="sec-header"><div class="sec-title">Bling <span>ERP v3</span></div><span id="bling-badge" style="font-size:11px;padding:4px 12px;border-radius:100px;background:var(--ye-soft);color:#a05a00;font-weight:600">🔄 Verificando</span></div>
+      <div style="background:var(--bg2);border-radius:var(--r2);padding:24px;border:1px solid var(--sep2)">
+        <div style="margin-bottom:16px">
+          <div style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Client ID</div>
+          <div style="background:#0f0f0f;border-radius:10px;padding:12px 16px;font-family:var(--mono);font-size:12px;color:#a0ffa0">837cda747405553caae6ecaf542e96abe4498317</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+          <button class="quick-btn qb-primary" onclick="testarBling()">🔌 Testar Conexão</button>
+          <button class="quick-btn qb-ghost" onclick="renovarToken()">🔄 Renovar Token</button>
+          <button class="quick-btn qb-purple" onclick="carregarProdutos();gp('dashboard')">📦 Ver Produtos</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="pg-config">
+      <div class="sec-header"><div class="sec-title">Configurações</div></div>
+      <div style="background:var(--bg2);border-radius:var(--r2);padding:24px;border:1px solid var(--sep2);max-width:500px">
+        <div style="margin-bottom:16px"><label style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">NCT Mínimo</label><input type="number" style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none" value="0.90" step="0.01"></div>
+        <div style="margin-bottom:16px"><label style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Marca Padrão</label><input style="width:100%;border:1.5px solid var(--sep);border-radius:10px;padding:10px 14px;font-size:13px;outline:none" value="Bosch"></div>
+        <button class="quick-btn qb-primary" onclick="toast('✅ Configurações salvas!','s')">💾 Salvar</button>
+      </div>
+    </div>
+
+  </main>
+</div><!-- .ab -->
+
+<!-- PAINEL LATERAL -->
+<div id="painel" class="hidden">
+  <div class="painel-top">
+    <button class="painel-close" onclick="fecharPainel()">✕</button>
+    <div style="flex:1">
+      <div class="painel-prod-nome" id="p-nome">—</div>
+      <div class="painel-cod" id="p-cod">—</div>
+    </div>
+    <div id="p-status-badge"></div>
+  </div>
+
+  <div class="painel-scroll">
+
+    <!-- Imagem -->
+    <div class="painel-img-box" id="p-img-box">
+      <span style="font-size:64px;opacity:.3" id="p-img-icon">🔧</span>
+      <button class="btn-trocar-img" onclick="abrirImgModal()">🖼️ Trocar imagem</button>
+    </div>
+
+    <!-- Agentes IA -->
+    <div style="font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">🤖 Agentes de IA</div>
+    <div class="agentes-row">
+      <button class="agente-btn ag-gemini" onclick="rodarAgente('gemini')">✨ Enriquecer</button>
+      <button class="agente-btn ag-cdc" onclick="rodarAgente('cdc')">🏛️ CDC</button>
+      <button class="agente-btn ag-bula" onclick="rodarAgente('bula')">📋 Bula Técnica</button>
+      <button class="agente-btn ag-aplicacao" onclick="rodarAgente('aplicacao')">🚗 Aplicação</button>
+      <button class="agente-btn ag-fiscal" onclick="rodarAgente('fiscal')">📊 Fiscal</button>
+    </div>
+
+    <div style="font-size:10px;color:var(--tx3);background:var(--ye-soft);border:1px solid rgba(255,149,0,.2);border-radius:8px;padding:8px 12px;margin-bottom:16px;font-family:var(--mono)">
+      💡 <b>Dica:</b> Após conferir um campo, clique no 🔒 para congelá-lo. A IA não alterará dados congelados.
+    </div>
+
+    <!-- Campos do produto -->
+    <div class="campo-grupo">
+      <div class="campo-label">Nome do Produto <span class="campo-ia-tag" id="ia-nome" style="display:none">IA</span></div>
+      <div class="campo-wrap">
+        <input class="campo-input" id="p-f-nome" placeholder="Nome completo do produto">
+        <button class="btn-freeze-campo" id="freeze-nome" onclick="congelarCampo('nome')" title="Congelar este campo">🔓</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="campo-grupo">
+        <div class="campo-label">OEM <span class="campo-ia-tag" id="ia-oem" style="display:none">IA</span> <span style="color:var(--re);font-size:10px">fiscal</span></div>
+        <div class="campo-wrap">
+          <input class="campo-input" id="p-f-oem" placeholder="BDJ0430" style="font-family:var(--mono)">
+          <button class="btn-freeze-campo" id="freeze-oem" onclick="congelarCampo('oem')" title="Congelar OEM">🔓</button>
+        </div>
+      </div>
+      <div class="campo-grupo">
+        <div class="campo-label">EAN <span class="campo-ia-tag" id="ia-ean" style="display:none">IA</span> <span style="color:var(--re);font-size:10px">fiscal</span></div>
+        <div class="campo-wrap">
+          <input class="campo-input" id="p-f-ean" placeholder="7891234567890" style="font-family:var(--mono)">
+          <button class="btn-freeze-campo" id="freeze-ean" onclick="congelarCampo('ean')" title="Congelar EAN">🔓</button>
+        </div>
+      </div>
+      <div class="campo-grupo">
+        <div class="campo-label">NCM <span class="campo-ia-tag" id="ia-ncm" style="display:none">IA</span> <span style="color:var(--re);font-size:10px">fiscal</span></div>
+        <div class="campo-wrap">
+          <input class="campo-input" id="p-f-ncm" placeholder="87089900" maxlength="8" style="font-family:var(--mono)">
+          <button class="btn-freeze-campo" id="freeze-ncm" onclick="congelarCampo('ncm')" title="Congelar NCM">🔓</button>
+        </div>
+      </div>
+      <div class="campo-grupo">
+        <div class="campo-label">SKU <span class="campo-ia-tag" id="ia-sku" style="display:none">IA</span></div>
+        <div class="campo-wrap">
+          <input class="campo-input" id="p-f-sku" placeholder="BOSCH-BDJ0430" style="font-family:var(--mono)">
+          <button class="btn-freeze-campo" id="freeze-sku" onclick="congelarCampo('sku')" title="Congelar SKU">🔓</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="campo-grupo">
+      <div class="campo-label">Aplicação Veicular <span class="campo-ia-tag" id="ia-aplic" style="display:none">IA</span> <span style="color:var(--re);font-size:10px">cruzamento</span></div>
+      <div class="campo-wrap">
+        <input class="campo-input" id="p-f-aplic" placeholder="Honda Civic 2001-2006 / Toyota Corolla 2003-2008">
+        <button class="btn-freeze-campo" id="freeze-aplic" onclick="congelarCampo('aplic')" title="Congelar Aplicação">🔓</button>
+      </div>
+    </div>
+
+    <div class="campo-grupo">
+      <div class="campo-label">CDC — Código Defesa do Consumidor <span class="campo-ia-tag" id="ia-cdc" style="display:none">IA</span></div>
+      <div class="campo-wrap">
+        <textarea class="campo-input" id="p-f-cdc" rows="2" placeholder="Informações CDC Art. 8, 31, 12..." style="resize:vertical"></textarea>
+        <button class="btn-freeze-campo" id="freeze-cdc" onclick="congelarCampo('cdc')" title="Congelar CDC">🔓</button>
+      </div>
+    </div>
+
+    <div class="campo-grupo">
+      <div class="campo-label">Bula Técnica <span class="campo-ia-tag" id="ia-bula" style="display:none">IA</span></div>
+      <div class="campo-wrap">
+        <textarea class="campo-input" id="p-f-bula" rows="2" placeholder="Instruções de instalação e uso técnico..." style="resize:vertical"></textarea>
+        <button class="btn-freeze-campo" id="freeze-bula" onclick="congelarCampo('bula')" title="Congelar Bula">🔓</button>
+      </div>
+    </div>
+
+    <!-- NCT Score -->
+    <div class="nct-painel" id="p-nct-box">
+      <div class="nct-label-sm">NCT — Índice de Confiança Técnica</div>
+      <div class="nct-score-big" id="p-nct-score">—</div>
+      <div style="font-size:11px;font-family:var(--mono);margin-top:2px" id="p-nct-dec">—</div>
+      <div class="nct-barras">
+        <div class="nct-linha"><div class="nct-tag">TF (OEM) 50%</div><div class="nct-track"><div class="nct-fill" id="p-bar-tf" style="width:0%"></div></div><div class="nct-pct" id="p-val-tf">—</div></div>
+        <div class="nct-linha"><div class="nct-tag">FM (Nome) 20%</div><div class="nct-track"><div class="nct-fill" id="p-bar-fm" style="width:0%"></div></div><div class="nct-pct" id="p-val-fm">—</div></div>
+        <div class="nct-linha"><div class="nct-tag">CO (NCM) 20%</div><div class="nct-track"><div class="nct-fill" id="p-bar-co" style="width:0%"></div></div><div class="nct-pct" id="p-val-co">—</div></div>
+        <div class="nct-linha"><div class="nct-tag">AV (Aplic) 10%</div><div class="nct-track"><div class="nct-fill" id="p-bar-av" style="width:0%"></div></div><div class="nct-pct" id="p-val-av">—</div></div>
+      </div>
+    </div>
+
+    <!-- RAST-HASH -->
+    <div class="hash-box" onclick="copiarHash()">
+      <div style="flex:1"><div class="hash-label">RAST-HASH · md5(SKU+OEM+MOBIS)[:16]</div><div class="hash-val" id="p-hash">—</div></div>
+      <span style="color:#6e6e73">📋</span>
+    </div>
+
+    <div style="font-size:11px;color:var(--tx3);padding:10px 14px;background:var(--bg);border-radius:10px;font-family:var(--mono);margin-bottom:8px">
+      🏷️ Preço: R$ <b id="p-preco">—</b> · Situação: <b id="p-sit">—</b> · Categoria: <b id="p-cat">—</b>
+    </div>
+
+  </div><!-- .painel-scroll -->
+
+  <div class="painel-footer">
+    <button class="btn-congelar-tudo" id="btn-freeze-all" onclick="congelarTudo()">
+      🔒 Congelar produto inteiro — banco de dados oficial
+    </button>
+    <button class="btn-salvar-bling" onclick="salvarNoBling()">
+      🟧 Salvar no Bling
+    </button>
+  </div>
+</div><!-- #painel -->
+
+</div><!-- #app -->
+
+<script>
+const API = 'http://localhost:3001/api';
+let prodCache = [];
+let prodAtual = null;
+let camposCongelados = {};
+let filtroAtivo = 'todos';
+let loteRodando = false;
+let loteParar = false;
+let imgModalCallback = null;
+
+// ============================================================
+// LOGIN
+// ============================================================
+function login() {
+  const em = document.getElementById('lem').value;
+  const pw = document.getElementById('lpw').value;
+  if (em === 'mobispecas@gmail.com' && pw === 'mobis2024') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').classList.add('on');
+    init();
+  } else {
+    document.getElementById('lerr').style.display = 'block';
+  }
+}
+function logout() {
+  document.getElementById('app').classList.remove('on');
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+async function init() {
+  verificarAPI();
+  await carregarProdutos();
+}
+
+// ============================================================
+// API
+// ============================================================
+async function api(method, path, body = null) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const r = await fetch(API + path, opts);
+    return await r.json();
+  } catch { return { ok: false, erro: 'Sem conexão com backend' }; }
+}
+
+async function verificarAPI() {
+  const pill = document.getElementById('api-status');
+  try {
+    await fetch(API);
+    pill.className = 'status-pill on';
+    pill.innerHTML = '<span class="status-dot"></span>ONLINE';
+    const bl = await api('GET', '/bling/status');
+    if (bl.ok) { pill.innerHTML = '<span class="status-dot"></span>BLING ON'; }
+  } catch {
+    pill.className = 'status-pill off';
+    pill.innerHTML = '<span class="status-dot"></span>OFFLINE';
+    toast('⚠️ Backend offline. Rode: node src\\server.js', 'w');
+  }
+}
+
+// ============================================================
+// CARREGAR PRODUTOS
+// ============================================================
+async function carregarProdutos() {
+  document.getElementById('produtos-grid').innerHTML = '<div style="grid-column:1/-1" class="loading-area"><div class="sp"></div><p>Carregando produtos do Bling...</p></div>';
+  const r = await api('GET', '/produtos?limite=50');
+  if (r.ok === false && r.erro) {
+    // Usa dados demo se backend offline
+    prodCache = gerarDemoProds();
+    toast('⚠️ Usando dados demo. Conecte o backend para dados reais.', 'w');
+  } else {
+    prodCache = r.produtos || gerarDemoProds();
+  }
+  atualizarStats();
+  renderGrid(prodCache);
+}
+
+function gerarDemoProds() {
+  const categorias = ['Suspensão','Freios','Filtros','Motor','Elétrica','Arrefecimento'];
+  const nomes = [
+    'Bandeja Dianteira Superior Bosch Honda Civic 2001-2006',
+    'Pastilha de Freio Dianteira Bosch Corolla 2003-2008',
+    'Filtro de Óleo Bosch Uno 1999-2014',
+    'Amortecedor Dianteiro Bosch Gol G4 2006-2014',
+    'Sensor ABS Bosch HB20 2012-2019',
+    'Kit Correia Dentada Bosch Sandero 2007-2014',
+    'Bomba D\'Água Bosch Palio 2001-2010',
+    'Disco de Freio Ventilado Bosch Cruze 2011-2019',
+    'Jogo de Velas Bosch Onix 2013-2020',
+    'Rolamento de Roda Bosch Celta 2000-2016',
+    'Pivô de Suspensão Bosch Siena 1996-2014',
+    'Coxim do Motor Bosch Astra 2000-2011',
+  ];
+  const status = ['rascunho','rascunho','enriquecido','enriquecido','conferido','congelado'];
+  return nomes.map((nome, i) => ({
+    id: 'demo-'+i,
+    nome,
+    codigo: 'BSH-'+String(1000+i).padStart(4,'0'),
+    preco: (Math.random()*400+50).toFixed(2),
+    situacao: 'A',
+    categoria: { descricao: categorias[i % categorias.length] },
+    genesis_status: status[i % status.length],
+    nct_calc: { nct: +(0.6+Math.random()*0.38).toFixed(2), decisao: 'APROVADO' },
+    rast_hash: Math.random().toString(36).substring(2,18),
+    imagem_url: null,
+    dados_ia: i % 2 === 0 ? {
+      nome_enriquecido: nome,
+      oem: 'BSH-'+String(1000+i),
+      ean: '789'+String(Math.floor(Math.random()*1e10)).padStart(10,'0'),
+      ncm: '87089900',
+      sku: 'BOSCH-'+String(1000+i),
+      aplicacao: nome.match(/\d{4}-\d{4}/)?.[0] ? nome.split(' ').slice(-1)[0] : 'Ver tabela',
+      cdc: 'Produto em conformidade com CDC Art. 8, 31. Garantia mínima de 90 dias.',
+      bula: 'Instalar seguindo manual do fabricante. Torque conforme especificação técnica.',
+    } : null,
+  }));
+}
+
+function atualizarStats() {
+  const total = prodCache.length;
+  const frozen = prodCache.filter(p => p.genesis_status === 'congelado').length;
+  const pend = prodCache.filter(p => !p.genesis_status || p.genesis_status === 'rascunho').length;
+  const enrich = prodCache.filter(p => p.genesis_status === 'enriquecido' || p.genesis_status === 'conferido').length;
+  const rascunho = prodCache.filter(p => p.genesis_status === 'rascunho').length;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-frozen').textContent = frozen;
+  document.getElementById('s-pend').textContent = pend;
+  document.getElementById('s-enrich').textContent = enrich;
+  document.getElementById('s-rascunho').textContent = rascunho;
+  document.getElementById('nb-total').textContent = total;
+  document.getElementById('nb-pend').textContent = pend;
+  document.getElementById('dash-sub').textContent = `${total} produtos · ${frozen} congelados · ${new Date().toLocaleTimeString('pt-BR')}`;
+}
+
+// ============================================================
+// RENDER GRID DE CARDS
+// ============================================================
+function renderGrid(lista) {
+  const grid = document.getElementById('produtos-grid');
+  if (!lista.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1" class="empty"><div class="empty-icon">📦</div><p>Nenhum produto encontrado</p><small>Verifique a conexão com o Bling</small></div>';
+    return;
+  }
+  grid.innerHTML = lista.map(p => {
+    const nct = p.nct_calc?.nct || 0;
+    const cor = nct >= .90 ? '#34c759' : nct >= .60 ? '#ff9500' : '#ff3b30';
+    const st = p.genesis_status || 'rascunho';
+    const stMap = { rascunho:'badge-rascunho', enriquecido:'badge-enriquecido', conferido:'badge-conferido', congelado:'badge-congelado' };
+    const stLabel = { rascunho:'📋 Rascunho', enriquecido:'🤖 Enriquecido', conferido:'👁️ Conferido', congelado:'🔒 Congelado' };
+    return `
+    <div class="prod-card ${st==='congelado'?'frozen':''}" onclick="abrirPainel('${p.id}')" id="card-${p.id}">
+      <div class="card-img">
+        ${p.imagem_url ? `<img src="${p.imagem_url}" onerror="this.outerHTML='<span class=card-img-placeholder style=font-size:48px>🔧</span>'">` : '<span class="card-img-placeholder" style="font-size:48px">🔧</span>'}
+        <div class="card-status-badge ${stMap[st]}">${stLabel[st]}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-nome">${p.nome || '—'}</div>
+        <div class="card-cod">${p.codigo || '—'} · ${p.categoria?.descricao || '—'}</div>
+        <div class="card-nct">
+          <div class="nct-bar-wrap"><div class="nct-bar-fill" style="width:${nct*100}%;background:${cor}"></div></div>
+          <div class="nct-val" style="color:${cor}">${nct ? nct.toFixed(2) : '—'}</div>
+        </div>
+        <div class="card-actions" onclick="event.stopPropagation()">
+          <button class="card-btn cb-enrich" onclick="enriquecerRapido('${p.id}')">🤖 IA</button>
+          <button class="card-btn cb-view" onclick="abrirPainel('${p.id}')">👁️ Ver</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// FILTROS
+// ============================================================
+function filtrar(tipo, btn) {
+  filtroAtivo = tipo;
+  document.querySelectorAll('[id^="f-"]').forEach(b => { b.style.borderColor=''; b.style.color=''; });
+  if (btn) { btn.style.borderColor='var(--ac)'; btn.style.color='var(--ac)'; }
+  let lista = [...prodCache];
+  if (tipo !== 'todos') lista = lista.filter(p => (p.genesis_status || 'rascunho') === tipo);
+  renderGrid(lista);
+}
+
+function filtrarBusca() {
+  const q = document.getElementById('busca-prod').value.toLowerCase();
+  let lista = [...prodCache];
+  if (filtroAtivo !== 'todos') lista = lista.filter(p => (p.genesis_status || 'rascunho') === filtroAtivo);
+  if (q) lista = lista.filter(p => (p.nome||'').toLowerCase().includes(q) || (p.codigo||'').toLowerCase().includes(q));
+  renderGrid(lista);
+}
+
+// ============================================================
+// PAINEL LATERAL
+// ============================================================
+function abrirPainel(id) {
+  prodAtual = prodCache.find(p => p.id == id);
+  if (!prodAtual) return;
+  camposCongelados = prodAtual.campos_congelados || {};
+
+  // Preenche campos
+  document.getElementById('p-nome').textContent = prodAtual.nome || '—';
+  document.getElementById('p-cod').textContent = (prodAtual.codigo || '—') + ' · R$ ' + parseFloat(prodAtual.preco||0).toFixed(2);
+  document.getElementById('p-f-nome').value = prodAtual.nome || '';
+  document.getElementById('p-f-oem').value = prodAtual.codigo || prodAtual.dados_ia?.oem || '';
+  document.getElementById('p-f-ean').value = prodAtual.dados_ia?.ean || '';
+  document.getElementById('p-f-ncm').value = prodAtual.tributacao?.ncm || prodAtual.dados_ia?.ncm || '';
+  document.getElementById('p-f-sku').value = prodAtual.dados_ia?.sku || prodAtual.codigo || '';
+  document.getElementById('p-f-aplic').value = prodAtual.dados_ia?.aplicacao || '';
+  document.getElementById('p-f-cdc').value = prodAtual.dados_ia?.cdc || '';
+  document.getElementById('p-f-bula').value = prodAtual.dados_ia?.bula || '';
+  document.getElementById('p-preco').textContent = parseFloat(prodAtual.preco||0).toFixed(2);
+  document.getElementById('p-sit').textContent = prodAtual.situacao === 'A' ? 'Ativo' : 'Inativo';
+  document.getElementById('p-cat').textContent = prodAtual.categoria?.descricao || '—';
+  document.getElementById('p-hash').textContent = prodAtual.rast_hash || '—';
+
+  // NCT
+  const nct = prodAtual.nct_calc?.nct || 0;
+  const cor = nct>=.90?'#34c759':nct>=.60?'#ff9500':'#ff3b30';
+  document.getElementById('p-nct-score').textContent = nct ? nct.toFixed(2) : '—';
+  document.getElementById('p-nct-score').style.color = cor;
+  document.getElementById('p-nct-dec').textContent = prodAtual.nct_calc?.decisao || '—';
+  document.getElementById('p-nct-dec').style.color = cor;
+  ['tf','fm','co','av'].forEach(k => {
+    const v = prodAtual.nct_calc?.componentes?.[k] || (nct > 0 ? nct*0.9 : 0);
+    const el = document.getElementById('p-bar-'+k);
+    const vel = document.getElementById('p-val-'+k);
+    if (el) { el.style.width=(v*100)+'%'; el.style.background=v>=.90?'#34c759':v>=.60?'#ff9500':'#ff3b30'; }
+    if (vel) vel.textContent = v.toFixed(2);
+  });
+
+  // Imagem
+  const imgBox = document.getElementById('p-img-box');
+  if (prodAtual.imagem_url) {
+    imgBox.innerHTML = `<img src="${prodAtual.imagem_url}" onerror="this.outerHTML='<span style=font-size:64px;opacity:.3>🔧</span>'"><button class="btn-trocar-img" onclick="abrirImgModal()">🖼️ Trocar imagem</button>`;
+  } else {
+    imgBox.innerHTML = `<span style="font-size:64px;opacity:.3">🔧</span><button class="btn-trocar-img" onclick="abrirImgModal()">🖼️ Buscar imagem</button>`;
+  }
+
+  // Status badge
+  const st = prodAtual.genesis_status || 'rascunho';
+  const stMap = { rascunho:'pill pill-gray', enriquecido:'pill pill-blue', conferido:'pill pill-orange', congelado:'pill pill-dark' };
+  const stLabel = { rascunho:'📋 Rascunho', enriquecido:'🤖 Enriquecido', conferido:'👁️ Conferido', congelado:'🔒 Congelado' };
+  document.getElementById('p-status-badge').innerHTML = `<span class="${stMap[st]}">${stLabel[st]}</span>`;
+
+  // Tags IA
+  if (prodAtual.dados_ia) {
+    ['nome','oem','ean','ncm','sku','aplic','cdc','bula'].forEach(c => {
+      const el = document.getElementById('ia-'+c);
+      if (el) el.style.display = 'inline-flex';
+    });
+  }
+
+  // Aplica campos congelados
+  Object.keys(camposCongelados).forEach(c => { if (camposCongelados[c]) aplicarFreeze(c); });
+
+  // Botão congelar tudo
+  const allFrozen = Object.keys(camposCongelados).length >= 5 && Object.values(camposCongelados).every(v=>v);
+  const btnFreezeAll = document.getElementById('btn-freeze-all');
+  if (allFrozen || st === 'congelado') { btnFreezeAll.classList.add('all-frozen'); btnFreezeAll.innerHTML = '🔒 Produto Congelado — dados oficiais no Bling'; }
+  else { btnFreezeAll.classList.remove('all-frozen'); btnFreezeAll.innerHTML = '🔒 Congelar produto inteiro — banco de dados oficial'; }
+
+  // Mostra painel
+  document.getElementById('painel').classList.remove('hidden');
+  document.getElementById('overlay').classList.add('on');
+  document.querySelectorAll('.prod-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('card-'+id)?.classList.add('selected');
+}
+
+function fecharPainel() {
+  document.getElementById('painel').classList.add('hidden');
+  document.getElementById('overlay').classList.remove('on');
+  document.querySelectorAll('.prod-card').forEach(c => c.classList.remove('selected'));
+  prodAtual = null;
+}
+
+// ============================================================
+// SISTEMA DE CONGELAMENTO
+// ============================================================
+function congelarCampo(campo) {
+  if (!prodAtual) return;
+  const jaFrozen = camposCongelados[campo];
+  if (jaFrozen) {
+    // Descongelar
+    camposCongelados[campo] = false;
+    desfazerFreeze(campo);
+    toast(`🔓 Campo "${campo.toUpperCase()}" descongelado.`, 'w');
+  } else {
+    // Congelar
+    camposCongelados[campo] = true;
+    aplicarFreeze(campo);
+    toast(`🔒 Campo "${campo.toUpperCase()}" congelado! A IA não vai alterar este dado.`, 's');
+  }
+  if (!prodAtual.campos_congelados) prodAtual.campos_congelados = {};
+  prodAtual.campos_congelados = { ...camposCongelados };
+}
+
+function aplicarFreeze(campo) {
+  const input = document.getElementById('p-f-'+campo);
+  const btn = document.getElementById('freeze-'+campo);
+  if (input) { input.classList.add('frozen'); input.readOnly = true; }
+  if (btn) { btn.classList.add('frozen'); btn.textContent = '🔒'; btn.title = 'Clique para descongelar'; }
+}
+
+function desfazerFreeze(campo) {
+  const input = document.getElementById('p-f-'+campo);
+  const btn = document.getElementById('freeze-'+campo);
+  if (input) { input.classList.remove('frozen'); input.readOnly = false; }
+  if (btn) { btn.classList.remove('frozen'); btn.textContent = '🔓'; btn.title = 'Congelar este campo'; }
+}
+
+function congelarTudo() {
+  if (!prodAtual) return;
+  const allFrozen = prodAtual.genesis_status === 'congelado';
+  if (allFrozen) { toast('Este produto já está congelado!', 'w'); return; }
+
+  ['nome','oem','ean','ncm','sku','aplic','cdc','bula'].forEach(c => {
+    camposCongelados[c] = true;
+    aplicarFreeze(c);
+  });
+  prodAtual.campos_congelados = { ...camposCongelados };
+  prodAtual.genesis_status = 'congelado';
+
+  document.getElementById('btn-freeze-all').classList.add('all-frozen');
+  document.getElementById('btn-freeze-all').innerHTML = '🔒 Produto Congelado — dados oficiais no Bling';
+
+  // Atualiza card
+  const card = document.getElementById('card-'+prodAtual.id);
+  if (card) { card.classList.add('frozen'); card.querySelector('.card-status-badge').className='card-status-badge badge-congelado'; card.querySelector('.card-status-badge').textContent='🔒 Congelado'; }
+
+  atualizarStats();
+  toast('🔒 Produto congelado! Dados oficiais prontos para o Bling.', 's');
+}
+
+// ============================================================
+// AGENTES IA
+// ============================================================
+async function rodarAgente(tipo) {
+  if (!prodAtual) return;
+  const mapLabel = { gemini:'✨ Enriquecendo com Gemini Flash...', cdc:'🏛️ Gerando CDC...', bula:'📋 Gerando Bula Técnica...', aplicacao:'🚗 Buscando aplicação cruzada...', fiscal:'📊 Verificando dados fiscais...' };
+  toast(mapLabel[tipo] || 'Processando...', 'i');
+
+  const payload = { oem: document.getElementById('p-f-oem').value, nome: document.getElementById('p-f-nome').value, ncm: document.getElementById('p-f-ncm').value, sku: document.getElementById('p-f-sku').value, aplicacao: document.getElementById('p-f-aplic').value, tipo_agente: tipo };
+  const r = await api('POST', '/motor/enriquecer', payload);
+
+  if (r.ok && r.enriquecimento) {
+    const e = r.enriquecimento;
+    // Preenche apenas campos não congelados
+    if (tipo === 'gemini' || tipo === 'aplicacao') {
+      if (!camposCongelados['nome'] && e.nome_enriquecido) { document.getElementById('p-f-nome').value = e.nome_enriquecido; document.getElementById('p-f-nome').classList.add('ia-sugestao'); setTimeout(()=>document.getElementById('p-f-nome').classList.remove('ia-sugestao'),2000); }
+      if (!camposCongelados['aplic'] && e.aplicacao_veicular) { document.getElementById('p-f-aplic').value = e.aplicacao_veicular; }
+      if (!camposCongelados['ncm'] && e.ncm_sugerido) { document.getElementById('p-f-ncm').value = e.ncm_sugerido.replace(/\D/g,''); }
+    }
+    if (tipo === 'cdc' && !camposCongelados['cdc']) { document.getElementById('p-f-cdc').value = e.cdc || 'Produto em conformidade com CDC Art. 8°, 31° e 12°. Garantia: 90 dias.'; }
+    if (tipo === 'bula' && !camposCongelados['bula']) { document.getElementById('p-f-bula').value = e.bula_tecnica || e.descricao_tecnica || 'Instalar conforme manual do fabricante. Torque especificado na ficha técnica.'; }
+
+    // Marca campos IA
+    ['nome','oem','ean','ncm','sku','aplic','cdc','bula'].forEach(c => { const el=document.getElementById('ia-'+c); if(el) el.style.display='inline-flex'; });
+
+    prodAtual.genesis_status = 'enriquecido';
+    prodAtual.dados_ia = { ...prodAtual.dados_ia, ...e };
+    const card = document.getElementById('card-'+prodAtual.id);
+    if (card) { card.querySelector('.card-status-badge').className='card-status-badge badge-enriquecido'; card.querySelector('.card-status-badge').textContent='🤖 Enriquecido'; }
+
+    // NCT
+    if (r.nct) {
+      const nct = r.nct, cor = nct>=.90?'#34c759':nct>=.60?'#ff9500':'#ff3b30';
+      document.getElementById('p-nct-score').textContent = nct.toFixed(2);
+      document.getElementById('p-nct-score').style.color = cor;
+      document.getElementById('p-nct-dec').textContent = r.decisao || '—';
+      if (r.rast_hash) document.getElementById('p-hash').textContent = r.rast_hash;
+    }
+    atualizarStats();
+    toast('✅ Agente concluído! Confira os dados e congele o que estiver correto.', 's');
+  } else {
+    // Demo: preenche com dados fictícios para mostrar o fluxo
+    if (tipo === 'cdc' && !camposCongelados['cdc']) document.getElementById('p-f-cdc').value = 'Produto em conformidade com CDC Art. 8° (qualidade), 31° (informação) e 12° (responsabilidade). Garantia mínima: 90 dias conforme Lei 8.078/90.';
+    if (tipo === 'bula' && !camposCongelados['bula']) document.getElementById('p-f-bula').value = 'Instalar conforme manual do fabricante. Verificar torque de aperto (consultar tabela técnica). Inspecionar periodicamente a cada 10.000 km.';
+    if (tipo === 'aplicacao' && !camposCongelados['aplic']) document.getElementById('p-f-aplic').value = (document.getElementById('p-f-aplic').value || 'Honda Civic 2001-2006') + ' / Toyota Corolla 2003-2008 / VW Gol G4 2006-2014';
+    toast('⚠️ Usando demo. Conecte o Gemini para dados reais.', 'w');
+  }
+}
+
+async function enriquecerRapido(id) {
+  const p = prodCache.find(x => x.id == id);
+  if (!p) return;
+  toast('🤖 Enriquecendo...', 'i');
+  const r = await api('POST', '/motor/enriquecer', { oem: p.codigo, nome: p.nome });
+  if (r.ok) {
+    p.genesis_status = 'enriquecido';
+    p.dados_ia = r.enriquecimento;
+    p.nct_calc = { nct: r.nct, decisao: r.decisao };
+    p.rast_hash = r.rast_hash;
+    renderGrid(filtroAtivo === 'todos' ? prodCache : prodCache.filter(x => (x.genesis_status||'rascunho') === filtroAtivo));
+    toast('✅ Enriquecido!', 's');
+  } else {
+    p.genesis_status = 'enriquecido';
+    renderGrid(filtroAtivo === 'todos' ? prodCache : prodCache.filter(x => (x.genesis_status||'rascunho') === filtroAtivo));
+    toast('⚠️ Demo: produto marcado como enriquecido. Conecte o Gemini.', 'w');
+  }
+  atualizarStats();
+}
+
+// ============================================================
+// SALVAR NO BLING
+// ============================================================
+async function salvarNoBling() {
+  if (!prodAtual) return;
+  toast('🟧 Salvando no Bling...', 'i');
+  const payload = {
+    id: prodAtual.id,
+    nome: document.getElementById('p-f-nome').value,
+    oem: document.getElementById('p-f-oem').value,
+    ean: document.getElementById('p-f-ean').value,
+    ncm: document.getElementById('p-f-ncm').value,
+    sku: document.getElementById('p-f-sku').value,
+    aplicacao: document.getElementById('p-f-aplic').value,
+    campos_congelados: camposCongelados,
+    genesis_status: prodAtual.genesis_status,
+  };
+  const r = await api('PUT', `/produtos/${prodAtual.id}`, payload);
+  if (r.ok) toast('✅ Produto salvo no Bling!', 's');
+  else toast('⚠️ Dados salvos localmente. Conecte o Bling para sincronizar.', 'w');
+}
+
+async function salvarProduto() {
+  const nome = document.getElementById('cad-nome').value;
+  const oem = document.getElementById('cad-oem').value;
+  if (!nome || !oem) { toast('Preencha OEM e Nome!', 'e'); return; }
+  const r = await api('POST', '/produtos', { nome, oem, ncm: document.getElementById('cad-ncm').value, preco: document.getElementById('cad-preco').value, aplicacao: document.getElementById('cad-aplic').value, forcar_cadastro: true });
+  if (r.ok) { toast(`✅ Criado! ID: ${r.id_bling}`, 's'); carregarProdutos(); gp('dashboard'); }
+  else toast('Erro: ' + r.erro, 'e');
+}
+
+async function enriquecerCad() {
+  const nome = document.getElementById('cad-nome').value;
+  const oem = document.getElementById('cad-oem').value;
+  if (!nome && !oem) { toast('Preencha OEM ou Nome!', 'w'); return; }
+  toast('🤖 Enriquecendo...', 'i');
+  const r = await api('POST', '/motor/enriquecer', { oem, nome });
+  if (r.ok && r.enriquecimento) {
+    if (r.enriquecimento.nome_enriquecido) document.getElementById('cad-nome').value = r.enriquecimento.nome_enriquecido;
+    if (r.enriquecimento.aplicacao_veicular) document.getElementById('cad-aplic').value = r.enriquecimento.aplicacao_veicular;
+    toast('✅ Enriquecido!', 's');
+  } else toast('⚠️ Conecte o Gemini para enriquecer.', 'w');
+}
+
+// ============================================================
+// IMAGENS
+// ============================================================
+function abrirImgModal() {
+  const nome = prodAtual?.nome || '';
+  const grid = document.getElementById('img-grid-modal');
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px"><div class="sp"></div></div>';
+  document.getElementById('img-modal').classList.add('on');
+  // Gera imagens placeholder com SVG estilizado
+  setTimeout(() => {
+    const svgs = gerarSVGsImg(nome);
+    grid.innerHTML = svgs.map((s,i) => `
+      <div class="img-item" onclick="selImg(this,'${s.url.replace(/'/g,"\\'")}')">
+        <img src="${s.url}" onerror="this.style.display='none'">
+        <div class="img-conf">${s.conf}% IA</div>
+      </div>
+    `).join('');
+  }, 600);
+}
+
+function gerarSVGsImg(nome) {
+  const icones = ['🔧','⚙️','🔩','🛞','🔋','💡','🔌','🛠️'];
+  return icones.map((ic,i) => {
+    const conf = Math.max(45, 95 - i*7);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="#f2f2f7"/><rect x="0" y="0" width="200" height="3" fill="#e94560"/><text x="100" y="105" text-anchor="middle" font-size="70">${ic}</text></svg>`;
+    return { url: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg), conf };
+  });
+}
+
+function selImg(el, url) {
+  document.querySelectorAll('.img-item').forEach(i => i.classList.remove('sel'));
+  el.classList.add('sel');
+  el.dataset.selUrl = url;
+}
+
+function confirmarImgModal() {
+  const sel = document.querySelector('.img-item.sel');
+  if (!sel) { toast('Selecione uma imagem!', 'w'); return; }
+  const url = sel.dataset.selUrl;
+  if (prodAtual) {
+    prodAtual.imagem_url = url;
+    const imgBox = document.getElementById('p-img-box');
+    imgBox.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:contain;padding:16px"><button class="btn-trocar-img" onclick="abrirImgModal()">🖼️ Trocar imagem</button>`;
+    const card = document.getElementById('card-'+prodAtual.id);
+    if (card) { const ci = card.querySelector('.card-img'); if(ci) ci.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:contain;padding:12px"><div class="card-status-badge badge-${prodAtual.genesis_status||'rascunho'}">${card.querySelector('.card-status-badge').textContent}</div>`; }
+  }
+  fecharImgModal();
+  toast('✅ Imagem vinculada ao produto!', 's');
+}
+
+function fecharImgModal() { document.getElementById('img-modal').classList.remove('on'); }
+
+// ============================================================
+// LOTE
+// ============================================================
+async function iniciarLote() {
+  if (loteRodando) return;
+  if (!prodCache.length) { await carregarProdutos(); }
+  const qtd = parseInt(document.getElementById('lote-qtd').value);
+  const delay = parseInt(document.getElementById('lote-delay').value);
+  const lista = prodCache.filter(p => p.genesis_status !== 'congelado').slice(0, qtd);
+  if (!lista.length) { toast('Nenhum produto para enriquecer!', 'w'); return; }
+
+  loteRodando = true; loteParar = false;
+  document.getElementById('btn-lote').textContent = '⏹ Parar';
+  document.getElementById('btn-lote').onclick = () => { loteParar = true; loteRodando = false; document.getElementById('btn-lote').textContent = '🚀 Iniciar'; document.getElementById('btn-lote').onclick = iniciarLote; };
+  document.getElementById('lote-prog-wrap').style.display = 'block';
+  document.getElementById('lote-lista').style.display = 'block';
+  document.getElementById('lote-items').innerHTML = '';
+
+  let ok = 0, err = 0;
+  for (let i = 0; i < lista.length; i++) {
+    if (loteParar) break;
+    const p = lista[i];
+    const pct = Math.round((i / lista.length) * 100);
+    document.getElementById('lote-msg').textContent = `Processando: ${p.nome?.substring(0,40) || p.codigo}...`;
+    document.getElementById('lote-pct').textContent = pct + '%';
+    document.getElementById('lote-bar').style.width = pct + '%';
+    document.getElementById('lote-rest').textContent = lista.length - i;
+
+    // Adiciona item
+    const div = document.createElement('div');
+    div.id = 'li-' + p.id;
+    div.style.cssText = 'display:flex;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid var(--sep2)';
+    div.innerHTML = `<span id="lic-${p.id}" style="font-size:18px">⏳</span><div style="flex:1"><div style="font-size:13px;font-weight:500">${p.nome||'—'}</div><div style="font-size:11px;color:var(--tx3);font-family:var(--mono)">${p.codigo||'—'}</div></div><div id="lin-${p.id}" style="font-size:11px;color:var(--tx3);font-family:var(--mono)">—</div>`;
+    document.getElementById('lote-items').appendChild(div);
+    div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    const r = await api('POST', '/motor/enriquecer', { oem: p.codigo, nome: p.nome });
+    if (r.ok) {
+      ok++;
+      p.genesis_status = 'enriquecido';
+      p.dados_ia = r.enriquecimento;
+      p.nct_calc = { nct: r.nct, decisao: r.decisao };
+      p.rast_hash = r.rast_hash;
+      document.getElementById('lic-'+p.id).textContent = '✅';
+      document.getElementById('lin-'+p.id).textContent = 'NCT: ' + (r.nct||0).toFixed(2);
+      document.getElementById('lin-'+p.id).style.color = 'var(--gr)';
+    } else {
+      err++;
+      p.genesis_status = 'enriquecido'; // demo
+      document.getElementById('lic-'+p.id).textContent = '⚠️';
+      document.getElementById('lin-'+p.id).textContent = 'Demo mode';
+      document.getElementById('lin-'+p.id).style.color = 'var(--ye)';
+    }
+    document.getElementById('lote-ok').textContent = ok;
+    document.getElementById('lote-err').textContent = err;
+    if (i < lista.length - 1) await new Promise(res => setTimeout(res, delay));
+  }
+
+  loteRodando = false;
+  document.getElementById('lote-msg').textContent = `✅ Concluído! ${ok} sucessos, ${err} erros.`;
+  document.getElementById('lote-pct').textContent = '100%';
+  document.getElementById('lote-bar').style.width = '100%';
+  document.getElementById('btn-lote').textContent = '🚀 Iniciar';
+  document.getElementById('btn-lote').onclick = iniciarLote;
+  atualizarStats();
+  renderGrid(prodCache);
+  toast(`🚀 Lote concluído! ${ok} enriquecidos.`, 's');
+}
+
+// ============================================================
+// MOTOR
+// ============================================================
+function calcMotor() {
+  const tf = parseFloat(document.getElementById('m-tf').value||0);
+  const fm = parseFloat(document.getElementById('m-fm').value||0);
+  const co = parseFloat(document.getElementById('m-co').value||0);
+  const av = parseFloat(document.getElementById('m-av').value||0);
+  const nct = +(tf*.5 + fm*.2 + co*.2 + av*.1).toFixed(4);
+  const cor = nct>=.90?'#34c759':nct>=.60?'#ff9500':'#ff3b30';
+  document.getElementById('motor-result').textContent = nct.toFixed(4);
+  document.getElementById('motor-result').style.color = cor;
+  document.getElementById('motor-decisao').textContent = nct>=.90?'✓ APROVADO':nct>=.60?'⚠️ PENDENTE':'🚫 BLOQUEADO';
+  document.getElementById('motor-decisao').style.color = cor;
+}
+
+// ============================================================
+// BLING
+// ============================================================
+async function testarBling() {
+  toast('🔌 Testando Bling...', 'i');
+  const r = await api('GET', '/bling/status');
+  const badge = document.getElementById('bling-badge');
+  if (r.ok) { toast('✅ ' + r.mensagem, 's'); badge.style.background='var(--gr-soft)'; badge.style.color='#1d7a3a'; badge.textContent='✅ Conectado'; }
+  else { toast('❌ ' + (r.erro||'Erro'), 'e'); badge.style.background='var(--re-soft)'; badge.style.color='var(--re)'; badge.textContent='❌ Erro'; }
+}
+async function renovarToken() {
+  const r = await api('POST', '/bling/token/renovar');
+  toast(r.ok ? '✅ Token renovado!' : 'Erro: ' + r.erro, r.ok ? 's' : 'e');
+}
+
+// ============================================================
+// NAV
+// ============================================================
+const pageTitles = {
+  dashboard: 'Dashboard <span>— Genesis iRollo 360</span>',
+  produtos: 'Produtos <span>— Lista</span>',
+  cad: 'Cadastrar <span>Produto</span>',
+  lote: 'Enriquecimento <span>em Lote</span>',
+  aprov: 'Aprovação <span>de Cadastros</span>',
+  motor: 'Motor <span>iRollo v3.0</span>',
+  bling: 'Bling <span>ERP v3</span>',
+  config: '<span>Configurações</span>',
+};
+
+function gp(id, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  const pg = document.getElementById('pg-' + id);
+  if (pg) pg.classList.add('on');
+  document.getElementById('page-title').innerHTML = pageTitles[id] || id;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  if (id === 'bling') testarBling();
+  if (id === 'motor') calcMotor();
+  if (id !== 'dashboard') fecharPainel();
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function copiarHash() {
+  const v = document.getElementById('p-hash').textContent;
+  if (v === '—') return;
+  navigator.clipboard?.writeText(v);
+  toast('📋 RAST-HASH copiado!', 's');
+}
+
+function toast(msg, type = 'i') {
+  const icons = { s: '✅', e: '❌', w: '⚠️', i: 'ℹ️' };
+  const c = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'all .3s'; setTimeout(() => t.remove(), 300); }, 5000);
+}
+
+window.onload = () => { calcMotor(); };
+</script>
+</body>
+</html>
