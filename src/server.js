@@ -1,129 +1,187 @@
-// ============================================================
-// GENESIS iROLLO 360 — SERVER PRINCIPAL
-// Node.js + Express | MOBIS Peças Automotivas
-// Porta: 3001 | http://localhost:3001
-// ============================================================
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+/**
+ * @copyright 2026 Jose Nunes Junior / MOBIS Pecas
+ * @license Proprietario — Todos os direitos reservados
+ *
+ * server.js — v4.0
+ * Genesis iRollo 360 · genesisindexia.com.br
+ * Motor NCT by Junior / MOBIS Pecas
+ */
 
-const app = express();
+require('dotenv').config();
+const express    = require('express');
+const cors       = require('cors');
+const path       = require('path');
+
+const app  = express();
 const PORT = process.env.PORT || 3001;
 
-// ------------------------------------------------------------
+// ============================================================
 // MIDDLEWARES
-// ------------------------------------------------------------
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5500', 'http://127.0.0.1:5500', '*'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Genesis-Key']
-}));
-
+// ============================================================
+app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Serve arquivos estáticos (frontend HTML)
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Logger simples
-app.use((req, res, next) => {
-  const ts = new Date().toISOString().substring(11, 19);
-  console.log(`[${ts}] ${req.method} ${req.path}`);
-  next();
-});
+// ============================================================
+// CARREGAR MÓDULOS GENESIS
+// ============================================================
 
-// ------------------------------------------------------------
-// ROTAS
-// ------------------------------------------------------------
-const produtosRouter = require('./routes/produtos');
-const { motorRouter, blingRouter } = require('./routes/motor');
-const massaRouter = require('./routes/massa');
-const wixRouter = require('./routes/wix');
+// Motor NCT v2 — 10 blocos + NF automático + repositório
+let motorNCT = null;
+try {
+  motorNCT = require('./motor-triangulacao-v2');
+  console.log('  Motor NCT v2 carregado');
+} catch (e) {
+  console.warn('  [AVISO] motor-triangulacao-v2.js nao encontrado:', e.message);
+}
 
-app.use('/api/produtos', produtosRouter);
-app.use('/api/motor', motorRouter);
-app.use('/api/bling', blingRouter);
-app.use('/api/massa', massaRouter);
-app.use('/api/wix', wixRouter);
+// Conectores personalizados
+let conectores = null;
+try {
+  conectores = require('./conector-base');
+  console.log('  Conectores carregados');
+} catch (e) {
+  console.warn('  [AVISO] conector-base.js nao encontrado:', e.message);
+}
 
-// ------------------------------------------------------------
-// GET /api — Health check + info do sistema
-// ------------------------------------------------------------
-app.get('/api', (req, res) => {
+// Banner gerador
+let banner = null;
+try {
+  banner = require('./banner-gerador');
+  console.log('  Banner gerador carregado');
+} catch (e) {
+  console.warn('  [AVISO] banner-gerador.js nao encontrado:', e.message);
+}
+
+// Token Bling
+let blingToken = null;
+try {
+  blingToken = require('./bling-auto-token');
+  console.log('  Bling token carregado');
+} catch (e) {
+  console.warn('  [AVISO] bling-auto-token.js nao encontrado:', e.message);
+}
+
+// ============================================================
+// ROTA RAIZ — status do sistema
+// ============================================================
+app.get('/', (req, res) => {
   res.json({
-    sistema: 'Genesis iRollo 360',
-    versao: '3.0.0',
-    motor: 'iRollo v3.0',
-    empresa: 'MOBIS Peças Automotivas',
-    status: 'online',
-    timestamp: new Date().toISOString(),
+    sistema  : 'Genesis iRollo 360',
+    versao   : '4.0',
+    titular  : 'Junior / MOBIS Pecas',
+    motor    : 'NCT v2 — Motor de Confianca Tecnica',
+    status   : 'online',
+    modulos  : {
+      motor_nct   : !!motorNCT,
+      conectores  : !!conectores,
+      banner      : !!banner,
+      bling_token : !!blingToken,
+    },
     endpoints: {
-      produtos: {
-        'GET /api/produtos': 'Listar produtos do Bling',
-        'GET /api/produtos/:id': 'Buscar produto por ID',
-        'POST /api/produtos': 'Criar produto (Motor NCT + Bling)',
-        'PUT /api/produtos/:id': 'Atualizar produto',
-        'DELETE /api/produtos/:id': 'Deletar produto',
-        'POST /api/produtos/:id/enriquecer': 'Enriquecer com Gemini'
-      },
-      motor: {
-        'POST /api/motor/nct': 'Calcular NCT',
-        'POST /api/motor/processar': 'Processar produto completo',
-        'POST /api/motor/hash': 'Gerar RAST-HASH',
-        'POST /api/motor/enriquecer': 'Enriquecer via Gemini',
-        'POST /api/motor/titulo': 'Gerar título SEO Full-Match',
-        'POST /api/motor/lote': 'Processar lote'
-      },
-      bling: {
-        'GET /api/bling/status': 'Testar conexão Bling',
-        'POST /api/bling/token/renovar': 'Renovar token OAuth2',
-        'GET /api/bling/categorias': 'Listar categorias',
-        'GET /api/bling/buscar?codigo=X': 'Buscar por código'
-      },
-      massa: {
-        'POST /api/massa/upload': 'Upload CSV/XLSX',
-        'POST /api/massa/enviar-bling': 'Enviar lote para Bling',
-        'POST /api/massa/enriquecer-lote': 'Enriquecer lote via Gemini'
-      }
-    }
+      motor    : '/api/motor/triangular · /api/motor/nf · /api/motor/ncm/:codigo',
+      conectores: '/api/conectores · /api/conectores/testar · /api/conectores/whatsapp/link',
+      banner   : '/api/banner/gerar · /api/banner/todos',
+      bling    : '/api/bling/token · /api/bling/produtos',
+      health   : '/api/health',
+    },
   });
 });
 
-// ------------------------------------------------------------
-// GET /* — Serve o frontend HTML
-// ------------------------------------------------------------
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+// ============================================================
+// HEALTH CHECK
+// ============================================================
+app.get('/api/health', (req, res) => {
+  res.json({
+    ok      : true,
+    versao  : '4.0',
+    ts      : new Date().toISOString(),
+    modulos : {
+      motor_nct   : !!motorNCT,
+      conectores  : !!conectores,
+      banner      : !!banner,
+      bling_token : !!blingToken,
+    },
+  });
 });
 
-// 404 para rotas não encontradas
-app.use('/api/*', (req, res) => {
-  res.status(404).json({ erro: `Rota ${req.path} não encontrada` });
+// ============================================================
+// REGISTRAR ROTAS DOS MÓDULOS
+// ============================================================
+if (motorNCT?.registrarRotas)   motorNCT.registrarRotas(app);
+if (conectores?.registrarRotas) conectores.registrarRotas(app);
+if (banner?.registrarRotas)     banner.registrarRotas(app);
+
+// ============================================================
+// ROTA LEGADA — compatibilidade com v3.0
+// ============================================================
+app.post('/api/nct/triangular', async (req, res) => {
+  if (!motorNCT) return res.status(503).json({ ok: false, erro: 'Motor NCT nao carregado' });
+  try {
+    const resultado = await motorNCT.triangular(req.body);
+    return res.json({ ok: true, ...resultado });
+  } catch (e) {
+    return res.status(500).json({ ok: false, erro: e.message });
+  }
 });
 
-// Handler de erros global
+// ============================================================
+// BLING — rotas básicas
+// ============================================================
+app.get('/api/bling/token', async (req, res) => {
+  if (!blingToken) return res.status(503).json({ ok: false, erro: 'Bling token nao carregado' });
+  try {
+    const token = await blingToken.getToken?.();
+    return res.json({ ok: true, token: token ? 'ativo' : 'inativo' });
+  } catch (e) {
+    return res.status(500).json({ ok: false, erro: e.message });
+  }
+});
+
+// ============================================================
+// 404
+// ============================================================
+app.use((req, res) => {
+  res.status(404).json({
+    ok    : false,
+    erro  : 'Rota nao encontrada',
+    rota  : req.originalUrl,
+    dica  : 'Consulte / para ver os endpoints disponíveis',
+  });
+});
+
+// ============================================================
+// ERRO GLOBAL
+// ============================================================
 app.use((err, req, res, next) => {
-  console.error('[ERRO]', err.message);
-  res.status(500).json({ erro: err.message });
+  console.error('[Genesis] Erro:', err.message);
+  res.status(500).json({ ok: false, erro: err.message });
 });
 
-// ------------------------------------------------------------
-// START
-// ------------------------------------------------------------
+// ============================================================
+// INICIAR SERVIDOR
+// ============================================================
 app.listen(PORT, () => {
   console.log('');
   console.log('╔══════════════════════════════════════════════╗');
-  console.log('║  ⚙️  GENESIS iROLLO 360 — BACKEND ONLINE      ║');
-  console.log('║  MOBIS Peças Automotivas                      ║');
-  console.log(`║  🌐 http://localhost:${PORT}                    ║`);
-  console.log(`║  📋 API: http://localhost:${PORT}/api            ║`);
+  console.log('║  GENESIS iRollo 360 — BACKEND v4.0           ║');
+  console.log('║  Motor NCT · Junior / MOBIS Pecas            ║');
+  console.log(`║  http://localhost:${PORT}                     ║`);
   console.log('╚══════════════════════════════════════════════╝');
   console.log('');
-  console.log(`  Motor iRollo v3.0 ativo`);
-  console.log(`  Bling API: ${process.env.BLING_BASE_URL}`);
-  console.log(`  NCT mínimo: ${process.env.NCT_MINIMO || 0.90}`);
-  console.log(`  Marca padrão: ${process.env.MARCA_PADRAO || 'TRIMGO'}`);
+  console.log('  Modulos ativos:');
+  console.log(`  Motor NCT v2   : ${motorNCT   ? '✅' : '❌'}`);
+  console.log(`  Conectores     : ${conectores ? '✅' : '❌'}`);
+  console.log(`  Banner gerador : ${banner     ? '✅' : '❌'}`);
+  console.log(`  Bling token    : ${blingToken ? '✅' : '❌'}`);
+  console.log('');
+  console.log('  Endpoints principais:');
+  console.log('  POST /api/motor/triangular');
+  console.log('  POST /api/motor/nf');
+  console.log('  POST /api/banner/gerar');
+  console.log('  POST /api/conectores');
+  console.log('  GET  /api/health');
   console.log('');
 });
 
