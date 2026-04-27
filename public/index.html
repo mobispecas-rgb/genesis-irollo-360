@@ -793,7 +793,7 @@ async function verificarAPI() {
   const dot = document.getElementById('api-dot');
   const badge = document.getElementById('tb-api');
   try {
-    const r = await fetch(API);
+    const r = await fetch(API + '/produtos?limite=1');
     const d = await r.json();
     dot.className = 'api-dot on';
     badge.textContent = '● BACKEND ON';
