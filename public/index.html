@@ -793,8 +793,8 @@ async function verificarAPI() {
   const dot = document.getElementById('api-dot');
   const badge = document.getElementById('tb-api');
   try {
-    const r = await fetch(API + '/produtos?limite=1');
-    const d = await r.json();
+    const r = await fetch(API);
+    if (!r.ok) throw new Error('offline');
     dot.className = 'api-dot on';
     badge.textContent = '● BACKEND ON';
     badge.className = 'tb-badge g';
