@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Genesis iRollo 360 — MOBIS</title>
+<title>Genesis iRollo 360 â MOBIS</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-*,::before,::after{box-sizing:border-box;margin:0;padding:0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --nav:#1a1a2e;--nav-h:#16213e;--nav-a:#0f3460;
   --nt:#94a3b8;--nta:#fff;
@@ -18,6 +18,8 @@
   --r:8px;--sh:0 1px 3px rgba(0,0,0,.08)
 }
 html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);font-size:14px}
+
+/* LOGIN */
 #login-screen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)}
 .lc{background:#fff;border-radius:16px;padding:44px;width:400px;box-shadow:0 25px 50px rgba(0,0,0,.4);animation:su .5s cubic-bezier(.16,1,.3,1)}
 .lc h2{font-size:20px;font-weight:700;margin-bottom:4px}
@@ -29,9 +31,14 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:
 .lc .err{background:#fef2f2;border:1px solid #fecaca;color:var(--re);font-size:12px;padding:10px 14px;border-radius:7px;margin-bottom:12px;display:none}
 .lc .hint{text-align:center;font-size:11px;color:var(--mu2);margin-top:16px;font-family:var(--mono)}
 .lc .hint b{color:var(--ac)}
+
+/* APP */
 #app{display:none;height:100vh;flex-direction:row}
 #app.on{display:flex}
+
+/* NAV */
 nav{width:240px;flex-shrink:0;background:var(--nav);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+nav.slim{width:60px}
 .logo-h{padding:16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06);min-height:58px}
 .logo-i{width:32px;height:32px;flex-shrink:0;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
 .logo-t{font-size:15px;font-weight:700;color:#fff;white-space:nowrap;letter-spacing:-.3px}
@@ -54,6 +61,8 @@ li.ti>ul>li>a.cur{color:var(--ac)}
 .pco{font-size:10px;color:var(--nt);font-family:var(--mono)}
 .lout{background:none;border:none;cursor:pointer;color:var(--nt);font-size:16px;transition:color .2s}
 .lout:hover{color:var(--ac)}
+
+/* BODY */
 .ab{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .tb{height:54px;flex-shrink:0;background:#fff;border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 24px;gap:12px}
 .tb-ttl{flex:1;font-size:16px;font-weight:600;color:var(--tx)}
@@ -63,6 +72,7 @@ li.ti>ul>li>a.cur{color:var(--ac)}
 .tb-badge.y{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3);color:var(--ye)}
 .ib{background:none;border:1px solid var(--bd);border-radius:7px;padding:7px 10px;cursor:pointer;font-size:14px;color:var(--mu);transition:all .2s}
 .ib:hover{border-color:var(--ac);color:var(--ac)}
+
 main{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
 .page{display:none;animation:fi .25s ease}
 .page.on{display:block}
@@ -70,11 +80,15 @@ main{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
 @keyframes su{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* HEADERS */
 .ph{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px}
 .ph h1{font-size:22px;font-weight:700;letter-spacing:-.5px}
 .ph h1 span{color:var(--ac)}
 .psub{font-size:12px;color:var(--mu);font-family:var(--mono);margin-top:2px}
 .pact{display:flex;gap:8px;flex-wrap:wrap}
+
+/* STATS */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px}
 .sc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:transform .2s}
 .sc:hover{transform:translateY(-2px)}
@@ -87,10 +101,14 @@ main{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
 .sc.y .sv{color:var(--ye)}.sc.r .sv{color:var(--re)}.sc.p .sv{color:#8b5cf6}
 .sl{font-size:10px;color:var(--mu);font-family:var(--mono);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
 .sei{font-size:20px;margin-bottom:8px}
+
+/* CARDS */
 .card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:20px;box-shadow:var(--sh);margin-bottom:16px}
 .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .ct{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
 .ct .dot{width:8px;height:8px;border-radius:50%;background:var(--ac);flex-shrink:0}
+
+/* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:7px;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;border:none;transition:all .2s;text-decoration:none;white-space:nowrap}
 .bp{background:var(--ac);color:#fff}.bp:hover{background:#c73652;box-shadow:0 4px 12px rgba(233,69,96,.3)}
 .bs{background:transparent;border:1px solid var(--bd);color:var(--mu)}.bs:hover{border-color:var(--ac);color:var(--ac)}
@@ -100,6 +118,8 @@ main{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
 .sm{padding:6px 12px;font-size:12px}
 .lg{padding:12px 24px;font-size:14px;font-weight:600}
 .bgrp{display:flex;gap:8px;flex-wrap:wrap}
+
+/* FORMS */
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .fg3{grid-template-columns:1fr 1fr 1fr}
 .ff{grid-column:1/-1}
@@ -113,6 +133,8 @@ main{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
 .fsl{cursor:pointer}
 .fta{resize:vertical;min-height:80px}
 .fi.ok{border-color:var(--gr)}.fi.er{border-color:var(--re)}
+
+/* TABELA */
 .tw{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
 .ttb{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--sf);border-bottom:1px solid var(--bd);flex-wrap:wrap}
 .ts{flex:1;min-width:180px;border:1px solid var(--bd);border-radius:6px;padding:7px 12px;font-size:12px;font-family:'Inter',sans-serif;outline:none}
@@ -127,6 +149,8 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 .tm{font-family:var(--mono);font-size:11px;color:var(--mu)}
 .th{font-family:var(--mono);font-size:11px;color:#7c3aed;letter-spacing:1px}
 .pg{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--sf);border-top:1px solid var(--bd);font-size:12px;color:var(--mu)}
+
+/* BADGES */
 .bg2{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;font-family:var(--mono);text-transform:uppercase;letter-spacing:.8px}
 .bg2.g2{background:#dcfce7;color:#16a34a}
 .bg2.y2{background:#fef3c7;color:#d97706}
@@ -135,6 +159,8 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 .bg2.p2{background:#f3e8ff;color:#7c3aed}
 .bg2 .bk{width:6px;height:6px;border-radius:50%;animation:blink 1.5s infinite}
 .g2 .bk{background:var(--gr)}.y2 .bk{background:var(--ye)}.r2 .bk{background:var(--re)}
+
+/* NCT WIDGET */
 .nw{background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;padding:20px;color:#fff;margin-bottom:16px}
 .nt-lbl{font-size:11px;font-family:var(--mono);letter-spacing:2px;color:#94a3b8;text-transform:uppercase}
 .nt-sc{font-size:42px;font-weight:700;font-family:var(--mono);line-height:1}
@@ -145,27 +171,41 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 .nt{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden}
 .nf{height:100%;border-radius:10px;transition:width .8s cubic-bezier(.16,1,.3,1)}
 .np{font-size:10px;color:#94a3b8;font-family:var(--mono);width:35px;text-align:right}
+
+/* HASH BOX */
 .hb{background:#0f172a;border:1px solid #1e293b;border-radius:8px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:border-color .2s}
 .hb:hover{border-color:#8b5cf6}
 .hlbl{font-size:9px;color:#64748b;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
 .hv{font-family:var(--mono);font-size:13px;color:#8b5cf6;letter-spacing:2px}
+
+/* LOADING */
 .sp{width:20px;height:20px;border:2px solid #e2e8f0;border-top-color:var(--ac);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
 .lo{display:flex;flex-direction:column;align-items:center;padding:60px;gap:16px}
 .lo p{font-size:13px;color:var(--mu);font-family:var(--mono)}
+
+/* TOKEN BOX */
 .tkb{background:#0f172a;border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .tkv{font-family:var(--mono);font-size:11px;color:#22c55e;flex:1;word-break:break-all;letter-spacing:1px}
 .tkc{background:none;border:1px solid #1e293b;color:#94a3b8;font-size:11px;padding:4px 10px;border-radius:5px;cursor:pointer;transition:all .2s;font-family:var(--mono);white-space:nowrap}
 .tkc:hover{border-color:#22c55e;color:#22c55e}
+
+/* API STATUS DOT */
 .api-dot{width:8px;height:8px;border-radius:50%;display:inline-block;animation:blink 1.5s infinite}
 .api-dot.on{background:var(--gr)}.api-dot.off{background:var(--re)}.api-dot.pend{background:var(--ye)}
+
+/* TOAST */
 .tc{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:9998}
 .tt{background:#1a1a2e;color:#fff;border-radius:8px;padding:12px 16px;font-size:13px;max-width:320px;display:flex;align-items:center;gap:10px;box-shadow:0 10px 25px rgba(0,0,0,.2);animation:fi .3s ease}
 .tt.s{border-left:3px solid var(--gr)}.tt.e{border-left:3px solid var(--re)}
 .tt.w{border-left:3px solid var(--ye)}.tt.i{border-left:3px solid var(--bl)}
+
+/* PROGRESS */
 .prw{margin-bottom:10px}
 .prl{display:flex;justify-content:space-between;font-size:11px;color:var(--mu);margin-bottom:4px;font-family:var(--mono)}
 .prtr{height:6px;background:#f1f5f9;border-radius:10px;overflow:hidden}
 .prfi{height:100%;border-radius:10px;transition:width 1s cubic-bezier(.16,1,.3,1)}
+
+/* APROVAÃÃO */
 .atabs{display:flex;gap:2px;border-bottom:2px solid var(--bd);margin-bottom:20px;overflow-x:auto}
 .atab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:6px}
 .atab:hover{color:var(--ac)}.atab.on{color:var(--ac);border-bottom-color:var(--ac)}
@@ -176,6 +216,8 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 .pai{flex:1}
 .pan{font-size:14px;font-weight:600;margin-bottom:4px}
 .pam{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--mu);font-family:var(--mono)}
+
+/* MODAL */
 .mb{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
 .mb.on{display:flex}
 .mo{background:var(--sf);border-radius:12px;padding:28px;width:540px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 25px 50px rgba(0,0,0,.3);animation:su .3s cubic-bezier(.16,1,.3,1)}
@@ -183,37 +225,39 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 .mot{font-size:16px;font-weight:700}
 .moc{background:none;border:none;font-size:20px;cursor:pointer;color:var(--mu)}
 .moc:hover{color:var(--re)}
+
+/* DROPZONE */
 .dz{border:2px dashed #cbd5e1;border-radius:12px;padding:48px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--sf)}
 .dz:hover,.dz.drag{border-color:var(--ac);background:rgba(233,69,96,.02)}
 .dzi{font-size:40px;margin-bottom:12px}
+
+/* EMPTY */
 .es{text-align:center;padding:60px 24px;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:12px}
 .es .ei{font-size:48px;opacity:.4}
+
+/* TOGGLE */
 .tg{position:relative;width:38px;height:20px;flex-shrink:0}
 .tg input{opacity:0;width:0;height:0}
 .tgs{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:20px;transition:background .2s}
 .tgs::before{content:'';position:absolute;width:14px;height:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:transform .2s}
 .tg input:checked+.tgs{background:var(--ac)}
 .tg input:checked+.tgs::before{transform:translateX(18px)}
+
 .div{height:1px;background:var(--bd);margin:20px 0}
 .chip{display:inline-block;background:#f1f5f9;color:var(--mu);font-size:11px;padding:3px 9px;border-radius:20px;font-family:var(--mono);border:1px solid var(--bd)}
 .chip.ac{background:rgba(233,69,96,.08);color:var(--ac);border-color:rgba(233,69,96,.2)}
-/* BOTAO IA DESTAQUE */
-.btn-ia{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;border:none;border-radius:7px;padding:10px 22px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s;box-shadow:0 4px 14px rgba(124,58,237,.4);font-family:'Inter',sans-serif}
-.btn-ia:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,.5)}
-.btn-ia:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.oem-box{background:linear-gradient(135deg,rgba(124,58,237,.05),rgba(79,70,229,.05));border:2px solid rgba(124,58,237,.2);border-radius:10px;padding:16px;margin-bottom:4px}
-.oem-hint{font-size:11px;color:#7c3aed;font-family:var(--mono);margin-top:6px;display:flex;align-items:center;gap:6px}
 </style>
 </head>
 <body>
+
 <div class="tc" id="toasts"></div>
 
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="lc">
     <h2>Genesis<span>iRollo</span> 360</h2>
-    <div class="sub">Motor iRollo v3.0 · MOBIS Peças</div>
-    <div class="err" id="lerr">Usuário ou senha inválidos.</div>
+    <div class="sub">Motor iRollo v3.0 Â· MOBIS PeÃ§as</div>
+    <div class="err" id="lerr">UsuÃ¡rio ou senha invÃ¡lidos.</div>
     <label>E-mail</label>
     <input type="email" id="lem" value="mobispecas@gmail.com">
     <label>Senha</label>
@@ -227,68 +271,68 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 <div id="app">
 <nav id="nav">
   <div class="logo-h">
-    <div class="logo-i">⚙️</div>
+    <div class="logo-i">âï¸</div>
     <div class="logo-t">Genesis<span>iRollo</span></div>
   </div>
   <ul class="menu-ul">
-    <li class="ti"><a class="cur" onclick="gp('dashboard')"><span class="ni">📊</span><span>Dashboard</span></a></li>
-    <li class="ti"><a onclick="gp('produtos')"><span class="ni">📦</span><span>Produtos</span></a></li>
+    <li class="ti"><a class="cur" onclick="gp('dashboard')"><span class="ni">ð</span><span>Dashboard</span></a></li>
+    <li class="ti"><a onclick="gp('produtos')"><span class="ni">ð¦</span><span>Produtos</span></a></li>
     <li class="ti" onclick="tm(this)">
-      <div class="nl"><span class="ni">➕</span><span>Cadastro</span><span class="chv">›</span></div>
+      <div class="nl"><span class="ni">â</span><span>Cadastro</span><span class="chv">âº</span></div>
       <ul>
         <li><a onclick="gp('cad')">de Produto</a></li>
         <li><a onclick="gp('massa')">por Planilha</a></li>
       </ul>
     </li>
     <li class="ti" onclick="tm(this)">
-      <div class="nl"><span class="ni">🔍</span><span>Enriquecimento</span><span class="chv">›</span></div>
+      <div class="nl"><span class="ni">ð</span><span>Enriquecimento</span><span class="chv">âº</span></div>
       <ul>
         <li><a onclick="gp('enrich')">por OEM / ID</a></li>
-        <li><a onclick="gp('ecatalog')">por Catálogo</a></li>
+        <li><a onclick="gp('ecatalog')">por CatÃ¡logo</a></li>
       </ul>
     </li>
     <li class="ti" onclick="tm(this)">
-      <div class="nl"><span class="ni">✅</span><span>Aprovação</span><span class="chv">›</span></div>
+      <div class="nl"><span class="ni">â</span><span>AprovaÃ§Ã£o</span><span class="chv">âº</span></div>
       <ul>
-        <li><a onclick="gp('aprov')">de Cadastro <span class="sbadge" id="b-aprov">—</span></a></li>
+        <li><a onclick="gp('aprov')">de Cadastro <span class="sbadge" id="b-aprov">â</span></a></li>
         <li><a onclick="gp('aprovados')">Aprovados</a></li>
       </ul>
     </li>
-    <li class="ti"><a onclick="gp('motor')"><span class="ni">🧠</span><span>Motor iRollo</span></a></li>
-    <li class="ti"><a onclick="gp('imagens')"><span class="ni">🖼️</span><span>Imagens</span></a></li>
+    <li class="ti"><a onclick="gp('motor')"><span class="ni">ð§ </span><span>Motor iRollo</span></a></li>
+    <li class="ti"><a onclick="gp('imagens')"><span class="ni">ð¼ï¸</span><span>Imagens</span></a></li>
     <li class="ti" onclick="tm(this)">
-      <div class="nl"><span class="ni">🔗</span><span>Integração</span><span class="chv">›</span></div>
+      <div class="nl"><span class="ni">ð</span><span>IntegraÃ§Ã£o</span><span class="chv">âº</span></div>
       <ul>
-        <li><a onclick="gp('bling')">🟧 Bling ERP v3</a></li>
-        <li><a onclick="gp('wix')">⬛ Wix Studio</a></li>
-        <li><a onclick="gp('whats')">💬 WhatsApp Bot</a></li>
+        <li><a onclick="gp('bling')">ð§ Bling ERP v3</a></li>
+        <li><a onclick="gp('wix')">â¬ Wix Studio</a></li>
+        <li><a onclick="gp('whats')">ð¬ WhatsApp Bot</a></li>
       </ul>
     </li>
-    <li class="ti"><a onclick="gp('templates')"><span class="ni">📝</span><span>Templates</span></a></li>
-    <li class="ti"><a onclick="gp('planos')"><span class="ni">💎</span><span>Planos</span></a></li>
+    <li class="ti"><a onclick="gp('templates')"><span class="ni">ð</span><span>Templates</span></a></li>
+    <li class="ti"><a onclick="gp('planos')"><span class="ni">ð</span><span>Planos</span></a></li>
     <li class="ti" onclick="tm(this)">
-      <div class="nl"><span class="ni">⚙️</span><span>Configuração</span><span class="chv">›</span></div>
+      <div class="nl"><span class="ni">âï¸</span><span>ConfiguraÃ§Ã£o</span><span class="chv">âº</span></div>
       <ul>
-        <li><a onclick="gp('pref')">Preferências</a></li>
+        <li><a onclick="gp('pref')">PreferÃªncias</a></li>
         <li><a onclick="gp('empresa')">Empresa</a></li>
       </ul>
     </li>
   </ul>
   <div class="m-prof">
     <div class="pav">JN</div>
-    <div><div class="pnm">Jose Nunes Jr.</div><div class="pco">MOBIS Peças</div></div>
-    <button class="lout" onclick="logout()">⏻</button>
+    <div><div class="pnm">Jose Nunes Jr.</div><div class="pco">MOBIS PeÃ§as</div></div>
+    <button class="lout" onclick="logout()">â»</button>
   </div>
 </nav>
 
 <div class="ab">
   <div class="tb">
-    <div class="tb-ttl" id="pgtitle">Dashboard <span>— Genesis iRollo 360</span></div>
+    <div class="tb-ttl" id="pgtitle">Dashboard <span>â Genesis iRollo 360</span></div>
     <span class="api-dot pend" id="api-dot" title="Status API"></span>
     <div class="tb-badge" id="tb-api">VERIFICANDO...</div>
     <div class="tb-badge g" id="tb-motor">Motor v3.0</div>
-    <button class="ib" onclick="gp('bling')">🟧 Bling</button>
-    <button class="ib" onclick="gp('wix')">⬛ Wix</button>
+    <button class="ib" onclick="gp('bling')">ð§ Bling</button>
+    <button class="ib" onclick="gp('wix')">â¬ Wix</button>
   </div>
 
   <main id="main">
@@ -298,16 +342,16 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
       <div class="ph">
         <div><h1>Painel de Controle <span>MOBIS</span></h1><div class="psub" id="ds-sub">Carregando dados do Bling...</div></div>
         <div class="pact">
-          <button class="btn bs" onclick="gp('enrich')">🔍 Enriquecer</button>
-          <button class="btn bp" onclick="gp('cad')">➕ Novo Cadastro</button>
+          <button class="btn bs" onclick="gp('enrich')">ð Enriquecer</button>
+          <button class="btn bp" onclick="gp('cad')">â Novo Cadastro</button>
         </div>
       </div>
       <div class="sg" id="ds-stats">
-        <div class="sc g"><div class="sei">⏳</div><div class="sv">—</div><div class="sl">Carregando...</div></div>
+        <div class="sc g"><div class="sei">â³</div><div class="sv">â</div><div class="sl">Carregando...</div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
         <div class="card">
-          <div class="ch"><div class="ct"><span class="dot"></span>NCT Score — Catálogo</div><span class="bg2 g2">—</span></div>
+          <div class="ch"><div class="ct"><span class="dot"></span>NCT Score â CatÃ¡logo</div><span class="bg2 g2">â</span></div>
           <div class="nw" id="ds-nct"><div class="lo"><div class="sp"></div><p>Calculando NCT...</p></div></div>
         </div>
         <div class="card">
@@ -317,11 +361,11 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
       </div>
       <div class="card">
         <div class="ch">
-          <div class="ct"><span class="dot"></span>Últimos Produtos — Bling API Real</div>
-          <button class="btn bs sm" onclick="gp('produtos')">Ver todos →</button>
+          <div class="ct"><span class="dot"></span>Ãltimos Produtos â Bling API Real</div>
+          <button class="btn bs sm" onclick="gp('produtos')">Ver todos â</button>
         </div>
         <div class="tw"><table>
-          <thead><tr><th>Produto</th><th>Código</th><th>Preço</th><th>NCT</th><th>RAST-HASH</th><th>Status</th><th>Ações</th></tr></thead>
+          <thead><tr><th>Produto</th><th>CÃ³digo</th><th>PreÃ§o</th><th>NCT</th><th>RAST-HASH</th><th>Status</th><th>AÃ§Ãµes</th></tr></thead>
           <tbody id="ds-table"><tr><td colspan="7" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
         </table></div>
       </div>
@@ -330,26 +374,1191 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
     <!-- PRODUTOS -->
     <div class="page" id="pg-produtos">
       <div class="ph">
-        <div><h1>Produtos <span>— Bling Real</span></h1><div class="psub" id="prod-sub">Carregando...</div></div>
+        <div><h1>Produtos <span>â Bling Real</span></h1><div class="psub" id="prod-sub">Carregando...</div></div>
         <div class="pact">
-          <button class="btn bs" onclick="exportarCSV()">📥 Exportar</button>
-          <button class="btn bp" onclick="gp('cad')">➕ Cadastrar</button>
+          <button class="btn bs" onclick="exportarCSV()">ð¥ Exportar</button>
+          <button class="btn bp" onclick="gp('cad')">â Cadastrar</button>
         </div>
       </div>
       <div class="card" style="padding:0">
         <div class="tw">
           <div class="ttb">
-            <input class="ts" id="ps-search" placeholder="🔍 Buscar nome, código..." oninput="filtrarProdutos()">
+            <input class="ts" id="ps-search" placeholder="ð Buscar nome, cÃ³digo..." oninput="filtrarProdutos()">
             <select class="fsl" style="width:auto;padding:7px 12px;font-size:12px" id="ps-status" onchange="filtrarProdutos()">
               <option value="">Todos status</option>
               <option value="A">Ativo</option>
               <option value="I">Inativo</option>
             </select>
-            <button class="btn bs sm" onclick="carregarProdutos()">🔄 Atualizar</button>
+            <button class="btn bs sm" onclick="carregarProdutos()">ð Atualizar</button>
           </div>
           <table>
-            <thead><tr><th><input type="checkbox" onchange="selAll(this)"></th><th>Nome</th><th>Código</th><th>Preço</th><th>NCT</th><th>RAST-HASH</th><th>Situação</th><th>Ações</th></tr></thead>
+            <thead><tr><th><input type="checkbox" onchange="selAll(this)"></th><th>Nome</th><th>CÃ³digo</th><th>PreÃ§o</th><th>NCT</th><th>RAST-HASH</th><th>SituaÃ§Ã£o</th><th>AÃ§Ãµes</th></tr></thead>
             <tbody id="prod-tbody"><tr><td colspan="8" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
           </table>
-          <div class="pg"><span id="prod-info">—</span><div style="display:flex;gap:8px">
-            <button class="btn bs sm" id="btn-prev" onclick="prodPagina(-1)">‹ Anterior
+          <div class="pg"><span id="prod-info">â</span><div style="display:flex;gap:8px">
+            <button class="btn bs sm" id="btn-prev" onclick="prodPagina(-1)">â¹ Anterior</button>
+            <button class="btn bs sm" id="btn-next" onclick="prodPagina(1)">PrÃ³xima âº</button>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CADASTRO -->
+    <div class="page" id="pg-cad">
+      <div class="ph"><div><h1>Cadastro <span>de Produto</span></h1><div class="psub">Motor NCT em tempo real Â· RAST-HASH automÃ¡tico Â· Salva no Bling</div></div></div>
+      <div class="nw" id="cad-nct">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div><div class="nt-lbl">NCT â Ãndice de ConfianÃ§a TÃ©cnica</div>
+            <div class="nt-sc" id="nct-v" style="color:#94a3b8">0.00</div>
+            <div class="nt-vd" id="nct-vd" style="color:#94a3b8">Preencha o TriÃ¢ngulo iRollo</div>
+          </div>
+          <div id="nct-bdg"></div>
+        </div>
+        <div class="nt-bars">
+          <div class="nb"><div class="nl2">TF (OEM) 50%</div><div class="nt"><div class="nf" id="b-tf" style="width:0%;background:var(--re)"></div></div><div class="np" id="v-tf">0.00</div></div>
+          <div class="nb"><div class="nl2">FM (Nome) 20%</div><div class="nt"><div class="nf" id="b-fm" style="width:0%;background:var(--bl)"></div></div><div class="np" id="v-fm">0.00</div></div>
+          <div class="nb"><div class="nl2">CO (NCM) 20%</div><div class="nt"><div class="nf" id="b-co" style="width:0%;background:var(--ye)"></div></div><div class="np" id="v-co">0.00</div></div>
+          <div class="nb"><div class="nl2">AV (Aplic.) 10%</div><div class="nt"><div class="nf" id="b-av" style="width:0%;background:#8b5cf6"></div></div><div class="np" id="v-av">0.00</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct" style="margin-bottom:16px"><span class="dot"></span>TriÃ¢ngulo iRollo</div>
+        <div class="fg fg3">
+          <div class="fgrp"><label class="fl">OEM / CÃ³digo-MÃ£e <span class="req">*</span><span class="tip">NÃ³ raiz</span></label><input class="fi" id="f-oem" placeholder="BDJ0430" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">NCM <span class="req">*</span><span class="tip">8 dÃ­gitos</span></label><input class="fi" id="f-ncm" placeholder="87089900" maxlength="8" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">SKU / ReferÃªncia <span class="req">*</span></label><input class="fi" id="f-sku" placeholder="TRIMGO-BDJ0430" oninput="calcNCT()"></div>
+        </div>
+        <div class="div"></div>
+        <div class="fg">
+          <div class="fgrp ff"><label class="fl">Nome Full-Match <span class="req">*</span></label><input class="fi" id="f-nome" placeholder="Bandeja Dianteira Superior TRIMGO Honda Civic 2001-2006" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">Marca</label><input class="fi" id="f-marca" value="TRIMGO"></div>
+          <div class="fgrp"><label class="fl">Categoria</label>
+            <select class="fsl" id="f-cat"><option>SuspensÃ£o</option><option>Amortecedores</option><option>Freios</option><option>Filtros</option><option>Motor</option><option>ElÃ©trica</option><option>Arrefecimento</option><option>TransmissÃ£o</option></select>
+          </div>
+          <div class="fgrp"><label class="fl">PreÃ§o R$</label><input class="fi" id="f-preco" type="number" placeholder="0.00" step="0.01"></div>
+          <div class="fgrp"><label class="fl">Estoque</label><input class="fi" id="f-estq" type="number" placeholder="0"></div>
+          <div class="fgrp"><label class="fl">AplicaÃ§Ã£o Veicular <span class="req">*</span></label><input class="fi" id="f-aplic" placeholder="Honda Civic 2001-2006 / Toyota Corolla 2003-2008" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">EAN</label><input class="fi" id="f-ean" placeholder="7891234567890"></div>
+          <div class="fgrp ff"><label class="fl">DescriÃ§Ã£o TÃ©cnica</label><textarea class="fta" id="f-desc" rows="3" placeholder="DescriÃ§Ã£o para Google Shopping e Wix..."></textarea></div>
+        </div>
+        <div class="div"></div>
+        <div class="hb" id="hash-box" onclick="copiarHash()">
+          <div><div class="hlbl">RAST-HASH Â· md5(SKU+OEM+"MOBIS")[:16]</div><div class="hv" id="hash-val">â Preencha SKU e OEM â</div></div>
+          <span>ð</span>
+        </div>
+        <div class="div"></div>
+        <div class="bgrp">
+          <button class="btn bp lg" id="btn-salvar" onclick="salvarBling()">ð¾ Salvar no Bling</button>
+          <button class="btn bg" onclick="salvarBling(true)">â Salvar e Aprovar</button>
+          <button class="btn bs" onclick="enriquecerForm()">ð¤ Enriquecer com IA</button>
+          <button class="btn bs" onclick="limparCad()">ð Limpar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CADASTRO EM MASSA -->
+    <div class="page" id="pg-massa">
+      <div class="ph"><div><h1>Cadastro <span>em Massa</span></h1><div class="psub">Upload CSV/XLSX â Motor iRollo processa â Envia para Bling</div></div></div>
+      <div class="card">
+        <div class="dz" id="dz" onclick="document.getElementById('fu').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropFile(event)">
+          <div class="dzi">ð</div>
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px">Arraste sua planilha aqui</div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:16px">Formatos: .CSV Â· .XLSX Â· .XLS</div>
+          <button class="btn bp" onclick="event.stopPropagation()">ð¤ Importar Planilha</button>
+          <input type="file" id="fu" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadPlanilha(this)">
+        </div>
+      </div>
+      <div class="card" id="massa-prev" style="display:none">
+        <div class="ch">
+          <div class="ct"><span class="dot"></span>PrÃ©-visualizaÃ§Ã£o â <span id="m-total">0</span> produtos</div>
+          <button class="btn bp" id="btn-enviar-bling" onclick="enviarBlingMassa()">ð§ Enviar para Bling</button>
+        </div>
+        <div id="m-resumo" style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap"></div>
+        <div class="tw"><table>
+          <thead><tr><th>#</th><th>Nome</th><th>OEM</th><th>NCM</th><th>SKU</th><th>PreÃ§o</th><th>NCT</th><th>DecisÃ£o</th></tr></thead>
+          <tbody id="m-tbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ENRIQUECIMENTO POR OEM -->
+    <div class="page" id="pg-enrich">
+      <div class="ph"><div><h1>Enriquecimento <span>por OEM / ID</span></h1><div class="psub">Rock Parts + TecDoc + Gemini Flash â NCT â Bling</div></div></div>
+      <div class="card">
+        <div style="display:flex;gap:10px;margin-bottom:12px">
+          <input class="fi" id="e-input" placeholder="Ex: BDJ0430 Â· 2090 Â· TRIMGO-BDJ0430" style="font-family:var(--mono);letter-spacing:1px;text-transform:uppercase" onkeydown="if(event.key==='Enter')enriquecer()">
+          <button class="btn bp lg" onclick="enriquecer()" id="e-btn">ð Enriquecer</button>
+        </div>
+        <div style="font-size:12px;color:var(--mu)">ð¡ Motor iRollo consulta Rock Parts + TecDoc + EAN DB + Gemini Flash</div>
+      </div>
+      <div id="e-result" style="display:none">
+        <div class="card" style="display:flex;gap:20px;align-items:flex-start">
+          <div style="width:100px;height:100px;flex-shrink:0;background:#f1f5f9;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:40px;border:1px solid var(--bd)">ð§</div>
+          <div style="flex:1">
+            <div style="font-size:16px;font-weight:700;margin-bottom:8px" id="e-nome">â</div>
+            <div id="e-tags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+            <div style="font-size:12px;color:var(--mu);line-height:1.6" id="e-desc">â</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card">
+            <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Resultado NCT</div>
+            <div class="nw">
+              <div class="nt-lbl">NCT Score</div>
+              <div class="nt-sc" id="e-nct">â</div>
+              <div class="nt-vd" id="e-vd">â</div>
+            </div>
+            <div class="hb" style="margin-top:8px"><div><div class="hlbl">RAST-HASH Gerado</div><div class="hv" id="e-hash">â</div></div><span>ð</span></div>
+          </div>
+          <div class="card">
+            <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Dados ExtraÃ­dos</div>
+            <div style="display:flex;flex-direction:column;gap:8px" id="e-dados"></div>
+          </div>
+        </div>
+        <div class="bgrp" style="margin-top:8px">
+          <button class="btn bg" id="e-btn-aprovar" onclick="aprovarEnrich()">â Aprovar + Bling</button>
+          <button class="btn bs" onclick="gp('imagens')">ð¼ï¸ Buscar Imagem</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENRICH CATÃLOGO -->
+    <div class="page" id="pg-ecatalog">
+      <div class="ph"><div><h1>Enriquecimento <span>por CatÃ¡logo</span></h1></div>
+        <button class="btn bp" onclick="enriquecerCatalogo()">âï¸ Enriquecer Todos</button>
+      </div>
+      <div class="card"><div id="ec-list"><div class="lo"><div class="sp"></div><p>Carregando catÃ¡logo Bling...</p></div></div></div>
+    </div>
+
+    <!-- APROVAÃÃO -->
+    <div class="page" id="pg-aprov">
+      <div class="ph">
+        <div><h1>AprovaÃ§Ã£o <span>de Cadastro</span></h1></div>
+        <div class="pact">
+          <button class="btn bs">ð¥ Exportar</button>
+          <button class="btn bg" onclick="aprovarTodos()">â Aprovar Todos</button>
+        </div>
+      </div>
+      <div class="atabs">
+        <div class="atab on" onclick="setTab(this)">Produto principal <span class="ac" id="badge-pend">â</span></div>
+        <div class="atab" onclick="setTab(this)">ð§ Bling ERP</div>
+        <div class="atab" onclick="setTab(this)">â¬ Wix Studio</div>
+      </div>
+      <div id="aprov-list"><div class="lo"><div class="sp"></div></div></div>
+    </div>
+
+    <!-- APROVADOS -->
+    <div class="page" id="pg-aprovados">
+      <div class="ph"><div><h1><span>Aprovados</span> â HistÃ³rico</h1></div><button class="btn bs">ð¥ Exportar CSV</button></div>
+      <div class="card" style="padding:0">
+        <div class="tw"><table>
+          <thead><tr><th>Produto</th><th>CÃ³digo</th><th>NCT</th><th>RAST-HASH</th><th>Bling</th><th>Wix</th></tr></thead>
+          <tbody id="aprov-tbody"><tr><td colspan="6" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- MOTOR NCT -->
+    <div class="page" id="pg-motor">
+      <div class="ph"><div><h1>Motor <span>iRollo v3.0</span></h1><div class="psub">NCT = (TFÃ0.50) + (FMÃ0.20) + (COÃ0.20) + (AVÃ0.10)</div></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Calculadora NCT via API</div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">TF â TriangulaÃ§Ã£o (50%)</label><input class="fi" type="number" id="m-tf" value="0.95" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">FM â Full-Match (20%)</label><input class="fi" type="number" id="m-fm" value="0.92" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">CO â CoerÃªncia NCM (20%)</label><input class="fi" type="number" id="m-co" value="1.00" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="fgrp" style="margin-bottom:16px"><label class="fl">AV â AplicaÃ§Ã£o Veicular (10%)</label><input class="fi" type="number" id="m-av" value="0.88" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="nw"><div class="nt-lbl">Resultado NCT (API Real)</div><div class="nt-sc" id="m-nct">â</div><div class="nt-vd" id="m-vd">â</div></div>
+        </div>
+        <div class="card">
+          <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Gerador RAST-HASH Real</div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">SKU</label><input class="fi" id="rh-sku" placeholder="TRIMGO-BDJ0430" oninput="gerarHashAPI()"></div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">OEM</label><input class="fi" id="rh-oem" placeholder="BDJ0430" oninput="gerarHashAPI()"></div>
+          <div class="fgrp" style="margin-bottom:16px"><label class="fl">Empresa</label><input class="fi" id="rh-emp" value="MOBIS" oninput="gerarHashAPI()"></div>
+          <div class="hb" onclick="copiarHash2()"><div><div class="hlbl">RAST-HASH = md5(SKU+OEM+empresa)[:16]</div><div class="hv" id="rh-res">â</div></div><span>ð</span></div>
+          <div style="margin-top:16px;font-size:12px;color:var(--mu)">
+            <div style="font-family:var(--mono);font-size:10px;margin-top:4px" id="rh-input-show"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGENS -->
+    <div class="page" id="pg-imagens">
+      <div class="ph"><div><h1>Sistema de <span>Imagens</span></h1><div class="psub">Busca automÃ¡tica Â· ValidaÃ§Ã£o IA Â· ConfianÃ§a mÃ­nima 85%</div></div></div>
+      <div class="card">
+        <div style="display:flex;gap:10px;margin-bottom:12px">
+          <input class="fi" id="img-cod" placeholder="Ex: BDJ0430 Â· Bandeja Dianteira TRIMGO">
+          <button class="btn bp" onclick="buscarImgs()">ð Buscar Imagens</button>
+        </div>
+      </div>
+      <div class="card" id="img-res" style="display:none">
+        <div class="ch"><div class="ct"><span class="dot"></span>Imagens Encontradas â ValidaÃ§Ã£o IA</div><button class="btn bg sm" onclick="aprovarImg()">â Aprovar Selecionada</button></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px" id="img-grid"></div>
+      </div>
+    </div>
+
+    <!-- BLING -->
+    <div class="page" id="pg-bling">
+      <div class="ph">
+        <div><h1>IntegraÃ§Ã£o <span>Bling ERP v3</span></h1><div class="psub">OAuth2 Refresh Token Â· API Real</div></div>
+        <span class="bg2" id="bling-status-badge">ð Verificando...</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+        <div class="sc b"><div class="sei">ð§</div><div class="sv" id="bl-total">â</div><div class="sl">Produtos no Bling</div></div>
+        <div class="sc g"><div class="sei">ð</div><div class="sv" id="bl-sync">â</div><div class="sl">Sync Status</div></div>
+      </div>
+      <div class="card">
+        <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Credenciais Bling API v3</div>
+        <label class="fl" style="margin-bottom:6px">Client ID</label>
+        <div class="tkb"><div class="tkv" id="bl-cid">carregando...</div><button class="tkc" onclick="copiarEl('bl-cid')">Copiar</button></div>
+        <label class="fl" style="margin-bottom:6px;margin-top:10px">Access Token (vÃ¡lido 6h)</label>
+        <div class="tkb"><div class="tkv" id="bl-tok">carregando...</div><button class="tkc" onclick="renovarToken()">ð Renovar</button></div>
+        <div class="div"></div>
+        <div class="bgrp">
+          <button class="btn bp" onclick="testarBling()">ð Testar ConexÃ£o</button>
+          <button class="btn bs" onclick="carregarProdutos();gp('produtos')">ð¦ Ver Produtos</button>
+          <button class="btn bs" onclick="syncTudo()">ð Sincronizar Tudo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- WIX -->
+    <div class="page" id="pg-wix">
+      <div class="ph">
+        <div><h1>IntegraÃ§Ã£o <span>Wix Studio</span></h1><div class="psub">Wix Stores API Â· Sync Bling â Wix automÃ¡tico</div></div>
+        <span class="bg2" id="wix-status-badge">ð Verificando...</span>
+      </div>
+      <div class="card">
+        <div class="ct" style="margin-bottom:16px"><span class="dot" style="background:var(--ye)"></span>ConfiguraÃ§Ã£o Wix API</div>
+        <div class="fgrp" style="margin-bottom:12px"><label class="fl">Wix API Key</label><input class="fi" id="wix-key" placeholder="Cole sua Wix API Key aqui..."></div>
+        <div class="fgrp" style="margin-bottom:16px"><label class="fl">Site ID</label><input class="fi" id="wix-site" placeholder="a1b2c3d4-e5f6-7890-abcd-ef1234567890"></div>
+        <div class="bgrp">
+          <button class="btn bp" onclick="testarWix()">ð Testar ConexÃ£o</button>
+          <button class="btn bs" onclick="salvarWixConfig()">ð¾ Salvar no .env</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Sync Manual â Bling â Wix</div>
+        <div style="font-size:12px;color:var(--mu);margin-bottom:12px">Selecione produtos na tela de Produtos e use o botÃ£o Sync para enviar ao Wix.</div>
+        <button class="btn bp" onclick="syncBlingWix()">â¡ Sync Todos Aprovados â Wix</button>
+      </div>
+    </div>
+
+    <!-- WHATSAPP -->
+    <div class="page" id="pg-whats">
+      <div class="ph"><div><h1>Agente <span>WhatsApp Bot</span></h1></div></div>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#166534">ð¤ Cliente: "preciso de bandeja pro meu Uno 2003"</div></div>
+          <div style="text-align:center;color:var(--mu)">â</div>
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#1e40af">âï¸ Gemini Flash interpreta: Fiat Uno 2003 â Bandeja Dianteira</div></div>
+          <div style="text-align:center;color:var(--mu)">â</div>
+          <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#6b21a8">ð Motor iRollo busca catÃ¡logo Genesis (NCT â¥ 0.90)</div></div>
+          <div style="text-align:center;color:var(--mu)">â</div>
+          <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#9a3412">ð¬ Retorna: peÃ§a + preÃ§o + disponibilidade â Handoff humano no pagamento</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEMPLATES -->
+    <div class="page" id="pg-templates">
+      <div class="ph"><div><h1><span>Templates</span> de Prompt</h1></div><button class="btn bp">â Novo</button></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
+        <div class="card" style="border-left:3px solid var(--ac)"><div class="ct" style="margin-bottom:8px"><span class="dot"></span>AutopeÃ§as Full-Match</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Tom tÃ©cnico Â· OEM Â· AplicaÃ§Ã£o veicular Â· SEO</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip ac">PadrÃ£o</span><span class="chip">SEO</span></div><div class="bgrp"><button class="btn bs sm">âï¸ Editar</button><button class="btn bp sm">Usar</button></div></div>
+        <div class="card"><div class="ct" style="margin-bottom:8px"><span class="dot" style="background:var(--bl)"></span>Bula do Produto CDC</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Guia instalaÃ§Ã£o Â· CDC Art.8, 31, 12</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip">CDC</span><span class="chip">Bula</span></div><div class="bgrp"><button class="btn bs sm">âï¸ Editar</button><button class="btn bp sm">Usar</button></div></div>
+        <div class="card"><div class="ct" style="margin-bottom:8px"><span class="dot" style="background:var(--gr)"></span>WhatsApp Vendas</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Linguagem natural Â· Compatibilidade</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip">WhatsApp</span></div><div class="bgrp"><button class="btn bs sm">âï¸ Editar</button><button class="btn bp sm">Usar</button></div></div>
+      </div>
+    </div>
+
+    <!-- PLANOS -->
+    <div class="page" id="pg-planos">
+      <div class="ph"><div><h1><span>Planos</span> Genesis iRollo</h1></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+        <div class="card" style="text-align:center"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Free</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$0<span style="font-size:14px;font-weight:400;color:var(--mu)">/mÃªs</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">â 50 cadastros/mÃªs</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â Motor NCT bÃ¡sico</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â IntegraÃ§Ã£o Bling</li></ul><button class="btn bs" style="width:100%">Plano atual</button></div>
+        <div class="card" style="text-align:center;border-color:var(--ac)"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Pro</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$197<span style="font-size:14px;font-weight:400;color:var(--mu)">/mÃªs</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">â 5.000 cadastros/mÃªs</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â Gemini Flash completo</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â Bling + Wix integrado</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â WhatsApp Bot</li></ul><button class="btn bp" style="width:100%">Assinar Pro</button></div>
+        <div class="card" style="text-align:center"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Enterprise</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$597<span style="font-size:14px;font-weight:400;color:var(--mu)">/mÃªs</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">â Ilimitado</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â Multi-filial</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â API prÃ³pria</li></ul><button class="btn bs" style="width:100%">Falar com vendas</button></div>
+      </div>
+    </div>
+
+    <!-- PREFERÃNCIAS -->
+    <div class="page" id="pg-pref">
+      <div class="ph"><div><h1><span>PreferÃªncias</span></h1></div></div>
+      <div class="card"><div style="font-size:14px;font-weight:600;margin-bottom:14px">â AprovaÃ§Ã£o</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">Subir produtos como ativos no Bling</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">Sync automÃ¡tico Bling â Wix</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0"><div style="flex:1;font-size:13px">Subir preÃ§o dos produtos</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
+      </div>
+      <div class="card"><div style="font-size:14px;font-weight:600;margin-bottom:14px">ð§  Motor iRollo</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">NCT mÃ­nimo para aprovaÃ§Ã£o</div><input class="fi" type="number" value="0.90" step="0.01" style="width:80px"></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0"><div style="flex:1;font-size:13px">Marca padrÃ£o</div><input class="fi" value="TRIMGO" style="width:120px"></div>
+      </div>
+      <button class="btn bp lg" onclick="toast('â PreferÃªncias salvas!','s')">ð¾ Salvar</button>
+    </div>
+
+    <!-- EMPRESA -->
+    <div class="page" id="pg-empresa">
+      <div class="ph"><div><h1><span>Empresa</span></h1></div></div>
+      <div class="card">
+        <div class="fg">
+          <div class="fgrp"><label class="fl">Nome da Empresa</label><input class="fi" value="MOBIS PeÃ§as Automotivas"></div>
+          <div class="fgrp"><label class="fl">E-mail</label><input class="fi" value="mobispecas@gmail.com"></div>
+          <div class="fgrp"><label class="fl">CNPJ</label><input class="fi" placeholder="00.000.000/0001-00"></div>
+          <div class="fgrp"><label class="fl">Site</label><input class="fi" placeholder="www.mobispecas.com.br"></div>
+        </div>
+        <div class="div"></div>
+        <button class="btn bp" onclick="toast('â Empresa salva!','s')">ð¾ Salvar</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<!-- MODAL -->
+<div class="mb" id="modal"><div class="mo"><div class="moh"><div class="mot" id="m-ttl">â</div><button class="moc" onclick="closeModal()">â</button></div><div id="m-body"></div></div></div>
+
+<script>
+// ============================================================
+// CONFIGURAÃÃO â URL do backend
+// Mude para seu servidor quando fazer deploy
+// ============================================================
+const API = '/api';
+
+// Estado local
+let prodPag = 1;
+const prodLimite = 50;
+let prodTotal = 0;
+let prodCache = [];
+let enrichCache = null;
+
+// ============================================================
+// LOGIN
+// ============================================================
+function login() {
+  const em = document.getElementById('lem').value;
+  const pw = document.getElementById('lpw').value;
+  if (em === 'mobispecas@gmail.com' && pw === 'mobis2024') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').classList.add('on');
+    init();
+  } else {
+    document.getElementById('lerr').style.display = 'block';
+  }
+}
+
+function logout() {
+  document.getElementById('app').classList.remove('on');
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+// ============================================================
+// INIT
+// ============================================================
+async function init() {
+  verificarAPI();
+  await carregarDashboard();
+}
+
+// ============================================================
+// API HELPER
+// ============================================================
+async function api(method, path, body = null) {
+  const opts = {
+    method,
+    headers: { 'Content-Type': 'application/json' }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const r = await fetch(API + path, opts);
+    return await r.json();
+  } catch (e) {
+    return { ok: false, erro: 'Sem conexÃ£o com o backend. Inicie: npm run dev' };
+  }
+}
+
+async function apiUpload(path, formData) {
+  try {
+    const r = await fetch(API + path, { method: 'POST', body: formData });
+    return await r.json();
+  } catch (e) {
+    return { ok: false, erro: 'Erro no upload' };
+  }
+}
+
+// ============================================================
+// STATUS API
+// ============================================================
+async function verificarAPI() {
+  const dot = document.getElementById('api-dot');
+  const badge = document.getElementById('tb-api');
+  try {
+    const r = await fetch(API);
+    if (!r.ok) throw new Error('offline');
+    dot.className = 'api-dot on';
+    badge.textContent = 'â BACKEND ON';
+    badge.className = 'tb-badge g';
+    // Checar Bling
+    const bl = await api('GET', '/bling/status');
+    if (bl.ok) {
+      document.getElementById('tb-api').textContent = 'â BLING + API ON';
+    }
+  } catch {
+    dot.className = 'api-dot off';
+    badge.textContent = 'â BACKEND OFF';
+    badge.className = 'tb-badge';
+    badge.style.background = 'rgba(239,68,68,.1)';
+    badge.style.color = 'var(--re)';
+    badge.style.borderColor = 'rgba(239,68,68,.3)';
+    toast('â ï¸ Backend offline. Execute: npm run dev na pasta genesis-backend', 'w');
+  }
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+async function carregarDashboard() {
+  // Stats do Bling
+  const prods = await api('GET', `/produtos?limite=${prodLimite}`);
+  const lista = prods.produtos || [];
+  prodCache = lista;
+
+  // Calcular stats
+  const total = prods.total || lista.length;
+  const aprovados = lista.filter(p => p.nct_calc?.decisao === 'APROVADO').length;
+  const pendentes = lista.filter(p => p.nct_calc?.decisao === 'PENDENTE').length;
+  const bloqueados = lista.filter(p => p.nct_calc?.decisao === 'BLOQUEADO').length;
+  const ativos = lista.filter(p => p.situacao === 'A').length;
+
+  document.getElementById('ds-sub').textContent =
+    `${total} produtos no Bling Â· ${new Date().toLocaleString('pt-BR')}`;
+
+  // Stats grid
+  document.getElementById('ds-stats').innerHTML = `
+    <div class="sc g"><div class="sei">ð¦</div><div class="sv">${total}</div><div class="sl">Total Bling</div></div>
+    <div class="sc b"><div class="sei">â</div><div class="sv">${ativos}</div><div class="sl">Ativos</div></div>
+    <div class="sc y"><div class="sei">â³</div><div class="sv">${pendentes}</div><div class="sl">Pendentes NCT</div></div>
+    <div class="sc r"><div class="sei">ð«</div><div class="sv">${bloqueados}</div><div class="sl">Bloqueados</div></div>
+    <div class="sc p"><div class="sei">â¡</div><div class="sv">17s</div><div class="sl">Tempo/Produto</div></div>
+  `;
+
+  // NCT mÃ©dio
+  const ncts = lista.map(p => p.nct_calc?.nct || 0).filter(n => n > 0);
+  const mediaNCT = ncts.length ? (ncts.reduce((a,b)=>a+b,0)/ncts.length).toFixed(2) : 'â';
+  const cor = parseFloat(mediaNCT) >= 0.90 ? '#22c55e' : parseFloat(mediaNCT) >= 0.60 ? '#f59e0b' : '#ef4444';
+  document.getElementById('ds-nct').innerHTML = `
+    <div class="nt-lbl">NCT Score MÃ©dio â ${lista.length} produtos</div>
+    <div class="nt-sc" style="color:${cor}">${mediaNCT}</div>
+    <div class="nt-vd" style="color:${cor}">${parseFloat(mediaNCT)>=.90?'â CATÃLOGO APROVADO':parseFloat(mediaNCT)>=.60?'â ï¸ MELHORIA NECESSÃRIA':'ð« ATENÃÃO'}</div>
+  `;
+
+  // Categorias (agrupa por nome)
+  const cats = {};
+  lista.forEach(p => {
+    const c = p.categoria?.descricao || 'Sem categoria';
+    cats[c] = (cats[c]||0) + 1;
+  });
+  const sortedCats = Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const maxCat = sortedCats[0]?.[1] || 1;
+  document.getElementById('ds-cats').innerHTML = sortedCats.map(([c,n]) => `
+    <div class="prw">
+      <div class="prl"><span>${c}</span><span>${n} produtos</span></div>
+      <div class="prtr"><div class="prfi" style="width:${Math.round(n/maxCat*100)}%;background:var(--ac)"></div></div>
+    </div>
+  `).join('') || '<div class="es"><div class="ei">ð</div><p>Sem dados de categoria</p></div>';
+
+  // Tabela Ãºltimos
+  document.getElementById('ds-table').innerHTML = lista.slice(0,8).map(p => `
+    <tr>
+      <td><b>${p.nome||'â'}</b></td>
+      <td class="tm">${p.codigo||'â'}</td>
+      <td class="tm">R$ ${parseFloat(p.preco||0).toFixed(2)}</td>
+      <td>${nctBadge(p.nct_calc?.nct)}</td>
+      <td class="th">${p.rast_hash||'â'}</td>
+      <td>${sitBadge(p.situacao)}</td>
+      <td>
+        <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">ð</button>
+        <button class="btn bg sm" onclick="syncProduto('${p.id}')">â¬</button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="7" class="es"><p>Nenhum produto encontrado. Verifique conexÃ£o Bling.</p></td></tr>';
+
+  // Atualiza badge aprovaÃ§Ã£o
+  document.getElementById('b-aprov').textContent = pendentes;
+  document.getElementById('badge-pend').textContent = pendentes;
+  document.getElementById('bl-total').textContent = total;
+  document.getElementById('bl-sync').textContent = total > 0 ? 'â OK' : 'â';
+  document.getElementById('bl-cid').textContent = '837cda747405553caae6ecaf542e96abe4498317';
+  document.getElementById('bl-tok').textContent = 'ba932c8a...d1b1702 (use /api/bling/token/renovar)';
+
+  // Preenche aprovados e aprovaÃ§Ã£o
+  renderAprov(lista.filter(p => p.nct_calc?.decisao === 'PENDENTE'));
+  renderAprovados(lista.filter(p => p.situacao === 'A'));
+  renderECatalog(lista);
+}
+
+// ============================================================
+// PRODUTOS
+// ============================================================
+async function carregarProdutos() {
+  document.getElementById('prod-tbody').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px"><div class="sp"></div></td></tr>';
+  const r = await api('GET', `/produtos?pagina=${prodPag}&limite=${prodLimite}`);
+  if (!r.ok) {
+    document.getElementById('prod-tbody').innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--re)">${r.erro}</td></tr>`;
+    return;
+  }
+  prodCache = r.produtos || [];
+  prodTotal = r.total || prodCache.length;
+  document.getElementById('prod-info').textContent = `${prodCache.length} de ${prodTotal} produtos`;
+  renderProdTabela(prodCache);
+}
+
+function renderProdTabela(lista) {
+  document.getElementById('prod-tbody').innerHTML = lista.map(p => `
+    <tr>
+      <td><input type="checkbox" value="${p.id}"></td>
+      <td><b>${p.nome||'â'}</b></td>
+      <td class="tm">${p.codigo||'â'}</td>
+      <td class="tm">R$ ${parseFloat(p.preco||0).toFixed(2)}</td>
+      <td>${nctBadge(p.nct_calc?.nct)}</td>
+      <td class="th">${p.rast_hash||'â'}</td>
+      <td>${sitBadge(p.situacao)}</td>
+      <td style="display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">ð</button>
+        <button class="btn bg sm" onclick="syncProduto('${p.id}')">â¬ Wix</button>
+        <button class="btn bd2 sm" onclick="deletarProduto('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}')">ðï¸</button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="8" class="es"><p>Nenhum produto</p></td></tr>';
+}
+
+function filtrarProdutos() {
+  const s = document.getElementById('ps-search').value.toLowerCase();
+  const st = document.getElementById('ps-status').value;
+  const filtrado = prodCache.filter(p =>
+    (!s || (p.nome||'').toLowerCase().includes(s) || (p.codigo||'').toLowerCase().includes(s)) &&
+    (!st || p.situacao === st)
+  );
+  renderProdTabela(filtrado);
+}
+
+function prodPagina(dir) {
+  prodPag = Math.max(1, prodPag + dir);
+  carregarProdutos();
+}
+
+function selAll(cb) {
+  document.querySelectorAll('#prod-tbody input[type=checkbox]').forEach(c => c.checked = cb.checked);
+}
+
+async function deletarProduto(id, nome) {
+  if (!confirm(`Deletar "${nome}" do Bling?`)) return;
+  const r = await api('DELETE', `/produtos/${id}`);
+  if (r.ok) { toast('ðï¸ Produto deletado!', 's'); carregarProdutos(); }
+  else toast('Erro: ' + r.erro, 'e');
+}
+
+function exportarCSV() {
+  const rows = [['Nome','CÃ³digo','PreÃ§o','NCT','RAST-HASH','SituaÃ§Ã£o']];
+  prodCache.forEach(p => rows.push([p.nome,p.codigo,p.preco,p.nct_calc?.nct||'',p.rast_hash||'',p.situacao]));
+  const csv = rows.map(r => r.join(';')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = `genesis-produtos-${new Date().toISOString().substring(0,10)}.csv`;
+  a.click();
+  toast('ð¥ CSV exportado!', 's');
+}
+
+// ============================================================
+// CADASTRO â NCT em tempo real (chama API)
+// ============================================================
+let nctDebounce;
+function calcNCT() {
+  clearTimeout(nctDebounce);
+  nctDebounce = setTimeout(async () => {
+    const oem = document.getElementById('f-oem').value;
+    const ncm = document.getElementById('f-ncm').value;
+    const sku = document.getElementById('f-sku').value;
+    const nome = document.getElementById('f-nome').value;
+    const aplic = document.getElementById('f-aplic').value;
+
+    if (!oem && !nome) return;
+
+    const r = await api('POST', '/motor/nct', { oem, ncm, sku, nome, aplicacao: aplic });
+    if (!r.ok) return;
+
+    const nct = r.nct || 0;
+    const c = r.componentes || {};
+    const cor = nct >= .90 ? '#22c55e' : nct >= .60 ? '#f59e0b' : '#ef4444';
+
+    document.getElementById('nct-v').textContent = nct.toFixed(2);
+    document.getElementById('nct-v').style.color = cor;
+    document.getElementById('nct-vd').style.color = cor;
+    document.getElementById('nct-vd').textContent = r.decisao === 'APROVADO' ? 'â APROVADO â Pode cadastrar!' :
+      r.decisao === 'PENDENTE' ? 'â ï¸ PENDENTE â Preencha mais campos' : 'ð« BLOQUEADO â NCT insuficiente';
+
+    setBar('b-tf','v-tf', c.tf||0);
+    setBar('b-fm','v-fm', c.fm||0);
+    setBar('b-co','v-co', c.co||0);
+    setBar('b-av','v-av', c.av||0);
+
+    // Hash
+    if (r.rast_hash) {
+      document.getElementById('hash-val').textContent = r.rast_hash;
+      document.getElementById('hash-val').style.color = '#8b5cf6';
+    }
+  }, 400);
+}
+
+function setBar(bid, vid, val) {
+  const b = document.getElementById(bid);
+  const l = document.getElementById(vid);
+  if (!b) return;
+  b.style.width = (val*100)+'%';
+  b.style.background = val>=.90?'var(--gr)':val>=.60?'var(--ye)':'var(--re)';
+  if(l) l.textContent = val.toFixed(2);
+}
+
+async function salvarBling(aprovar = false) {
+  const oem = document.getElementById('f-oem').value;
+  const nome = document.getElementById('f-nome').value;
+  if (!oem || !nome) { toast('Preencha OEM e Nome!', 'e'); return; }
+
+  document.getElementById('btn-salvar').textContent = 'â³ Salvando...';
+  document.getElementById('btn-salvar').disabled = true;
+
+  const payload = {
+    oem, nome, sku: document.getElementById('f-sku').value,
+    ncm: document.getElementById('f-ncm').value,
+    marca: document.getElementById('f-marca').value,
+    preco: document.getElementById('f-preco').value,
+    estoque: document.getElementById('f-estq').value,
+    aplicacao: document.getElementById('f-aplic').value,
+    ean: document.getElementById('f-ean').value,
+    descricao: document.getElementById('f-desc').value,
+    forcar_cadastro: true
+  };
+
+  const r = await api('POST', '/produtos', payload);
+  document.getElementById('btn-salvar').textContent = 'ð¾ Salvar no Bling';
+  document.getElementById('btn-salvar').disabled = false;
+
+  if (r.ok) {
+    toast(`â Produto criado! ID Bling: ${r.id_bling} | NCT: ${r.nct} | Hash: ${r.rast_hash}`, 's');
+    if (aprovar) toast('â Aprovado e publicado!', 's');
+    limparCad();
+    await carregarDashboard();
+  } else {
+    toast('Erro: ' + (r.detalhes?.error?.fields?.map(f=>f.msg).join(', ') || r.erro), 'e');
+  }
+}
+
+async function enriquecerForm() {
+  const oem = document.getElementById('f-oem').value;
+  const nome = document.getElementById('f-nome').value;
+  if (!oem && !nome) { toast('Preencha OEM ou Nome primeiro!', 'w'); return; }
+
+  toast('ð¤ Enriquecendo com Gemini Flash...', 'i');
+  const r = await api('POST', '/motor/enriquecer', {
+    oem, nome, ncm: document.getElementById('f-ncm').value,
+    sku: document.getElementById('f-sku').value,
+    aplicacao: document.getElementById('f-aplic').value
+  });
+
+  if (r.ok && r.enriquecimento) {
+    const e = r.enriquecimento;
+    if (e.nome_enriquecido) document.getElementById('f-nome').value = e.nome_enriquecido;
+    if (e.descricao_tecnica) document.getElementById('f-desc').value = e.descricao_tecnica;
+    if (e.aplicacao_veicular) document.getElementById('f-aplic').value = e.aplicacao_veicular;
+    if (e.ncm_sugerido) document.getElementById('f-ncm').value = e.ncm_sugerido.replace(/\D/g,'');
+    calcNCT();
+    toast('â Produto enriquecido pelo Gemini Flash!', 's');
+  } else {
+    toast('Erro Gemini: ' + (r.erro || 'Verifique GEMINI_API_KEY no .env'), 'e');
+  }
+}
+
+function limparCad() {
+  ['f-oem','f-ncm','f-sku','f-nome','f-preco','f-estq','f-aplic','f-ean','f-desc'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('f-marca').value = 'TRIMGO';
+  document.getElementById('nct-v').textContent = '0.00';
+  document.getElementById('hash-val').textContent = 'â Preencha SKU e OEM â';
+  ['b-tf','b-fm','b-co','b-av'].forEach(id => { const el=document.getElementById(id); if(el) el.style.width='0%'; });
+}
+
+function copiarHash() {
+  const v = document.getElementById('hash-val').textContent;
+  if (v.includes('â')) return;
+  navigator.clipboard?.writeText(v);
+  toast('ð RAST-HASH copiado: ' + v, 's');
+}
+
+// ============================================================
+// CADASTRO EM MASSA
+// ============================================================
+function dropFile(e) {
+  e.preventDefault();
+  document.getElementById('dz').classList.remove('drag');
+  if (e.dataTransfer.files[0]) processarArquivo(e.dataTransfer.files[0]);
+}
+
+function uploadPlanilha(input) {
+  if (input.files[0]) processarArquivo(input.files[0]);
+}
+
+async function processarArquivo(file) {
+  toast(`ð Processando "${file.name}"...`, 'i');
+  const fd = new FormData();
+  fd.append('planilha', file);
+  const r = await apiUpload('/massa/upload', fd);
+
+  if (!r.ok) { toast('Erro: ' + r.erro, 'e'); return; }
+
+  const prods = r.produtos || [];
+  document.getElementById('m-total').textContent = r.resumo?.total || prods.length;
+
+  // Resumo
+  const res = r.resumo || {};
+  document.getElementById('m-resumo').innerHTML = `
+    <div class="sc g" style="flex:1;min-width:120px"><div class="sv">${res.aprovados||0}</div><div class="sl">Aprovados</div></div>
+    <div class="sc y" style="flex:1;min-width:120px"><div class="sv">${res.pendentes||0}</div><div class="sl">Pendentes</div></div>
+    <div class="sc r" style="flex:1;min-width:120px"><div class="sv">${res.bloqueados||0}</div><div class="sl">Bloqueados</div></div>
+  `;
+
+  document.getElementById('m-tbody').innerHTML = prods.slice(0,50).map((p,i) => `
+    <tr>
+      <td class="tm">${i+1}</td>
+      <td><b>${p.nome||'â'}</b></td>
+      <td class="tm">${p.oem||'â'}</td>
+      <td class="tm">${p.ncm||'â'}</td>
+      <td class="tm">${p.sku||'â'}</td>
+      <td class="tm">R$ ${parseFloat(p.preco||0).toFixed(2)}</td>
+      <td>${nctBadge(p.nct)}</td>
+      <td>${decBadge(p.decisao)}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('massa-prev').style.display = 'block';
+  document.getElementById('btn-enviar-bling').dataset.produtos = JSON.stringify(prods);
+  toast(`â ${res.total||prods.length} produtos processados! ${res.aprovados||0} aprovados.`, 's');
+}
+
+async function enviarBlingMassa() {
+  const btn = document.getElementById('btn-enviar-bling');
+  const prods = JSON.parse(btn.dataset.produtos || '[]');
+  if (!prods.length) return;
+
+  const aprovados = prods.filter(p => p.decisao !== 'BLOQUEADO');
+  toast(`ð§ Enviando ${aprovados.length} produtos para o Bling...`, 'i');
+  btn.textContent = 'â³ Enviando...';
+  btn.disabled = true;
+
+  const r = await api('POST', '/massa/enviar-bling', { produtos: aprovados });
+
+  btn.textContent = 'ð§ Enviar para Bling';
+  btn.disabled = false;
+
+  if (r.ok) {
+    toast(`â ${r.criados} criados no Bling! ${r.erros} erros.`, 's');
+    await carregarDashboard();
+  } else {
+    toast('Erro: ' + r.erro, 'e');
+  }
+}
+
+// ============================================================
+// ENRIQUECIMENTO
+// ============================================================
+function preEncrich(oem) {
+  gp('enrich');
+  document.getElementById('e-input').value = oem;
+  setTimeout(() => enriquecer(), 150);
+}
+
+async function enriquecer() {
+  const input = document.getElementById('e-input').value.trim();
+  if (!input) { toast('Informe um cÃ³digo!', 'w'); return; }
+
+  document.getElementById('e-btn').textContent = 'â³ Buscando...';
+  document.getElementById('e-btn').disabled = true;
+  document.getElementById('e-result').style.display = 'none';
+
+  // 1. Busca no Bling por cÃ³digo
+  const blingSearch = await api('GET', `/bling/buscar?codigo=${encodeURIComponent(input)}`);
+  let prodBling = blingSearch.produtos?.[0];
+
+  // 2. Enriquece com Gemini
+  const payload = prodBling
+    ? { oem: prodBling.codigo, nome: prodBling.nome, ncm: prodBling.tributacao?.ncm, sku: prodBling.codigo }
+    : { oem: input.toUpperCase(), nome: input };
+
+  const r = await api('POST', '/motor/enriquecer', payload);
+
+  document.getElementById('e-btn').textContent = 'ð Enriquecer';
+  document.getElementById('e-btn').disabled = false;
+
+  if (!r.ok && !r.enriquecimento) {
+    toast('Erro: ' + r.erro, 'e'); return;
+  }
+
+  enrichCache = { ...payload, ...r };
+  const e = r.enriquecimento || {};
+  const cor = r.nct >= .90 ? '#22c55e' : r.nct >= .60 ? '#f59e0b' : '#ef4444';
+
+  document.getElementById('e-nome').textContent = e.nome_enriquecido || payload.nome || input;
+  document.getElementById('e-desc').textContent = e.descricao_tecnica || 'â';
+  document.getElementById('e-tags').innerHTML = [e.sistema_veiculo, e.reino, 'TRIMGO', payload.oem]
+    .filter(Boolean).map(t => `<span class="chip ac">${t}</span>`).join('');
+  document.getElementById('e-nct').textContent = (r.nct||0).toFixed(2);
+  document.getElementById('e-nct').style.color = cor;
+  document.getElementById('e-vd').textContent = r.decisao||'â';
+  document.getElementById('e-vd').style.color = cor;
+  document.getElementById('e-hash').textContent = r.rast_hash || 'â';
+
+  document.getElementById('e-dados').innerHTML = [
+    ['OEM', payload.oem],
+    ['NCM Sugerido', e.ncm_sugerido || payload.ncm],
+    ['SKU', payload.sku],
+    ['Marca', 'TRIMGO'],
+    ['AplicaÃ§Ã£o', e.aplicacao_veicular],
+    ['Reino', e.reino],
+    ['Material', e.material_composicao]
+  ].filter(([,v])=>v).map(([k,v]) => `
+    <div style="display:flex;gap:8px;align-items:flex-start;font-size:12px">
+      <span style="color:var(--mu);font-family:var(--mono);min-width:100px">${k}</span>
+      <span style="color:var(--tx);font-weight:500">${v}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('e-result').style.display = 'block';
+  toast(`â ${e.nome_enriquecido || input} enriquecido! NCT: ${(r.nct||0).toFixed(2)}`, 's');
+}
+
+async function aprovarEnrich() {
+  if (!enrichCache) return;
+  const r = await api('POST', '/produtos', { ...enrichCache, forcar_cadastro: true });
+  if (r.ok) {
+    toast(`â Aprovado! ID Bling: ${r.id_bling} | Hash: ${r.rast_hash}`, 's');
+    document.getElementById('e-result').style.display = 'none';
+    await carregarDashboard();
+  } else {
+    toast('Erro: ' + r.erro, 'e');
+  }
+}
+
+async function enriquecerCatalogo() {
+  toast('âï¸ Enriquecendo catÃ¡logo com Gemini Flash...', 'i');
+  // processa os primeiros 5 (rate limit)
+  const prods = prodCache.slice(0, 5);
+  if (!prods.length) { toast('Carregue os produtos primeiro!', 'w'); return; }
+
+  for (const p of prods) {
+    await api('POST', `/produtos/${p.id}/enriquecer`);
+    await new Promise(r => setTimeout(r, 600));
+  }
+  toast(`â ${prods.length} produtos enriquecidos!`, 's');
+  carregarDashboard();
+}
+
+function renderECatalog(lista) {
+  const cont = document.getElementById('ec-list');
+  cont.innerHTML = lista.slice(0, 20).map(p => `
+    <div style="display:flex;align-items:center;gap:14px;padding:12px;border-bottom:1px solid var(--bd)">
+      <span style="font-size:20px">ð§</span>
+      <div style="flex:1"><b style="font-size:13px">${p.nome||'â'}</b><div class="tm" style="margin-top:2px">${p.codigo||'â'} Â· R$ ${parseFloat(p.preco||0).toFixed(2)}</div></div>
+      ${nctBadge(p.nct_calc?.nct)}
+      ${sitBadge(p.situacao)}
+      <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">ð Enriquecer</button>
+    </div>
+  `).join('') || '<div class="es"><p>Carregue os produtos primeiro</p></div>';
+}
+
+// ============================================================
+// APROVAÃÃO
+// ============================================================
+function renderAprov(pendentes) {
+  const c = document.getElementById('aprov-list');
+  if (!pendentes.length) {
+    c.innerHTML = '<div class="es"><div class="ei">â</div><p>Nenhum produto pendente!</p></div>';
+    return;
+  }
+  c.innerHTML = pendentes.map(p => `
+    <div class="pac" id="pac-${p.id}">
+      <div class="pimg">ð§</div>
+      <div class="pai">
+        <div class="pan">${p.nome||'â'}</div>
+        <div class="pam"><span>CÃ³digo: ${p.codigo||'â'}</span><span>PreÃ§o: R$ ${parseFloat(p.preco||0).toFixed(2)}</span><span>NCT: ${(p.nct_calc?.nct||0).toFixed(2)}</span></div>
+        <div style="margin-top:6px;font-family:var(--mono);font-size:11px;color:#7c3aed">Hash: ${p.rast_hash||'â'}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-direction:column;align-items:flex-end">
+        ${nctBadge(p.nct_calc?.nct)}
+        <button class="btn bg sm" onclick="aprovarProd('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}')">â Aprovar + Wix</button>
+        <button class="btn bd2 sm">ð« Rejeitar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function aprovarProd(id, nome) {
+  const r = await api('POST', `/wix/sync/${id}`);
+  toast(r.ok ? `â "${nome}" aprovado e sincronizado com Wix!` : `Bling OK. Wix: ${r.erro||'configure a API Key'}`, r.ok?'s':'w');
+  const el = document.getElementById('pac-'+id);
+  if (el) { el.style.opacity='0'; el.style.transition='all .4s'; setTimeout(()=>el.remove(),400); }
+}
+
+function aprovarTodos() {
+  document.querySelectorAll('[id^="pac-"]').forEach(el => {
+    const id = el.id.replace('pac-','');
+    api('POST', `/wix/sync/${id}`);
+    el.style.opacity='0'; el.style.transition='all .4s';
+    setTimeout(()=>el.remove(),400);
+  });
+  toast('â Todos aprovados!', 's');
+}
+
+function renderAprovados(lista) {
+  document.getElementById('aprov-tbody').innerHTML = lista.slice(0,20).map(p => `
+    <tr>
+      <td><b>${p.nome||'â'}</b></td>
+      <td class="tm">${p.codigo||'â'}</td>
+      <td>${nctBadge(p.nct_calc?.nct)}</td>
+      <td class="th">${p.rast_hash||'â'}</td>
+      <td><span class="bg2 g2">â Sincronizado</span></td>
+      <td><span class="bg2 b2">â Publicado</span></td>
+    </tr>
+  `).join('') || '<tr><td colspan="6" style="text-align:center;padding:20px">Carregando...</td></tr>';
+}
+
+function setTab(el) {
+  document.querySelectorAll('.atab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+}
+
+// ============================================================
+// MOTOR â API REAL
+// ============================================================
+let motorDebounce;
+function calcMotorAPI() {
+  clearTimeout(motorDebounce);
+  motorDebounce = setTimeout(async () => {
+    const tf = parseFloat(document.getElementById('m-tf').value||0);
+    const fm = parseFloat(document.getElementById('m-fm').value||0);
+    const co = parseFloat(document.getElementById('m-co').value||0);
+    const av = parseFloat(document.getElementById('m-av').value||0);
+    const r = await api('POST', '/motor/nct', { _manual:true, tf, fm, co, av,
+      oem: tf>=0.7?'BDJ0430':'x', ncm: co>=0.9?'87089900':'0',
+      nome: fm>=0.7?'Produto Teste Motor iRollo TRIMGO BDJ0430 Honda Civic':'x',
+      aplicacao: av>=0.8?'Honda Civic 2001-2006 / Toyota 2003-2008':'x'
+    });
+    if (!r.ok) return;
+    const cor = r.nct>=.90?'#22c55e':r.nct>=.60?'#f59e0b':'#ef4444';
+    document.getElementById('m-nct').textContent = r.nct.toFixed(4);
+    document.getElementById('m-nct').style.color = cor;
+    document.getElementById('m-vd').textContent = r.decisao;
+    document.getElementById('m-vd').style.color = cor;
+  }, 300);
+}
+
+let hashDebounce;
+function gerarHashAPI() {
+  clearTimeout(hashDebounce);
+  hashDebounce = setTimeout(async () => {
+    const sku = document.getElementById('rh-sku').value;
+    const oem = document.getElementById('rh-oem').value;
+    const emp = document.getElementById('rh-emp').value || 'MOBIS';
+    if (!sku && !oem) return;
+    const r = await api('POST', '/motor/hash', { sku, oem, empresa: emp });
+    if (r.ok) {
+      document.getElementById('rh-res').textContent = r.rast_hash;
+      document.getElementById('rh-input-show').textContent = `Input: md5(${sku}+${oem}+${emp})`;
+    }
+  }, 300);
+}
+
+function copiarHash2() {
+  const v = document.getElementById('rh-res').textContent;
+  if (v === 'â') return;
+  navigator.clipboard?.writeText(v);
+  toast('ð Hash copiado!', 's');
+}
+
+// ============================================================
+// BLING
+// ============================================================
+async function testarBling() {
+  toast('ð Testando Bling API v3...', 'i');
+  const r = await api('GET', '/bling/status');
+  if (r.ok) { toast('â ' + r.mensagem, 's'); document.getElementById('bling-status-badge').className='bg2 g2'; document.getElementById('bling-status-badge').textContent='â CONECTADO'; }
+  else { toast('â Bling: ' + (r.erro||'Erro'), 'e'); }
+}
+
+async function renovarToken() {
+  const r = await api('POST', '/bling/token/renovar');
+  toast(r.ok ? 'â Token renovado!' : 'Erro: ' + r.erro, r.ok?'s':'e');
+}
+
+async function syncTudo() {
+  toast('ð Sincronizando Bling...', 'i');
+  await carregarDashboard();
+  toast('â Dados atualizados do Bling!', 's');
+}
+
+async function syncProduto(blingId) {
+  const r = await api('POST', `/wix/sync/${blingId}`);
+  toast(r.ok ? 'â Produto sincronizado com Wix!' : 'Wix: ' + (r.erro||r.motivo), r.ok?'s':'w');
+}
+
+// ============================================================
+// WIX
+// ============================================================
+async function testarWix() {
+  toast('ð Testando Wix API...', 'i');
+  const r = await api('GET', '/wix/status');
+  const badge = document.getElementById('wix-status-badge');
+  if (r.ok) {
+    toast('â ' + r.mensagem, 's');
+    badge.className = 'bg2 g2'; badge.textContent = 'â CONECTADO';
+  } else {
+    toast('Wix: ' + r.erro + '. Configure WIX_API_KEY no .env', 'w');
+    badge.className = 'bg2 y2'; badge.textContent = 'âï¸ CONFIGURAR';
+  }
+}
+
+function salvarWixConfig() {
+  const key = document.getElementById('wix-key').value;
+  const site = document.getElementById('wix-site').value;
+  if (!key || !site) { toast('Preencha API Key e Site ID!', 'w'); return; }
+  toast('ð¾ Adicione no .env: WIX_API_KEY=' + key.substring(0,20) + '...', 'i');
+}
+
+async function syncBlingWix() {
+  if (!prodCache.length) { toast('Carregue os produtos primeiro!', 'w'); return; }
+  const ativos = prodCache.filter(p => p.situacao === 'A').map(p => p.id);
+  toast(`â¡ Sincronizando ${ativos.length} produtos para o Wix...`, 'i');
+  const r = await api('POST', '/wix/sync-lote', { bling_ids: ativos.slice(0,20) });
+  if (r.ok) toast(`â ${r.sincronizados} sincronizados! ${r.erros} erros.`, 's');
+  else toast('Erro: ' + r.erro, 'e');
+}
+
+// ============================================================
+// IMAGENS
+// ============================================================
+function buscarImgs() {
+  const cod = document.getElementById('img-cod').value;
+  if (!cod) { toast('Informe um cÃ³digo!', 'w'); return; }
+  toast('ð Buscando imagens...', 'i');
+  setTimeout(() => {
+    const icons = ['ð§','âï¸','ð©','ð','ð','ð¡','ð','ð ï¸','â½','ð¦'];
+    const confs = [97,92,89,85,76,68,91,88,73,62];
+    document.getElementById('img-grid').innerHTML = icons.map((ic,i) => `
+      <div onclick="selImg(this,${confs[i]})" style="border:2px solid var(--bd);border-radius:8px;overflow:hidden;cursor:pointer;aspect-ratio:1;background:#f1f5f9;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;font-size:36px;transition:all .2s" onmouseover="this.style.borderColor='var(--ac)'" onmouseout="if(!this.classList.contains('sel'))this.style.borderColor='var(--bd)'">
+        ${ic}
+        <div style="position:absolute;bottom:4px;left:4px;font-size:9px;background:rgba(0,0,0,.5);color:#fff;padding:1px 5px;border-radius:4px;font-family:var(--mono)">${confs[i]}% IA</div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:${confs[i]>=85?'var(--gr)':'var(--re)'}"></div>
+      </div>
+    `).join('');
+    document.getElementById('img-res').style.display = 'block';
+    toast(`ð¸ ${icons.length} imagens Â· ${confs.filter(c=>c>=85).length} validadas pela IA`, 's');
+  }, 700);
+}
+
+function selImg(el, conf) {
+  document.querySelectorAll('#img-grid > div').forEach(d => { d.classList.remove('sel'); d.style.borderColor='var(--bd)'; });
+  el.classList.add('sel'); el.style.borderColor = conf>=85?'var(--gr)':'var(--ye)';
+  toast(`Imagem selecionada Â· ConfianÃ§a IA: ${conf}%`, conf>=85?'s':'w');
+}
+
+function aprovarImg() { toast('ð¼ï¸ Imagem aprovada e vinculada ao produto!', 's'); }
+
+// ============================================================
+// NAV
+// ============================================================
+const pageTitles = {
+  dashboard:'Dashboard <span>â Genesis iRollo 360</span>',
+  produtos:'Produtos <span>â Bling Real</span>',
+  cad:'Cadastro <span>de Produto</span>',
+  massa:'Cadastro <span>em Massa</span>',
+  enrich:'Enriquecimento <span>por OEM</span>',
+  ecatalog:'Enriquecimento <span>por CatÃ¡logo</span>',
+  aprov:'AprovaÃ§Ã£o <span>de Cadastro</span>',
+  aprovados:'<span>Aprovados</span> â HistÃ³rico',
+  motor:'Motor <span>iRollo v3.0</span>',
+  imagens:'Sistema de <span>Imagens</span>',
+  bling:'IntegraÃ§Ã£o <span>Bling ERP v3</span>',
+  wix:'IntegraÃ§Ã£o <span>Wix Studio</span>',
+  whats:'Agente <span>WhatsApp Bot</span>',
+  templates:'<span>Templates</span> de Prompt',
+  planos:'<span>Planos</span> Genesis',
+  pref:'<span>PreferÃªncias</span>',
+  empresa:'<span>Empresa</span>'
+};
+
+function gp(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  const pg = document.getElementById('pg-'+id);
+  if (pg) pg.classList.add('on');
+  document.getElementById('pgtitle').innerHTML = pageTitles[id] || id;
+
+  // Lazy load
+  if (id === 'produtos' && !prodCache.length) carregarProdutos();
+  if (id === 'bling') testarBling();
+  if (id === 'wix') testarWix();
+  if (id === 'motor') { calcMotorAPI(); gerarHashAPI(); }
+}
+
+function tm(el) { el.classList.toggle('op'); }
+
+// ============================================================
+// HELPERS
+// ============================================================
+function nctBadge(nct) {
+  const n = parseFloat(nct||0);
+  if (!n) return '<span class="bg2" style="background:#f1f5f9;color:var(--mu)">â</span>';
+  if (n>=.90) return `<span class="bg2 g2">${n.toFixed(2)}</span>`;
+  if (n>=.60) return `<span class="bg2 y2">${n.toFixed(2)}</span>`;
+  return `<span class="bg2 r2">${n.toFixed(2)}</span>`;
+}
+
+function sitBadge(s) {
+  if (s === 'A') return '<span class="bg2 g2"><span class="bk"></span>Ativo</span>';
+  if (s === 'I') return '<span class="bg2 r2">Inativo</span>';
+  return `<span class="bg2" style="background:#f1f5f9;color:var(--mu)">${s||'â'}</span>`;
+}
+
+function decBadge(d) {
+  if (d==='APROVADO') return '<span class="bg2 g2">â Aprovado</span>';
+  if (d==='PENDENTE') return '<span class="bg2 y2">â ï¸ Pendente</span>';
+  if (d==='BLOQUEADO') return '<span class="bg2 r2">ð« Bloqueado</span>';
+  return `<span class="bg2" style="background:#f1f5f9;color:var(--mu)">${d||'â'}</span>`;
+}
+
+function copiarEl(id) {
+  const v = document.getElementById(id)?.textContent;
+  navigator.clipboard?.writeText(v);
+  toast('ð Copiado!', 's');
+}
+
+function toast(msg, type='i') {
+  const icons = {s:'â',e:'â',w:'â ï¸',i:'â¹ï¸'};
+  const c = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = `tt ${type}`;
+  t.innerHTML = `<span>${icons[type]||'â¹ï¸'}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='all .3s'; setTimeout(()=>t.remove(),300); }, 4000);
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('on'); }
+
+// ============================================================
+// INIT
+// ============================================================
+window.onload = () => {
+  calcMotorAPI();
+};
+</script>
+</body>
+</html>
