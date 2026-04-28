@@ -1,20 +1,20 @@
 // ============================================================
-// GENESIS iROLLO v4.0 — BLING API v3 SERVICE
-// OAuth2 com Refresh Token automático (token em memória)
+// GENESIS iROLLO v4.0 â BLING API v3 SERVICE
+// OAuth2 com Refresh Token automÃ¡tico (token em memÃ³ria)
 // ============================================================
 const axios = require('axios');
 require('dotenv').config();
 
 const BLING_BASE = process.env.BLING_BASE_URL || 'https://www.bling.com.br/Api/v3';
 
-// Token em memória (renovado automaticamente)
+// Token em memÃ³ria (renovado automaticamente)
 let tokenCache = {
     access_token: process.env.BLING_ACCESS_TOKEN || '',
-    expires_at  : Date.now() + (6 * 60 * 60 * 1000) // 6h padrão
+    expires_at  : Date.now() + (6 * 60 * 60 * 1000) // 6h padrÃ£o
 };
 
 // ------------------------------------------------------------
-// Formata erro Bling para string legível (corrige [object Object])
+// Formata erro Bling para string legÃ­vel (corrige [object Object])
 // ------------------------------------------------------------
 function formatarErro(err) {
     if (!err) return 'Erro desconhecido';
@@ -22,7 +22,7 @@ function formatarErro(err) {
     if (err.error) return formatarErro(err.error);
     if (err.message) return err.message;
     if (err.fields) {
-          // Erros de validação Bling: { fields: [{msg, fieldName}] }
+          // Erros de validaÃ§Ã£o Bling: { fields: [{msg, fieldName}] }
       if (Array.isArray(err.fields)) {
               return err.fields.map(f => `${f.fieldName || ''}: ${f.msg || f.message || JSON.stringify(f)}`).join(' | ');
       }
@@ -63,7 +63,7 @@ async function renovarToken() {
               process.env.BLING_REFRESH_TOKEN = resp.data.refresh_token;
       }
 
-      // Sincroniza com bling-auto-token se disponível
+      // Sincroniza com bling-auto-token se disponÃ­vel
       process.env.BLING_ACCESS_TOKEN = resp.data.access_token;
 
       console.log('[BLING] Token renovado com sucesso!');
@@ -115,7 +115,7 @@ async function blingRequest(method, endpoint, data = null, params = {}) {
         const resp = await axios(config);
         return { ok: true, data: resp.data, status: resp.status };
   } catch (err) {
-        // Token expirado — tenta renovar e repetir
+        // Token expirado â tenta renovar e repetir
       if (err.response?.status === 401) {
               console.log('[BLING] Token expirado, renovando...');
               await renovarToken();
@@ -169,7 +169,21 @@ async function deletarProduto(id) {
 }
 
 async function buscarPorCodigo(codigo) {
-    return blingRequest('GET', '/produtos', null, { codigo, limite: 5 });
+    // Bling API v3 nao suporta filtro ?codigo= — busca por nome e filtra local
+    try {
+        const r = await blingRequest('GET', '/produtos', null, { nome: codigo, limite: 20 });
+        if (r.ok) {
+            const todos = r.data?.data || [];
+            const exatos = todos.filter(p =>
+                (p.codigo || '').toLowerCase() === codigo.toLowerCase() ||
+                (p.nome  || '').toLowerCase().includes(codigo.toLowerCase())
+            );
+            return { ok: true, data: { data: exatos.length > 0 ? exatos : todos } };
+        }
+        return r;
+    } catch (err) {
+        return { ok: false, error: err.message };
+    }
 }
 
 // ------------------------------------------------------------
@@ -185,7 +199,7 @@ function montarPayloadProduto(p) {
           unidade            : p.unidade || 'UN',
           descricaoCurta     : p.descricao_curta || '',
           descricaoComplementar: p.descricao || '',
-          observacoes        : `Motor iRollo v4.0 | NCT: ${p.nct || '—'} | RAST-HASH: ${p.rast_hash || '—'} | ${p.motor_versao || ''}`,
+          observacoes        : `Motor iRollo v4.0 | NCT: ${p.nct || 'â'} | RAST-HASH: ${p.rast_hash || 'â'} | ${p.motor_versao || ''}`,
           tributacao         : {
                   ncm   : (p.ncm || '').replace(/\D/g, ''),
                   origem: parseInt(p.origem || 0)
@@ -243,14 +257,14 @@ async function buscarContato(nome) {
 }
 
 // ============================================================
-// TESTAR CONEXÃO
+// TESTAR CONEXÃO
 // ============================================================
 async function testarConexao() {
     const resp = await blingRequest('GET', '/produtos', null, { limite: 1 });
     if (resp.ok) {
           return {
                   ok         : true,
-                  mensagem   : 'Conexão Bling API v3 OK!',
+                  mensagem   : 'ConexÃ£o Bling API v3 OK!',
                   token_expira_em: new Date(tokenCache.expires_at).toISOString()
           };
     }
