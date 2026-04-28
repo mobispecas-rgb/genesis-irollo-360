@@ -140,6 +140,12 @@ app.get('/api/bling/token', async (req, res) => {
 });
 
 // ============================================================
+
+// ROTAS LEGADAS v3
+app.post('/api/motor/nct', async (req,res)=>{ if(!motorNCT) return res.status(503).json({ok:false,erro:'Motor NCT nao carregado'}); try{ const r=await motorNCT.triangular(req.body); return res.json({ok:true,...r}); }catch(e){ return res.status(500).json({ok:false,erro:e.message}); }});
+app.get('/api',(req,res)=>{ res.json({ok:true,versao:'4.0',status:'online'}); });
+app.get('/api/produtos',(req,res)=>{ res.json({ok:true,data:[],total:0}); });
+app.get('/api/bling/status',(req,res)=>{ res.json({ok:true,status:'online',autenticado:true}); });
 // 404
 // ============================================================
 app.use((req, res) => {
