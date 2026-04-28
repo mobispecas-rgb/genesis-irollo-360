@@ -1,0 +1,30 @@
+# ─── Credenciais e segredos ─────────────────────────────────
+.env
+.env.local
+.env.production
+.env.*.local
+*.key
+*.pem
+*.p12
+secrets.json
+
+# ─── Node.js ────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+
+# ─── Build / Deploy ─────────────────────────────────────────
+dist/
+build/
+.firebase/
+.firebaserc
+
+# ─── Logs ───────────────────────────────────────────────────
+logs/
+*.log
+
+# ─── OS ─────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
