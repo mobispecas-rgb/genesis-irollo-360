@@ -144,11 +144,12 @@ app.get('/api/bling/token', async (req, res) => {
 
 // ROTAS v3 — routes/
 const rProdutos = require('./routes/produtos');
-const rMotor    = require('./routes/motor');
+const { motorRouter: rMotor, blingRouter: rBling } = require('./routes/motor');
 const rMassa    = require('./routes/massa');
 const rWix      = require('./routes/wix');
 app.use('/api/produtos', rProdutos);
-app.use('/api/motor',    rMotor);
+app.use('/api/motor', rMotor);
+app.use('/api/bling',  rBling);
 app.use('/api/massa',    rMassa);
 app.use('/api/wix',      rWix);
 // ROTAS LEGADAS v3
