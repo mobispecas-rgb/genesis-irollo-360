@@ -141,6 +141,16 @@ app.get('/api/bling/token', async (req, res) => {
 
 // ============================================================
 
+
+// ROTAS v3 — routes/
+const rProdutos = require('./routes/produtos');
+const rMotor    = require('./routes/motor');
+const rMassa    = require('./routes/massa');
+const rWix      = require('./routes/wix');
+app.use('/api/produtos', rProdutos);
+app.use('/api/motor',    rMotor);
+app.use('/api/massa',    rMassa);
+app.use('/api/wix',      rWix);
 // ROTAS LEGADAS v3
 app.post('/api/motor/nct', async (req,res)=>{ if(!motorNCT) return res.status(503).json({ok:false,erro:'Motor NCT nao carregado'}); try{ const r=await motorNCT.triangular(req.body); return res.json({ok:true,...r}); }catch(e){ return res.status(500).json({ok:false,erro:e.message}); }});
 app.get('/api',(req,res)=>{ res.json({ok:true,versao:'4.0',status:'online'}); });
