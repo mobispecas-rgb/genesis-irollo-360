@@ -15,6 +15,7 @@ const path    = require('path');
 const app  = express();
 const { setupMCP } = require('./mcp');
 setupMCP(app);
+app.use('/api/indexador', require('./indexador'));
 const PORT = process.env.PORT || 3001;
 
 // ============================================================
