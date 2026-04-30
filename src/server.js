@@ -13,6 +13,8 @@ const cors    = require('cors');
 const path    = require('path');
 
 const app  = express();
+const { setupMCP } = require('./mcp');
+setupMCP(app);
 const PORT = process.env.PORT || 3001;
 
 // ============================================================
