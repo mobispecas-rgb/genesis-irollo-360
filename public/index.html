@@ -278,15 +278,15 @@ textarea.field-input{resize:vertical;line-height:1.5}
     <div class="card">
       <div class="card-head"><div class="card-title">Busca por codigo EAN</div></div>
       <div class="card-body">
-        <div class="toolbar-info" style="margin-bottom:14px">O EAN e o codigo de barras do produto (13 digitos). Ele esta impresso na embalagem abaixo do codigo de barras. Exemplo: BC720JSTD = 7891945023581</div>
+        <div class="toolbar-info" style="margin-bottom:14px">Busque por EAN (codigo de barras), OEM (codigo do fabricante) ou SKU (referencia interna). Exemplos: EAN = 7891945023581 | OEM = 234104A950 | SKU = BC720JSTD</div>
         <div class="field" style="margin-bottom:10px">
-          <div class="field-label">Codigo EAN do produto <span class="field-hint">-- digitado ou lido por leitor de codigo de barras</span></div>
+          <div class="field-label">EAN, OEM ou SKU <span class="field-hint">-- qualquer codigo do produto</span></div>
           <div style="display:flex;gap:8px">
-            <input class="field-input" id="ean-input" type="text" placeholder="Ex: 7891945023581" maxlength="14" style="font-size:16px;font-family:monospace;letter-spacing:2px;flex:1">
+            <input class="field-input" id="ean-input" type="text" placeholder="Ex: 234104A950 | 7891945023581 | BC720JSTD" style="font-size:16px;font-family:monospace;letter-spacing:1px;flex:1">
             <button class="btn btn-primary" onclick="buscarEAN()" style="padding:9px 20px">Buscar</button>
           </div>
         </div>
-        <div style="font-size:12px;color:var(--faint);font-family:monospace">Codigos de teste: 7891945023581 | 7891945031586 | 7891945012615</div>
+        <div style="font-size:12px;color:var(--faint);font-family:monospace">Teste agora: 234104A950 | BC720JSTD | 7891945023581 | TC0451</div>
       </div>
     </div>
     <div id="ean-result" style="display:none">
@@ -611,7 +611,13 @@ const PRODS=[
    bula:"Verificar pressao de oleo (min 2.5 kgf). Substituir todos os tuchos simultaneamente. Aguardar 30 min apos instalacao antes de ligar o motor.",
    cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao profissional. Substituicao do conjunto completo recomendada.",
    tags:["tucho hidraulico l200","tc0451 metal leve","tuchos 4d56","l200 pajero sport tuchos"],
-   nct:0.843,hash:"NCT-tc0451d2f5a1c7c84c",status:"PENDENTE"}
+   nct:0.843,hash:"NCT-tc0451d2f5a1c7c84c",status:"PENDENTE"},
+  {id:"p4",sku:"234104A950",ean:"8809160806956",nome:"Pistao Motor 23410-4A950 -- Hyundai MOBIS -- HR / H100 / Porter Motor D4BH 2.5 Diesel",oem:"23410-4A950",ncm:"8409.91.20",fab:"Hyundai MOBIS",med:"STD",
+   aplic:[{m:"Hyundai",mod:"HR / H100 Caminhonete",mot:"D4BH 2.5 8v Diesel Turbo",a:"2005-2012",f:"Catalogo Hyundai MOBIS"},{m:"Hyundai",mod:"Porter II",mot:"D4BH 2.5 Diesel",a:"2004-2012",f:"TecDoc API"},{m:"Hyundai",mod:"Starex / H1",mot:"D4BH 2.5 CRDi",a:"2002-2007",f:"AutoData"}],
+   bula:"Verificar diametro do cilindro antes da instalacao (medida STD: 91.000-91.010 mm). Instalar aneis de pistao com sentido correto. Torque do parafuso da biela: 48 Nm + 90 graus. Substituir todos os pistoes simultaneamente. Lubrificar levemente com oleo de motor.",
+   cdc:"CDC Art. 26 -- Garantia 90 dias contra defeitos de fabricacao. Instalacao por mecanico habilitado. Verificar compatibilidade do motor antes da compra.",
+   tags:["pistao hyundai hr","234104a950","23410-4a950","pistao d4bh","pistao h100 diesel","hyundai mobis pistao","pistao porter diesel"],
+   nct:0.912,hash:"NCT-234104a950b7c3d1f9",status:"ENRIQUECIDO"}
 ];
 
 let curProd=null;
@@ -665,9 +671,15 @@ function showPreview(boxId,prod){document.getElementById(boxId).innerHTML='<div 
 // EAN
 let curEAN=null;
 function buscarEAN(){
-  const ean=document.getElementById('ean-input').value.trim();
-  if(!ean||ean.length<8){showToast('ean-toast','Digite um EAN valido (minimo 8 digitos)','err');return}
-  const prod=PRODS.find(p=>p.ean===ean);
+  const q=document.getElementById('ean-input').value.trim().toUpperCase().replace(/[-\s]/g,'');
+  if(!q||q.length<6){showToast('ean-toast','Digite EAN, OEM ou SKU (minimo 6 caracteres)','err');return}
+  const prod=PRODS.find(p=>
+    p.ean===q||
+    p.sku.toUpperCase().replace(/[-\s]/g,'')===q||
+    p.oem.toUpperCase().replace(/[-\s]/g,'').includes(q)||
+    q.includes(p.ean)||
+    p.ean.includes(q)
+  );
   if(prod){preencherEAN(prod)}
   else{showToast('ean-toast','Buscando nas bases e catalogos...','');
     setTimeout(()=>{const novo={id:'n',sku:'REF-'+ean.slice(-6),ean,nome:'Produto EAN '+ean+' - aguardando enriquecimento',oem:'Consultando TecDoc...',ncm:'Consultando SEFAZ...',fab:'Identificando...',med:'STD',aplic:[{m:'Pendente',mod:'verificar catalogo',mot:'-',a:'-',f:'Triangulacao pendente'}],bula:'Bula sendo gerada pela IA com base nos catalogos do fabricante.',cdc:'Garantia conforme CDC Art. 26.',tags:['produto diesel','autopeca'],nct:0.72,hash:'NCT-ean'+ean.slice(-8),status:'RASCUNHO'};preencherEAN(novo)},1500)}
