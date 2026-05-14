@@ -713,120 +713,36 @@ function buscarEAN(){
 }
 
 // â”€â”€ CLAUDE API -- Anti-alucinacao â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-async function enriquecerComClaude(descricao) {
-  showToast('ean-toast','Claude API -- analisando "'+descricao+'" nas bases automotivas...','');
+async function enriquecerComClaude(d){
+  showToast('ean-toast','Buscando "'+d+'" na web...','');
   document.getElementById('ean-result').style.display='block';
-
-  // Placeholder enquanto Claude processa
-  const placeholder={
-    id:'ia-'+Date.now(),sku:'PROCESSANDO',ean:'',
-    nome:'Analisando: "'+descricao+'" -- aguarde Claude API...',
-    oem:'Consultando...',ncm:'Consultando...',fab:'Identificando...',med:'--',
-    aplic:[{m:'Aguardando',mod:'Claude API processando',mot:'--',a:'--',f:'Agente IA'}],
-    bula:'Gerando bula tecnica com base em fontes verificadas...',
-    cdc:'CDC sendo calculado...',tags:[],nct:0,hash:'calculando...',status:'PROCESSANDO'
-  };
-  preencherEAN(placeholder);
-
-  const prompt=`Voce e um especialista senior em autopecas brasileiras. 
-Analise esta descricao e retorne APENAS JSON valido sem markdown.
-REGRA ANTI-ALUCINACAO: se nao tiver certeza de um dado, coloque "VERIFICAR" no campo. Nunca invente OEM, NCM ou aplicacao veicular sem embasamento.
-
-Descricao do usuario: "${descricao}"
-
-Retorne exatamente este JSON:
-{
-  "sku": "referencia ou codigo mais provavel",
-  "ean": "",
-  "nome": "nome tecnico completo para SEO (max 120 chars) -- inclua marca modelo motor",
-  "oem": "codigo OEM se conhecido com certeza, senao VERIFICAR",
-  "ncm": "NCM 8 digitos se conhecido, senao VERIFICAR",
-  "fab": "fabricante provavel",
-  "med": "STD ou especificar",
-  "aplic": [{"m":"marca","mod":"modelo especifico","mot":"motor cilindrada","a":"anos","f":"fonte do dado"}],
-  "bula": "instrucoes tecnicas de instalacao com torques e cuidados (apenas dados verificados)",
-  "cdc": "aviso CDC obrigatorio",
-  "tags": ["tag seo 1","tag seo 2","tag seo 3","tag seo 4","tag seo 5","tag seo 6","tag seo 7","tag seo 8"],
-  "seo_title": "title tag Google Ads max 60 chars",
-  "seo_desc": "meta description max 155 chars com CTA e palavra-chave principal",
-  "seo_h1": "H1 da pagina do produto",
-  "google_shopping": {"marca":"","mpn":"","gtin":"","categoria_google":"Autoparts > Pecas de Motor"},
-  "confianca": 0.0,
-  "fontes_usadas": ["lista das fontes que embasaram os dados"],
-  "nct_estimado": 0.0
-}`;
-
-  try {
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:2000,
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const d=await r.json();
-    let raw2=d.content?.find(b=>b.type==='text')?.text||'{}';
-    raw2=raw2.replace(/```json|```/g,'').trim();
-    const st=raw2.indexOf('{');if(st>0)raw2=raw2.slice(st);
-    let dados;
-    try{dados=JSON.parse(raw2)}catch(e){
-      // Tentar reparar JSON truncado
-      let s=raw2;let op=0,br=0,iS=false,esc=false;
-      for(const c of s){if(esc){esc=false;continue}if(c==='\\'){esc=true;continue}if(c==='"'){iS=!iS;continue}if(iS)continue;if(c==='{')op++;if(c==='}')op--;if(c==='[')br++;if(c===']')br--}
-      if(iS)s+='"';for(let i=0;i<br;i++)s+=']';for(let i=0;i<op;i++)s+='}';
-      dados=JSON.parse(s);
+  preencherEAN({id:'x',sku:'...',ean:'',nome:'Agente buscando: '+d,oem:'...',ncm:'...',fab:'...',med:'...',aplic:[{m:'Web',mod:'Search',mot:'--',a:'--',f:'Claude+WebSearch'}],bula:'Aguardando...',cdc:'...',tags:[],nct:0,hash:'...',status:'PROCESSANDO'});
+  const p='Especialista autopecas BR. Use web_search para buscar dados REAIS de: "'+d+'". Retorne APENAS JSON sem markdown: {"sku":"","ean":"","nome":"nome tecnico SEO","oem":"OEM ou VERIFICAR","ncm":"NCM ou VERIFICAR","fab":"","med":"STD","aplic":[{"m":"marca","mod":"modelo","mot":"motor","a":"2014-2021","f":"fonte"}],"bula":"instrucoes com torques reais","cdc":"aviso CDC","tags":["t1","t2"],"seo_title":"","seo_desc":"","fontes":[],"confianca":0.9}';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:p}]})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    const blocos=j.content||[];
+    const temSearch=blocos.some(b=>b.type==='tool_use');
+    let txt=blocos.filter(b=>b.type==='text').map(b=>b.text).join('');
+    if(temSearch&&!txt){
+      showToast('ean-toast','Agente encontrou dados -- processando...','');
+      const r2=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:p},{role:'assistant',content:blocos},{role:'user',content:'Retorne agora o JSON estruturado com os dados encontrados.'}]})});
+      const j2=await r2.json();
+      txt=(j2.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
     }
-
-    // Montar produto com dados da IA
-    const prod={
-      id:'ia-'+Date.now(),
-      sku:dados.sku||'REF-IA',
-      ean:dados.ean||'',
-      nome:dados.nome||descricao,
-      oem:dados.oem||'VERIFICAR',
-      ncm:dados.ncm||'VERIFICAR',
-      fab:dados.fab||'Identificar',
-      med:dados.med||'STD',
-      aplic:(dados.aplic||[]).map(a=>({m:a.m||'--',mod:a.mod||'--',mot:a.mot||'--',a:a.a||'--',f:a.f||'Claude API'})),
-      bula:dados.bula||'Consultar manual tecnico do fabricante.',
-      cdc:dados.cdc||'Garantia conforme CDC Art. 26.',
-      tags:dados.tags||[],
-      nct:dados.nct_estimado||dados.confianca||0.72,
-      hash:'NCT-ia-'+Math.random().toString(36).slice(2,10),
-      status:'ENRIQUECIDO',
-      seo:{title:dados.seo_title||'',desc:dados.seo_desc||'',h1:dados.seo_h1||''},
-      shopping:dados.google_shopping||{},
-      fontes:dados.fontes_usadas||[],
-      confianca:dados.confianca||0
-    };
-
-    // Alertar se dados incertos
-    const incertos=['oem','ncm'].filter(f=>prod[f]==='VERIFICAR');
+    if(!txt)throw new Error('Sem resposta');
+    let raw=txt.replace(/```json|```/g,'').trim();
+    const si=raw.indexOf('{')
+;if(si>0)raw=raw.slice(si);
+    const ei=raw.lastIndexOf('}');if(ei>=0)raw=raw.slice(0,ei+1);
+    let g;try{g=JSON.parse(raw)}catch(e){g={sku:'VERIFICAR',oem:'VERIFICAR',ncm:'VERIFICAR',nome:d,fab:'Verificar',med:'STD',aplic:[],bula:'Consultar catalogo.',cdc:'CDC Art.26.',tags:[],confianca:0.5,fontes:[]}}
+    const prod={id:'w'+Date.now(),sku:g.sku||'VERIFICAR',ean:g.ean||'',nome:g.nome||d,oem:g.oem||'VERIFICAR',ncm:g.ncm||'VERIFICAR',fab:g.fab||'?',med:g.med||'STD',aplic:(g.aplic||[]).map(a=>({m:a.m,mod:a.mod,mot:a.mot,a:a.a,f:a.f||'Web'})),bula:g.bula||'Ver catalogo.',cdc:g.cdc||'CDC Art.26.',tags:g.tags||[],nct:Number(g.confianca)||0.72,hash:'NCT-w'+Math.random().toString(36).slice(2,8),status:Number(g.confianca)>=0.8?'ENRIQUECIDO':'VERIFICAR',seo:{title:g.seo_title||'',desc:g.seo_desc||''},fontes:g.fontes||[],confianca:g.confianca||0};
     preencherEAN(prod);
-    if(incertos.length>0){
-      showToast('ean-toast','Atencao: campos '+incertos.join(', ')+' precisam verificacao manual','err');
-    } else {
-      showToast('ean-toast','Claude API -- produto enriquecido -- NCT '+prod.nct.toFixed(3),'ok');
-    }
-
-    // Mostrar SEO se disponivel
-    if(prod.seo.title){
-      const seoBox=document.getElementById('ean-seo-box');
-      if(seoBox){
-        seoBox.style.display='block';
-        document.getElementById('ean-seo-title').textContent=prod.seo.title;
-        document.getElementById('ean-seo-desc').textContent=prod.seo.desc;
-        document.getElementById('ean-seo-h1').textContent=prod.seo.h1;
-      }
-    }
-
-  } catch(err) {
-    console.error('Claude API erro:',err);
-    showToast('ean-toast','Erro na API -- tente novamente','err');
-    document.getElementById('ean-result').style.display='none';
-  }
+    const v=['oem','ncm','sku'].filter(k=>prod[k]==='VERIFICAR');
+    if(v.length)setTimeout(()=>showToast('ean-toast','Verificar: '+v.join(', '),'err'),800);
+    else showToast('ean-toast','Encontrado na web -- NCT '+prod.nct.toFixed(3)+' -- '+Math.round(prod.confianca*100)+'%','ok');
+  }catch(e){console.error(e);showToast('ean-toast','Erro: '+e.message,'err');document.getElementById('ean-result').style.display='none';}
 }
 function preencherEAN(prod){
   curEAN=prod;
