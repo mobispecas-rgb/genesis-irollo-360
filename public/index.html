@@ -672,9 +672,8 @@ function showPreview(boxId,prod){document.getElementById(boxId).innerHTML='<div 
 let curEAN=null;
 function buscarEAN(){
   const q=document.getElementById('ean-input').value.trim().toUpperCase().replace(/[-\s]/g,'');
-  if(!q||q.length<6){showToast('ean-toast','Digite EAN, OEM ou SKU (minimo 6 caracteres)','err');return}
-  const prod=PRODS.find(p=>
-    p.ean===q||
+  if(!q||q.length<3){showToast('ean-toast','Digite EAN, OEM ou SKU (minimo 6 caracteres)','err');return}
+  const prod=PRODS.find(p=>p.ean===q||p.tags.some(t=>t.includes(q.toLowerCase().replace(/[-\s]/g,"")))||p.nome.toLowerCase().includes(raw.toLowerCase())||
     p.sku.toUpperCase().replace(/[-\s]/g,'')===q||
     p.oem.toUpperCase().replace(/[-\s]/g,'').includes(q)||
     q.includes(p.ean)||
@@ -754,3 +753,5 @@ go('home');
 </script>
 </body>
 </html>
+
+
