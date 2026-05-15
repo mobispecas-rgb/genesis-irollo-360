@@ -30,8 +30,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 // ── PROXY ANTHROPIC API (resolve CORS do browser) ──────────
 app.post('/api/claude', async (req, res) => {
   try {
-    const fetch = (...args) => import('node-fetch').then(({default: f}) => f(...args));
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    
+    const r = await globalThis.fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -272,4 +272,5 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
 
