@@ -1,9 +1,9 @@
-/**
+﻿/**
  * @copyright 2026 Jose Nunes Junior / MOBIS Pecas
- * @license Proprietario — Todos os direitos reservados
+ * @license Proprietario â€” Todos os direitos reservados
  *
- * server.js — v4.0
- * Genesis iRollo 360 · genesisindexia.com.br
+ * server.js â€” v4.0
+ * Genesis iRollo 360 Â· genesisindexia.com.br
  * Motor NCT by Junior / MOBIS Pecas
  */
 
@@ -26,8 +26,28 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
+
+// ── PROXY ANTHROPIC API (resolve CORS do browser) ──────────
+app.post('/api/claude', async (req, res) => {
+  try {
+    const fetch = (...args) => import('node-fetch').then(({default: f}) => f(...args));
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+        'x-api-key': process.env.ANTHROPIC_API_KEY || ''
+      },
+      body: JSON.stringify(req.body)
+    });
+    const d = await r.json();
+    res.json(d);
+  } catch(e) {
+    res.status(500).json({error: e.message});
+  }
+});
 // ============================================================
-// CARREGAR MÓDULOS GENESIS
+// CARREGAR MÃ“DULOS GENESIS
 // ============================================================
 
 // Motor NCT v2
@@ -57,7 +77,7 @@ try {
     console.warn(' [AVISO] banner-gerador.js nao encontrado:', e.message);
 }
 
-// Token Bling (v4.0 — memória)
+// Token Bling (v4.0 â€” memÃ³ria)
 let blingToken = null;
 try {
     blingToken = require('./bling-auto-token');
@@ -67,14 +87,14 @@ try {
 }
 
 // ============================================================
-// ROTA RAIZ — status do sistema
+// ROTA RAIZ â€” status do sistema
 // ============================================================
 app.get('/', (req, res) => {
     res.json({
           sistema  : 'Genesis iRollo 360',
           versao   : '4.0',
           titular  : 'Junior / MOBIS Pecas',
-          motor    : 'NCT v2 — Motor de Confianca Tecnica',
+          motor    : 'NCT v2 â€” Motor de Confianca Tecnica',
           status   : 'online',
           modulos  : {
                   motor_nct  : !!motorNCT,
@@ -83,10 +103,10 @@ app.get('/', (req, res) => {
                   bling_token: !!blingToken,
           },
           endpoints: {
-                  motor     : '/api/motor/triangular · /api/motor/nf · /api/motor/ncm/:codigo',
-                  conectores: '/api/conectores · /api/conectores/testar · /api/conectores/whatsapp/link',
-                  banner    : '/api/banner/gerar · /api/banner/todos',
-                  bling     : '/api/bling/token · /api/bling/status · /api/bling/token/renovar · /api/bling/produtos',
+                  motor     : '/api/motor/triangular Â· /api/motor/nf Â· /api/motor/ncm/:codigo',
+                  conectores: '/api/conectores Â· /api/conectores/testar Â· /api/conectores/whatsapp/link',
+                  banner    : '/api/banner/gerar Â· /api/banner/todos',
+                  bling     : '/api/bling/token Â· /api/bling/status Â· /api/bling/token/renovar Â· /api/bling/produtos',
                   health    : '/api/health',
           },
     });
@@ -110,14 +130,14 @@ app.get('/api/health', (req, res) => {
 });
 
 // ============================================================
-// REGISTRAR ROTAS DOS MÓDULOS
+// REGISTRAR ROTAS DOS MÃ“DULOS
 // ============================================================
 if (motorNCT?.registrarRotas)  motorNCT.registrarRotas(app);
 if (conectores?.registrarRotas) conectores.registrarRotas(app);
 if (banner?.registrarRotas)    banner.registrarRotas(app);
 
 // ============================================================
-// ROTA LEGADA — compatibilidade com v3.0
+// ROTA LEGADA â€” compatibilidade com v3.0
 // ============================================================
 app.post('/api/nct/triangular', async (req, res) => {
     if (!motorNCT) return res.status(503).json({ ok: false, erro: 'Motor NCT nao carregado' });
@@ -130,10 +150,10 @@ app.post('/api/nct/triangular', async (req, res) => {
 });
 
 // ============================================================
-// BLING — rotas de token
+// BLING â€” rotas de token
 // ============================================================
 
-// GET /api/bling/token — retorna se o token está ativo
+// GET /api/bling/token â€” retorna se o token estÃ¡ ativo
 app.get('/api/bling/token', async (req, res) => {
     if (!blingToken) return res.status(503).json({ ok: false, erro: 'Bling token nao carregado' });
     try {
@@ -144,7 +164,7 @@ app.get('/api/bling/token', async (req, res) => {
     }
 });
 
-// GET /api/bling/status — status detalhado real do token
+// GET /api/bling/status â€” status detalhado real do token
 app.get('/api/bling/status', (req, res) => {
     if (!blingToken) {
           return res.json({ ok: false, status: 'modulo_nao_carregado', autenticado: false });
@@ -163,7 +183,7 @@ app.get('/api/bling/status', (req, res) => {
     });
 });
 
-// POST /api/bling/token/renovar — força renovação do token
+// POST /api/bling/token/renovar â€” forÃ§a renovaÃ§Ã£o do token
 app.post('/api/bling/token/renovar', async (req, res) => {
     if (!blingToken) return res.status(503).json({ ok: false, erro: 'Bling token nao carregado' });
     try {
@@ -175,7 +195,7 @@ app.post('/api/bling/token/renovar', async (req, res) => {
 });
 
 // ============================================================
-// ROTAS v3 — routes/
+// ROTAS v3 â€” routes/
 // ============================================================
 const rProdutos = require('./routes/produtos');
 const { motorRouter: rMotor, blingRouter: rBling } = require('./routes/motor');
@@ -211,7 +231,7 @@ app.use((req, res) => {
           ok  : false,
           erro: 'Rota nao encontrada',
           rota: req.originalUrl,
-          dica: 'Consulte / para ver os endpoints disponíveis',
+          dica: 'Consulte / para ver os endpoints disponÃ­veis',
     });
 });
 
@@ -228,17 +248,17 @@ app.use((err, req, res, next) => {
 // ============================================================
 app.listen(PORT, () => {
     console.log('');
-    console.log('╔══════════════════════════════════════════════╗');
-    console.log('║  GENESIS iRollo 360 — BACKEND v4.0          ║');
-    console.log('║  Motor NCT · Junior / MOBIS Pecas           ║');
-    console.log(`║  http://localhost:${PORT}                    ║`);
-    console.log('╚══════════════════════════════════════════════╝');
+    console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+    console.log('â•‘  GENESIS iRollo 360 â€” BACKEND v4.0          â•‘');
+    console.log('â•‘  Motor NCT Â· Junior / MOBIS Pecas           â•‘');
+    console.log(`â•‘  http://localhost:${PORT}                    â•‘`);
+    console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
     console.log('');
     console.log(' Modulos ativos:');
-    console.log(`  Motor NCT v2  : ${motorNCT    ? '✅' : '❌'}`);
-    console.log(`  Conectores    : ${conectores  ? '✅' : '❌'}`);
-    console.log(`  Banner gerador: ${banner      ? '✅' : '❌'}`);
-    console.log(`  Bling token   : ${blingToken  ? '✅' : '❌'}`);
+    console.log(`  Motor NCT v2  : ${motorNCT    ? 'âœ…' : 'âŒ'}`);
+    console.log(`  Conectores    : ${conectores  ? 'âœ…' : 'âŒ'}`);
+    console.log(`  Banner gerador: ${banner      ? 'âœ…' : 'âŒ'}`);
+    console.log(`  Bling token   : ${blingToken  ? 'âœ…' : 'âŒ'}`);
     console.log('');
     console.log(' Endpoints principais:');
     console.log('  POST /api/motor/triangular');
@@ -252,3 +272,4 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
