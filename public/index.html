@@ -728,7 +728,7 @@ async function enriquecerComClaude(descricao) {
   };
   preencherEAN(placeholder);
 
-  const prompt=`Voce e um especialista senior em autopecas brasileiras de motores DIESEL pesados (Mitsubishi L200, Hyundai HR, KIA Bongo, VW Constellation, Ford Cargo, Mercedes Actros). Foco em pecas de motor: pistao, biela, bronzina, junta, anel, tucho, bomba injetora, virabrequim, cabecote. Fabricantes: Metal Leve, MAHLE, Hyundai MOBIS, Bosch, Victor Reinz. 
+  const prompt=`Voce e um agente especializado em autopecas brasileiras. OBRIGATORIO: use a ferramenta web_search para buscar o produto antes de responder. Consulte: Rock Parts, MAHLE catalogo, TecDoc, GS1 Brasil, INMETRO, Google Shopping. Se nao encontrar nas bases consultadas retorne campo vazio - NUNCA invente dados. Especialidade: motores DIESEL pesados Mitsubishi L200, Hyundai HR, KIA Bongo, VW, Ford, Mercedes (Mitsubishi L200, Hyundai HR, KIA Bongo, VW Constellation, Ford Cargo, Mercedes Actros). Foco em pecas de motor: pistao, biela, bronzina, junta, anel, tucho, bomba injetora, virabrequim, cabecote. Fabricantes: Metal Leve, MAHLE, Hyundai MOBIS, Bosch, Victor Reinz. 
 Analise esta descricao e retorne APENAS JSON valido sem markdown.
 REGRA ANTI-ALUCINACAO: se nao tiver certeza de um dado, coloque "VERIFICAR" no campo. Nunca invente OEM, NCM ou aplicacao veicular sem embasamento.
 
@@ -1015,6 +1015,7 @@ go('home');
 </script>
 </body>
 </html>
+
 
 
 
