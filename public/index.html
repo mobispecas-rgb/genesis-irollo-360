@@ -742,6 +742,7 @@ async function enriquecerComClaude(d){
     const v=['oem','ncm','sku'].filter(k=>prod[k]==='VERIFICAR');
     if(v.length)setTimeout(()=>showToast('ean-toast','Verificar manualmente: '+v.join(', '),'err'),800);
     else showToast('ean-toast','Encontrado na web -- NCT '+prod.nct.toFixed(3)+' -- '+Math.round(prod.confianca*100)+'%','ok');
+  }
   }catch(e){console.error(e);showToast('ean-toast','Erro: '+e.message,'err');document.getElementById('ean-result').style.display='none';}
 function ativarVoz(){
   if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){
