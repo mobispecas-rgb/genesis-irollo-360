@@ -757,7 +757,7 @@ Retorne exatamente este JSON:
 }`;
 
   try {
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
+    const r=await fetch('https://genesis-irollo-360.onrender.com/api/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -1015,3 +1015,4 @@ go('home');
 </script>
 </body>
 </html>
+
