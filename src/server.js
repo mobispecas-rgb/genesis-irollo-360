@@ -27,7 +27,32 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 
-$proxy
+app.post('/api/claude', (req, res) => {
+  const https = require('https');
+  const body = JSON.stringify(req.body);
+  const options = {
+    hostname: 'api.anthropic.com',
+    path: '/v1/messages',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'anthropic-version': '2023-06-01',
+      'x-api-key': process.env.ANTHROPIC_API_KEY || '',
+      'Content-Length': Buffer.byteLength(body)
+    }
+  };
+  const r = https.request(options, (response) => {
+    let data = '';
+    response.on('data', chunk => data += chunk);
+    response.on('end', () => {
+      try { res.json(JSON.parse(data)); }
+      catch(e) { res.status(500).json({error: data}); }
+    });
+  });
+  r.on('error', e => res.status(500).json({error: e.message}));
+  r.write(body);
+  r.end();
+});
     const d = await r.json();
     res.json(d);
   } catch(e) {
