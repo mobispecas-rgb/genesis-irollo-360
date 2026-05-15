@@ -278,15 +278,16 @@ textarea.field-input{resize:vertical;line-height:1.5}
     <div class="card">
       <div class="card-head"><div class="card-title">Busca por codigo EAN</div></div>
       <div class="card-body">
-        <div class="toolbar-info" style="margin-bottom:14px">O EAN e o codigo de barras do produto (13 digitos). Ele esta impresso na embalagem abaixo do codigo de barras. Exemplo: BC720JSTD = 7891945023581</div>
+        <div class="toolbar-info" style="margin-bottom:14px">Busque por EAN (codigo de barras), OEM (codigo do fabricante) ou SKU (referencia interna). Exemplos: EAN = 7891945023581 | OEM = 234104A950 | SKU = BC720JSTD</div>
         <div class="field" style="margin-bottom:10px">
-          <div class="field-label">Codigo EAN do produto <span class="field-hint">-- digitado ou lido por leitor de codigo de barras</span></div>
+          <div class="field-label">EAN, OEM, SKU ou descricao <span class="field-hint">-- codigo ou "biela hr", "pistao porter"</span></div>
           <div style="display:flex;gap:8px">
-            <input class="field-input" id="ean-input" type="text" placeholder="Ex: 7891945023581" maxlength="14" style="font-size:16px;font-family:monospace;letter-spacing:2px;flex:1">
+            <input class="field-input" id="ean-input" type="text" placeholder="Ex: 234104A950 | biela hr | pistao porter diesel" style="font-size:16px;font-family:monospace;flex:1" onkeydown="if(event.key==='Enter')buscarEAN()">
             <button class="btn btn-primary" onclick="buscarEAN()" style="padding:9px 20px">Buscar</button>
+            <button class="btn btn-secondary" id="btn-voz" onclick="ativarVoz()" title="Busca por voz -- fale o nome da peca" style="padding:9px 14px">Microfone</button>
           </div>
         </div>
-        <div style="font-size:12px;color:var(--faint);font-family:monospace">Codigos de teste: 7891945023581 | 7891945031586 | 7891945012615</div>
+        <div style="font-size:12px;color:var(--faint);font-family:monospace">Exemplos: 234104A950 | biela hr | junta cabecote h100 | BC720JSTD | pistao porter diesel</div>
       </div>
     </div>
     <div id="ean-result" style="display:none">
@@ -611,7 +612,25 @@ const PRODS=[
    bula:"Verificar pressao de oleo (min 2.5 kgf). Substituir todos os tuchos simultaneamente. Aguardar 30 min apos instalacao antes de ligar o motor.",
    cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao profissional. Substituicao do conjunto completo recomendada.",
    tags:["tucho hidraulico l200","tc0451 metal leve","tuchos 4d56","l200 pajero sport tuchos"],
-   nct:0.843,hash:"NCT-tc0451d2f5a1c7c84c",status:"PENDENTE"}
+   nct:0.843,hash:"NCT-tc0451d2f5a1c7c84c",status:"PENDENTE"},
+  {id:"p4",sku:"234104A950",ean:"8809160806956",nome:"Pistao Motor 23410-4A950 -- Hyundai MOBIS -- HR / H100 / Porter Motor D4BH 2.5 Diesel",oem:"23410-4A950",ncm:"8409.91.20",fab:"Hyundai MOBIS",med:"STD",
+   aplic:[{m:"Hyundai",mod:"HR / H100 Caminhonete",mot:"D4BH 2.5 8v Diesel Turbo",a:"2005-2012",f:"Catalogo Hyundai MOBIS"},{m:"Hyundai",mod:"Porter II",mot:"D4BH 2.5 Diesel",a:"2004-2012",f:"TecDoc API"},{m:"Hyundai",mod:"Starex / H1",mot:"D4BH 2.5 CRDi",a:"2002-2007",f:"AutoData"}],
+   bula:"Verificar diametro do cilindro antes da instalacao (medida STD: 91.000-91.010 mm). Instalar aneis de pistao com sentido correto. Torque do parafuso da biela: 48 Nm + 90 graus. Substituir todos os pistoes simultaneamente. Lubrificar levemente com oleo de motor.",
+   cdc:"CDC Art. 26 -- Garantia 90 dias contra defeitos de fabricacao. Instalacao por mecanico habilitado. Verificar compatibilidade do motor antes da compra.",
+   tags:["pistao hyundai hr","234104a950","23410-4a950","pistao d4bh","pistao h100 diesel","hyundai mobis pistao","pistao porter diesel"],
+   nct:0.912,hash:"NCT-234104a950b7c3d1f9",status:"ENRIQUECIDO"},
+  {id:"p5",sku:"235004A010",ean:"8809160810816",nome:"Biela Motor 23500-4A010 -- Hyundai MOBIS -- HR / H100 / Porter Motor D4BH 2.5 Diesel",oem:"23500-4A010",ncm:"8409.91.10",fab:"Hyundai MOBIS",med:"STD",
+   aplic:[{m:"Hyundai",mod:"HR / H100 Caminhonete",mot:"D4BH 2.5 8v Diesel Turbo",a:"2005-2012",f:"Catalogo Hyundai MOBIS"},{m:"Hyundai",mod:"Porter II",mot:"D4BH 2.5 Diesel",a:"2004-2012",f:"TecDoc API"},{m:"Hyundai",mod:"Starex / H1",mot:"D4BH 2.5 CRDi",a:"2002-2007",f:"AutoData"}],
+   bula:"Verificar folga de biela (0.018-0.036 mm). Torque: 48 Nm + 90 graus de giro angular. Nao reutilizar parafusos. Substituir bronzinas simultaneamente. Verificar virabrequim antes da instalacao.",
+   cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao por mecanico especializado em motores diesel.",
+   tags:["biela hyundai hr","235004a010","biela d4bh","biela h100 diesel","biela porter","biela hr motor diesel","hyundai mobis biela"],
+   nct:0.905,hash:"NCT-235004a010c8d2e3f4",status:"ENRIQUECIDO"},
+  {id:"p6",sku:"209304A001",ean:"8809160803979",nome:"Junta do Cabecote 20930-4A001 -- Hyundai MOBIS -- HR / H100 Motor D4BH 2.5 Diesel",oem:"20930-4A001",ncm:"8484.10.00",fab:"Hyundai MOBIS",med:"Unitario",
+   aplic:[{m:"Hyundai",mod:"HR / H100 Caminhonete",mot:"D4BH 2.5 8v Diesel Turbo",a:"2005-2012",f:"Catalogo Hyundai MOBIS"},{m:"Hyundai",mod:"Porter II",mot:"D4BH 2.5 Diesel",a:"2004-2012",f:"Metal Leve PDF"}],
+   bula:"Limpar superficies do bloco e cabecote. Torque em cruz: 1a etapa 29 Nm, 2a etapa + 90 graus, 3a etapa + 90 graus. Nunca reutilizar a junta. Verificar planeidade do cabecote (max 0.05 mm).",
+   cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao por profissional especializado.",
+   tags:["junta cabecote hr","209304a001","junta d4bh","junta cabecote h100","junta hyundai mobis","junta hr diesel"],
+   nct:0.891,hash:"NCT-209304a001d9e4f5a6",status:"ENRIQUECIDO"}
 ];
 
 let curProd=null;
@@ -665,27 +684,179 @@ function showPreview(boxId,prod){document.getElementById(boxId).innerHTML='<div 
 // EAN
 let curEAN=null;
 function buscarEAN(){
-  const ean=document.getElementById('ean-input').value.trim();
-  if(!ean||ean.length<8){showToast('ean-toast','Digite um EAN valido (minimo 8 digitos)','err');return}
-  const prod=PRODS.find(p=>p.ean===ean);
-  if(prod){preencherEAN(prod)}
-  else{showToast('ean-toast','Buscando nas bases e catalogos...','');
-    setTimeout(()=>{const novo={id:'n',sku:'REF-'+ean.slice(-6),ean,nome:'Produto EAN '+ean+' - aguardando enriquecimento',oem:'Consultando TecDoc...',ncm:'Consultando SEFAZ...',fab:'Identificando...',med:'STD',aplic:[{m:'Pendente',mod:'verificar catalogo',mot:'-',a:'-',f:'Triangulacao pendente'}],bula:'Bula sendo gerada pela IA com base nos catalogos do fabricante.',cdc:'Garantia conforme CDC Art. 26.',tags:['produto diesel','autopeca'],nct:0.72,hash:'NCT-ean'+ean.slice(-8),status:'RASCUNHO'};preencherEAN(novo)},1500)}
+  const raw=document.getElementById('ean-input').value.trim();
+  const q=raw.toUpperCase().replace(/[-\s]/g,'');
+  if(!q||q.length<3){showToast('ean-toast','Digite EAN, OEM, SKU ou descricao (minimo 3 caracteres)','err');return}
+
+  // Busca exata: EAN, OEM ou SKU
+  let prod=PRODS.find(p=>
+    p.ean===q||
+    p.sku.toUpperCase().replace(/[-\s]/g,'')===q||
+    p.oem.toUpperCase().replace(/[-\s]/g,'').includes(q)
+  );
+
+  // Busca por descricao: palavras-chave no nome, tags ou aplicacao
+  if(!prod){
+    const palavras=raw.toLowerCase().split(/\s+/).filter(w=>w.length>2);
+    prod=PRODS.find(p=>{
+      const texto=(p.nome+' '+p.tags.join(' ')+' '+p.aplic.map(a=>a.m+' '+a.mod+' '+a.mot).join(' ')).toLowerCase();
+      return palavras.every(w=>texto.includes(w));
+    });
+  }
+
+  if(prod){
+    preencherEAN(prod);
+  } else {
+    // Chamar Claude API para enriquecimento real
+    enriquecerComClaude(raw);
+  }
+}
+
+// â”€â”€ CLAUDE API -- Anti-alucinacao â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+async function enriquecerComClaude(descricao) {
+  showToast('ean-toast','Claude API -- analisando "'+descricao+'" nas bases automotivas...','');
+  document.getElementById('ean-result').style.display='block';
+
+  // Placeholder enquanto Claude processa
+  const placeholder={
+    id:'ia-'+Date.now(),sku:'PROCESSANDO',ean:'',
+    nome:'Analisando: "'+descricao+'" -- aguarde Claude API...',
+    oem:'Consultando...',ncm:'Consultando...',fab:'Identificando...',med:'--',
+    aplic:[{m:'Aguardando',mod:'Claude API processando',mot:'--',a:'--',f:'Agente IA'}],
+    bula:'Gerando bula tecnica com base em fontes verificadas...',
+    cdc:'CDC sendo calculado...',tags:[],nct:0,hash:'calculando...',status:'PROCESSANDO'
+  };
+  preencherEAN(placeholder);
+
+  const prompt=`Voce e um especialista senior em autopecas brasileiras. 
+Analise esta descricao e retorne APENAS JSON valido sem markdown.
+REGRA ANTI-ALUCINACAO: se nao tiver certeza de um dado, coloque "VERIFICAR" no campo. Nunca invente OEM, NCM ou aplicacao veicular sem embasamento.
+
+Descricao do usuario: "${descricao}"
+
+Retorne exatamente este JSON:
+{
+  "sku": "referencia ou codigo mais provavel",
+  "ean": "",
+  "nome": "nome tecnico completo para SEO (max 120 chars) -- inclua marca modelo motor",
+  "oem": "codigo OEM se conhecido com certeza, senao VERIFICAR",
+  "ncm": "NCM 8 digitos se conhecido, senao VERIFICAR",
+  "fab": "fabricante provavel",
+  "med": "STD ou especificar",
+  "aplic": [{"m":"marca","mod":"modelo especifico","mot":"motor cilindrada","a":"anos","f":"fonte do dado"}],
+  "bula": "instrucoes tecnicas de instalacao com torques e cuidados (apenas dados verificados)",
+  "cdc": "aviso CDC obrigatorio",
+  "tags": ["tag seo 1","tag seo 2","tag seo 3","tag seo 4","tag seo 5","tag seo 6","tag seo 7","tag seo 8"],
+  "seo_title": "title tag Google Ads max 60 chars",
+  "seo_desc": "meta description max 155 chars com CTA e palavra-chave principal",
+  "seo_h1": "H1 da pagina do produto",
+  "google_shopping": {"marca":"","mpn":"","gtin":"","categoria_google":"Autoparts > Pecas de Motor"},
+  "confianca": 0.0,
+  "fontes_usadas": ["lista das fontes que embasaram os dados"],
+  "nct_estimado": 0.0
+}`;
+
+  try {
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:2000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const d=await r.json();
+    let raw2=d.content?.find(b=>b.type==='text')?.text||'{}';
+    raw2=raw2.replace(/```json|```/g,'').trim();
+    const st=raw2.indexOf('{');if(st>0)raw2=raw2.slice(st);
+    let dados;
+    try{dados=JSON.parse(raw2)}catch(e){
+      // Tentar reparar JSON truncado
+      let s=raw2;let op=0,br=0,iS=false,esc=false;
+      for(const c of s){if(esc){esc=false;continue}if(c==='\\'){esc=true;continue}if(c==='"'){iS=!iS;continue}if(iS)continue;if(c==='{')op++;if(c==='}')op--;if(c==='[')br++;if(c===']')br--}
+      if(iS)s+='"';for(let i=0;i<br;i++)s+=']';for(let i=0;i<op;i++)s+='}';
+      dados=JSON.parse(s);
+    }
+
+    // Montar produto com dados da IA
+    const prod={
+      id:'ia-'+Date.now(),
+      sku:dados.sku||'REF-IA',
+      ean:dados.ean||'',
+      nome:dados.nome||descricao,
+      oem:dados.oem||'VERIFICAR',
+      ncm:dados.ncm||'VERIFICAR',
+      fab:dados.fab||'Identificar',
+      med:dados.med||'STD',
+      aplic:(dados.aplic||[]).map(a=>({m:a.m||'--',mod:a.mod||'--',mot:a.mot||'--',a:a.a||'--',f:a.f||'Claude API'})),
+      bula:dados.bula||'Consultar manual tecnico do fabricante.',
+      cdc:dados.cdc||'Garantia conforme CDC Art. 26.',
+      tags:dados.tags||[],
+      nct:dados.nct_estimado||dados.confianca||0.72,
+      hash:'NCT-ia-'+Math.random().toString(36).slice(2,10),
+      status:'ENRIQUECIDO',
+      seo:{title:dados.seo_title||'',desc:dados.seo_desc||'',h1:dados.seo_h1||''},
+      shopping:dados.google_shopping||{},
+      fontes:dados.fontes_usadas||[],
+      confianca:dados.confianca||0
+    };
+
+    // Alertar se dados incertos
+    const incertos=['oem','ncm'].filter(f=>prod[f]==='VERIFICAR');
+    preencherEAN(prod);
+    if(incertos.length>0){
+      showToast('ean-toast','Atencao: campos '+incertos.join(', ')+' precisam verificacao manual','err');
+    } else {
+      showToast('ean-toast','Claude API -- produto enriquecido -- NCT '+prod.nct.toFixed(3),'ok');
+    }
+
+    // Mostrar SEO se disponivel
+    if(prod.seo.title){
+      const seoBox=document.getElementById('ean-seo-box');
+      if(seoBox){
+        seoBox.style.display='block';
+        document.getElementById('ean-seo-title').textContent=prod.seo.title;
+        document.getElementById('ean-seo-desc').textContent=prod.seo.desc;
+        document.getElementById('ean-seo-h1').textContent=prod.seo.h1;
+      }
+    }
+
+  } catch(err) {
+    console.error('Claude API erro:',err);
+    showToast('ean-toast','Erro na API -- tente novamente','err');
+    document.getElementById('ean-result').style.display='none';
+  }
 }
 function preencherEAN(prod){
   curEAN=prod;
   document.getElementById('ean-result').style.display='block';
   renderNCT('ean-nct-block',prod);
   ['nome','sku','oem','ncm','fab','med'].forEach(f=>document.getElementById('ean-'+f).textContent=prod[{sku:'sku',oem:'oem',ncm:'ncm',fab:'fab',med:'med',nome:'nome'}[f]]||'-');
+  // Destacar campos que precisam verificacao
+  ['ean-oem','ean-ncm'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.textContent==='VERIFICAR'){el.style.background='#FFF3CD';el.style.color='#856404';el.style.fontWeight='700'}
+    else if(el){el.style.background='';el.style.color='';el.style.fontWeight=''}
+  });
   renderAplic('ean-aplic',prod.aplic);
   document.getElementById('ean-bula').textContent=prod.bula;
   document.getElementById('ean-cdc').textContent='Aviso CDC: '+prod.cdc;
   document.getElementById('ean-badge').textContent=prod.status;
-  document.getElementById('ean-badge').className='badge '+(prod.status==='ENRIQUECIDO'?'badge-ok':'badge-warn');
+  document.getElementById('ean-badge').className='badge '+(prod.status==='ENRIQUECIDO'?'badge-ok':prod.status==='PROCESSANDO'?'badge-info':'badge-warn');
   const tg=document.getElementById('ean-tags');tg.innerHTML='';
   (prod.tags||[]).forEach(t=>{const s=document.createElement('span');s.className='tag';s.textContent=t;tg.appendChild(s)});
   document.getElementById('ean-img-box').innerHTML='';
-  showToast('ean-toast','Produto enriquecido -- NCT '+prod.nct.toFixed(3),'ok');
+  // Injetar painel SEO se tiver dados
+  const seoBox=document.getElementById('ean-seo-box');
+  if(seoBox&&prod.seo&&prod.seo.title){
+    seoBox.style.display='block';
+    document.getElementById('ean-seo-title').textContent=prod.seo.title;
+    document.getElementById('ean-seo-desc').textContent=prod.seo.desc;
+    document.getElementById('ean-seo-h1').textContent=prod.seo.h1;
+    if(prod.fontes&&prod.fontes.length>0)document.getElementById('ean-fontes').textContent='Fontes: '+prod.fontes.join(' | ');
+  }
+  if(prod.nct>0)showToast('ean-toast','Produto enriquecido -- NCT '+prod.nct.toFixed(3)+(prod.confianca?' -- Confianca '+Math.round(prod.confianca*100)+'%':''),'ok');
 }
 function gerarPreviewEAN(){if(curEAN)showPreview('ean-img-box',curEAN)}
 function downloadEAN(t){if(curEAN)downloadImg(curEAN,t)}
@@ -737,6 +908,108 @@ function arejeitar(){showToast('aprov-toast','Produto rejeitado -- voltou para f
 function aregen(){showToast('aprov-toast','Regenerando com os 5 agentes de IA...','');}
 function blingAuth(){const cid=document.getElementById('bling-cid').value.trim();if(!cid){showToast('bling-toast','Informe o Client ID do Bling primeiro','err');return}window.open('https://www.bling.com.br/OAuth2/index.php?response_type=code&client_id='+cid+'&state=genesis360','_blank');showToast('bling-toast','Janela de autorizacao aberta -- autorize e cole o codigo aqui','')}
 function blingTest(){showToast('bling-toast','Testando...','');setTimeout(()=>showToast('bling-toast','invalid_grant -- use o botao Autorizar Bling','err'),1500)}
+
+// â”€â”€ VOZ -- Web Speech API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+let reconhecimento=null;
+function ativarVoz(){
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){
+    showToast('ean-toast','Voz nao suportada neste navegador. Use Chrome.','err');return;
+  }
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  reconhecimento=new SR();
+  reconhecimento.lang='pt-BR';
+  reconhecimento.continuous=false;
+  reconhecimento.interimResults=false;
+  reconhecimento.onstart=()=>{
+    document.getElementById('btn-voz').textContent='Ouvindo...';
+    document.getElementById('btn-voz').style.background='#E74C3C';
+    showToast('ean-toast','Fale o nome ou codigo da peca...','');
+  };
+  reconhecimento.onresult=(e)=>{
+    const txt=e.results[0][0].transcript;
+    document.getElementById('ean-input').value=txt;
+    document.getElementById('btn-voz').textContent='Microfone';
+    document.getElementById('btn-voz').style.background='';
+    buscarEAN();
+  };
+  reconhecimento.onerror=()=>{
+    document.getElementById('btn-voz').textContent='Microfone';
+    document.getElementById('btn-voz').style.background='';
+    showToast('ean-toast','Erro no microfone -- tente novamente','err');
+  };
+  reconhecimento.start();
+}
+
+// â”€â”€ SEO EXPORT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function exportarSEO(){
+  if(!curEAN){showToast('ean-toast','Busque um produto primeiro','err');return}
+  const p=curEAN;
+  const seo=p.seo||{};
+  const aplic=p.aplic?p.aplic.map(a=>a.m+' '+a.mod+' '+a.a).join('; '):'-';
+  const schema={
+    "@context":"https://schema.org/",
+    "@type":"Product",
+    "name":p.nome,
+    "sku":p.sku,
+    "gtin13":p.ean||undefined,
+    "mpn":p.oem,
+    "brand":{"@type":"Brand","name":p.fab},
+    "description":p.bula,
+    "offers":{
+      "@type":"Offer",
+      "priceCurrency":"BRL",
+      "availability":"https://schema.org/InStock",
+      "seller":{"@type":"Organization","name":"MOBIS Autopecas"}
+    },
+    "additionalProperty":[
+      {"@type":"PropertyValue","name":"NCM","value":p.ncm},
+      {"@type":"PropertyValue","name":"Aplicacao Veicular","value":aplic},
+      {"@type":"PropertyValue","name":"Medida","value":p.med}
+    ]
+  };
+  const txt=
+    '=== SEO -- GENESIS iROLLO 360 === \n\n'+
+    'TITLE TAG (Google Ads): '+(seo.title||p.nome.slice(0,60))+'\n'+
+    'META DESCRIPTION: '+(seo.desc||p.bula.slice(0,155))+'\n'+
+    'H1: '+(seo.h1||p.nome)+'\n\n'+
+    'PALAVRAS-CHAVE: '+p.tags.join(', ')+'\n\n'+
+    'APLICACAO VEICULAR: '+aplic+'\n\n'+
+    'SCHEMA.ORG (colar no HTML do PDV):\n'+JSON.stringify(schema,null,2)+'\n\n'+
+    'GOOGLE SHOPPING FEED:\n'+
+    'id: '+p.sku+'\n'+
+    'title: '+p.nome.slice(0,150)+'\n'+
+    'description: '+p.bula.slice(0,5000)+'\n'+
+    'brand: '+p.fab+'\n'+
+    'gtin: '+(p.ean||'')+'\n'+
+    'mpn: '+p.oem+'\n'+
+    'google_product_category: 913\n'+
+    'condition: new\n'+
+    'availability: in stock\n';
+  const a=document.createElement('a');
+  a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);
+  a.download=(p.sku||'produto')+'-seo-genesis.txt';
+  a.click();
+  showToast('ean-toast','SEO exportado -- cole o schema.org no HTML do seu PDV para baixar CPC','ok');
+}
+
+// â”€â”€ SCHEMA.ORG INJECT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function injetarSchema(prod){
+  const aplic=prod.aplic?prod.aplic.map(a=>a.m+' '+a.mod+' '+a.a).join('; '):'-';
+  const schema={
+    "@context":"https://schema.org/",
+    "@type":"Product",
+    "name":prod.nome,"sku":prod.sku,"mpn":prod.oem,"brand":{"@type":"Brand","name":prod.fab},
+    "description":prod.bula,
+    "additionalProperty":[
+      {"@type":"PropertyValue","name":"Aplicacao","value":aplic},
+      {"@type":"PropertyValue","name":"NCM","value":prod.ncm},
+      {"@type":"PropertyValue","name":"Motor NCT","value":prod.nct}
+    ]
+  };
+  let el=document.getElementById('schema-json');
+  if(!el){el=document.createElement('script');el.type='application/ld+json';el.id='schema-json';document.head.appendChild(el)}
+  el.textContent=JSON.stringify(schema);
+}
 
 go('home');
 </script>
