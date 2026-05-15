@@ -717,117 +717,33 @@ async function enriquecerComClaude(d){
   showToast('ean-toast','Buscando "'+d+'" na web...','');
   document.getElementById('ean-result').style.display='block';
   preencherEAN({id:'x',sku:'...',ean:'',nome:'Agente buscando: '+d,oem:'...',ncm:'...',fab:'...',med:'...',aplic:[{m:'Web',mod:'Search',mot:'--',a:'--',f:'Claude+WebSearch'}],bula:'Aguardando...',cdc:'...',tags:[],nct:0,hash:'...',status:'PROCESSANDO'});
-  const p='Especialista autopecas BR. Use web_search para buscar dados REAIS de: "'+d+'". Retorne APENAS JSON sem markdown: {"sku":"","ean":"","nome":"nome tecnico SEO","oem":"OEM ou VERIFICAR","ncm":"NCM ou VERIFICAR","fab":"","med":"STD","aplic":[{"m":"marca","mod":"modelo","mot":"motor","a":"2014-2021","f":"fonte"}],"bula":"instrucoes com torques reais","cdc":"aviso CDC","tags":["t1","t2"],"seo_title":"","seo_desc":"","fontes":[],"confianca":0.9}';
+  const p='Especialista autopecas BR. Use web_search para buscar dados REAIS de: "'+d+'". Retorne APENAS JSON sem markdown: {"sku":"","ean":"","nome":"nome tecnico SEO 120 chars","oem":"OEM exato ou VERIFICAR","ncm":"NCM 8 digitos ou VERIFICAR","fab":"fabricante","med":"STD","aplic":[{"m":"marca","mod":"modelo","mot":"motor","a":"2010-2021","f":"fonte"}],"bula":"instrucoes com torques reais","cdc":"aviso CDC Art.26","tags":["t1","t2","t3"],"seo_title":"titulo 60chars","seo_desc":"desc 155chars","fontes":["url1"],"confianca":0.9}';
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:p}]})});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const j=await r.json();
-    const blocos=j.content||[];
-    const temSearch=blocos.some(b=>b.type==='tool_use');
-    let txt=blocos.filter(b=>b.type==='text').map(b=>b.text).join('');
-    if(temSearch&&!txt){
-      showToast('ean-toast','Agente encontrou dados -- processando...','');
-      const r2=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:p},{role:'assistant',content:blocos},{role:'user',content:'Retorne agora o JSON estruturado com os dados encontrados.'}]})});
+    const bl=j.content||[];
+    const temTool=bl.some(b=>b.type==='tool_use');
+    let txt=bl.filter(b=>b.type==='text').map(b=>b.text).join('');
+    if(temTool&&!txt){
+      showToast('ean-toast','Dados encontrados na web -- processando...','');
+      const r2=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:p},{role:'assistant',content:bl},{role:'user',content:'Retorne agora o JSON estruturado com os dados encontrados na web.'}]})});
       const j2=await r2.json();
       txt=(j2.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
     }
-    if(!txt)throw new Error('Sem resposta');
+    if(!txt)throw new Error('Sem resposta da API');
     let raw=txt.replace(/```json|```/g,'').trim();
     const si=raw.indexOf('{')
 ;if(si>0)raw=raw.slice(si);
     const ei=raw.lastIndexOf('}');if(ei>=0)raw=raw.slice(0,ei+1);
-    let g;try{g=JSON.parse(raw)}catch(e){g={sku:'VERIFICAR',oem:'VERIFICAR',ncm:'VERIFICAR',nome:d,fab:'Verificar',med:'STD',aplic:[],bula:'Consultar catalogo.',cdc:'CDC Art.26.',tags:[],confianca:0.5,fontes:[]}}
-    const prod={id:'w'+Date.now(),sku:g.sku||'VERIFICAR',ean:g.ean||'',nome:g.nome||d,oem:g.oem||'VERIFICAR',ncm:g.ncm||'VERIFICAR',fab:g.fab||'?',med:g.med||'STD',aplic:(g.aplic||[]).map(a=>({m:a.m,mod:a.mod,mot:a.mot,a:a.a,f:a.f||'Web'})),bula:g.bula||'Ver catalogo.',cdc:g.cdc||'CDC Art.26.',tags:g.tags||[],nct:Number(g.confianca)||0.72,hash:'NCT-w'+Math.random().toString(36).slice(2,8),status:Number(g.confianca)>=0.8?'ENRIQUECIDO':'VERIFICAR',seo:{title:g.seo_title||'',desc:g.seo_desc||''},fontes:g.fontes||[],confianca:g.confianca||0};
+    let g;try{g=JSON.parse(raw)}catch(e){g={sku:'VERIFICAR',oem:'VERIFICAR',ncm:'VERIFICAR',nome:d,fab:'Verificar',med:'STD',aplic:[],bula:'Consultar catalogo do fabricante.',cdc:'Garantia CDC Art. 26.',tags:[],confianca:0.5,fontes:[]}}
+    const prod={id:'w'+Date.now(),sku:g.sku||'VERIFICAR',ean:g.ean||'',nome:g.nome||d,oem:g.oem||'VERIFICAR',ncm:g.ncm||'VERIFICAR',fab:g.fab||'?',med:g.med||'STD',aplic:(g.aplic||[]).map(a=>({m:a.m||'--',mod:a.mod||'--',mot:a.mot||'--',a:a.a||'--',f:a.f||'Web'})),bula:g.bula||'Ver catalogo.',cdc:g.cdc||'CDC Art.26.',tags:g.tags||[],nct:Number(g.confianca)||0.72,hash:'NCT-w'+Math.random().toString(36).slice(2,8),status:Number(g.confianca)>=0.8?'ENRIQUECIDO':'VERIFICAR',seo:{title:g.seo_title||'',desc:g.seo_desc||''},fontes:g.fontes||[],confianca:g.confianca||0};
     preencherEAN(prod);
     const v=['oem','ncm','sku'].filter(k=>prod[k]==='VERIFICAR');
-    if(v.length)setTimeout(()=>showToast('ean-toast','Verificar: '+v.join(', '),'err'),800);
+    if(v.length)setTimeout(()=>showToast('ean-toast','Verificar manualmente: '+v.join(', '),'err'),800);
     else showToast('ean-toast','Encontrado na web -- NCT '+prod.nct.toFixed(3)+' -- '+Math.round(prod.confianca*100)+'%','ok');
   }catch(e){console.error(e);showToast('ean-toast','Erro: '+e.message,'err');document.getElementById('ean-result').style.display='none';}
 }
-function preencherEAN(prod){
-  curEAN=prod;
-  document.getElementById('ean-result').style.display='block';
-  renderNCT('ean-nct-block',prod);
-  ['nome','sku','oem','ncm','fab','med'].forEach(f=>document.getElementById('ean-'+f).textContent=prod[{sku:'sku',oem:'oem',ncm:'ncm',fab:'fab',med:'med',nome:'nome'}[f]]||'-');
-  // Destacar campos que precisam verificacao
-  ['ean-oem','ean-ncm'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el&&el.textContent==='VERIFICAR'){el.style.background='#FFF3CD';el.style.color='#856404';el.style.fontWeight='700'}
-    else if(el){el.style.background='';el.style.color='';el.style.fontWeight=''}
-  });
-  renderAplic('ean-aplic',prod.aplic);
-  document.getElementById('ean-bula').textContent=prod.bula;
-  document.getElementById('ean-cdc').textContent='Aviso CDC: '+prod.cdc;
-  document.getElementById('ean-badge').textContent=prod.status;
-  document.getElementById('ean-badge').className='badge '+(prod.status==='ENRIQUECIDO'?'badge-ok':prod.status==='PROCESSANDO'?'badge-info':'badge-warn');
-  const tg=document.getElementById('ean-tags');tg.innerHTML='';
-  (prod.tags||[]).forEach(t=>{const s=document.createElement('span');s.className='tag';s.textContent=t;tg.appendChild(s)});
-  document.getElementById('ean-img-box').innerHTML='';
-  // Injetar painel SEO se tiver dados
-  const seoBox=document.getElementById('ean-seo-box');
-  if(seoBox&&prod.seo&&prod.seo.title){
-    seoBox.style.display='block';
-    document.getElementById('ean-seo-title').textContent=prod.seo.title;
-    document.getElementById('ean-seo-desc').textContent=prod.seo.desc;
-    document.getElementById('ean-seo-h1').textContent=prod.seo.h1;
-    if(prod.fontes&&prod.fontes.length>0)document.getElementById('ean-fontes').textContent='Fontes: '+prod.fontes.join(' | ');
-  }
-  if(prod.nct>0)showToast('ean-toast','Produto enriquecido -- NCT '+prod.nct.toFixed(3)+(prod.confianca?' -- Confianca '+Math.round(prod.confianca*100)+'%':''),'ok');
-}
-function gerarPreviewEAN(){if(curEAN)showPreview('ean-img-box',curEAN)}
-function downloadEAN(t){if(curEAN)downloadImg(curEAN,t)}
-function salvarEAN(){showToast('ean-toast','Produto salvo no catalogo Genesis!','ok')}
-function enviarBling(){showToast('ean-toast','Produto enviado para o Bling ERP!','')}
-function limparEAN(){document.getElementById('ean-input').value='';document.getElementById('ean-result').style.display='none';curEAN=null}
-function enriquecerManual(){showToast('mp-toast','Enriquecendo com IA -- aguarde...','');setTimeout(()=>showToast('mp-toast','Produto enriquecido com Motor NCT!','ok'),2500)}
-function salvarManual(){showToast('mp-toast','Produto salvo no catalogo!','ok')}
-function limparManual(){['mp-nome','mp-sku','mp-ean','mp-ncm','mp-fab','mp-med','mp-aplic','mp-oem'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''})}
-function carregarPlanilha(inp){const f=inp.files[0];if(!f)return;document.getElementById('plan-preview').style.display='block';document.getElementById('plan-count').textContent='3';const l=document.getElementById('plan-lista');l.innerHTML='';PRODS.forEach(p=>{const d=document.createElement('div');d.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surf);border:1px solid var(--bdr);border-radius:4px;margin-bottom:6px;font-size:13px';d.innerHTML='<div><strong style="font-family:monospace;color:var(--red)">'+p.sku+'</strong> -- '+p.nome.slice(0,45)+'...</div><span class="badge badge-warn">PENDENTE</span>';l.appendChild(d)})}
-function baixarModelo(){const csv='SKU,Nome,EAN,OEM,NCM,Fabricante,Medida,Aplicacao\nBC720JSTD,Bronzina Mancal BC720J STD,7891945023581,MD-185923,8484.10.00,Metal Leve,STD,L200 HPE 2012-2024\n';const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='modelo-genesis.csv';a.click()}
-function importarPlan(){showToast('plan-toast','Enriquecendo 3 produtos com 5 agentes IA...','');setTimeout(()=>showToast('plan-toast','3 produtos enriquecidos -- prontos para aprovacao!','ok'),3000)}
-function cancelarPlan(){document.getElementById('plan-preview').style.display='none';document.getElementById('file-input').value=''}
-
-function renderAprovList(){
-  const el=document.getElementById('aprov-list');el.innerHTML='';
-  PRODS.forEach(p=>{
-    const d=document.createElement('div');d.className='prod-item';d.dataset.id=p.id;
-    const cor=p.nct>=.90?'var(--green)':p.nct>=.70?'#E67E22':'var(--red)';
-    d.innerHTML='<div class="prod-item-sku">'+p.sku+'</div><div class="prod-item-nome">'+p.nome+'</div><div class="prod-item-meta">EAN: '+p.ean+'</div><div class="prod-item-footer"><span class="badge '+(p.status==='ENRIQUECIDO'?'badge-ok':'badge-warn')+'">'+p.status+'</span><span class="prod-item-nct" style="color:'+cor+'">'+p.nct.toFixed(3)+'</span></div>';
-    d.onclick=()=>abrirProd(d);el.appendChild(d);
-  });
-}
-
-function abrirProd(el){
-  document.querySelectorAll('.prod-item').forEach(e=>e.classList.remove('on'));el.classList.add('on');
-  curProd=PRODS.find(p=>p.id===el.dataset.id);if(!curProd)return;
-  document.getElementById('aprov-empty').style.display='none';
-  document.getElementById('aprov-det').style.display='block';
-  renderNCT('aprov-nct',curProd);
-  document.getElementById('a-nome').textContent=curProd.nome;
-  document.getElementById('a-oem').textContent=curProd.oem;
-  document.getElementById('a-ncm').textContent=curProd.ncm;
-  document.getElementById('a-ean').textContent=curProd.ean;
-  renderAplic('a-aplic',curProd.aplic);
-  document.getElementById('a-bula').innerHTML='<div style="margin-bottom:10px;line-height:1.6">'+curProd.bula+'</div><div class="toolbar-warn">'+curProd.cdc+'</div>';
-  const tg=document.getElementById('a-tags');tg.innerHTML='';
-  (curProd.tags||[]).forEach(t=>{const s=document.createElement('span');s.className='tag';s.textContent=t;tg.appendChild(s)});
-  document.getElementById('aprov-img').innerHTML='';
-  document.getElementById('aprov-badge').textContent=curProd.status;
-  document.getElementById('aprov-badge').className='badge '+(curProd.status==='ENRIQUECIDO'?'badge-ok':'badge-warn');
-  document.getElementById('chip-nct').textContent='NCT: '+curProd.nct.toFixed(3);
-}
-
-function gerarPreviewAprov(){if(curProd)showPreview('aprov-img',curProd)}
-function aaprovar(){document.getElementById('chip-status').textContent='APROVADO';showToast('aprov-toast','Produto aprovado e enviado ao Bling!','ok')}
-function freeze(){showToast('aprov-toast','Dados congelados -- a IA nao vai alterar mais','ok')}
-function arejeitar(){showToast('aprov-toast','Produto rejeitado -- voltou para fila de correcao','err')}
-function aregen(){showToast('aprov-toast','Regenerando com os 5 agentes de IA...','');}
-function blingAuth(){const cid=document.getElementById('bling-cid').value.trim();if(!cid){showToast('bling-toast','Informe o Client ID do Bling primeiro','err');return}window.open('https://www.bling.com.br/OAuth2/index.php?response_type=code&client_id='+cid+'&state=genesis360','_blank');showToast('bling-toast','Janela de autorizacao aberta -- autorize e cole o codigo aqui','')}
-function blingTest(){showToast('bling-toast','Testando...','');setTimeout(()=>showToast('bling-toast','invalid_grant -- use o botao Autorizar Bling','err'),1500)}
-
-// â”€â”€ VOZ -- Web Speech API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-let reconhecimento=null;
-function ativarVoz(){
   if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){
     showToast('ean-toast','Voz nao suportada neste navegador. Use Chrome.','err');return;
   }
