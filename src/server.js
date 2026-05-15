@@ -46,10 +46,10 @@ app.post('/api/claude', (req, res) => {
     response.on('data', chunk => data += chunk);
     response.on('end', () => {
       try { res.json(JSON.parse(data)); }
-      catch(e) { res.status(500).json({error: data}); }
+      catch(e) { console.error('PROXY PARSE ERR:',data); res.status(500).json({error: data, parse: e.message}); }
     });
   });
-  r.on('error', e => res.status(500).json({error: e.message}));
+  r.on('error', e => { console.error('PROXY REQ ERR:',e.message); res.status(500).json({error: e.message}); });
   r.write(body);
   r.end();
 });
@@ -279,6 +279,7 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
 
 
 
