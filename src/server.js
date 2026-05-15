@@ -53,12 +53,6 @@ app.post('/api/claude', (req, res) => {
   r.write(body);
   r.end();
 });
-    const d = await r.json();
-    res.json(d);
-  } catch(e) {
-    res.status(500).json({error: e.message});
-  }
-});
 // ============================================================
 // CARREGAR MÃ“DULOS GENESIS
 // ============================================================
