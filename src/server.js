@@ -37,7 +37,7 @@ app.post('/api/claude', (req, res) => {
     headers: {
       'Content-Type': 'application/json',
       'anthropic-version': '2023-06-01',
-      'x-api-key': process.env.ANTHROPIC_API_KEY || '',
+      'x-api-key': (process.env.ANTHROPIC_API_KEY||'').trim().replace(/[\r\n\t\s]/g,''),
       'Content-Length': Buffer.byteLength(body)
     }
   };
@@ -279,6 +279,7 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
 
 
 
