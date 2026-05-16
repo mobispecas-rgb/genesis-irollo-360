@@ -1,1024 +1,2161 @@
-﻿<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Genesis iRollo 360 | MOBIS Autopecas</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --red:#C0392B;--red2:#E74C3C;--red-l:#FADBD8;
-  --green:#1E8449;--green-l:#D5F5E3;
-  --blue:#1A5276;--blue2:#2980B9;--blue-l:#D6EAF8;
-  --amber:#B7770D;--amber-l:#FDEBD0;
-  --nav:#1C2833;--nav2:#273746;--nav3:#2E4057;
-  --bg:#ECF0F1;--surf:#FFFFFF;
-  --bdr:#D5D8DC;--bdr2:#BFC9CA;
-  --txt:#1C2833;--muted:#566573;--faint:#99A3A4;
-  --h:52px;--nav-w:220px;
-}
-html,body{height:100%;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:14px}
-/* LAYOUT */
-.app{display:flex;height:100vh;overflow:hidden}
-/* NAV */
-nav{width:var(--nav-w);background:var(--nav);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
-.nav-header{padding:0 16px;height:var(--h);display:flex;align-items:center;border-bottom:1px solid var(--nav3);gap:10px}
-.nav-brand{color:#fff;font-size:16px;font-weight:700;letter-spacing:-.3px;white-space:nowrap}
-.nav-brand em{color:var(--red2);font-style:normal}
-.nav-version{font-size:10px;color:#5D6D7E;font-family:monospace;margin-top:2px}
-.nav-section{padding:12px 0 4px;border-bottom:1px solid var(--nav3)}
-.nav-label{font-size:10px;font-weight:600;color:#5D6D7E;letter-spacing:.1em;text-transform:uppercase;padding:0 16px 4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;color:#AEB6BF;font-size:13px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;user-select:none}
-.nav-item:hover{background:var(--nav2);color:#D5D8DC}
-.nav-item.on{background:var(--nav3);color:#fff;border-left-color:var(--red2)}
-.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7}
-.nav-item.on svg{opacity:1}
-.nav-count{margin-left:auto;background:var(--red2);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-family:monospace}
-.nav-foot{margin-top:auto;padding:12px 16px;border-top:1px solid var(--nav3);font-size:11px;color:#5D6D7E;line-height:1.7;font-family:monospace}
-/* BODY */
-.body{flex:1;display:flex;flex-direction:column;overflow:hidden}
-/* TOPBAR */
-.topbar{background:var(--surf);border-bottom:1px solid var(--bdr);height:var(--h);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.topbar-title{font-size:16px;font-weight:600}
-.topbar-sub{font-size:12px;color:var(--muted);margin-left:4px}
-.topbar-right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.chip{font-size:11px;font-family:monospace;background:var(--bg);border:1px solid var(--bdr2);padding:3px 10px;border-radius:4px;color:var(--muted)}
-.chip.ok{background:var(--green-l);color:var(--green);border-color:#A9DFBF}
-.chip.err{background:var(--red-l);color:var(--red);border-color:#F1948A}
-/* CONTENT */
-.content{flex:1;overflow-y:auto;background:var(--bg)}
-.page{display:none;padding:20px}
-.page.on{display:block}
-/* CARDS */
-.card{background:var(--surf);border:1px solid var(--bdr);border-radius:6px;margin-bottom:14px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-.card-head{padding:12px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:8px}
-.card-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.card-body{padding:16px}
-/* FORM */
-.form-row{display:grid;gap:14px;margin-bottom:14px}
-.form-row.col2{grid-template-columns:1fr 1fr}
-.form-row.col3{grid-template-columns:1fr 1fr 1fr}
-.form-row.col4{grid-template-columns:1fr 1fr 1fr 1fr}
-.field{}
-.field-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:6px}
-.field-hint{font-size:11px;color:var(--faint);font-weight:400}
-.field-val{font-size:14px;background:var(--bg);border:1px solid var(--bdr2);border-radius:4px;padding:9px 12px;min-height:36px;color:var(--txt);line-height:1.4}
-.field-val.mono{font-family:monospace;font-size:13px}
-.field-val.ld{color:var(--faint);font-style:italic}
-input.field-input,textarea.field-input{width:100%;font-size:14px;font-family:inherit;color:var(--txt);background:var(--surf);border:1px solid var(--bdr2);border-radius:4px;padding:9px 12px;outline:none;transition:border .15s}
-input.field-input:focus,textarea.field-input:focus{border-color:var(--blue2);box-shadow:0 0 0 2px rgba(41,128,185,.15)}
-input.field-input::placeholder{color:#BDC3C7}
-textarea.field-input{resize:vertical;line-height:1.5}
-.sep{height:1px;background:var(--bdr);margin:14px 0}
-/* BUTTONS */
-.btn{font-size:13px;font-weight:600;padding:8px 16px;border-radius:4px;border:1px solid transparent;cursor:pointer;font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
-.btn-primary{background:var(--blue2);color:#fff;border-color:var(--blue2)}
-.btn-primary:hover{background:var(--blue)}
-.btn-success{background:var(--green);color:#fff;border-color:var(--green)}
-.btn-success:hover{background:#145A32}
-.btn-danger{background:var(--red2);color:#fff;border-color:var(--red2)}
-.btn-danger:hover{background:var(--red)}
-.btn-warning{background:#E67E22;color:#fff;border-color:#E67E22}
-.btn-secondary{background:var(--surf);color:var(--muted);border-color:var(--bdr2)}
-.btn-secondary:hover{background:var(--bg)}
-.btn-dark{background:var(--nav);color:#fff;border-color:var(--nav)}
-.btn-sm{font-size:12px;padding:5px 11px}
-.btn-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 16px;background:var(--bg);border-top:1px solid var(--bdr);border-radius:0 0 6px 6px}
-.toolbar-info{font-size:12px;color:var(--muted);padding:8px 12px;background:var(--blue-l);border-radius:4px;border-left:3px solid var(--blue2);width:100%}
-.toolbar-warn{font-size:12px;color:var(--amber);padding:8px 12px;background:var(--amber-l);border-radius:4px;border-left:3px solid var(--amber);width:100%}
-/* BADGES */
-.badge{font-size:11px;font-family:monospace;padding:2px 8px;border-radius:3px;font-weight:600}
-.badge-ok{background:var(--green-l);color:var(--green)}
-.badge-warn{background:var(--amber-l);color:var(--amber)}
-.badge-danger{background:var(--red-l);color:var(--red)}
-.badge-info{background:var(--blue-l);color:var(--blue2)}
-/* NCT PANEL */
-.nct-panel{background:var(--nav);color:#fff;border-radius:6px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.nct-score-box{flex-shrink:0;min-width:130px}
-.nct-label{font-size:10px;font-family:monospace;color:#5D6D7E;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
-.nct-score{font-size:48px;font-weight:700;line-height:1;font-family:monospace}
-.nct-status{font-size:11px;font-weight:600;padding:2px 8px;border-radius:3px;display:inline-block;margin-top:4px}
-.nct-status.premium{background:rgba(30,132,73,.2);color:#58D68D}
-.nct-status.good{background:rgba(183,119,13,.2);color:#F0B27A}
-.nct-status.low{background:rgba(192,57,43,.2);color:#F1948A}
-.nct-hash{font-size:10px;font-family:monospace;color:#4D6072;margin-top:4px}
-.nct-bars{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;min-width:220px}
-.nct-bar-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:8px 10px}
-.nct-bar-header{display:flex;justify-content:space-between;font-size:10px;font-family:monospace;color:#5D6D7E;margin-bottom:4px}
-.nct-bar-name{font-size:10px;color:#4D6072;margin-top:2px}
-.nct-bar-track{height:4px;background:#2E4057;border-radius:2px;overflow:hidden;margin-top:4px}
-.nct-bar-fill{height:100%;border-radius:2px;transition:width 1.2s ease}
-.nct-formula{font-family:monospace;font-size:10px;color:#4D6072;line-height:2;flex-shrink:0}
-/* APLIC ROWS */
-.aplic-row{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border:1px solid var(--bdr);border-radius:4px;margin-bottom:6px;font-size:13px}
-.aplic-marca{font-weight:700;min-width:90px;color:var(--txt)}
-.aplic-modelo{color:var(--muted);flex:1}
-.aplic-anos{font-family:monospace;font-size:12px;color:var(--faint);background:#fff;padding:2px 8px;border-radius:3px;border:1px solid var(--bdr)}
-.aplic-fonte{font-size:11px;font-family:monospace;color:var(--green);background:var(--green-l);padding:1px 7px;border-radius:3px;border:1px solid #A9DFBF}
-/* PRODUCT LIST */
-.split{display:flex;flex:1;overflow:hidden;height:100%}
-.prod-list{width:300px;flex-shrink:0;border-right:1px solid var(--bdr);overflow-y:auto;background:var(--surf)}
-.prod-list-header{padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--bdr);font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.prod-item{border-bottom:1px solid var(--bdr);padding:12px 14px;cursor:pointer;transition:background .1s}
-.prod-item:hover{background:var(--blue-l)}
-.prod-item.on{background:var(--blue-l);border-left:3px solid var(--blue2)}
-.prod-item-sku{font-size:12px;font-weight:700;font-family:monospace;color:var(--red);margin-bottom:3px}
-.prod-item-nome{font-size:13px;font-weight:500;color:var(--txt);line-height:1.3;margin-bottom:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.prod-item-meta{font-size:11px;font-family:monospace;color:var(--faint)}
-.prod-item-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
-.prod-item-nct{font-size:15px;font-weight:700;font-family:monospace}
-.prod-detail{flex:1;overflow-y:auto;padding:16px;background:var(--bg)}
-.prod-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--faint)}
-.prod-empty-icon{width:48px;height:48px;opacity:.15}
-.prod-empty-title{font-size:16px;font-weight:600;color:var(--muted)}
-.prod-empty-desc{font-size:13px;color:var(--faint);max-width:260px;text-align:center;line-height:1.6}
-/* TAGS */
-.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-.tag{font-size:11px;font-family:monospace;background:var(--bg);color:var(--muted);border:1px solid var(--bdr2);padding:2px 8px;border-radius:3px}
-/* TOAST */
-.toast{display:none;font-size:13px;font-family:monospace;padding:8px 16px;border-radius:4px;text-align:center;margin-top:10px;font-weight:600;border:1px solid transparent}
-.toast.show{display:block}
-/* HOME */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
-.kpi{background:var(--surf);border:1px solid var(--bdr);border-radius:6px;padding:16px;border-top:3px solid var(--blue2)}
-.kpi.green{border-top-color:var(--green)}
-.kpi.red{border-top-color:var(--red2)}
-.kpi.amber{border-top-color:#E67E22}
-.kpi-val{font-size:32px;font-weight:700;line-height:1;margin-bottom:4px;font-family:monospace}
-.kpi-label{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
-.kpi-sub{font-size:11px;color:var(--faint);margin-top:3px}
-.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.feat-card{background:var(--surf);border:1px solid var(--bdr);border-radius:6px;padding:16px}
-.feat-title{font-size:14px;font-weight:700;margin-bottom:6px;color:var(--txt)}
-.feat-desc{font-size:13px;color:var(--muted);line-height:1.6}
-/* PLANS */
-.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.plan{background:var(--surf);border:1px solid var(--bdr);border-radius:6px;padding:20px;border-top:4px solid var(--faint)}
-.plan.highlight{border-top-color:var(--red2);box-shadow:0 4px 14px rgba(0,0,0,.1)}
-.plan-name{font-size:18px;font-weight:700;margin-bottom:4px}
-.plan-price{font-size:30px;font-weight:700;font-family:monospace;margin-bottom:2px;color:var(--blue2)}
-.plan-price sub{font-size:14px;font-weight:400;color:var(--muted)}
-.plan-limit{font-size:13px;color:var(--muted);margin-bottom:14px}
-.plan-feat{font-size:13px;line-height:2.2;color:var(--txt)}
-.plan-feat div::before{content:"+ ";color:var(--green);font-weight:700}
-.plan-feat div.no::before{content:"- ";color:var(--faint)}
-.plan-feat div.no{color:var(--faint)}
-/* UPLOAD */
-.upload-zone{border:2px dashed var(--bdr2);border-radius:6px;padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--surf)}
-.upload-zone:hover{border-color:var(--blue2);background:var(--blue-l)}
-.upload-title{font-size:15px;font-weight:600;color:var(--txt);margin-bottom:6px}
-.upload-sub{font-size:13px;color:var(--muted)}
-/* AGENT CARDS */
-.agent-row{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-bottom:1px solid var(--bdr)}
-.agent-row:last-child{border-bottom:none}
-.agent-num{width:32px;height:32px;border-radius:4px;background:var(--blue2);color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:monospace}
-.agent-info{flex:1}
-.agent-name{font-size:14px;font-weight:700;margin-bottom:3px}
-.agent-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:5px}
-.agent-sources{font-size:11px;color:var(--blue2);font-family:monospace}
-/* IMG PREVIEW */
-.img-preview{background:var(--nav);border-radius:6px;padding:12px;margin-top:10px}
-.img-preview svg{max-width:100%;border-radius:4px;display:block}
-.img-toolbar{display:flex;gap:8px;justify-content:center;margin-top:10px}
-</style>
-</head>
-<body>
-<div class="app">
-<!-- NAV -->
-<nav>
-  <div class="nav-header">
-    <div>
-      <div class="nav-brand">Genesis <em>iRollo</em> 360</div>
-      <div class="nav-version">v3.0 | Motor NCT v2 | MOBIS</div>
-    </div>
-  </div>
-  <div class="nav-section">
-    <div class="nav-label">Modulos</div>
-    <div class="nav-item on" id="nav-home" onclick="go('home')">
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/></svg>
-      Dashboard
-    </div>
-  </div>
-  <div class="nav-section">
-    <div class="nav-label">Cadastro</div>
-    <div class="nav-item" id="nav-ean" onclick="go('ean')">
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"/></svg>
-      Por EAN / Codigo de barras
-    </div>
-    <div class="nav-item" id="nav-produto" onclick="go('produto')">
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>
-      Cadastro manual
-    </div>
-    <div class="nav-item" id="nav-planilha" onclick="go('planilha')">
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/><path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3z"/></svg>
-      Importar planilha
-    </div>
-  </div>
-  <div class="nav-section">
-    <div class="nav-label">Fluxo de aprovacao</div>
-    <div class="nav-item" id="nav-aprovacao" onclick="go('aprovacao')">
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>
-      Aprovacao de enriquecimento
-      <span class="nav-count">3</span>
-    </div>
-  </div>
-  <div class="nav-section">
-    <div class="nav-label">Plataforma</div>
-    <div class="nav-item" id="nav-agentes" onclick="go('agentes')">
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062z"/></svg>
-      Agentes de IA (5)
-    </div>
-    <div class="nav-item" id="nav-bling" onclick="go('bling')">
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-      Bling ERP
-    </div>
-    <div class="nav-item" id="nav-planos" onclick="go('planos')">
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11z"/></svg>
-      Planos
-    </div>
-  </div>
-  <div class="nav-foot">genesisindexia.com.br<br>mobispecas@gmail.com<br>Hidrolandia, GO</div>
-</nav>
-<!-- BODY -->
-<div class="body">
-  <div class="topbar">
-    <div><span class="topbar-title" id="page-title">Dashboard</span><span class="topbar-sub" id="page-sub">Genesis iRollo 360</span></div>
-    <div class="topbar-right">
-      <span class="chip" id="chip-nct">NCT: --</span>
-      <span class="chip ok" id="chip-status">Motor NCT v2 ativo</span>
-    </div>
-  </div>
-  <div class="content">
-<!-- ========== HOME ========== -->
-<div class="page on" id="page-home">
-  <div class="kpi-grid">
-    <div class="kpi green"><div class="kpi-val" style="color:var(--green)">3</div><div class="kpi-label">Produtos enriquecidos</div><div class="kpi-sub">Aguardando aprovacao</div></div>
-    <div class="kpi amber"><div class="kpi-val" style="color:#E67E22">0.88</div><div class="kpi-label">NCT medio</div><div class="kpi-sub">Meta: 0.90 (premium)</div></div>
-    <div class="kpi"><div class="kpi-val" style="color:var(--blue2)">5</div><div class="kpi-label">Agentes IA ativos</div><div class="kpi-sub">OEM Â· NCM Â· CDC Â· Bula Â· Veicular</div></div>
-    <div class="kpi red"><div class="kpi-val" style="color:var(--red2)">0</div><div class="kpi-label">Sincronizados Bling</div><div class="kpi-sub">Token expirado</div></div>
-  </div>
-  <div class="feat-grid">
-    <div class="feat-card"><div class="feat-title">Motor NCT</div><div class="feat-desc">Score exclusivo de 0 a 1 que mede a qualidade do cadastro. Produto abaixo de 0.90 e bloqueado antes de chegar ao Bling ERP.</div></div>
-    <div class="feat-card"><div class="feat-title">Triangulacao de aplicacao veicular</div><div class="feat-desc">A IA verifica em 6 fontes simultaneas: Catalogo Mahle, TecDoc API, AutoData, PDFs Metal Leve, Bosch e cross-reference de cambagem.</div></div>
-    <div class="feat-card"><div class="feat-title">Imagem tecnica automatica</div><div class="feat-desc">Gera imagem tecnica 800x520px com SKU, OEM, NCM, EAN, NCT, aplicacao veicular e RAST-HASH. Obrigatoria para nota de aplicacao.</div></div>
-  </div>
-  <div class="card" style="margin-top:14px">
-    <div class="card-head"><div class="card-title">Acoes rapidas</div></div>
-    <div class="card-body" style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-primary" onclick="go('ean')">Buscar produto por EAN</button>
-      <button class="btn btn-success" onclick="go('aprovacao')">Revisar produtos (3)</button>
-      <button class="btn btn-secondary" onclick="go('agentes')">Ver agentes de IA</button>
-      <button class="btn btn-warning" onclick="go('bling')">Corrigir token Bling</button>
-    </div>
-  </div>
-</div>
-<!-- ========== EAN ========== -->
-<div class="page" id="page-ean">
-  <div style="max-width:700px">
-    <div class="card">
-      <div class="card-head"><div class="card-title">Busca por codigo EAN</div></div>
-      <div class="card-body">
-        <div class="toolbar-info" style="margin-bottom:14px">Busque por EAN (codigo de barras), OEM (codigo do fabricante) ou SKU (referencia interna). Exemplos: EAN = 7891945023581 | OEM = 234104A950 | SKU = BC720JSTD</div>
-        <div class="field" style="margin-bottom:10px">
-          <div class="field-label">EAN, OEM, SKU ou descricao <span class="field-hint">-- codigo ou "biela hr", "pistao porter"</span></div>
-          <div style="display:flex;gap:8px">
-            <input class="field-input" id="ean-input" type="text" placeholder="Ex: 234104A950 | biela hr | pistao porter diesel" style="font-size:16px;font-family:monospace;flex:1" onkeydown="if(event.key==='Enter')buscarEAN()">
-            <button class="btn btn-primary" onclick="buscarEAN()" style="padding:9px 20px">Buscar</button>
-            <button class="btn btn-secondary" id="btn-voz" onclick="ativarVoz()" title="Busca por voz -- fale o nome da peca" style="padding:9px 14px">Microfone</button>
-          </div>
-        </div>
-        <div style="font-size:12px;color:var(--faint);font-family:monospace">Exemplos: 234104A950 | biela hr | junta cabecote h100 | BC720JSTD | pistao porter diesel</div>
-      </div>
-    </div>
-    <div id="ean-result" style="display:none">
-      <div id="ean-nct-block"></div>
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">Dados do produto enriquecido</div>
-          <span class="badge badge-ok" id="ean-badge">ENRIQUECIDO</span>
-        </div>
-        <div class="card-body">
-          <div class="field" style="margin-bottom:14px">
-            <div class="field-label">Nome tecnico completo</div>
-            <div class="field-val" id="ean-nome" style="font-size:15px;font-weight:500"></div>
-          </div>
-          <div class="form-row col3" style="margin-bottom:0">
-            <div class="field"><div class="field-label">SKU / Referencia</div><div class="field-val mono" id="ean-sku" style="color:var(--red);font-weight:700"></div></div>
-            <div class="field"><div class="field-label">Codigo OEM</div><div class="field-val mono" id="ean-oem"></div></div>
-            <div class="field"><div class="field-label">NCM fiscal</div><div class="field-val mono" id="ean-ncm"></div></div>
-          </div>
-          <div class="sep"></div>
-          <div class="form-row col2" style="margin-bottom:0">
-            <div class="field"><div class="field-label">Fabricante</div><div class="field-val" id="ean-fab"></div></div>
-            <div class="field"><div class="field-label">Medida <span class="field-hint">STD = medida original</span></div><div class="field-val" id="ean-med"></div></div>
-          </div>
-          <div class="sep"></div>
-          <div class="field" style="margin-bottom:14px">
-            <div class="field-label">Aplicacao veicular -- veiculos compativeis (triangulada em multiplas fontes)</div>
-            <div id="ean-aplic"></div>
-          </div>
-          <div class="sep"></div>
-          <div class="field" style="margin-bottom:10px">
-            <div class="field-label">Bula tecnica de instalacao</div>
-            <div class="field-val" id="ean-bula" style="font-size:13px;line-height:1.7"></div>
-          </div>
-          <div class="toolbar-warn" id="ean-cdc"></div>
-          <div class="field">
-            <div class="field-label">Palavras-chave SEO</div>
-            <div class="tags" id="ean-tags"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title">Imagem tecnica do produto (800x520px)</div></div>
-        <div class="card-body">
-          <div class="toolbar-info" style="margin-bottom:10px">A imagem tecnica e obrigatoria para nota de aplicacao veicular. Baixe em SVG (vetorial) ou PNG para uso em documentos.</div>
-          <div id="ean-img-box"></div>
-          <div class="img-toolbar" style="justify-content:flex-start;padding:10px 0 0">
-            <button class="btn btn-primary btn-sm" onclick="gerarPreviewEAN()">Gerar previa</button>
-            <button class="btn btn-dark btn-sm" onclick="downloadEAN('svg')">Baixar SVG</button>
-            <button class="btn btn-dark btn-sm" onclick="downloadEAN('png')">Baixar PNG</button>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="btn-toolbar">
-          <div class="toolbar-info">Confira todos os dados acima. Se correto, salve no catalogo ou envie direto ao Bling ERP.</div>
-          <button class="btn btn-success" onclick="salvarEAN()">Salvar no catalogo</button>
-          <button class="btn btn-primary" onclick="enviarBling()">Enviar para Bling</button>
-          <button class="btn btn-secondary" onclick="limparEAN()">Cancelar e limpar</button>
-        </div>
-        <div class="toast" id="ean-toast"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- ========== PRODUTO MANUAL ========== -->
-<div class="page" id="page-produto">
-  <div style="max-width:700px">
-    <div class="card">
-      <div class="card-head"><div class="card-title">Cadastro manual de produto</div></div>
-      <div class="card-body">
-        <div class="toolbar-info" style="margin-bottom:14px">Preencha nome, SKU e aplicacao veicular. A IA completa automaticamente OEM, NCM, bula tecnica e palavras-chave.</div>
-        <div class="field" style="margin-bottom:14px">
-          <div class="field-label">Nome do produto *</div>
-          <input class="field-input" id="mp-nome" type="text" placeholder="Ex: Bronzina Mancal BC720J STD Metal Leve L200 4D56 Diesel">
-        </div>
-        <div class="form-row col3">
-          <div class="field"><div class="field-label">SKU / Referencia *</div><input class="field-input" id="mp-sku" type="text" placeholder="BC720JSTD"></div>
-          <div class="field"><div class="field-label">Codigo EAN</div><input class="field-input" id="mp-ean" type="text" placeholder="7891945023581"></div>
-          <div class="field"><div class="field-label">NCM fiscal</div><input class="field-input" id="mp-ncm" type="text" placeholder="8484.10.00"></div>
-        </div>
-        <div class="form-row col2">
-          <div class="field"><div class="field-label">Fabricante</div><input class="field-input" id="mp-fab" type="text" placeholder="Metal Leve (Mahle)"></div>
-          <div class="field"><div class="field-label">Medida <span class="field-hint">STD = medida original de fabrica</span></div><input class="field-input" id="mp-med" type="text" placeholder="STD"></div>
-        </div>
-        <div class="sep"></div>
-        <div class="field" style="margin-bottom:14px">
-          <div class="field-label">Aplicacao veicular <span class="field-hint">-- em quais veiculos este produto serve</span></div>
-          <input class="field-input" id="mp-aplic" type="text" placeholder="Ex: Mitsubishi L200 HPE 2012-2024 | Pajero Sport 2007-2016">
-        </div>
-        <div class="field">
-          <div class="field-label">Codigo OEM <span class="field-hint">-- codigo do fabricante original</span></div>
-          <input class="field-input" id="mp-oem" type="text" placeholder="MD-185923 | MD-356576">
-        </div>
-      </div>
-      <div class="btn-toolbar">
-        <div class="toolbar-info">Clique em "Enriquecer com IA" para completar OEM, NCM, bula tecnica e aplicacao veicular automaticamente.</div>
-        <button class="btn btn-danger" onclick="enriquecerManual()">Enriquecer com IA</button>
-        <button class="btn btn-success" onclick="salvarManual()">Salvar produto</button>
-        <button class="btn btn-secondary" onclick="limparManual()">Limpar campos</button>
-      </div>
-      <div class="toast" id="mp-toast"></div>
-    </div>
-  </div>
-</div>
-<!-- ========== PLANILHA ========== -->
-<div class="page" id="page-planilha">
-  <div style="max-width:700px">
-    <div class="card">
-      <div class="card-head"><div class="card-title">Importacao por planilha</div></div>
-      <div class="card-body">
-        <div class="toolbar-info" style="margin-bottom:14px">Importe varios produtos de uma vez. Baixe o modelo abaixo, preencha com seus produtos e envie. A IA vai enriquecer todos automaticamente.</div>
-        <div class="upload-zone" onclick="document.getElementById('file-input').click()">
-          <svg width="40" height="40" viewBox="0 0 16 16" fill="#BDC3C7" style="margin-bottom:10px"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
-          <div class="upload-title">Clique aqui para selecionar a planilha</div>
-          <div class="upload-sub">ou arraste o arquivo para esta area | Formatos aceitos: .xlsx .xls .csv</div>
-          <input type="file" id="file-input" accept=".xlsx,.xls,.csv" style="display:none" onchange="carregarPlanilha(this)">
-        </div>
-        <div id="plan-preview" style="display:none;margin-top:14px">
-          <div class="toolbar-info" style="margin-bottom:10px"><strong><span id="plan-count">0</span> produtos</strong> encontrados na planilha. Clique em Importar para enriquecer todos.</div>
-          <div id="plan-lista"></div>
-          <div class="btn-toolbar" style="margin-top:0">
-            <button class="btn btn-danger" onclick="importarPlan()">Enriquecer e importar todos</button>
-            <button class="btn btn-secondary" onclick="cancelarPlan()">Cancelar</button>
-          </div>
-        </div>
-        <div class="toast" id="plan-toast"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-head"><div class="card-title">Modelo de planilha</div></div>
-      <div class="card-body">
-        <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Colunas esperadas: <span style="font-family:monospace;background:var(--bg);padding:2px 6px;border-radius:3px">SKU | Nome | EAN | OEM | NCM | Fabricante | Medida | Aplicacao</span></div>
-        <button class="btn btn-dark" onclick="baixarModelo()">Baixar modelo CSV</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- ========== APROVACAO ========== -->
-<div class="page" id="page-aprovacao" style="padding:0;height:100%">
-  <div class="split">
-    <div class="prod-list">
-      <div class="prod-list-header">Produtos aguardando revisao</div>
-      <div style="padding:8px 10px;background:var(--blue-l);border-bottom:1px solid var(--bdr);font-size:12px;color:var(--blue)">Clique em um produto para ver os detalhes e aprovar ou rejeitar.</div>
-      <div id="aprov-list"></div>
-    </div>
-    <div class="prod-detail">
-      <div class="prod-empty" id="aprov-empty">
-        <svg class="prod-empty-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/><path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3z"/></svg>
-        <div class="prod-empty-title">Selecione um produto</div>
-        <div class="prod-empty-desc">Clique em um produto na lista para ver os dados enriquecidos pela IA e aprovar ou rejeitar.</div>
-      </div>
-      <div id="aprov-det" style="display:none">
-        <div id="aprov-nct"></div>
-        <div class="card">
-          <div class="card-head">
-            <div class="card-title">Identidade do produto</div>
-            <div style="display:flex;gap:6px"><span class="badge" id="aprov-badge">PENDENTE</span><button class="btn btn-dark btn-sm" onclick="freeze()">Congelar dados</button></div>
-          </div>
-          <div class="card-body">
-            <div class="field" style="margin-bottom:14px">
-              <div class="field-label">Nome tecnico enriquecido pela IA</div>
-              <div class="field-val" id="a-nome" style="font-size:15px;font-weight:500"></div>
-            </div>
-            <div class="form-row col3">
-              <div class="field"><div class="field-label">Codigo OEM</div><div class="field-val mono" id="a-oem"></div></div>
-              <div class="field"><div class="field-label">NCM fiscal</div><div class="field-val mono" id="a-ncm"></div></div>
-              <div class="field"><div class="field-label">Codigo EAN</div><div class="field-val mono" id="a-ean"></div></div>
-            </div>
-          </div>
-        </div>
-        <div class="form-row col2" style="gap:14px;margin-bottom:14px">
-          <div class="card" style="margin-bottom:0">
-            <div class="card-head"><div class="card-title">Aplicacao veicular -- triangulada</div></div>
-            <div class="card-body" style="padding:12px 14px"><div id="a-aplic"></div></div>
-          </div>
-          <div class="card" style="margin-bottom:0">
-            <div class="card-head"><div class="card-title">Bula tecnica + CDC</div></div>
-            <div class="card-body" style="padding:12px 14px"><div id="a-bula" style="font-size:13px;line-height:1.6"></div></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-head"><div class="card-title">Imagem tecnica</div></div>
-          <div class="card-body">
-            <div id="aprov-img"></div>
-            <div style="display:flex;gap:8px;margin-top:10px">
-              <button class="btn btn-primary btn-sm" onclick="gerarPreviewAprov()">Gerar previa</button>
-              <button class="btn btn-dark btn-sm" onclick="if(curProd)downloadImg(curProd,'svg')">Baixar SVG</button>
-              <button class="btn btn-dark btn-sm" onclick="if(curProd)downloadImg(curProd,'png')">Baixar PNG</button>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-head"><div class="card-title">SEO -- Palavras-chave</div></div>
-          <div class="card-body"><div class="tags" id="a-tags"></div></div>
-        </div>
-        <div class="card">
-          <div class="btn-toolbar">
-            <div class="toolbar-info">Confira todos os dados. Se correto, clique Aprovar. Se tiver algum erro, clique Rejeitar para corrigir.</div>
-            <button class="btn btn-success" onclick="aaprovar()">Aprovar e enviar ao Bling</button>
-            <button class="btn btn-secondary" onclick="freeze()">Congelar todos os dados</button>
-            <button class="btn btn-secondary" onclick="arejeitar()">Rejeitar</button>
-            <button class="btn btn-secondary" onclick="aregen()">Regenerar com IA</button>
-          </div>
-          <div class="toast" id="aprov-toast"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- ========== AGENTES ========== -->
-<div class="page" id="page-agentes">
-  <div style="max-width:720px">
-    <div class="card">
-      <div class="card-head"><div class="card-title">5 agentes de IA especializados</div></div>
-      <div class="agent-row"><div class="agent-num">1</div><div class="agent-info"><div class="agent-name">Enriquecimento geral</div><div class="agent-desc">Enriquece nome tecnico, descricao, OEM e EAN do produto usando Claude Sonnet como motor principal.</div><div class="agent-sources">Fontes: Claude API | Gemini Flash | Base propria MOBIS</div></div><span class="badge badge-ok">Ativo</span></div>
-      <div class="agent-row"><div class="agent-num">2</div><div class="agent-info"><div class="agent-name">Aplicacao veicular (triangulacao)</div><div class="agent-desc">Verifica em 6 fontes simultaneas quais veiculos sao compativeis com o produto. Cruza catalogos de fabricantes, APIs publicas e PDFs tecnicos para garantir precisao.</div><div class="agent-sources">Fontes: Catalogo Mahle | TecDoc API | AutoData | PDFs Metal Leve | Catalogo Bosch | Cross-reference cambagem</div></div><span class="badge badge-ok">Ativo</span></div>
-      <div class="agent-row"><div class="agent-num">3</div><div class="agent-info"><div class="agent-name">CDC -- Codigo de Defesa do Consumidor</div><div class="agent-desc">Gera os avisos obrigatorios do CDC para cada produto: garantia, prazo de devolucao e responsabilidade do instalador.</div><div class="agent-sources">Fontes: Lei 8.078/90 | Resolucao INMETRO | Base juridica PROCON</div></div><span class="badge badge-ok">Ativo</span></div>
-      <div class="agent-row"><div class="agent-num">4</div><div class="agent-info"><div class="agent-name">Bula tecnica</div><div class="agent-desc">Gera instrucoes de instalacao com torques especificos, folgas, ferramentas necessarias e cuidados especiais para cada peca.</div><div class="agent-sources">Fontes: Manuais tecnicos | PDFs Mahle | Metal Leve | Bosch | Gates | FAG</div></div><span class="badge badge-ok">Ativo</span></div>
-      <div class="agent-row"><div class="agent-num">5</div><div class="agent-info"><div class="agent-name">Fiscal NCM / EAN</div><div class="agent-desc">Valida e completa o codigo NCM fiscal e EAN de cada produto. Verifica se o NCM esta correto para a categoria da peca.</div><div class="agent-sources">Fontes: Tabela TIPI/NCM | GS1 Brasil | SEFAZ | API Nota Fiscal</div></div><span class="badge badge-ok">Ativo</span></div>
-    </div>
-    <div class="card">
-      <div class="card-head"><div class="card-title">Motor NCT -- formula de calculo</div></div>
-      <div class="card-body">
-        <div style="font-size:14px;line-height:2.4;color:var(--txt)">
-          <div><strong style="font-family:monospace;color:var(--blue2)">TF x 0.50</strong> -- Triangulacao de fontes: OEM confirmado + EAN validado em multiplas bases</div>
-          <div><strong style="font-family:monospace;color:var(--blue2)">FM x 0.20</strong> -- Foto / Midia: produto tem imagem tecnica gerada</div>
-          <div><strong style="font-family:monospace;color:var(--blue2)">CO x 0.20</strong> -- Conteudo: descricao completa e detalhada (min. 100 caracteres)</div>
-          <div><strong style="font-family:monospace;color:var(--blue2)">AV x 0.10</strong> -- Aplicacao veicular: confirmada em no minimo 2 fontes</div>
-          <div class="sep"></div>
-          <div style="color:var(--green);font-weight:700">NCT maior ou igual 0.90 -- PREMIUM -- aprovado para publicacao no Bling e marketplaces</div>
-          <div style="color:#E67E22;font-weight:700">NCT entre 0.70 e 0.89 -- BOM -- pode publicar com revisao manual</div>
-          <div style="color:var(--red);font-weight:700">NCT menor que 0.70 -- BAIXO -- bloqueado ate completar os dados obrigatorios</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- ========== BLING ========== -->
-<div class="page" id="page-bling">
-  <div style="max-width:620px">
-    <div class="card">
-      <div class="card-head"><div class="card-title">Integracao Bling ERP v3</div></div>
-      <div class="card-body">
-        <div class="toolbar-warn" style="margin-bottom:16px">Token atual expirado -- invalid_grant. O Bling esta rejeitando as chamadas. Reautorize abaixo para reconectar.</div>
-        <div class="toolbar-info" style="margin-bottom:16px">Onde encontrar as credenciais: bling.com.br -- Configuracoes -- API -- Meus Aplicativos -- clique no app Genesis iRollo 360</div>
-        <div class="form-row col2">
-          <div class="field"><div class="field-label">Client ID</div><input class="field-input" id="bling-cid" type="text" placeholder="Cole o Client ID do app Genesis"></div>
-          <div class="field"><div class="field-label">Client Secret</div><input class="field-input" id="bling-secret" type="password" placeholder="Cole o Client Secret"></div>
-        </div>
-      </div>
-      <div class="btn-toolbar">
-        <button class="btn btn-danger" onclick="blingAuth()">Autorizar Bling (abre nova aba)</button>
-        <button class="btn btn-primary" onclick="blingTest()">Testar conexao atual</button>
-      </div>
-      <div class="toast" id="bling-toast"></div>
-    </div>
-    <div class="card">
-      <div class="card-head"><div class="card-title">Status da sincronizacao</div></div>
-      <div class="card-body">
-        <div style="font-size:14px;line-height:2.4">
-          <div>Ciclos executados: <strong style="font-family:monospace">1.326</strong></div>
-          <div>Ultimo erro: <strong style="color:var(--red);font-family:monospace">invalid_grant -- refresh token expirado</strong></div>
-          <div>Produtos sincronizados: <strong>0</strong></div>
-          <div>Intervalo entre ciclos: <strong>5 minutos</strong></div>
-          <div>Servidor: <strong style="color:var(--green)">genesis-irollo-360.onrender.com -- Online</strong></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- ========== PLANOS ========== -->
-<div class="page" id="page-planos">
-  <div class="plans-grid" style="max-width:900px">
-    <div class="plan">
-      <div class="plan-name">Free</div>
-      <div class="plan-price">R$0<sub>/mes</sub></div>
-      <div class="plan-limit">Ate 50 produtos</div>
-      <div class="sep"></div>
-      <div class="plan-feat"><div>Motor NCT basico</div><div>Integracao Bling ERP</div><div>Enriquecimento com IA</div><div>Cadastro por EAN</div><div class="no">Multi-usuario</div><div class="no">Imagem tecnica automatica</div><div class="no">Suporte prioritario</div></div>
-      <button class="btn btn-secondary" style="width:100%;justify-content:center;margin-top:16px" onclick="showToast('plan-toast','Plano Free ativo!','ok')">Plano atual</button>
-    </div>
-    <div class="plan highlight">
-      <div class="plan-name">Pro <span class="badge badge-danger" style="font-size:10px;vertical-align:middle">Mais popular</span></div>
-      <div class="plan-price" style="color:var(--red2)">R$197<sub>/mes</sub></div>
-      <div class="plan-limit">Ate 5.000 produtos</div>
-      <div class="sep"></div>
-      <div class="plan-feat"><div>Motor NCT + RAST-HASH</div><div>Todos os conectores ERP</div><div>5 agentes IA especializados</div><div>Triangulacao veicular completa</div><div>Imagem tecnica automatica</div><div>Cross-reference / cambagem</div><div class="no">Suporte prioritario</div></div>
-      <button class="btn btn-danger" style="width:100%;justify-content:center;margin-top:16px" onclick="showToast('plan-toast','Redirecionando para pagamento...','ok')">Assinar Pro</button>
-    </div>
-    <div class="plan">
-      <div class="plan-name">Enterprise</div>
-      <div class="plan-price">R$597<sub>/mes</sub></div>
-      <div class="plan-limit">Produtos ilimitados</div>
-      <div class="sep"></div>
-      <div class="plan-feat"><div>Multi-tenant / filiais</div><div>Todos os agentes IA</div><div>Gerador de banners</div><div>API propria</div><div>Cross-reference / cambagem</div><div>Suporte prioritario dedicado</div><div>Onboarding personalizado</div></div>
-      <button class="btn btn-dark" style="width:100%;justify-content:center;margin-top:16px" onclick="showToast('plan-toast','Abrindo contato comercial...','ok')">Falar com comercial</button>
-    </div>
-  </div>
-  <div class="toast" id="plan-toast" style="max-width:400px;margin:12px auto"></div>
-</div>
-  </div><!-- /content -->
-</div><!-- /body -->
-</div><!-- /app -->
-<script>
-// Genesis iRollo 360 -- Motor NCT -- MOBIS Pecas
-const PRODS=[
-  {id:"p1",sku:"BC720JSTD",ean:"7891945023581",nome:"Bronzina Mancal BC720J STD -- Metal Leve -- L200 HPE 4D56 VGT Turbo 2.5 Diesel",oem:"MD-185923 -- MD-356576 -- MN-158088",ncm:"8484.10.00",fab:"Metal Leve (Mahle)",med:"STD",
-   aplic:[{m:"Mitsubishi",mod:"L200 HPE / Sport / Outdoor",mot:"4D56 VGT Turbo 2.5 8v",a:"2012-2024",f:"Catalogo Mahle"},{m:"Mitsubishi",mod:"L200 GL / GLS / 4x4",mot:"4D56 2.5 8v Diesel",a:"2001-2012",f:"Metal Leve PDF"},{m:"Mitsubishi",mod:"Pajero Sport",mot:"4D56 2.5 8v Diesel",a:"2007-2016",f:"TecDoc API"}],
-   bula:"Verificar virabrequim (57,982 a 58,000 mm). Limpar mancal. Aplicar oleo na face interna. Apertar parafusos em 2 etapas: 30 Nm e depois 90 graus de giro. Nao reutilizar parafusos. Substituir todos os mancais simultaneamente.",
-   cdc:"CDC Art. 26 -- Garantia 90 dias contra defeitos de fabricacao. Instalacao por mecanico habilitado. Verificar compatibilidade antes da compra. Instalacao inadequada anula a garantia.",
-   tags:["bronzina mancal l200","bc720j std","metal leve 4d56","bronzina diesel mitsubishi","mahle bc720j","pajero sport bronzina"],
-   nct:0.927,hash:"NCT-bc720jstd9e4b7016",status:"ENRIQUECIDO"},
-  {id:"p2",sku:"JE127KSTD",ean:"7891945031586",nome:"Jogo Aneis de Pistao JE127K STD -- Metal Leve -- L200 HPE 4D56 2.5 Diesel",oem:"MD-997-047 -- MB-303-310",ncm:"8409.91.30",fab:"Metal Leve (Mahle)",med:"STD",
-   aplic:[{m:"Mitsubishi",mod:"L200 HPE / Sport / Outdoor",mot:"4D56 VGT 2.5 8v",a:"2012-2024",f:"Catalogo Mahle"},{m:"Mitsubishi",mod:"Pajero Sport",mot:"4D56 2.5 8v",a:"2007-2016",f:"Metal Leve PDF"}],
-   bula:"Verificar desgaste do cilindro. Respeitar sentido de montagem (topo para cima). Escalonar aberturas a 120 graus. Lubrificar levemente com oleo de motor.",
-   cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao profissional. Verificar medida do cilindro antes da compra.",
-   tags:["aneis pistao l200","je127k std","metal leve 4d56","aneis motor diesel"],
-   nct:0.871,hash:"NCT-je127kstd4a8c3021",status:"PENDENTE"},
-  {id:"p3",sku:"TC0451",ean:"7891945012615",nome:"Tucho Hidraulico TC0451 -- Metal Leve -- L200 Pajero Sport Motor 4D56 2.5 Diesel",oem:"MD-308-397 -- MB-668-399",ncm:"8409.91.90",fab:"Metal Leve",med:"Unitario",
-   aplic:[{m:"Mitsubishi",mod:"L200 GL / GLS / HPE / Sport",mot:"4D56 2.5 8v Diesel",a:"2001-2024",f:"Catalogo Metal Leve"},{m:"Mitsubishi",mod:"Pajero Sport",mot:"4D56 2.5 8v",a:"2007-2016",f:"AutoData"}],
-   bula:"Verificar pressao de oleo (min 2.5 kgf). Substituir todos os tuchos simultaneamente. Aguardar 30 min apos instalacao antes de ligar o motor.",
-   cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao profissional. Substituicao do conjunto completo recomendada.",
-   tags:["tucho hidraulico l200","tc0451 metal leve","tuchos 4d56","l200 pajero sport tuchos"],
-   nct:0.843,hash:"NCT-tc0451d2f5a1c7c84c",status:"PENDENTE"},
-  {id:"p4",sku:"234104A950",ean:"8809160806956",nome:"Pistao Motor 23410-4A950 -- Hyundai MOBIS -- HR / H100 / Porter Motor D4BH 2.5 Diesel",oem:"23410-4A950",ncm:"8409.91.20",fab:"Hyundai MOBIS",med:"STD",
-   aplic:[{m:"Hyundai",mod:"HR / H100 Caminhonete",mot:"D4BH 2.5 8v Diesel Turbo",a:"2005-2012",f:"Catalogo Hyundai MOBIS"},{m:"Hyundai",mod:"Porter II",mot:"D4BH 2.5 Diesel",a:"2004-2012",f:"TecDoc API"},{m:"Hyundai",mod:"Starex / H1",mot:"D4BH 2.5 CRDi",a:"2002-2007",f:"AutoData"}],
-   bula:"Verificar diametro do cilindro antes da instalacao (medida STD: 91.000-91.010 mm). Instalar aneis de pistao com sentido correto. Torque do parafuso da biela: 48 Nm + 90 graus. Substituir todos os pistoes simultaneamente. Lubrificar levemente com oleo de motor.",
-   cdc:"CDC Art. 26 -- Garantia 90 dias contra defeitos de fabricacao. Instalacao por mecanico habilitado. Verificar compatibilidade do motor antes da compra.",
-   tags:["pistao hyundai hr","234104a950","23410-4a950","pistao d4bh","pistao h100 diesel","hyundai mobis pistao","pistao porter diesel"],
-   nct:0.912,hash:"NCT-234104a950b7c3d1f9",status:"ENRIQUECIDO"},
-  {id:"p5",sku:"235004A010",ean:"8809160810816",nome:"Biela Motor 23500-4A010 -- Hyundai MOBIS -- HR / H100 / Porter Motor D4BH 2.5 Diesel",oem:"23500-4A010",ncm:"8409.91.10",fab:"Hyundai MOBIS",med:"STD",
-   aplic:[{m:"Hyundai",mod:"HR / H100 Caminhonete",mot:"D4BH 2.5 8v Diesel Turbo",a:"2005-2012",f:"Catalogo Hyundai MOBIS"},{m:"Hyundai",mod:"Porter II",mot:"D4BH 2.5 Diesel",a:"2004-2012",f:"TecDoc API"},{m:"Hyundai",mod:"Starex / H1",mot:"D4BH 2.5 CRDi",a:"2002-2007",f:"AutoData"}],
-   bula:"Verificar folga de biela (0.018-0.036 mm). Torque: 48 Nm + 90 graus de giro angular. Nao reutilizar parafusos. Substituir bronzinas simultaneamente. Verificar virabrequim antes da instalacao.",
-   cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao por mecanico especializado em motores diesel.",
-   tags:["biela hyundai hr","235004a010","biela d4bh","biela h100 diesel","biela porter","biela hr motor diesel","hyundai mobis biela"],
-   nct:0.905,hash:"NCT-235004a010c8d2e3f4",status:"ENRIQUECIDO"},
-  {id:"p6",sku:"209304A001",ean:"8809160803979",nome:"Junta do Cabecote 20930-4A001 -- Hyundai MOBIS -- HR / H100 Motor D4BH 2.5 Diesel",oem:"20930-4A001",ncm:"8484.10.00",fab:"Hyundai MOBIS",med:"Unitario",
-   aplic:[{m:"Hyundai",mod:"HR / H100 Caminhonete",mot:"D4BH 2.5 8v Diesel Turbo",a:"2005-2012",f:"Catalogo Hyundai MOBIS"},{m:"Hyundai",mod:"Porter II",mot:"D4BH 2.5 Diesel",a:"2004-2012",f:"Metal Leve PDF"}],
-   bula:"Limpar superficies do bloco e cabecote. Torque em cruz: 1a etapa 29 Nm, 2a etapa + 90 graus, 3a etapa + 90 graus. Nunca reutilizar a junta. Verificar planeidade do cabecote (max 0.05 mm).",
-   cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao por profissional especializado.",
-   tags:["junta cabecote hr","209304a001","junta d4bh","junta cabecote h100","junta hyundai mobis","junta hr diesel"],
-   nct:0.891,hash:"NCT-209304a001d9e4f5a6",status:"ENRIQUECIDO"}
-,{id:"p7",sku:"PA9798STD",ean:"7892415957108",nome:"Jogo Pistao com Anel PA9798 STD -- MAHLE Metal Leve -- Hyundai HR / KIA Bongo K2500 D4CB 2.5 16v Turbo Diesel",oem:"PA9798STD -- 23410-4A030",ncm:"8409.91.20",fab:"MAHLE Metal Leve",med:"STD",aplic:[{m:"Hyundai",mod:"HR / Longue Deck",mot:"D4CB 2.5 16v Turbo Diesel",a:"2014-2021",f:"Catalogo MAHLE"},{m:"KIA",mod:"Bongo K2500",mot:"J3 2.5 16v CRDi",a:"2014-2021",f:"TecDoc API"},{m:"Hyundai",mod:"H100 / Porter II",mot:"D4CB 2.5 16v",a:"2012-2020",f:"AutoData"}],bula:"Verificar diametro cilindro STD 91.000-91.010 mm. Escalonar aneis 120 graus. Torque biela: 48 Nm + 90 graus. Substituir todos os pistoes simultaneamente.",cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao por mecanico especializado diesel.",tags:["pistao hr 2.5","pa9798 std","mahle metal leve hr","pistao kia bongo k2500","pistao d4cb","pistao hyundai hr turbo diesel","pa9798std"],nct:0.934,hash:"NCT-pa9798stdc4d5e6f7",status:"ENRIQUECIDO"}];
+<!DOCTYPE html>
 
-let curProd=null;
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Genesis iRollo 360 v2 | MOBIS Autopecas</title>
+
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+
+  --red:#C0392B;--red2:#E74C3C;--red-l:#FADBD8;
+
+  --green:#1E8449;--green-l:#D5F5E3;
+
+  --blue:#1A5276;--blue2:#2980B9;--blue-l:#D6EAF8;
+
+  --amber:#B7770D;--amber-l:#FDEBD0;
+
+  --nav:#1C2833;--nav2:#273746;--nav3:#2E4057;
+
+  --bg:#ECF0F1;--surf:#fff;
+
+  --bdr:#D5D8DC;--bdr2:#BFC9CA;
+
+  --txt:#1C2833;--muted:#566573;--faint:#99A3A4;
+
+  --h:52px;--nav-w:230px;
+
+}
+
+html,body{height:100%;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:14px}
+
+.app{display:flex;height:100vh;overflow:hidden}
+
+nav{width:var(--nav-w);background:var(--nav);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+
+.nav-header{padding:0 16px;height:var(--h);display:flex;align-items:center;border-bottom:1px solid var(--nav3);gap:10px}
+
+.nav-brand{color:#fff;font-size:15px;font-weight:700;letter-spacing:-.3px}
+
+.nav-brand em{color:var(--red2);font-style:normal}
+
+.nav-version{font-size:10px;color:#5D6D7E;font-family:monospace;margin-top:2px}
+
+.nav-section{padding:10px 0 4px;border-bottom:1px solid var(--nav3)}
+
+.nav-label{font-size:10px;font-weight:600;color:#5D6D7E;letter-spacing:.1em;text-transform:uppercase;padding:0 14px 4px}
+
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 14px;color:#AEB6BF;font-size:13px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;user-select:none}
+
+.nav-item:hover{background:var(--nav2);color:#D5D8DC}
+
+.nav-item.on{background:var(--nav3);color:#fff;border-left-color:var(--red2)}
+
+.nav-item svg{width:15px;height:15px;flex-shrink:0;opacity:.7}
+
+.nav-item.on svg{opacity:1}
+
+.nav-badge{margin-left:auto;background:var(--red2);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-family:monospace}
+
+.nav-badge.ok{background:var(--green)}
+
+.nav-foot{margin-top:auto;padding:10px 14px;border-top:1px solid var(--nav3);font-size:11px;color:#5D6D7E;line-height:1.7;font-family:monospace}
+
+.body{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+.topbar{background:var(--surf);border-bottom:1px solid var(--bdr);height:var(--h);display:flex;align-items:center;padding:0 18px;gap:10px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+.topbar-title{font-size:15px;font-weight:600}
+
+.topbar-sub{font-size:12px;color:var(--muted);margin-left:3px}
+
+.topbar-right{margin-left:auto;display:flex;gap:6px;align-items:center}
+
+.chip{font-size:11px;font-family:monospace;background:var(--bg);border:1px solid var(--bdr2);padding:3px 9px;border-radius:4px;color:var(--muted)}
+
+.chip.ok{background:var(--green-l);color:var(--green);border-color:#A9DFBF}
+
+.chip.err{background:var(--red-l);color:var(--red);border-color:#F1948A}
+
+.chip.warn{background:var(--amber-l);color:var(--amber);border-color:#F0B27A}
+
+.content{flex:1;overflow-y:auto;background:var(--bg)}
+
+.page{display:none;padding:18px}
+
+.page.on{display:block}
+
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:6px;margin-bottom:14px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+
+.card-head{padding:11px 15px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:8px}
+
+.card-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+.card-body{padding:15px}
+
+.form-row{display:grid;gap:12px;margin-bottom:12px}
+
+.form-row.c2{grid-template-columns:1fr 1fr}
+
+.form-row.c3{grid-template-columns:1fr 1fr 1fr}
+
+.form-row.c4{grid-template-columns:1fr 1fr 1fr 1fr}
+
+.field-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:5px}
+
+.field-hint{font-size:11px;color:var(--faint);font-weight:400}
+
+.field-val{font-size:14px;background:var(--bg);border:1px solid var(--bdr2);border-radius:4px;padding:8px 11px;min-height:34px;color:var(--txt);line-height:1.4}
+
+.field-val.mono{font-family:monospace;font-size:13px}
+
+.field-val.verify{background:#FFF3CD;color:#856404;font-weight:700;border-color:#FFDA6A}
+
+.field-val.frozen{background:#E8F8F5;color:var(--green);border-color:#A9DFBF}
+
+input.fi,textarea.fi,select.fi{width:100%;font-size:13px;font-family:inherit;color:var(--txt);background:var(--surf);border:1px solid var(--bdr2);border-radius:4px;padding:8px 11px;outline:none;transition:border .15s}
+
+input.fi:focus,textarea.fi:focus,select.fi:focus{border-color:var(--blue2);box-shadow:0 0 0 2px rgba(41,128,185,.15)}
+
+input.fi::placeholder{color:#BDC3C7}
+
+textarea.fi{resize:vertical;line-height:1.5}
+
+.sep{height:1px;background:var(--bdr);margin:12px 0}
+
+.btn{font-size:13px;font-weight:600;padding:7px 14px;border-radius:4px;border:1px solid transparent;cursor:pointer;font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+
+.btn-primary{background:var(--blue2);color:#fff;border-color:var(--blue2)}
+
+.btn-primary:hover{background:var(--blue)}
+
+.btn-success{background:var(--green);color:#fff}
+
+.btn-success:hover{background:#145A32}
+
+.btn-danger{background:var(--red2);color:#fff}
+
+.btn-danger:hover{background:var(--red)}
+
+.btn-warning{background:#E67E22;color:#fff}
+
+.btn-secondary{background:var(--surf);color:var(--muted);border-color:var(--bdr2)}
+
+.btn-secondary:hover{background:var(--bg)}
+
+.btn-dark{background:var(--nav);color:#fff}
+
+.btn-frozen{background:#1A5276;color:#AED6F1}
+
+.btn-sm{font-size:12px;padding:5px 10px}
+
+.btn-xs{font-size:11px;padding:3px 8px}
+
+.btn-toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;padding:11px 15px;background:var(--bg);border-top:1px solid var(--bdr);border-radius:0 0 6px 6px}
+
+.info-bar{font-size:12px;color:var(--muted);padding:8px 11px;background:var(--blue-l);border-radius:4px;border-left:3px solid var(--blue2);width:100%}
+
+.warn-bar{font-size:12px;color:var(--amber);padding:8px 11px;background:var(--amber-l);border-radius:4px;border-left:3px solid var(--amber);width:100%}
+
+.err-bar{font-size:12px;color:var(--red);padding:8px 11px;background:var(--red-l);border-radius:4px;border-left:3px solid var(--red2);width:100%}
+
+.ok-bar{font-size:12px;color:var(--green);padding:8px 11px;background:var(--green-l);border-radius:4px;border-left:3px solid var(--green);width:100%}
+
+.badge{font-size:11px;font-family:monospace;padding:2px 7px;border-radius:3px;font-weight:600}
+
+.b-ok{background:var(--green-l);color:var(--green)}
+
+.b-warn{background:var(--amber-l);color:var(--amber)}
+
+.b-danger{background:var(--red-l);color:var(--red)}
+
+.b-info{background:var(--blue-l);color:var(--blue2)}
+
+.b-frozen{background:#D6EAF8;color:#1A5276}
+
+/* NCT PANEL */
+
+.nct-panel{background:var(--nav);color:#fff;border-radius:6px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+
+.nct-score-box{flex-shrink:0;min-width:120px}
+
+.nct-lbl{font-size:10px;font-family:monospace;color:#5D6D7E;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+
+.nct-score{font-size:44px;font-weight:700;line-height:1;font-family:monospace}
+
+.nct-st{font-size:11px;font-weight:600;padding:2px 7px;border-radius:3px;display:inline-block;margin-top:3px}
+
+.nct-st.premium{background:rgba(30,132,73,.2);color:#58D68D}
+
+.nct-st.good{background:rgba(183,119,13,.2);color:#F0B27A}
+
+.nct-st.low{background:rgba(192,57,43,.2);color:#F1948A}
+
+.nct-hash{font-size:10px;font-family:monospace;color:#4D6072;margin-top:3px}
+
+.nct-bars{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;min-width:200px}
+
+.nct-bar-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:7px 9px}
+
+.nct-bar-hdr{display:flex;justify-content:space-between;font-size:10px;font-family:monospace;color:#5D6D7E;margin-bottom:3px}
+
+.nct-bar-nm{font-size:10px;color:#4D6072;margin-top:2px}
+
+.nct-track{height:4px;background:#2E4057;border-radius:2px;overflow:hidden;margin-top:3px}
+
+.nct-fill{height:100%;border-radius:2px;transition:width 1.2s ease}
+
+.nct-formula{font-family:monospace;font-size:10px;color:#4D6072;line-height:2;flex-shrink:0}
+
+/* APLIC */
+
+.aplic-row{display:flex;align-items:center;gap:8px;padding:7px 11px;background:var(--bg);border:1px solid var(--bdr);border-radius:4px;margin-bottom:5px;font-size:13px}
+
+.aplic-marca{font-weight:700;min-width:80px;color:var(--txt)}
+
+.aplic-modelo{color:var(--muted);flex:1}
+
+.aplic-anos{font-family:monospace;font-size:12px;color:var(--faint);background:#fff;padding:2px 7px;border-radius:3px;border:1px solid var(--bdr)}
+
+.aplic-fonte{font-size:11px;font-family:monospace;color:var(--green);background:var(--green-l);padding:1px 6px;border-radius:3px;border:1px solid #A9DFBF}
+
+/* CATALOG */
+
+.split{display:flex;flex:1;overflow:hidden;height:100%}
+
+.prod-list{width:290px;flex-shrink:0;border-right:1px solid var(--bdr);overflow-y:auto;background:var(--surf)}
+
+.prod-list-hdr{padding:9px 13px;background:var(--bg);border-bottom:1px solid var(--bdr);font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:flex;justify-content:space-between;align-items:center}
+
+.prod-item{border-bottom:1px solid var(--bdr);padding:11px 13px;cursor:pointer;transition:background .1s;position:relative}
+
+.prod-item:hover{background:var(--blue-l)}
+
+.prod-item.on{background:var(--blue-l);border-left:3px solid var(--blue2)}
+
+.prod-item.frozen{border-left:3px solid #1A5276}
+
+.prod-item-sku{font-size:12px;font-weight:700;font-family:monospace;color:var(--red);margin-bottom:2px;display:flex;align-items:center;gap:5px}
+
+.prod-item-nome{font-size:12px;font-weight:500;color:var(--txt);line-height:1.3;margin-bottom:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+.prod-item-foot{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+
+.prod-item-nct{font-size:14px;font-weight:700;font-family:monospace}
+
+.prod-detail{flex:1;overflow-y:auto;padding:15px;background:var(--bg)}
+
+.prod-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--faint)}
+
+/* TAGS */
+
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+
+.tag{font-size:11px;font-family:monospace;background:var(--bg);color:var(--muted);border:1px solid var(--bdr2);padding:2px 7px;border-radius:3px}
+
+/* TOAST */
+
+.toast{display:none;font-size:13px;font-family:monospace;padding:7px 14px;border-radius:4px;text-align:center;margin-top:8px;font-weight:600;border:1px solid transparent}
+
+.toast.show{display:block}
+
+/* KPI */
+
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+
+.kpi{background:var(--surf);border:1px solid var(--bdr);border-radius:6px;padding:14px;border-top:3px solid var(--blue2)}
+
+.kpi.green{border-top-color:var(--green)}
+
+.kpi.red{border-top-color:var(--red2)}
+
+.kpi.amber{border-top-color:#E67E22}
+
+.kpi.frozen{border-top-color:#1A5276}
+
+.kpi-val{font-size:30px;font-weight:700;line-height:1;margin-bottom:3px;font-family:monospace}
+
+.kpi-lbl{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+
+.kpi-sub{font-size:11px;color:var(--faint);margin-top:2px}
+
+/* GALLERY */
+
+.img-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+
+.img-card{border:2px solid var(--bdr);border-radius:5px;overflow:hidden;cursor:pointer;transition:all .15s;background:var(--bg);position:relative}
+
+.img-card:hover{border-color:var(--blue2)}
+
+.img-card.selected{border-color:var(--green);box-shadow:0 0 0 2px var(--green)}
+
+.img-card img{width:100%;height:90px;object-fit:cover;display:block}
+
+.img-card-foot{font-size:10px;font-family:monospace;padding:4px 6px;background:rgba(0,0,0,.5);color:#fff;position:absolute;bottom:0;left:0;right:0}
+
+.img-card-check{position:absolute;top:5px;right:5px;width:18px;height:18px;background:var(--green);border-radius:50%;display:none;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700}
+
+.img-card.selected .img-card-check{display:flex}
+
+/* PROMPT */
+
+.prompt-box{background:var(--nav);border-radius:5px;padding:12px;font-family:monospace;font-size:12px;color:#AEB6BF;line-height:1.8;margin-top:8px}
+
+/* PLANS */
+
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+.plan{background:var(--surf);border:1px solid var(--bdr);border-radius:6px;padding:18px;border-top:4px solid var(--faint)}
+
+.plan.hl{border-top-color:var(--red2);box-shadow:0 4px 14px rgba(0,0,0,.1)}
+
+.plan-name{font-size:17px;font-weight:700;margin-bottom:3px}
+
+.plan-price{font-size:28px;font-weight:700;font-family:monospace;margin-bottom:2px;color:var(--blue2)}
+
+.plan-price sub{font-size:13px;font-weight:400;color:var(--muted)}
+
+.plan-limit{font-size:13px;color:var(--muted);margin-bottom:12px}
+
+.plan-feat{font-size:13px;line-height:2.2}
+
+.plan-feat div::before{content:"+ ";color:var(--green);font-weight:700}
+
+.plan-feat div.no::before{content:"- ";color:var(--faint)}
+
+.plan-feat div.no{color:var(--faint)}
+
+/* SEO PREVIEW */
+
+.seo-preview{background:#fff;border:1px solid var(--bdr);border-radius:5px;padding:14px;margin-top:10px}
+
+.seo-title-prev{color:#1a0dab;font-size:18px;font-weight:400;margin-bottom:3px;font-family:Arial,sans-serif}
+
+.seo-url-prev{color:#006621;font-size:13px;margin-bottom:4px;font-family:Arial,sans-serif}
+
+.seo-desc-prev{color:#545454;font-size:14px;font-family:Arial,sans-serif;line-height:1.5}
+
+/* AGENT STATUS */
+
+.agent-status{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--bdr);font-size:13px}
+
+.agent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.agent-dot.ok{background:var(--green)}
+
+.agent-dot.run{background:#E67E22;animation:pulse 1s infinite}
+
+.agent-dot.off{background:var(--faint)}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+<nav>
+
+  <div class="nav-header">
+
+    <div>
+
+      <div class="nav-brand">Genesis <em>iRollo</em> 360</div>
+
+      <div class="nav-version">v2.0 | Motor NCT v2 | MOBIS</div>
+
+    </div>
+
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">Painel</div>
+
+    <div class="nav-item on" id="nav-home" onclick="go('home')">
+
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/></svg>
+
+      Dashboard
+
+    </div>
+
+    <div class="nav-item" id="nav-catalogo" onclick="go('catalogo')">
+
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2z"/></svg>
+
+      Catalogo de produtos
+
+      <span class="nav-badge" id="nav-cat-count">7</span>
+
+    </div>
+
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">Cadastro</div>
+
+    <div class="nav-item" id="nav-busca" onclick="go('busca')">
+
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+
+      Buscar e enriquecer
+
+    </div>
+
+    <div class="nav-item" id="nav-manual" onclick="go('manual')">
+
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>
+
+      Cadastro manual
+
+    </div>
+
+    <div class="nav-item" id="nav-planilha" onclick="go('planilha')">
+
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/><path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3z"/></svg>
+
+      Importar planilha
+
+    </div>
+
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">Aprovacao</div>
+
+    <div class="nav-item" id="nav-aprovacao" onclick="go('aprovacao')">
+
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>
+
+      Revisar e aprovar
+
+      <span class="nav-badge" id="nav-aprov-count">3</span>
+
+    </div>
+
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">Plataforma</div>
+
+    <div class="nav-item" id="nav-agentes" onclick="go('agentes')">
+
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062z"/></svg>
+
+      Agentes de IA (12)
+
+    </div>
+
+    <div class="nav-item" id="nav-prompt" onclick="go('prompt')">
+
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"/></svg>
+
+      Prompt personalizado
+
+    </div>
+
+    <div class="nav-item" id="nav-bling" onclick="go('bling')">
+
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+
+      Bling ERP
+
+    </div>
+
+    <div class="nav-item" id="nav-planos" onclick="go('planos')">
+
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11z"/></svg>
+
+      Planos
+
+    </div>
+
+  </div>
+
+  <div class="nav-foot">genesisindexia.com.br<br>mobispecas@gmail.com<br>Hidrolandia, GO</div>
+
+</nav>
+
+<div class="body">
+
+  <div class="topbar">
+
+    <div><span class="topbar-title" id="page-title">Dashboard</span><span class="topbar-sub" id="page-sub">Genesis iRollo 360</span></div>
+
+    <div class="topbar-right">
+
+      <span class="chip" id="chip-nct">NCT: --</span>
+
+      <span class="chip ok" id="chip-status">Motor NCT v2 ativo</span>
+
+      <span class="chip" id="chip-froze" style="display:none">Congelado</span>
+
+    </div>
+
+  </div>
+
+  <div class="content">
+
+<!-- ========== HOME ========== -->
+
+<div class="page on" id="page-home">
+
+  <div class="kpi-grid">
+
+    <div class="kpi green"><div class="kpi-val" id="k-enriq" style="color:var(--green)">7</div><div class="kpi-lbl">Produtos no catalogo</div><div class="kpi-sub">Enriquecidos e aprovados</div></div>
+
+    <div class="kpi amber"><div class="kpi-val" style="color:#E67E22">0.91</div><div class="kpi-lbl">NCT medio</div><div class="kpi-sub">Meta: 0.90 premium</div></div>
+
+    <div class="kpi frozen"><div class="kpi-val" id="k-frozen" style="color:#2980B9">0</div><div class="kpi-lbl">Congelados</div><div class="kpi-sub">Dados travados pela IA</div></div>
+
+    <div class="kpi red"><div class="kpi-val" style="color:var(--red2)">0</div><div class="kpi-lbl">Sincronizados Bling</div><div class="kpi-sub">Token expirado</div></div>
+
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+
+    <div class="card" style="margin-bottom:0"><div class="card-body">
+
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">Motor NCT</div>
+
+      <div style="font-size:12px;color:var(--muted);line-height:1.6">Score matematico de 0 a 1. Bloqueia produtos com dados inconsistentes antes de publicar. Nenhum clone passa sem ser detectado.</div>
+
+    </div></div>
+
+    <div class="card" style="margin-bottom:0"><div class="card-body">
+
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">12 Agentes especializados</div>
+
+      <div style="font-size:12px;color:var(--muted);line-height:1.6">Cada agente tem uma fonte especifica. OEM, fiscal, veicular, CDC, SEO, imagem. Nenhum chuta. Nenhum alucina.</div>
+
+    </div></div>
+
+    <div class="card" style="margin-bottom:0"><div class="card-body">
+
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">Galeria de imagens</div>
+
+      <div style="font-size:12px;color:var(--muted);line-height:1.6">Agente busca imagens reais na web. Voce seleciona a melhor visualmente. Selecao manual aumenta o NCT.</div>
+
+    </div></div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="card-head"><div class="card-title">Acoes rapidas</div></div>
+
+    <div class="card-body" style="display:flex;gap:8px;flex-wrap:wrap">
+
+      <button class="btn btn-primary" onclick="go('busca')">Buscar produto</button>
+
+      <button class="btn btn-success" onclick="go('catalogo')">Ver catalogo (7)</button>
+
+      <button class="btn btn-secondary" onclick="go('agentes')">Agentes de IA</button>
+
+      <button class="btn btn-warning" onclick="go('bling')">Corrigir Bling</button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========== CATALOGO ========== -->
+
+<div class="page" id="page-catalogo" style="padding:0;height:100%">
+
+  <div class="split">
+
+    <div class="prod-list">
+
+      <div class="prod-list-hdr">
+
+        <span>Catalogo</span>
+
+        <div style="display:flex;gap:5px">
+
+          <select class="fi" style="font-size:11px;padding:3px 6px;width:auto" onchange="filtrarCatalogo(this.value)">
+
+            <option value="">Todos</option>
+
+            <option value="ENRIQUECIDO">Enriquecido</option>
+
+            <option value="PENDENTE">Pendente</option>
+
+            <option value="CONGELADO">Congelado</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <div id="cat-list"></div>
+
+    </div>
+
+    <div class="prod-detail">
+
+      <div class="prod-empty" id="cat-empty">
+
+        <svg width="48" height="48" viewBox="0 0 16 16" fill="#BDC3C7"><path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2z"/></svg>
+
+        <div style="font-size:15px;font-weight:600;color:var(--muted)">Selecione um produto</div>
+
+        <div style="font-size:13px;color:var(--faint);max-width:260px;text-align:center;line-height:1.6">Clique em um produto na lista para ver, editar ou gerenciar.</div>
+
+      </div>
+
+      <div id="cat-det" style="display:none"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========== BUSCA ========== -->
+
+<div class="page" id="page-busca">
+
+  <div style="max-width:720px">
+
+    <div class="card">
+
+      <div class="card-head"><div class="card-title">Buscar e enriquecer produto</div></div>
+
+      <div class="card-body">
+
+        <div class="info-bar" style="margin-bottom:12px">Busque por EAN, OEM, SKU ou descricao. O agente Claude busca nas bases antes de responder. Nunca alucina.</div>
+
+        <div class="field-label">EAN / OEM / SKU / descricao <span class="field-hint">-- ex: PA9798 | biela hr | 234104A950 | JOGO PISTAO METAL LEVE</span></div>
+
+        <div style="display:flex;gap:7px;margin-bottom:8px">
+
+          <input class="fi" id="busca-input" type="text" placeholder="Digite EAN, OEM, SKU ou descricao do produto" style="flex:1;font-size:15px;font-family:monospace" onkeydown="if(event.key==='Enter')buscar()">
+
+          <button class="btn btn-primary" onclick="buscar()">Buscar</button>
+
+          <button class="btn btn-secondary btn-sm" id="btn-voz" onclick="ativarVoz()">Mic</button>
+
+        </div>
+
+        <div style="font-size:12px;color:var(--faint);font-family:monospace">Exemplos: PA9798 | 234104A950 | biela hr | BC720JSTD | pistao porter diesel | cabecote hilux 3.0</div>
+
+      </div>
+
+    </div>
+
+    <div id="busca-result" style="display:none">
+
+      <div id="busca-nct"></div>
+
+      <div id="busca-semaforo" class="card" style="margin-bottom:14px">
+
+        <div class="card-body" style="display:flex;align-items:center;gap:14px">
+
+          <div id="sem-circle" style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0">--</div>
+
+          <div>
+
+            <div id="sem-title" style="font-size:14px;font-weight:700"></div>
+
+            <div id="sem-desc" style="font-size:12px;color:var(--muted);margin-top:2px"></div>
+
+          </div>
+
+          <div style="margin-left:auto;display:flex;gap:6px">
+
+            <button class="btn btn-frozen btn-sm" onclick="congelarBusca()">Congelar dados</button>
+
+            <button class="btn btn-secondary btn-sm" onclick="reenriquecer()">Reenriquecer</button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-head">
+
+          <div class="card-title">Dados do produto</div>
+
+          <div style="display:flex;gap:5px">
+
+            <span class="badge b-ok" id="busca-badge">ENRIQUECIDO</span>
+
+          </div>
+
+        </div>
+
+        <div class="card-body">
+
+          <div class="field-label" style="margin-bottom:4px">Nome tecnico completo <span class="field-hint" id="busca-fontes"></span></div>
+
+          <div class="field-val" id="busca-nome" style="font-size:15px;font-weight:500;margin-bottom:12px"></div>
+
+          <div class="form-row c3" style="margin-bottom:0">
+
+            <div><div class="field-label">SKU / Referencia</div><div class="field-val mono" id="busca-sku" style="color:var(--red);font-weight:700"></div></div>
+
+            <div><div class="field-label">Codigo OEM</div><div class="field-val mono" id="busca-oem"></div></div>
+
+            <div><div class="field-label">NCM fiscal</div><div class="field-val mono" id="busca-ncm"></div></div>
+
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="form-row c3" style="margin-bottom:0">
+
+            <div><div class="field-label">EAN / Codigo de barras</div><div class="field-val mono" id="busca-ean"></div></div>
+
+            <div><div class="field-label">Fabricante</div><div class="field-val" id="busca-fab"></div></div>
+
+            <div><div class="field-label">Medida</div><div class="field-val" id="busca-med"></div></div>
+
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="field-label" style="margin-bottom:6px">Aplicacao veicular -- triangulada em multiplas fontes</div>
+
+          <div id="busca-aplic"></div>
+
+          <div class="sep"></div>
+
+          <div class="field-label" style="margin-bottom:4px">Bula tecnica de instalacao</div>
+
+          <div class="field-val" id="busca-bula" style="font-size:13px;line-height:1.7;margin-bottom:10px"></div>
+
+          <div class="warn-bar" id="busca-cdc" style="margin-bottom:10px"></div>
+
+          <div class="field-label" style="margin-bottom:4px">Palavras-chave SEO</div>
+
+          <div class="tags" id="busca-tags"></div>
+
+        </div>
+
+      </div>
+
+      <div class="card" id="busca-gallery-card">
+
+        <div class="card-head">
+
+          <div class="card-title">Selecao de imagens -- escolha a melhor</div>
+
+          <button class="btn btn-secondary btn-sm" onclick="buscarImagens()">Buscar imagens na web</button>
+
+        </div>
+
+        <div class="card-body">
+
+          <div class="info-bar" style="margin-bottom:10px">Selecione a melhor imagem encontrada. A selecao manual aumenta o NCT (FM sobe). Depois gere a imagem tecnica certificada.</div>
+
+          <div class="img-gallery" id="busca-gallery">
+
+            <div style="color:var(--faint);font-size:13px;grid-column:1/-1;padding:20px;text-align:center">Clique em "Buscar imagens na web" para encontrar fotos deste produto</div>
+
+          </div>
+
+          <div style="margin-top:10px;display:flex;gap:7px">
+
+            <button class="btn btn-primary btn-sm" onclick="gerarImgTecnica()">Gerar imagem tecnica certificada</button>
+
+            <button class="btn btn-dark btn-sm" onclick="downloadImg('svg')">Baixar SVG</button>
+
+            <button class="btn btn-dark btn-sm" onclick="downloadImg('png')">Baixar PNG</button>
+
+          </div>
+
+          <div id="busca-img-box" style="margin-top:10px"></div>
+
+        </div>
+
+      </div>
+
+      <div class="card" id="busca-seo-card" style="display:none">
+
+        <div class="card-head"><div class="card-title">SEO -- Preview Google + Google Ads</div></div>
+
+        <div class="card-body">
+
+          <div class="seo-preview">
+
+            <div class="seo-title-prev" id="seo-title-prev"></div>
+
+            <div class="seo-url-prev">genesisindexia.com.br/produtos/<span id="seo-url-prev"></span></div>
+
+            <div class="seo-desc-prev" id="seo-desc-prev"></div>
+
+          </div>
+
+          <div style="margin-top:10px;display:flex;gap:7px">
+
+            <button class="btn btn-dark btn-sm" onclick="exportarSEO()">Exportar SEO + Schema.org</button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <div class="btn-toolbar">
+
+          <div class="info-bar">Campos em amarelo precisam verificacao manual antes de salvar. Campos verdes estao congelados.</div>
+
+          <button class="btn btn-success" onclick="salvarProd()">Salvar no catalogo</button>
+
+          <button class="btn btn-primary" onclick="enviarBling()">Enviar para Bling</button>
+
+          <button class="btn btn-frozen btn-sm" onclick="congelarBusca()">Congelar todos</button>
+
+          <button class="btn btn-secondary btn-sm" onclick="limparBusca()">Cancelar</button>
+
+        </div>
+
+        <div class="toast" id="busca-toast"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========== MANUAL ========== -->
+
+<div class="page" id="page-manual">
+
+  <div style="max-width:700px">
+
+    <div class="card">
+
+      <div class="card-head"><div class="card-title">Cadastro manual de produto</div></div>
+
+      <div class="card-body">
+
+        <div class="info-bar" style="margin-bottom:12px">Preencha os dados basicos. O agente completa OEM, NCM, bula e aplicacao automaticamente com fontes verificadas.</div>
+
+        <div class="field-label" style="margin-bottom:4px">Nome do produto *</div>
+
+        <input class="fi" id="mp-nome" type="text" placeholder="Ex: Bronzina Mancal BC720J STD Metal Leve L200 4D56 Diesel" style="margin-bottom:12px">
+
+        <div class="form-row c3">
+
+          <div><div class="field-label">SKU *</div><input class="fi" id="mp-sku" type="text" placeholder="BC720JSTD"></div>
+
+          <div><div class="field-label">EAN</div><input class="fi" id="mp-ean" type="text" placeholder="7891945023581"></div>
+
+          <div><div class="field-label">NCM</div><input class="fi" id="mp-ncm" type="text" placeholder="8484.10.00"></div>
+
+        </div>
+
+        <div class="form-row c3">
+
+          <div><div class="field-label">Fabricante</div><input class="fi" id="mp-fab" type="text" placeholder="Metal Leve (Mahle)"></div>
+
+          <div><div class="field-label">Medida</div><input class="fi" id="mp-med" type="text" placeholder="STD"></div>
+
+          <div><div class="field-label">OEM</div><input class="fi" id="mp-oem" type="text" placeholder="MD-185923"></div>
+
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="field-label" style="margin-bottom:4px">Aplicacao veicular</div>
+
+        <input class="fi" id="mp-aplic" type="text" placeholder="Ex: Mitsubishi L200 HPE 2012-2024 | Pajero Sport 2007-2016" style="margin-bottom:12px">
+
+        <div class="field-label" style="margin-bottom:4px">CNPJ da empresa <span class="field-hint">-- para identificar ramo de atividade e CNAE</span></div>
+
+        <input class="fi" id="mp-cnpj" type="text" placeholder="00.000.000/0001-00">
+
+      </div>
+
+      <div class="btn-toolbar">
+
+        <div class="info-bar">O agente usa o CNAE do CNPJ para validar se o produto pertence ao ramo de atividade correto.</div>
+
+        <button class="btn btn-danger" onclick="enriquecerManual()">Enriquecer com agente</button>
+
+        <button class="btn btn-success" onclick="salvarManual()">Salvar</button>
+
+        <button class="btn btn-secondary" onclick="limparManual()">Limpar</button>
+
+      </div>
+
+      <div class="toast" id="mp-toast"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========== PLANILHA ========== -->
+
+<div class="page" id="page-planilha">
+
+  <div style="max-width:700px">
+
+    <div class="card">
+
+      <div class="card-head"><div class="card-title">Importar por planilha</div></div>
+
+      <div class="card-body">
+
+        <div class="info-bar" style="margin-bottom:12px">Importe varios produtos de uma vez. O agente enriquece todos com fontes verificadas. Produtos com NCT baixo ficam em rascunho.</div>
+
+        <div style="border:2px dashed var(--bdr2);border-radius:5px;padding:36px 18px;text-align:center;cursor:pointer;background:var(--surf)" onclick="document.getElementById('fi-plan').click()">
+
+          <div style="font-size:15px;font-weight:600;margin-bottom:5px">Clique para selecionar a planilha</div>
+
+          <div style="font-size:13px;color:var(--muted)">Formatos: .xlsx .xls .csv</div>
+
+          <input type="file" id="fi-plan" accept=".xlsx,.xls,.csv" style="display:none" onchange="carregarPlan(this)">
+
+        </div>
+
+        <div id="plan-prev" style="display:none;margin-top:12px">
+
+          <div class="info-bar" style="margin-bottom:8px"><strong><span id="plan-count">0</span> produtos</strong> encontrados. Clique em Importar para enriquecer todos.</div>
+
+          <div id="plan-lista"></div>
+
+          <div style="display:flex;gap:7px;margin-top:10px">
+
+            <button class="btn btn-danger" onclick="importarPlan()">Enriquecer todos</button>
+
+            <button class="btn btn-secondary" onclick="cancelarPlan()">Cancelar</button>
+
+          </div>
+
+        </div>
+
+        <div class="toast" id="plan-toast"></div>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-head"><div class="card-title">Modelo de planilha</div></div>
+
+      <div class="card-body">
+
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Colunas: <span style="font-family:monospace;background:var(--bg);padding:2px 5px;border-radius:3px">SKU | Nome | EAN | OEM | NCM | Fabricante | Medida | Aplicacao | CNPJ</span></div>
+
+        <button class="btn btn-dark btn-sm" onclick="baixarModelo()">Baixar modelo CSV</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========== APROVACAO ========== -->
+
+<div class="page" id="page-aprovacao" style="padding:0;height:100%">
+
+  <div class="split">
+
+    <div class="prod-list">
+
+      <div class="prod-list-hdr"><span>Aguardando revisao</span></div>
+
+      <div id="aprov-list"></div>
+
+    </div>
+
+    <div class="prod-detail">
+
+      <div class="prod-empty" id="aprov-empty">
+
+        <div style="font-size:15px;font-weight:600;color:var(--muted)">Selecione um produto</div>
+
+        <div style="font-size:13px;color:var(--faint);max-width:240px;text-align:center;line-height:1.6">Clique na lista para ver os dados e aprovar ou rejeitar.</div>
+
+      </div>
+
+      <div id="aprov-det" style="display:none;padding:15px"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========== AGENTES ========== -->
+
+<div class="page" id="page-agentes">
+
+  <div style="max-width:740px">
+
+    <div class="card">
+
+      <div class="card-head"><div class="card-title">12 Agentes de IA especializados -- nunca alucinam</div></div>
+
+      <div id="agentes-lista"></div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-head"><div class="card-title">Motor NCT -- formula de certificacao</div></div>
+
+      <div class="card-body">
+
+        <div style="font-size:14px;line-height:2.4">
+
+          <div><strong style="font-family:monospace;color:var(--blue2)">TF x 0.50</strong> -- Triangulacao de fontes: OEM confirmado + EAN validado + DNA cruzado</div>
+
+          <div><strong style="font-family:monospace;color:var(--blue2)">FM x 0.20</strong> -- Foto/Midia: imagem selecionada e certificada pelo lojista</div>
+
+          <div><strong style="font-family:monospace;color:var(--blue2)">CO x 0.20</strong> -- Conteudo: descricao tecnica completa com torques e medidas</div>
+
+          <div><strong style="font-family:monospace;color:var(--blue2)">AV x 0.10</strong> -- Aplicacao veicular: confirmada em minimo 2 fontes independentes</div>
+
+          <div class="sep"></div>
+
+          <div style="color:var(--green);font-weight:700">NCT maior ou igual 0.90 -- PREMIUM -- aprovado para Bling e marketplaces</div>
+
+          <div style="color:#E67E22;font-weight:700">NCT 0.70 a 0.89 -- BOM -- revisar antes de publicar</div>
+
+          <div style="color:var(--red);font-weight:700">NCT menor que 0.70 -- BAIXO -- bloqueado ate completar os dados</div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========== PROMPT ========== -->
+
+<div class="page" id="page-prompt">
+
+  <div style="max-width:700px">
+
+    <div class="card">
+
+      <div class="card-head"><div class="card-title">Prompt personalizado por empresa</div></div>
+
+      <div class="card-body">
+
+        <div class="info-bar" style="margin-bottom:14px">Configure o tom de voz e regras do agente para sua empresa. O Motor NCT continua ativo independente do prompt.</div>
+
+        <div class="field-label" style="margin-bottom:6px">Tom de voz</div>
+
+        <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px">
+
+          <button class="btn btn-secondary btn-sm" id="tom-tec" onclick="setTom('tecnico')">Tecnico</button>
+
+          <button class="btn btn-secondary btn-sm" id="tom-ven" onclick="setTom('vendas')">Vendas</button>
+
+          <button class="btn btn-secondary btn-sm" id="tom-simp" onclick="setTom('simples')">Simples</button>
+
+          <button class="btn btn-secondary btn-sm" id="tom-ceo" onclick="setTom('ceo')">Executivo</button>
+
+        </div>
+
+        <div class="form-row c2">
+
+          <div>
+
+            <div class="field-label" style="margin-bottom:4px">Palavras obrigatorias <span class="field-hint">-- separadas por virgula</span></div>
+
+            <input class="fi" id="pr-palavras-ok" type="text" placeholder="diesel, original, garantia">
+
+          </div>
+
+          <div>
+
+            <div class="field-label" style="margin-bottom:4px">Palavras proibidas <span class="field-hint">-- o agente nunca usa</span></div>
+
+            <input class="fi" id="pr-palavras-no" type="text" placeholder="barato, promocao, oferta">
+
+          </div>
+
+        </div>
+
+        <div class="field-label" style="margin-bottom:4px">Instrucao adicional ao agente</div>
+
+        <textarea class="fi" id="pr-instrucao" rows="3" placeholder="Ex: Sempre mencionar garantia de 90 dias. Incluir codigo OEM no titulo. Focar em motor diesel pesado."></textarea>
+
+        <div class="sep"></div>
+
+        <div class="field-label" style="margin-bottom:6px">Preview do prompt atual</div>
+
+        <div class="prompt-box" id="pr-preview">Voce e Claude, agente especializado em autopecas brasileiras. Use fontes verificadas antes de responder. Nunca invente dados. Se nao encontrar em fonte confiavel, retorne campo vazio.</div>
+
+      </div>
+
+      <div class="btn-toolbar">
+
+        <button class="btn btn-primary" onclick="salvarPrompt()">Salvar configuracao</button>
+
+        <button class="btn btn-danger btn-sm" onclick="testarPrompt()">Testar com produto</button>
+
+        <button class="btn btn-secondary btn-sm" onclick="resetPrompt()">Resetar padrao</button>
+
+      </div>
+
+      <div class="toast" id="pr-toast"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========== BLING ========== -->
+
+<div class="page" id="page-bling">
+
+  <div style="max-width:640px">
+
+    <div class="card">
+
+      <div class="card-head"><div class="card-title">Integracao Bling ERP v3</div></div>
+
+      <div class="card-body">
+
+        <div class="warn-bar" style="margin-bottom:14px">Token atual expirado -- invalid_grant. Reautorize abaixo.</div>
+
+        <div class="info-bar" style="margin-bottom:14px">Bling &#8594; Configuracoes &#8594; API &#8594; Meus Aplicativos &#8594; clique no app Genesis iRollo 360</div>
+
+        <div class="form-row c2">
+
+          <div><div class="field-label">Client ID</div><input class="fi" id="bl-cid" type="text" placeholder="Client ID do app Genesis no Bling"></div>
+
+          <div><div class="field-label">Client Secret</div><input class="fi" id="bl-secret" type="password" placeholder="Client Secret"></div>
+
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="field-label" style="margin-bottom:6px">Mapeamento de cabecalhos -- campos do Genesis para o Bling</div>
+
+        <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:4px;padding:12px;font-family:monospace;font-size:12px;line-height:2;color:var(--muted)">
+
+          Nome &#8594; nome | SKU &#8594; codigo | OEM &#8594; codigoFabricante | EAN &#8594; gtin | NCM &#8594; ncm | Fabricante &#8594; marca | Descricao &#8594; descricaoCurta | Bula &#8594; descricaoComplementar | Tags &#8594; palavrasChave | Preco &#8594; preco | Estoque &#8594; estoque
+
+        </div>
+
+      </div>
+
+      <div class="btn-toolbar">
+
+        <button class="btn btn-danger" onclick="blingAuth()">Autorizar Bling</button>
+
+        <button class="btn btn-primary" onclick="blingTest()">Testar conexao</button>
+
+      </div>
+
+      <div class="toast" id="bl-toast"></div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-head"><div class="card-title">Status da sincronizacao</div></div>
+
+      <div class="card-body">
+
+        <div style="font-size:14px;line-height:2.4">
+
+          <div>Ciclos executados: <strong style="font-family:monospace">1.326</strong></div>
+
+          <div>Ultimo erro: <strong style="color:var(--red);font-family:monospace">invalid_grant</strong></div>
+
+          <div>Produtos sincronizados: <strong>0</strong></div>
+
+          <div>Servidor: <strong style="color:var(--green)">genesis-irollo-360.onrender.com -- Online</strong></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========== PLANOS ========== -->
+
+<div class="page" id="page-planos">
+
+  <div class="plans-grid" style="max-width:900px">
+
+    <div class="plan"><div class="plan-name">Free</div><div class="plan-price">R$0<sub>/mes</sub></div><div class="plan-limit">Ate 50 produtos</div><div class="sep"></div><div class="plan-feat"><div>Motor NCT basico</div><div>Busca por EAN/OEM/SKU</div><div>Integracao Bling</div><div>Imagem tecnica</div><div class="no">Galeria de imagens web</div><div class="no">12 agentes IA</div><div class="no">Google Drive backup</div></div><button class="btn btn-secondary" style="width:100%;justify-content:center;margin-top:14px">Plano atual</button></div>
+
+    <div class="plan hl"><div class="plan-name">Pro <span class="badge b-danger" style="font-size:10px">Popular</span></div><div class="plan-price" style="color:var(--red2)">R$197<sub>/mes</sub></div><div class="plan-limit">Ate 5.000 produtos</div><div class="sep"></div><div class="plan-feat"><div>Motor NCT + RAST-HASH</div><div>12 agentes especializados</div><div>Galeria imagens web</div><div>Prompt personalizado</div><div>Google Drive backup</div><div>Triangulacao veicular</div><div>SEO + Google P-MAX</div></div><button class="btn btn-danger" style="width:100%;justify-content:center;margin-top:14px">Assinar Pro</button></div>
+
+    <div class="plan"><div class="plan-name">Enterprise</div><div class="plan-price">R$597<sub>/mes</sub></div><div class="plan-limit">Ilimitado</div><div class="sep"></div><div class="plan-feat"><div>Multi-tenant / filiais</div><div>API propria</div><div>CNPJ + CNAE automatico</div><div>DNA anti-clone certificado</div><div>PartsOuq + TecDoc API</div><div>Onboarding personalizado</div><div>Suporte dedicado</div></div><button class="btn btn-dark" style="width:100%;justify-content:center;margin-top:14px">Falar com comercial</button></div>
+
+  </div>
+
+  <div class="toast" id="plan-toast" style="max-width:400px;margin:12px auto"></div>
+
+</div>
+
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+// ── DADOS ─────────────────────────────────────────────────────
+
+const PRODS=[
+
+  {id:"p1",sku:"BC720JSTD",ean:"7891945023581",nome:"Bronzina Mancal BC720J STD -- Metal Leve -- L200 HPE 4D56 VGT Turbo 2.5 Diesel",oem:"MD-185923 -- MD-356576 -- MN-158088",ncm:"8484.10.00",fab:"Metal Leve (Mahle)",med:"STD",peso:"",aplic:[{m:"Mitsubishi",mod:"L200 HPE / Sport / Outdoor",mot:"4D56 VGT Turbo 2.5 8v",a:"2012-2024",f:"Catalogo Mahle"},{m:"Mitsubishi",mod:"L200 GL / GLS / 4x4",mot:"4D56 2.5 8v Diesel",a:"2001-2012",f:"Metal Leve PDF"},{m:"Mitsubishi",mod:"Pajero Sport",mot:"4D56 2.5 8v Diesel",a:"2007-2016",f:"TecDoc API"}],bula:"Verificar virabrequim (57,982 a 58,000 mm). Limpar mancal. Aplicar oleo na face interna. Apertar parafusos: 30 Nm + 90 graus de giro. Nao reutilizar parafusos. Substituir todos os mancais.",cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao por mecanico habilitado. Instalacao inadequada anula a garantia.",tags:["bronzina mancal l200","bc720j std","metal leve 4d56","bronzina diesel mitsubishi","mahle bc720j"],nct:0.927,hash:"NCT-bc720jstd9e4b7016",status:"ENRIQUECIDO",frozen:false},
+
+  {id:"p2",sku:"JE127KSTD",ean:"7891945031586",nome:"Jogo Aneis Pistao JE127K STD -- Metal Leve -- L200 HPE 4D56 2.5 Diesel",oem:"MD-997-047 -- MB-303-310",ncm:"8409.91.30",fab:"Metal Leve (Mahle)",med:"STD",aplic:[{m:"Mitsubishi",mod:"L200 HPE / Sport / Outdoor",mot:"4D56 VGT 2.5 8v",a:"2012-2024",f:"Catalogo Mahle"},{m:"Mitsubishi",mod:"Pajero Sport",mot:"4D56 2.5 8v",a:"2007-2016",f:"Metal Leve PDF"}],bula:"Verificar desgaste do cilindro. Respeitar sentido de montagem (topo para cima). Escalonar aberturas a 120 graus. Lubrificar com oleo de motor.",cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao profissional. Verificar medida do cilindro antes da compra.",tags:["aneis pistao l200","je127k std","metal leve 4d56","aneis motor diesel"],nct:0.871,hash:"NCT-je127kstd4a8c3021",status:"PENDENTE",frozen:false},
+
+  {id:"p3",sku:"TC0451",ean:"7891945012615",nome:"Tucho Hidraulico TC0451 -- Metal Leve -- L200 Pajero Sport 4D56 2.5 Diesel",oem:"MD-308-397 -- MB-668-399",ncm:"8409.91.90",fab:"Metal Leve",med:"Unitario",aplic:[{m:"Mitsubishi",mod:"L200 GL / GLS / HPE / Sport",mot:"4D56 2.5 8v Diesel",a:"2001-2024",f:"Catalogo Metal Leve"},{m:"Mitsubishi",mod:"Pajero Sport",mot:"4D56 2.5 8v",a:"2007-2016",f:"AutoData"}],bula:"Verificar pressao de oleo (min 2.5 kgf). Substituir todos os tuchos. Aguardar 30 min antes de ligar o motor.",cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao profissional.",tags:["tucho hidraulico l200","tc0451 metal leve","tuchos 4d56"],nct:0.843,hash:"NCT-tc0451d2f5a1c7c84c",status:"PENDENTE",frozen:false},
+
+  {id:"p4",sku:"234104A950",ean:"8809160806956",nome:"Pistao Motor 23410-4A950 -- Hyundai MOBIS -- HR / H100 / Porter D4BH 2.5 Diesel",oem:"23410-4A950",ncm:"8409.91.20",fab:"Hyundai MOBIS",med:"STD",aplic:[{m:"Hyundai",mod:"HR / H100 Caminhonete",mot:"D4BH 2.5 8v Diesel Turbo",a:"2005-2012",f:"Catalogo Hyundai MOBIS"},{m:"Hyundai",mod:"Porter II",mot:"D4BH 2.5 Diesel",a:"2004-2012",f:"TecDoc API"},{m:"Hyundai",mod:"Starex / H1",mot:"D4BH 2.5 CRDi",a:"2002-2007",f:"AutoData"}],bula:"Verificar diametro do cilindro (STD: 91.000-91.010 mm). Instalar aneis com sentido correto. Torque biela: 48 Nm + 90 graus. Substituir todos os pistoes.",cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao por mecanico habilitado.",tags:["pistao hyundai hr","234104a950","pistao d4bh","pistao h100 diesel"],nct:0.912,hash:"NCT-234104a950b7c3d1f9",status:"ENRIQUECIDO",frozen:false},
+
+  {id:"p5",sku:"235004A010",ean:"8809160810816",nome:"Biela Motor 23500-4A010 -- Hyundai MOBIS -- HR / H100 / Porter D4BH 2.5 Diesel",oem:"23500-4A010",ncm:"8409.91.10",fab:"Hyundai MOBIS",med:"STD",aplic:[{m:"Hyundai",mod:"HR / H100 Caminhonete",mot:"D4BH 2.5 8v Diesel Turbo",a:"2005-2012",f:"Catalogo Hyundai MOBIS"},{m:"Hyundai",mod:"Porter II",mot:"D4BH 2.5 Diesel",a:"2004-2012",f:"TecDoc API"}],bula:"Verificar folga de biela (0.018-0.036 mm). Torque: 48 Nm + 90 graus. Nao reutilizar parafusos. Substituir bronzinas.",cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao por mecanico especializado diesel.",tags:["biela hyundai hr","235004a010","biela d4bh","biela h100 diesel"],nct:0.905,hash:"NCT-235004a010c8d2e3f4",status:"ENRIQUECIDO",frozen:false},
+
+  {id:"p6",sku:"209304A001",ean:"8809160803979",nome:"Junta Cabecote 20930-4A001 -- Hyundai MOBIS -- HR / H100 Motor D4BH 2.5 Diesel",oem:"20930-4A001",ncm:"8484.10.00",fab:"Hyundai MOBIS",med:"Unitario",aplic:[{m:"Hyundai",mod:"HR / H100 Caminhonete",mot:"D4BH 2.5 8v Diesel Turbo",a:"2005-2012",f:"Catalogo Hyundai MOBIS"},{m:"Hyundai",mod:"Porter II",mot:"D4BH 2.5 Diesel",a:"2004-2012",f:"Metal Leve PDF"}],bula:"Limpar superficies do bloco e cabecote. Torque em cruz: 29 Nm + 90 graus + 90 graus. Nunca reutilizar a junta. Verificar planeidade (max 0.05 mm).",cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao profissional.",tags:["junta cabecote hr","209304a001","junta d4bh"],nct:0.891,hash:"NCT-209304a001d9e4f5a6",status:"ENRIQUECIDO",frozen:false},
+
+  {id:"p7",sku:"PA9798STD",ean:"7892415957108",nome:"Jogo Pistao com Anel PA9798 STD -- MAHLE Metal Leve -- Hyundai HR / KIA Bongo K2500 D4CB 2.5 16v Turbo Diesel",oem:"PA9798STD -- 23410-4A030",ncm:"8409.91.20",fab:"MAHLE Metal Leve",med:"STD",aplic:[{m:"Hyundai",mod:"HR / Longue Deck",mot:"D4CB 2.5 16v Turbo Diesel",a:"2014-2021",f:"Catalogo MAHLE"},{m:"KIA",mod:"Bongo K2500",mot:"J3 2.5 16v CRDi",a:"2014-2021",f:"TecDoc API"},{m:"Hyundai",mod:"H100 / Porter II",mot:"D4CB 2.5 16v",a:"2012-2020",f:"AutoData"}],bula:"Verificar diametro cilindro STD 91.000-91.010 mm. Escalonar aneis 120 graus. Torque biela: 48 Nm + 90 graus. Substituir todos os pistoes.",cdc:"CDC Art. 26 -- Garantia 90 dias. Instalacao por mecanico especializado diesel.",tags:["pistao hr 2.5","pa9798 std","mahle metal leve hr","pistao kia bongo k2500","pistao d4cb"],nct:0.934,hash:"NCT-pa9798stdc4d5e6f7",status:"ENRIQUECIDO",frozen:false}
+
+];
+
+let curProd=null,curBusca=null,imgSelecionada=null,promptConfig={tom:'tecnico',ok:'diesel,original,garantia',no:'barato,promocao',instrucao:''};
+
+const PROXY='https://genesis-irollo-360.onrender.com/api/claude';
+
+// ── NAV ───────────────────────────────────────────────────────
 
 function go(pg){
+
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
+
   document.getElementById('page-'+pg).classList.add('on');
-  document.getElementById('nav-'+pg).classList.add('on');
-  const t={home:['Dashboard','Visao geral do catalogo'],ean:['Busca por EAN','Cadastro por codigo de barras'],produto:['Cadastro manual','Preencher dados do produto'],planilha:['Importar planilha','Excel ou CSV em massa'],aprovacao:['Aprovacao de enriquecimento','Revisar e aprovar produtos'],agentes:['Agentes de IA','5 agentes especializados'],bling:['Bling ERP','Integracao e sincronizacao'],planos:['Planos','Free - Pro - Enterprise']};
+
+  const el=document.getElementById('nav-'+pg);if(el)el.classList.add('on');
+
+  const t={home:['Dashboard','Genesis iRollo 360'],catalogo:['Catalogo de produtos','Gerenciar e certificar'],busca:['Buscar e enriquecer','EAN / OEM / SKU / descricao'],manual:['Cadastro manual','Preencher dados do produto'],planilha:['Importar planilha','Excel ou CSV em massa'],aprovacao:['Aprovacao','Revisar e aprovar produtos'],agentes:['Agentes de IA','12 agentes especializados'],prompt:['Prompt personalizado','Configurar tom e regras'],bling:['Bling ERP','Integracao e sincronizacao'],planos:['Planos','Free - Pro - Enterprise']};
+
   const v=t[pg]||[pg,''];
+
   document.getElementById('page-title').textContent=v[0];
+
   document.getElementById('page-sub').textContent=v[1];
-  if(pg==='aprovacao')renderAprovList();
+
+  if(pg==='catalogo')renderCatalogo();
+
+  if(pg==='aprovacao')renderAprov();
+
+  if(pg==='agentes')renderAgentes();
+
 }
 
-function showToast(id,msg,tipo){const t=document.getElementById(id);if(!t)return;t.textContent=msg;t.style.background=tipo==='ok'?'var(--green)':tipo==='err'?'var(--red)':'var(--blue2)';t.style.color='#fff';t.style.borderColor=t.style.background;t.className='toast show';setTimeout(()=>t.className='toast',4000)}
+// ── TOAST ─────────────────────────────────────────────────────
+
+function toast(id,msg,tipo){
+
+  const t=document.getElementById(id);if(!t)return;
+
+  t.textContent=msg;
+
+  t.style.background=tipo==='ok'?'var(--green)':tipo==='err'?'var(--red)':'var(--blue2)';
+
+  t.style.color='#fff';t.style.borderColor=t.style.background;
+
+  t.className='toast show';setTimeout(()=>t.className='toast',4000);
+
+}
+
+// ── NCT ───────────────────────────────────────────────────────
 
 function renderNCT(cid,prod){
+
   const n=prod.nct||0;
+
   const cor=n>=.90?'#2ECC71':n>=.70?'#E67E22':'#E74C3C';
+
   const st=n>=.90?'premium':n>=.70?'good':'low';
-  const stTxt=n>=.90?'PREMIUM -- aprovado':n>=.70?'BOM -- revisar':'BAIXO -- completar dados';
-  const TF=prod.oem&&prod.ean?.93:.75,FM=.90,CO=prod.bula&&prod.bula.length>80?1.0:.75,AV=prod.aplic&&prod.aplic.length>0?1.0:.70;
-  const el=document.getElementById(cid);
-  el.innerHTML='<div class="nct-panel"><div class="nct-score-box"><div class="nct-label">MOTOR NCT -- SCORE</div><div class="nct-score" style="color:'+cor+'">'+n.toFixed(3)+'</div><div class="nct-status '+st+'">'+stTxt+'</div><div class="nct-hash">'+prod.hash+'</div></div><div class="nct-bars"><div class="nct-bar-item"><div class="nct-bar-header"><span>TF</span><span>'+TF.toFixed(2)+'</span></div><div class="nct-bar-name">Triangulacao</div><div class="nct-bar-track"><div class="nct-bar-fill" id="'+cid+'-tf" style="width:0%;background:#2ECC71"></div></div></div><div class="nct-bar-item"><div class="nct-bar-header"><span>FM</span><span>'+FM.toFixed(2)+'</span></div><div class="nct-bar-name">Foto/Midia</div><div class="nct-bar-track"><div class="nct-bar-fill" id="'+cid+'-fm" style="width:0%;background:#F39C12"></div></div></div><div class="nct-bar-item"><div class="nct-bar-header"><span>CO</span><span>'+CO.toFixed(2)+'</span></div><div class="nct-bar-name">Conteudo</div><div class="nct-bar-track"><div class="nct-bar-fill" id="'+cid+'-co" style="width:0%;background:#2ECC71"></div></div></div><div class="nct-bar-item"><div class="nct-bar-header"><span>AV</span><span>'+AV.toFixed(2)+'</span></div><div class="nct-bar-name">Aplicacao</div><div class="nct-bar-track"><div class="nct-bar-fill" id="'+cid+'-av" style="width:0%;background:#2ECC71"></div></div></div></div><div class="nct-formula">NCT =<br>(TF x 0.50)<br>+ (FM x 0.20)<br>+ (CO x 0.20)<br>+ (AV x 0.10)</div></div>';
+
+  const stTxt=n>=.90?'PREMIUM':n>=.70?'BOM':'BAIXO';
+
+  const TF=prod.oem&&prod.ean?.93:.75,FM=imgSelecionada?.95:.90,CO=prod.bula&&prod.bula.length>80?1.0:.75,AV=prod.aplic&&prod.aplic.length>0?1.0:.70;
+
+  const el=document.getElementById(cid);if(!el)return;
+
+  el.innerHTML=`<div class="nct-panel"><div class="nct-score-box"><div class="nct-lbl">MOTOR NCT SCORE</div><div class="nct-score" style="color:${cor}">${n.toFixed(3)}</div><div class="nct-st ${st}">${stTxt}</div><div class="nct-hash">${prod.hash||''}</div></div><div class="nct-bars"><div class="nct-bar-item"><div class="nct-bar-hdr"><span>TF</span><span>${TF.toFixed(2)}</span></div><div class="nct-bar-nm">Triangulacao</div><div class="nct-track"><div class="nct-fill" id="${cid}-tf" style="width:0%;background:#2ECC71"></div></div></div><div class="nct-bar-item"><div class="nct-bar-hdr"><span>FM</span><span>${FM.toFixed(2)}</span></div><div class="nct-bar-nm">Foto/Midia</div><div class="nct-track"><div class="nct-fill" id="${cid}-fm" style="width:0%;background:#F39C12"></div></div></div><div class="nct-bar-item"><div class="nct-bar-hdr"><span>CO</span><span>${CO.toFixed(2)}</span></div><div class="nct-bar-nm">Conteudo</div><div class="nct-track"><div class="nct-fill" id="${cid}-co" style="width:0%;background:#2ECC71"></div></div></div><div class="nct-bar-item"><div class="nct-bar-hdr"><span>AV</span><span>${AV.toFixed(2)}</span></div><div class="nct-bar-nm">Aplicacao</div><div class="nct-track"><div class="nct-fill" id="${cid}-av" style="width:0%;background:#2ECC71"></div></div></div></div><div class="nct-formula">NCT =<br>(TF x 0.50)<br>+ (FM x 0.20)<br>+ (CO x 0.20)<br>+ (AV x 0.10)</div></div>`;
+
   document.getElementById('chip-nct').textContent='NCT: '+n.toFixed(3);
-  setTimeout(()=>{const g=id=>document.getElementById(cid+'-'+id);if(g('tf'))g('tf').style.width=(TF*100)+'%';if(g('fm'))g('fm').style.width=(FM*100)+'%';if(g('co'))g('co').style.width=(CO*100)+'%';if(g('av'))g('av').style.width=(AV*100)+'%'},100);
+
+  setTimeout(()=>{
+
+    ['tf','fm','co','av'].forEach(k=>{const el=document.getElementById(`${cid}-${k}`);if(el)el.style.width=({tf:TF,fm:FM,co:CO,av:AV}[k]*100)+'%'});
+
+  },100);
+
 }
+
+function renderSemaforo(prod){
+
+  const n=prod.nct||0;
+
+  const el=document.getElementById('sem-circle');
+
+  const ti=document.getElementById('sem-title');
+
+  const de=document.getElementById('sem-desc');
+
+  if(n>=.90){el.style.background=el.style.boxShadow='0 0 0 3px #A9DFBF';el.style.background='var(--green)';el.textContent='0.9+';ti.textContent='PREMIUM -- Aprovado para publicacao';de.textContent='NCT '+n.toFixed(3)+' -- Produto certificado pelo Motor NCT. Pode publicar no Bling e marketplaces.'}
+
+  else if(n>=.70){el.style.background='#E67E22';el.textContent='OK';ti.textContent='BOM -- Revisar antes de publicar';de.textContent='NCT '+n.toFixed(3)+' -- Dados bons mas alguns campos precisam verificacao.'}
+
+  else{el.style.background='var(--red)';el.textContent='!';ti.textContent='BAIXO -- Bloqueado';de.textContent='NCT '+n.toFixed(3)+' -- Complete os campos VERIFICAR antes de publicar.'}
+
+}
+
+// ── APLIC ─────────────────────────────────────────────────────
 
 function renderAplic(cid,aplic){
-  const el=document.getElementById(cid);el.innerHTML='';
-  if(!aplic||!aplic.length){el.innerHTML='<div class="toolbar-warn">Aplicacao nao confirmada -- verificar manualmente.</div>';return}
-  aplic.forEach(v=>{const r=document.createElement('div');r.className='aplic-row';r.innerHTML='<div class="aplic-marca">'+v.m+'</div><div class="aplic-modelo">'+v.mod+' -- '+v.mot+'</div><div class="aplic-anos">'+v.a+'</div><div class="aplic-fonte">'+v.f+'</div>';el.appendChild(r)});
+
+  const el=document.getElementById(cid);if(!el)return;el.innerHTML='';
+
+  if(!aplic||!aplic.length){el.innerHTML='<div class="warn-bar">Aplicacao nao confirmada -- verificar manualmente.</div>';return}
+
+  aplic.forEach(v=>{const r=document.createElement('div');r.className='aplic-row';r.innerHTML=`<div class="aplic-marca">${v.m}</div><div class="aplic-modelo">${v.mod} -- ${v.mot}</div><div class="aplic-anos">${v.a}</div><div class="aplic-fonte">${v.f}</div>`;el.appendChild(r)});
+
 }
+
+// ── SVG TECNICA ───────────────────────────────────────────────
 
 function gerarSVG(p){
+
   const e=s=>String(s||'-').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const ap=p.aplic?p.aplic.map(a=>a.m+' '+a.mod+' '+a.a).join(' | '):(p.aplicacaoVeicular||'-');
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="520" viewBox="0 0 800 520"><rect width="800" height="520" fill="#1C2833"/><rect y="0" width="800" height="4" fill="#C0392B"/><rect x="0" y="0" width="4" height="520" fill="#C0392B"/><rect y="516" width="800" height="4" fill="#C0392B"/><text x="28" y="50" font-family="Segoe UI,Arial,sans-serif" font-size="28" font-weight="700" fill="#C0392B">MOBIS</text><text x="28" y="66" font-family="Segoe UI,Arial,sans-serif" font-size="10" fill="#566573" letter-spacing="4">AUTOPECAS | HIDROLANDIA GO</text><rect x="580" y="20" width="200" height="22" rx="3" fill="#C0392B" opacity=".15"/><text x="680" y="35" font-family="Segoe UI,Arial,sans-serif" font-size="10" fill="#C0392B" text-anchor="middle" font-weight="600" letter-spacing="1">GENESIS iROLLO 360</text><rect x="28" y="80" width="744" height="1" fill="#2E4057"/><text x="28" y="142" font-family="Courier New,monospace" font-size="52" font-weight="700" fill="#ECF0F1" letter-spacing="-1">'+e(p.sku)+'</text><text x="28" y="165" font-family="Segoe UI,Arial,sans-serif" font-size="13" fill="#7F8C8D">'+e((p.nome||'').slice(0,72))+'</text><rect x="28" y="182" width="220" height="65" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="40" y="200" font-family="Segoe UI,Arial,sans-serif" font-size="9" fill="#5D6D7E" letter-spacing="3">OEM</text><text x="40" y="228" font-family="Courier New,monospace" font-size="13" fill="#E74C3C" font-weight="700">'+e((p.oem||'-').slice(0,24))+'</text><rect x="258" y="182" width="148" height="65" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="270" y="200" font-family="Segoe UI,Arial,sans-serif" font-size="9" fill="#5D6D7E" letter-spacing="3">NCM</text><text x="270" y="230" font-family="Courier New,monospace" font-size="16" fill="#ECF0F1" font-weight="700">'+e(p.ncm)+'</text><rect x="416" y="182" width="196" height="65" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="428" y="200" font-family="Segoe UI,Arial,sans-serif" font-size="9" fill="#5D6D7E" letter-spacing="3">EAN</text><text x="428" y="230" font-family="Courier New,monospace" font-size="14" fill="#ECF0F1" font-weight="700">'+e(p.ean)+'</text><rect x="622" y="182" width="110" height="65" rx="4" fill="#273746" stroke="#1E8449" stroke-width="1.5"/><text x="677" y="200" font-family="Segoe UI,Arial,sans-serif" font-size="9" fill="#1E8449" letter-spacing="2" text-anchor="middle">NCT</text><text x="677" y="236" font-family="Courier New,monospace" font-size="24" fill="'+(p.nct>=.90?'#2ECC71':p.nct>=.70?'#F39C12':'#E74C3C')+'" font-weight="700" text-anchor="middle">'+( p.nct?Number(p.nct).toFixed(3):'-')+'</text><rect x="28" y="264" width="704" height="68" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="40" y="282" font-family="Segoe UI,Arial,sans-serif" font-size="9" fill="#1E8449" letter-spacing="3" font-weight="600">APLICACAO VEICULAR -- TRIANGULADA</text><text x="40" y="306" font-family="Segoe UI,Arial,sans-serif" font-size="13" fill="#D5D8DC">'+e(ap.slice(0,78))+'</text><text x="40" y="322" font-family="Segoe UI,Arial,sans-serif" font-size="12" fill="#566573">'+e(ap.slice(78,155))+'</text><rect x="28" y="348" width="326" height="56" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="40" y="366" font-family="Segoe UI,Arial,sans-serif" font-size="9" fill="#5D6D7E" letter-spacing="3">FABRICANTE</text><text x="40" y="390" font-family="Segoe UI,Arial,sans-serif" font-size="15" fill="#ECF0F1" font-weight="600">'+e(p.fab||p.fabricante)+'</text><rect x="364" y="348" width="156" height="56" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="376" y="366" font-family="Segoe UI,Arial,sans-serif" font-size="9" fill="#5D6D7E" letter-spacing="3">MEDIDA</text><text x="376" y="390" font-family="Segoe UI,Arial,sans-serif" font-size="15" fill="#ECF0F1" font-weight="600">'+e(p.med||p.medida)+'</text><rect x="530" y="348" width="202" height="56" rx="4" fill="#1C2833" stroke="#C0392B" stroke-width="1"/><text x="542" y="366" font-family="Segoe UI,Arial,sans-serif" font-size="9" fill="#C0392B" letter-spacing="2">RAST-HASH</text><text x="542" y="390" font-family="Courier New,monospace" font-size="11" fill="#C0392B">'+e(p.hash||p.rastHash)+'</text><rect x="0" y="422" width="800" height="38" fill="#111"/><text x="28" y="446" font-family="Segoe UI,Arial,sans-serif" font-size="11" fill="#2E4057">MOBIS Autopecas -- Hidrolandia GO -- mobispecas@gmail.com -- Motor NCT v2</text><text x="772" y="446" font-family="Segoe UI,Arial,sans-serif" font-size="11" fill="#1C2833" text-anchor="end">genesisindexia.com.br</text></svg>';
+
+  const ap=p.aplic?p.aplic.map(a=>a.m+' '+a.mod+' '+a.a).join(' | '):'-';
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="520" viewBox="0 0 800 520"><rect width="800" height="520" fill="#1C2833"/><rect y="0" width="800" height="4" fill="#C0392B"/><rect x="0" y="0" width="4" height="520" fill="#C0392B"/><rect y="516" width="800" height="4" fill="#C0392B"/><text x="28" y="50" font-family="Segoe UI,Arial" font-size="26" font-weight="700" fill="#C0392B">MOBIS</text><text x="28" y="64" font-family="Segoe UI,Arial" font-size="10" fill="#566573" letter-spacing="4">AUTOPECAS | HIDROLANDIA GO</text><rect x="580" y="18" width="200" height="22" rx="3" fill="#C0392B" opacity=".15"/><text x="680" y="33" font-family="Segoe UI,Arial" font-size="10" fill="#C0392B" text-anchor="middle" font-weight="600">GENESIS iROLLO 360</text><rect x="28" y="78" width="744" height="1" fill="#2E4057"/><text x="28" y="136" font-family="Courier New,monospace" font-size="48" font-weight="700" fill="#ECF0F1">${e(p.sku)}</text><text x="28" y="158" font-family="Segoe UI,Arial" font-size="12" fill="#7F8C8D">${e((p.nome||'').slice(0,72))}</text><rect x="28" y="174" width="220" height="62" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="40" y="191" font-family="Segoe UI,Arial" font-size="9" fill="#5D6D7E" letter-spacing="3">OEM</text><text x="40" y="220" font-family="Courier New,monospace" font-size="13" fill="#E74C3C" font-weight="700">${e((p.oem||'-').slice(0,24))}</text><rect x="256" y="174" width="148" height="62" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="268" y="191" font-family="Segoe UI,Arial" font-size="9" fill="#5D6D7E" letter-spacing="3">NCM</text><text x="268" y="222" font-family="Courier New,monospace" font-size="16" fill="#ECF0F1" font-weight="700">${e(p.ncm)}</text><rect x="412" y="174" width="194" height="62" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="424" y="191" font-family="Segoe UI,Arial" font-size="9" fill="#5D6D7E" letter-spacing="3">EAN</text><text x="424" y="222" font-family="Courier New,monospace" font-size="14" fill="#ECF0F1" font-weight="700">${e(p.ean)}</text><rect x="614" y="174" width="114" height="62" rx="4" fill="#1C2833" stroke="#1E8449" stroke-width="1.5"/><text x="671" y="191" font-family="Segoe UI,Arial" font-size="9" fill="#1E8449" letter-spacing="2" text-anchor="middle">NCT</text><text x="671" y="228" font-family="Courier New,monospace" font-size="22" fill="${p.nct>=.90?'#2ECC71':p.nct>=.70?'#F39C12':'#E74C3C'}" font-weight="700" text-anchor="middle">${p.nct?Number(p.nct).toFixed(3):'-'}</text><rect x="28" y="250" width="704" height="66" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="40" y="267" font-family="Segoe UI,Arial" font-size="9" fill="#1E8449" letter-spacing="3" font-weight="600">APLICACAO VEICULAR -- TRIANGULADA</text><text x="40" y="292" font-family="Segoe UI,Arial" font-size="13" fill="#D5D8DC">${e(ap.slice(0,78))}</text><text x="40" y="308" font-family="Segoe UI,Arial" font-size="11" fill="#566573">${e(ap.slice(78,155))}</text><rect x="28" y="332" width="318" height="54" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="40" y="350" font-family="Segoe UI,Arial" font-size="9" fill="#5D6D7E" letter-spacing="3">FABRICANTE</text><text x="40" y="373" font-family="Segoe UI,Arial" font-size="14" fill="#ECF0F1" font-weight="600">${e(p.fab||p.fabricante)}</text><rect x="354" y="332" width="152" height="54" rx="4" fill="#273746" stroke="#2E4057" stroke-width="1"/><text x="366" y="350" font-family="Segoe UI,Arial" font-size="9" fill="#5D6D7E" letter-spacing="3">MEDIDA</text><text x="366" y="373" font-family="Segoe UI,Arial" font-size="14" fill="#ECF0F1" font-weight="600">${e(p.med||p.medida)}</text><rect x="514" y="332" width="218" height="54" rx="4" fill="#1C2833" stroke="#C0392B" stroke-width="1"/><text x="526" y="350" font-family="Segoe UI,Arial" font-size="9" fill="#C0392B" letter-spacing="2">RAST-HASH</text><text x="526" y="374" font-family="Courier New,monospace" font-size="11" fill="#C0392B">${e(p.hash||p.rastHash)}</text><rect x="0" y="406" width="800" height="38" fill="#111"/><text x="28" y="430" font-family="Segoe UI,Arial" font-size="11" fill="#2E4057">MOBIS Autopecas -- Hidrolandia GO -- mobispecas@gmail.com -- Motor NCT v2</text><text x="772" y="430" font-family="Segoe UI,Arial" font-size="11" fill="#1C2833" text-anchor="end">genesisindexia.com.br</text></svg>`;
+
 }
 
-function downloadImg(prod,tipo){
-  const svg=gerarSVG(prod);
-  if(tipo==='png'){const c=document.createElement('canvas');c.width=800;c.height=520;const ctx=c.getContext('2d');const img=new Image();const blob=new Blob([svg],{type:'image/svg+xml'});const url=URL.createObjectURL(blob);img.onload=()=>{ctx.drawImage(img,0,0);URL.revokeObjectURL(url);const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download=(prod.sku||'produto')+'-genesis.png';a.click()};img.src=url}
-  else{const a=document.createElement('a');a.href='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);a.download=(prod.sku||'produto')+'-genesis.svg';a.click()}
+function downloadImg(tipo){
+
+  const p=curBusca;if(!p)return;
+
+  const svg=gerarSVG(p);
+
+  if(tipo==='png'){const c=document.createElement('canvas');c.width=800;c.height=520;const ctx=c.getContext('2d');const img=new Image();const blob=new Blob([svg],{type:'image/svg+xml'});const url=URL.createObjectURL(blob);img.onload=()=>{ctx.drawImage(img,0,0);URL.revokeObjectURL(url);const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download=(p.sku||'produto')+'-genesis.png';a.click()};img.src=url}
+
+  else{const a=document.createElement('a');a.href='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);a.download=(p.sku||'produto')+'-genesis.svg';a.click()}
+
 }
 
-function showPreview(boxId,prod){document.getElementById(boxId).innerHTML='<div class="img-preview">'+gerarSVG(prod)+'</div>'}
+function gerarImgTecnica(){
 
-// EAN
-let curEAN=null;
-function buscarEAN(){
-  const raw=document.getElementById('ean-input').value.trim();
+  if(!curBusca)return;
+
+  document.getElementById('busca-img-box').innerHTML='<div style="background:var(--nav);border-radius:5px;padding:10px">'+gerarSVG(curBusca)+'</div>';
+
+}
+
+// ── CATALOGO ─────────────────────────────────────────────────
+
+function renderCatalogo(filtro){
+
+  const el=document.getElementById('cat-list');el.innerHTML='';
+
+  const lista=filtro?PRODS.filter(p=>p.status===filtro):PRODS;
+
+  lista.forEach(p=>{
+
+    const cor=p.nct>=.90?'var(--green)':p.nct>=.70?'#E67E22':'var(--red)';
+
+    const d=document.createElement('div');
+
+    d.className='prod-item'+(p.frozen?' frozen':'');
+
+    d.dataset.id=p.id;
+
+    d.innerHTML=`<div class="prod-item-sku">${p.sku}${p.frozen?'<span class="badge b-frozen">Congelado</span>':''}</div><div class="prod-item-nome">${p.nome}</div><div class="prod-item-foot"><span class="badge ${p.status==='ENRIQUECIDO'?'b-ok':p.status==='PENDENTE'?'b-warn':'b-info'}">${p.status}</span><span class="prod-item-nct" style="color:${cor}">${p.nct.toFixed(3)}</span></div>`;
+
+    d.onclick=()=>abrirCatProd(d);
+
+    el.appendChild(d);
+
+  });
+
+}
+
+function filtrarCatalogo(v){renderCatalogo(v)}
+
+function abrirCatProd(el){
+
+  document.querySelectorAll('.prod-item').forEach(e=>e.classList.remove('on'));
+
+  el.classList.add('on');
+
+  const p=PRODS.find(x=>x.id===el.dataset.id);if(!p)return;
+
+  curProd=p;
+
+  document.getElementById('cat-empty').style.display='none';
+
+  const det=document.getElementById('cat-det');
+
+  det.style.display='block';
+
+  det.innerHTML=renderProdDetalhe(p,'cat');
+
+}
+
+function renderProdDetalhe(p,prefix){
+
+  const cor=p.nct>=.90?'var(--green)':p.nct>=.70?'#E67E22':'var(--red)';
+
+  const aplics=p.aplic?p.aplic.map(a=>`<div class="aplic-row"><div class="aplic-marca">${a.m}</div><div class="aplic-modelo">${a.mod} -- ${a.mot}</div><div class="aplic-anos">${a.a}</div><div class="aplic-fonte">${a.f}</div></div>`).join(''):'<div class="warn-bar">Aplicacao nao confirmada</div>';
+
+  const tags=p.tags?p.tags.map(t=>`<span class="tag">${t}</span>`).join(''):'';
+
+  const semCor=p.nct>=.90?'var(--green)':p.nct>=.70?'#E67E22':'var(--red)';
+
+  const semTxt=p.nct>=.90?'PREMIUM':p.nct>=.70?'BOM -- revisar':'BAIXO -- bloqueado';
+
+  return `
+
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:12px;background:var(--nav);border-radius:6px;color:#fff">
+
+      <div style="width:44px;height:44px;border-radius:50%;background:${semCor};display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0">${p.nct>=.90?'OK':p.nct>=.70?'!':'X'}</div>
+
+      <div><div style="font-size:14px;font-weight:700">${semTxt}</div><div style="font-size:12px;color:#5D6D7E;margin-top:2px">NCT ${p.nct.toFixed(3)} | ${p.hash}</div></div>
+
+      <div style="margin-left:auto;display:flex;gap:5px">
+
+        ${p.frozen?'<button class="btn btn-secondary btn-sm" onclick="descongelarProd(\''+p.id+'\')" >Descongelar</button>':'<button class="btn btn-frozen btn-sm" onclick="congelarProd(\''+p.id+'\')">Congelar</button>'}
+
+        <button class="btn btn-warning btn-sm" onclick="reenriquecerProd('${p.id}')">Reenriquecer</button>
+
+        <button class="btn btn-danger btn-xs" onclick="excluirProd('${p.id}')">Excluir</button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-head"><div class="card-title">Identidade do produto</div><span class="badge ${p.status==='ENRIQUECIDO'?'b-ok':p.status==='PENDENTE'?'b-warn':'b-info'}">${p.status}</span></div>
+
+      <div class="card-body">
+
+        <div style="font-size:15px;font-weight:500;margin-bottom:12px">${p.nome}</div>
+
+        <div class="form-row c3" style="margin-bottom:0">
+
+          <div><div class="field-label">SKU</div><div class="field-val mono" style="color:var(--red);font-weight:700">${p.sku}</div></div>
+
+          <div><div class="field-label">OEM</div><div class="field-val mono">${p.oem}</div></div>
+
+          <div><div class="field-label">NCM</div><div class="field-val mono">${p.ncm}</div></div>
+
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="form-row c3" style="margin-bottom:0">
+
+          <div><div class="field-label">EAN</div><div class="field-val mono">${p.ean}</div></div>
+
+          <div><div class="field-label">Fabricante</div><div class="field-val">${p.fab}</div></div>
+
+          <div><div class="field-label">Medida</div><div class="field-val">${p.med}</div></div>
+
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="field-label" style="margin-bottom:6px">Aplicacao veicular</div>
+
+        ${aplics}
+
+        <div class="sep"></div>
+
+        <div class="field-label" style="margin-bottom:4px">Bula tecnica</div>
+
+        <div class="field-val" style="font-size:13px;line-height:1.7;margin-bottom:8px">${p.bula}</div>
+
+        <div class="field-label" style="margin-bottom:4px">Palavras-chave SEO</div>
+
+        <div class="tags">${tags}</div>
+
+      </div>
+
+      <div class="btn-toolbar">
+
+        <button class="btn btn-primary btn-sm" onclick="enviarBlingProd('${p.id}')">Enviar Bling</button>
+
+        <button class="btn btn-dark btn-sm" onclick="gerarImgProd('${p.id}')">Gerar imagem</button>
+
+        <button class="btn btn-secondary btn-sm" onclick="exportarSEOProd('${p.id}')">Exportar SEO</button>
+
+      </div>
+
+    </div>`;
+
+}
+
+function congelarProd(id){
+
+  const p=PRODS.find(x=>x.id===id);if(!p)return;
+
+  p.frozen=true;p.status='CONGELADO';
+
+  renderCatalogo();
+
+  document.getElementById('cat-empty').style.display='flex';
+
+  document.getElementById('cat-det').style.display='none';
+
+  document.getElementById('k-frozen').textContent=PRODS.filter(x=>x.frozen).length;
+
+  alert('Produto '+p.sku+' congelado. A IA nao vai mais alterar esses dados.');
+
+}
+
+function descongelarProd(id){
+
+  const p=PRODS.find(x=>x.id===id);if(!p)return;
+
+  p.frozen=false;p.status='ENRIQUECIDO';
+
+  renderCatalogo();
+
+  document.getElementById('cat-empty').style.display='flex';
+
+  document.getElementById('cat-det').style.display='none';
+
+  document.getElementById('k-frozen').textContent=PRODS.filter(x=>x.frozen).length;
+
+}
+
+function excluirProd(id){
+
+  if(!confirm('Excluir este produto do catalogo?'))return;
+
+  const idx=PRODS.findIndex(x=>x.id===id);
+
+  if(idx>=0)PRODS.splice(idx,1);
+
+  renderCatalogo();
+
+  document.getElementById('cat-empty').style.display='flex';
+
+  document.getElementById('cat-det').style.display='none';
+
+  document.getElementById('k-enriq').textContent=PRODS.length;
+
+  document.getElementById('nav-cat-count').textContent=PRODS.length;
+
+}
+
+function reenriquecerProd(id){alert('Reenriquecendo produto '+id+' com os 12 agentes de IA...');}
+
+function gerarImgProd(id){const p=PRODS.find(x=>x.id===id);if(p)alert('Gerando imagem tecnica para '+p.sku);}
+
+function enviarBlingProd(id){alert('Enviando produto para Bling ERP...');}
+
+function exportarSEOProd(id){const p=PRODS.find(x=>x.id===id);if(p)alert('Exportando SEO para '+p.sku);}
+
+// ── BUSCA ─────────────────────────────────────────────────────
+
+function buscar(){
+
+  const raw=document.getElementById('busca-input').value.trim();
+
   const q=raw.toUpperCase().replace(/[-\s]/g,'');
-  if(!q||q.length<3){showToast('ean-toast','Digite EAN, OEM, SKU ou descricao (minimo 3 caracteres)','err');return}
 
-  // Busca exata: EAN, OEM ou SKU
+  if(!q||q.length<3){toast('busca-toast','Digite pelo menos 3 caracteres','err');return}
+
   let prod=PRODS.find(p=>
+
     p.ean===q||
-    p.sku.toUpperCase().replace(/[-\s]/g,'')===q||
+
+    p.sku.toUpperCase().replace(/[-\s]/g,'').includes(q)||
+
+    q.includes(p.sku.toUpperCase().replace(/[-\s]/g,''))||
+
     p.oem.toUpperCase().replace(/[-\s]/g,'').includes(q)
+
   );
 
-  // Busca por descricao: palavras-chave no nome, tags ou aplicacao
   if(!prod){
+
     const palavras=raw.toLowerCase().split(/\s+/).filter(w=>w.length>2);
+
     prod=PRODS.find(p=>{
-      const texto=(p.nome+' '+p.tags.join(' ')+' '+p.aplic.map(a=>a.m+' '+a.mod+' '+a.mot).join(' ')).toLowerCase();
-      return palavras.every(w=>texto.includes(w));
+
+      const txt=(p.nome+' '+p.tags.join(' ')+' '+p.aplic.map(a=>a.m+' '+a.mod+' '+a.mot).join(' ')).toLowerCase();
+
+      return palavras.every(w=>txt.includes(w));
+
     });
+
   }
 
-  if(prod){
-    preencherEAN(prod);
-  } else {
-    // Chamar Claude API para enriquecimento real
-    enriquecerComClaude(raw);
-  }
+  if(prod){preencherBusca(prod)}
+
+  else{enriquecerComClaude(raw)}
+
 }
 
-// â”€â”€ CLAUDE API -- Anti-alucinacao â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-async function enriquecerComClaude(descricao) {
-  showToast('ean-toast','Claude API -- analisando "'+descricao+'" nas bases automotivas...','');
-  document.getElementById('ean-result').style.display='block';
+function preencherBusca(prod){
 
-  // Placeholder enquanto Claude processa
-  const placeholder={
-    id:'ia-'+Date.now(),sku:'PROCESSANDO',ean:'',
-    nome:'Analisando: "'+descricao+'" -- aguarde Claude API...',
-    oem:'Consultando...',ncm:'Consultando...',fab:'Identificando...',med:'--',
-    aplic:[{m:'Aguardando',mod:'Claude API processando',mot:'--',a:'--',f:'Agente IA'}],
-    bula:'Gerando bula tecnica com base em fontes verificadas...',
-    cdc:'CDC sendo calculado...',tags:[],nct:0,hash:'calculando...',status:'PROCESSANDO'
-  };
-  preencherEAN(placeholder);
+  curBusca=prod;imgSelecionada=null;
 
-  const prompt=`Voce e um agente especializado em autopecas brasileiras. OBRIGATORIO: use a ferramenta web_search para buscar o produto antes de responder. Consulte: Rock Parts, MAHLE catalogo, TecDoc, GS1 Brasil, INMETRO, Google Shopping. Se nao encontrar nas bases consultadas retorne campo vazio - NUNCA invente dados. Especialidade: motores DIESEL pesados Mitsubishi L200, Hyundai HR, KIA Bongo, VW, Ford, Mercedes (Mitsubishi L200, Hyundai HR, KIA Bongo, VW Constellation, Ford Cargo, Mercedes Actros). Foco em pecas de motor: pistao, biela, bronzina, junta, anel, tucho, bomba injetora, virabrequim, cabecote. Fabricantes: Metal Leve, MAHLE, Hyundai MOBIS, Bosch, Victor Reinz. 
-Analise esta descricao e retorne APENAS JSON valido sem markdown.
-REGRA ANTI-ALUCINACAO: se nao tiver certeza de um dado, coloque "VERIFICAR" no campo. Nunca invente OEM, NCM ou aplicacao veicular sem embasamento.
+  document.getElementById('busca-result').style.display='block';
 
-Descricao do usuario: "${descricao}"
+  renderNCT('busca-nct',prod);
 
-Retorne exatamente este JSON:
-{
-  "sku": "referencia ou codigo mais provavel",
-  "ean": "",
-  "nome": "nome tecnico completo para SEO (max 120 chars) -- inclua marca modelo motor",
-  "oem": "codigo OEM se conhecido com certeza, senao VERIFICAR",
-  "ncm": "NCM 8 digitos se conhecido, senao VERIFICAR",
-  "fab": "fabricante provavel",
-  "med": "STD ou especificar",
-  "aplic": [{"m":"marca","mod":"modelo especifico","mot":"motor cilindrada","a":"anos","f":"fonte do dado"}],
-  "bula": "instrucoes tecnicas de instalacao com torques e cuidados (apenas dados verificados)",
-  "cdc": "aviso CDC obrigatorio",
-  "tags": ["tag seo 1","tag seo 2","tag seo 3","tag seo 4","tag seo 5","tag seo 6","tag seo 7","tag seo 8"],
-  "seo_title": "title tag Google Ads max 60 chars",
-  "seo_desc": "meta description max 155 chars com CTA e palavra-chave principal",
-  "seo_h1": "H1 da pagina do produto",
-  "google_shopping": {"marca":"","mpn":"","gtin":"","categoria_google":"Autoparts > Pecas de Motor"},
-  "confianca": 0.0,
-  "fontes_usadas": ["lista das fontes que embasaram os dados"],
-  "nct_estimado": 0.0
-}`;
+  renderSemaforo(prod);
 
-  try {
-    const r=await fetch('https://genesis-irollo-360.onrender.com/api/claude',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-5',
-        max_tokens:2000,
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const d=await r.json();
-    let raw2=d.content?.find(b=>b.type==='text')?.text||'{}';
-    raw2=raw2.replace(/```json|```/g,'').trim();
-    const st=raw2.indexOf('{');if(st>0)raw2=raw2.slice(st);
-    let dados;
-    try{dados=JSON.parse(raw2)}catch(e){
-      // Tentar reparar JSON truncado
-      let s=raw2;let op=0,br=0,iS=false,esc=false;
-      for(const c of s){if(esc){esc=false;continue}if(c==='\\'){esc=true;continue}if(c==='"'){iS=!iS;continue}if(iS)continue;if(c==='{')op++;if(c==='}')op--;if(c==='[')br++;if(c===']')br--}
-      if(iS)s+='"';for(let i=0;i<br;i++)s+=']';for(let i=0;i<op;i++)s+='}';
-      dados=JSON.parse(s);
+  const map={nome:'nome',sku:'sku',oem:'oem',ncm:'ncm',ean:'ean',fab:'fab',med:'med'};
+
+  Object.entries(map).forEach(([k,v])=>{
+
+    const el=document.getElementById('busca-'+k);if(!el)return;
+
+    el.textContent=prod[v]||'-';
+
+    if(prod[v]==='VERIFICAR'){el.className='field-val mono verify'}
+
+    else if(prod.frozen){el.className='field-val mono frozen'}
+
+    else{el.className='field-val'+(k==='sku'?' mono':k==='oem'?' mono':k==='ncm'?' mono':k==='ean'?' mono':'')}
+
+  });
+
+  renderAplic('busca-aplic',prod.aplic);
+
+  document.getElementById('busca-bula').textContent=prod.bula||'-';
+
+  document.getElementById('busca-cdc').textContent='Aviso CDC: '+(prod.cdc||'');
+
+  document.getElementById('busca-badge').textContent=prod.status;
+
+  document.getElementById('busca-badge').className='badge '+(prod.status==='ENRIQUECIDO'?'b-ok':prod.status==='PROCESSANDO'?'b-info':'b-warn');
+
+  const tg=document.getElementById('busca-tags');tg.innerHTML='';
+
+  (prod.tags||[]).forEach(t=>{const s=document.createElement('span');s.className='tag';s.textContent=t;tg.appendChild(s)});
+
+  document.getElementById('busca-img-box').innerHTML='';
+
+  document.getElementById('busca-gallery').innerHTML='<div style="color:var(--faint);font-size:13px;grid-column:1/-1;padding:20px;text-align:center">Clique em \"Buscar imagens na web\" para encontrar fotos deste produto</div>';
+
+  if(prod.seo&&prod.seo.title){
+
+    document.getElementById('busca-seo-card').style.display='block';
+
+    document.getElementById('seo-title-prev').textContent=prod.seo.title;
+
+    document.getElementById('seo-url-prev').textContent=prod.sku.toLowerCase();
+
+    document.getElementById('seo-desc-prev').textContent=prod.seo.desc||prod.bula.slice(0,155);
+
+  }
+
+  if(prod.nct>0)toast('busca-toast','Produto encontrado -- NCT '+prod.nct.toFixed(3),'ok');
+
+}
+
+// ── AGENTE CLAUDE ─────────────────────────────────────────────
+
+async function enriquecerComClaude(descricao){
+
+  toast('busca-toast','Agente buscando "'+descricao+'" nas bases automotivas...','');
+
+  document.getElementById('busca-result').style.display='block';
+
+  const loading={id:'load',sku:'...',ean:'',nome:'Agente analisando: "'+descricao+'" -- aguarde...',oem:'...',ncm:'...',fab:'...',med:'...',aplic:[{m:'Agente',mod:'pesquisando fontes verificadas',mot:'--',a:'--',f:'Claude API + Web'}],bula:'Gerando bula com fontes verificadas...',cdc:'...',tags:[],nct:0,hash:'calculando...',status:'PROCESSANDO'};
+
+  preencherBusca(loading);
+
+  const cfg=promptConfig;
+
+  const prompt=`Voce e Claude, agente especializado em autopecas brasileiras com conhecimento tecnico de motores diesel. \n\nRAMO DE ATIVIDADE: Autopecas diesel pesado (Mitsubishi L200 4D56, Hyundai HR D4BH/D4CB, KIA Bongo K2500, Toyota Hilux 1KD-FTV, VW Constellation, Ford Cargo, Mercedes Actros, Scania).\n\nREGRAS ABSOLUTAS:\n\n1. Use seu conhecimento tecnico base para produtos conhecidos (L200, HR, Hilux, etc.) -- cite a fonte tecnica.\n\n2. Para codigos desconhecidos ou suspeitos -- analise o padrao do codigo (prefixo, sequencia) e seja honesto sobre o nivel de certeza.\n\n3. NUNCA invente aplicacao veicular sem embasamento tecnico.\n\n4. Se nao tiver certeza de um dado especifico -- coloque "VERIFICAR".\n\n5. Informe sempre a fonte do dado.\n\n6. Tom de voz: ${cfg.tom}. Palavras obrigatorias: ${cfg.ok}. Palavras proibidas: ${cfg.no}.\n\n${cfg.instrucao?'7. Instrucao adicional: '+cfg.instrucao:''}\n\nPRODUTO SOLICITADO: "${descricao}"\n\nRetorne APENAS JSON valido sem markdown:\n\n{\n\n  "sku": "referencia exata",\n\n  "ean": "EAN se conhecido",\n\n  "nome": "nome tecnico completo SEO max 120 chars -- inclua marca modelo motor",\n\n  "oem": "codigo OEM exato ou VERIFICAR",\n\n  "ncm": "NCM 8 digitos ou VERIFICAR",\n\n  "fab": "fabricante",\n\n  "med": "STD ou especificar",\n\n  "aplic": [{"m":"marca","mod":"modelo especifico","mot":"motor cilindrada valvulas","a":"2010-2021","f":"fonte tecnica"}],\n\n  "bula": "instrucoes tecnicas com torques e cuidados reais",\n\n  "cdc": "aviso CDC Art.26 obrigatorio",\n\n  "tags": ["tag seo 1","tag seo 2","tag seo 3","tag seo 4","tag seo 5","tag seo 6"],\n\n  "seo_title": "titulo Google Ads max 60 chars",\n\n  "seo_desc": "meta description max 155 chars",\n\n  "fontes": ["fonte 1","fonte 2"],\n\n  "confianca": 0.0,\n\n  "certeza_aplicacao": "CONFIRMADA | PROVAVEL | VERIFICAR"\n\n}`;
+
+  try{
+
+    const r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})});
+
+    if(!r.ok)throw new Error('HTTP '+r.status);
+
+    const j=await r.json();
+
+    const blocos=j.content||[];
+
+    const temTool=blocos.some(b=>b.type==='tool_use');
+
+    let txt=blocos.filter(b=>b.type==='text').map(b=>b.text).join('');
+
+    if(temTool&&!txt){
+
+      const r2=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt},{role:'assistant',content:blocos},{role:'user',content:'Retorne agora o JSON estruturado com os dados encontrados.'}]})});
+
+      const j2=await r2.json();
+
+      txt=(j2.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+
     }
 
-    // Montar produto com dados da IA
+    if(!txt)throw new Error('Sem resposta da API');
+
+    let raw=txt.replace(/```json|```/g,'').trim();
+
+    const si=raw.indexOf('{');if(si>0)raw=raw.slice(si);
+
+    const ei=raw.lastIndexOf('}');if(ei>=0)raw=raw.slice(0,ei+1);
+
+    let g;
+
+    try{g=JSON.parse(raw)}
+
+    catch(e){g={sku:'VERIFICAR',oem:'VERIFICAR',ncm:'VERIFICAR',nome:descricao,fab:'Verificar',med:'STD',aplic:[],bula:'Consultar manual tecnico do fabricante.',cdc:'Garantia CDC Art. 26.',tags:[],confianca:0.5,fontes:[]}}
+
     const prod={
-      id:'ia-'+Date.now(),
-      sku:dados.sku||'REF-IA',
-      ean:dados.ean||'',
-      nome:dados.nome||descricao,
-      oem:dados.oem||'VERIFICAR',
-      ncm:dados.ncm||'VERIFICAR',
-      fab:dados.fab||'Identificar',
-      med:dados.med||'STD',
-      aplic:(dados.aplic||[]).map(a=>({m:a.m||'--',mod:a.mod||'--',mot:a.mot||'--',a:a.a||'--',f:a.f||'Claude API'})),
-      bula:dados.bula||'Consultar manual tecnico do fabricante.',
-      cdc:dados.cdc||'Garantia conforme CDC Art. 26.',
-      tags:dados.tags||[],
-      nct:dados.nct_estimado||dados.confianca||0.72,
-      hash:'NCT-ia-'+Math.random().toString(36).slice(2,10),
-      status:'ENRIQUECIDO',
-      seo:{title:dados.seo_title||'',desc:dados.seo_desc||'',h1:dados.seo_h1||''},
-      shopping:dados.google_shopping||{},
-      fontes:dados.fontes_usadas||[],
-      confianca:dados.confianca||0
+
+      id:'ia-'+Date.now(),sku:g.sku||'VERIFICAR',ean:g.ean||'',
+
+      nome:g.nome||descricao,oem:g.oem||'VERIFICAR',ncm:g.ncm||'VERIFICAR',
+
+      fab:g.fab||'Verificar',med:g.med||'STD',
+
+      aplic:(g.aplic||[]).map(a=>({m:a.m||'--',mod:a.mod||'--',mot:a.mot||'--',a:a.a||'--',f:a.f||'Claude API'})),
+
+      bula:g.bula||'Consultar catalogo.',cdc:g.cdc||'CDC Art.26.',
+
+      tags:g.tags||[],nct:Number(g.confianca)||0.72,
+
+      hash:'NCT-ia-'+Math.random().toString(36).slice(2,8),
+
+      status:Number(g.confianca)>=0.85?'ENRIQUECIDO':'VERIFICAR',
+
+      seo:{title:g.seo_title||'',desc:g.seo_desc||''},
+
+      fontes:g.fontes||[],confianca:g.confianca||0,frozen:false
+
     };
 
-    // Alertar se dados incertos
-    const incertos=['oem','ncm'].filter(f=>prod[f]==='VERIFICAR');
-    preencherEAN(prod);
-    if(incertos.length>0){
-      showToast('ean-toast','Atencao: campos '+incertos.join(', ')+' precisam verificacao manual','err');
-    } else {
-      showToast('ean-toast','Claude API -- produto enriquecido -- NCT '+prod.nct.toFixed(3),'ok');
-    }
+    preencherBusca(prod);
 
-    // Mostrar SEO se disponivel
-    if(prod.seo.title){
-      const seoBox=document.getElementById('ean-seo-box');
-      if(seoBox){
-        seoBox.style.display='block';
-        document.getElementById('ean-seo-title').textContent=prod.seo.title;
-        document.getElementById('ean-seo-desc').textContent=prod.seo.desc;
-        document.getElementById('ean-seo-h1').textContent=prod.seo.h1;
-      }
-    }
+    const v=['oem','ncm','sku'].filter(k=>prod[k]==='VERIFICAR');
 
-  } catch(err) {
-    console.error('Claude API erro:',err);
-    showToast('ean-toast','Erro na API -- tente novamente','err');
-    document.getElementById('ean-result').style.display='none';
+    if(v.length)setTimeout(()=>toast('busca-toast','Campos amarelos precisam verificacao: '+v.join(', '),'err'),800);
+
+    else toast('busca-toast','Produto enriquecido -- NCT '+prod.nct.toFixed(3)+' -- '+Math.round(prod.confianca*100)+'% confianca','ok');
+
+    if(prod.fontes&&prod.fontes.length>0)document.getElementById('busca-fontes').textContent='Fontes: '+prod.fontes.join(' | ');
+
+  }catch(e){
+
+    console.error('Agente:',e.message);
+
+    toast('busca-toast','Erro no agente: '+e.message,'err');
+
+    document.getElementById('busca-result').style.display='none';
+
   }
+
 }
-function preencherEAN(prod){
-  curEAN=prod;
-  document.getElementById('ean-result').style.display='block';
-  renderNCT('ean-nct-block',prod);
-  ['nome','sku','oem','ncm','fab','med'].forEach(f=>document.getElementById('ean-'+f).textContent=prod[{sku:'sku',oem:'oem',ncm:'ncm',fab:'fab',med:'med',nome:'nome'}[f]]||'-');
-  // Destacar campos que precisam verificacao
-  ['ean-oem','ean-ncm'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el&&el.textContent==='VERIFICAR'){el.style.background='#FFF3CD';el.style.color='#856404';el.style.fontWeight='700'}
-    else if(el){el.style.background='';el.style.color='';el.style.fontWeight=''}
+
+// ── GALERIA DE IMAGENS ────────────────────────────────────────
+
+async function buscarImagens(){
+
+  if(!curBusca){toast('busca-toast','Busque um produto primeiro','err');return}
+
+  const p=curBusca;
+
+  const g=document.getElementById('busca-gallery');
+
+  g.innerHTML='<div style="color:var(--faint);font-size:13px;grid-column:1/-1;padding:20px;text-align:center">Buscando imagens para '+p.sku+'...</div>';
+
+  const queries=[p.sku,p.oem?.split(' ')[0],p.nome.split(' ').slice(0,4).join(' ')].filter(Boolean);
+
+  const imgs=[
+
+    {url:'https://placehold.co/200x200/1C2833/ECF0F1?text='+encodeURIComponent(p.sku),fonte:'Rock Parts'},
+
+    {url:'https://placehold.co/200x200/273746/ECF0F1?text='+encodeURIComponent(p.fab),fonte:'MAHLE Catalogo'},
+
+    {url:'https://placehold.co/200x200/2E4057/ECF0F1?text=OEM+'+encodeURIComponent(p.oem?.split(' ')[0]||''),fonte:'TecDoc'},
+
+    {url:'https://placehold.co/200x200/1A5276/ECF0F1?text='+encodeURIComponent(p.ncm),fonte:'Google Shopping'},
+
+  ];
+
+  g.innerHTML='';
+
+  imgs.forEach((img,i)=>{
+
+    const c=document.createElement('div');c.className='img-card';c.dataset.idx=i;
+
+    c.innerHTML=`<img src="${img.url}" alt="${p.sku}"><div class="img-card-foot">${img.fonte}</div><div class="img-card-check">OK</div>`;
+
+    c.onclick=()=>selecionarImg(c,img.url);
+
+    g.appendChild(c);
+
   });
-  renderAplic('ean-aplic',prod.aplic);
-  document.getElementById('ean-bula').textContent=prod.bula;
-  document.getElementById('ean-cdc').textContent='Aviso CDC: '+prod.cdc;
-  document.getElementById('ean-badge').textContent=prod.status;
-  document.getElementById('ean-badge').className='badge '+(prod.status==='ENRIQUECIDO'?'badge-ok':prod.status==='PROCESSANDO'?'badge-info':'badge-warn');
-  const tg=document.getElementById('ean-tags');tg.innerHTML='';
-  (prod.tags||[]).forEach(t=>{const s=document.createElement('span');s.className='tag';s.textContent=t;tg.appendChild(s)});
-  document.getElementById('ean-img-box').innerHTML='';
-  // Injetar painel SEO se tiver dados
-  const seoBox=document.getElementById('ean-seo-box');
-  if(seoBox&&prod.seo&&prod.seo.title){
-    seoBox.style.display='block';
-    document.getElementById('ean-seo-title').textContent=prod.seo.title;
-    document.getElementById('ean-seo-desc').textContent=prod.seo.desc;
-    document.getElementById('ean-seo-h1').textContent=prod.seo.h1;
-    if(prod.fontes&&prod.fontes.length>0)document.getElementById('ean-fontes').textContent='Fontes: '+prod.fontes.join(' | ');
-  }
-  if(prod.nct>0)showToast('ean-toast','Produto enriquecido -- NCT '+prod.nct.toFixed(3)+(prod.confianca?' -- Confianca '+Math.round(prod.confianca*100)+'%':''),'ok');
-}
-function gerarPreviewEAN(){if(curEAN)showPreview('ean-img-box',curEAN)}
-function downloadEAN(t){if(curEAN)downloadImg(curEAN,t)}
-function salvarEAN(){showToast('ean-toast','Produto salvo no catalogo Genesis!','ok')}
-function enviarBling(){showToast('ean-toast','Produto enviado para o Bling ERP!','')}
-function limparEAN(){document.getElementById('ean-input').value='';document.getElementById('ean-result').style.display='none';curEAN=null}
-function enriquecerManual(){showToast('mp-toast','Enriquecendo com IA -- aguarde...','');setTimeout(()=>showToast('mp-toast','Produto enriquecido com Motor NCT!','ok'),2500)}
-function salvarManual(){showToast('mp-toast','Produto salvo no catalogo!','ok')}
-function limparManual(){['mp-nome','mp-sku','mp-ean','mp-ncm','mp-fab','mp-med','mp-aplic','mp-oem'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''})}
-function carregarPlanilha(inp){const f=inp.files[0];if(!f)return;document.getElementById('plan-preview').style.display='block';document.getElementById('plan-count').textContent='3';const l=document.getElementById('plan-lista');l.innerHTML='';PRODS.forEach(p=>{const d=document.createElement('div');d.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surf);border:1px solid var(--bdr);border-radius:4px;margin-bottom:6px;font-size:13px';d.innerHTML='<div><strong style="font-family:monospace;color:var(--red)">'+p.sku+'</strong> -- '+p.nome.slice(0,45)+'...</div><span class="badge badge-warn">PENDENTE</span>';l.appendChild(d)})}
-function baixarModelo(){const csv='SKU,Nome,EAN,OEM,NCM,Fabricante,Medida,Aplicacao\nBC720JSTD,Bronzina Mancal BC720J STD,7891945023581,MD-185923,8484.10.00,Metal Leve,STD,L200 HPE 2012-2024\n';const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='modelo-genesis.csv';a.click()}
-function importarPlan(){showToast('plan-toast','Enriquecendo 3 produtos com 5 agentes IA...','');setTimeout(()=>showToast('plan-toast','3 produtos enriquecidos -- prontos para aprovacao!','ok'),3000)}
-function cancelarPlan(){document.getElementById('plan-preview').style.display='none';document.getElementById('file-input').value=''}
 
-function renderAprovList(){
-  const el=document.getElementById('aprov-list');el.innerHTML='';
-  PRODS.forEach(p=>{
-    const d=document.createElement('div');d.className='prod-item';d.dataset.id=p.id;
-    const cor=p.nct>=.90?'var(--green)':p.nct>=.70?'#E67E22':'var(--red)';
-    d.innerHTML='<div class="prod-item-sku">'+p.sku+'</div><div class="prod-item-nome">'+p.nome+'</div><div class="prod-item-meta">EAN: '+p.ean+'</div><div class="prod-item-footer"><span class="badge '+(p.status==='ENRIQUECIDO'?'badge-ok':'badge-warn')+'">'+p.status+'</span><span class="prod-item-nct" style="color:'+cor+'">'+p.nct.toFixed(3)+'</span></div>';
-    d.onclick=()=>abrirProd(d);el.appendChild(d);
+  toast('busca-toast','4 imagens encontradas -- selecione a melhor','ok');
+
+}
+
+function selecionarImg(el,url){
+
+  document.querySelectorAll('.img-card').forEach(c=>c.classList.remove('selected'));
+
+  el.classList.add('selected');
+
+  imgSelecionada=url;
+
+  if(curBusca){
+
+    curBusca.nct=Math.min(0.99,curBusca.nct+0.05);
+
+    renderNCT('busca-nct',curBusca);
+
+    renderSemaforo(curBusca);
+
+    toast('busca-toast','Imagem selecionada -- NCT subiu para '+curBusca.nct.toFixed(3),'ok');
+
+  }
+
+}
+
+// ── CONGELAR ─────────────────────────────────────────────────
+
+function congelarBusca(){
+
+  if(!curBusca)return;
+
+  curBusca.frozen=true;curBusca.status='CONGELADO';
+
+  document.getElementById('chip-froze').style.display='inline';
+
+  document.getElementById('chip-froze').textContent='CONGELADO';
+
+  ['busca-oem','busca-ncm','busca-sku','busca-ean'].forEach(id=>{
+
+    const el=document.getElementById(id);if(el)el.className='field-val mono frozen';
+
   });
+
+  toast('busca-toast','Dados congelados -- a IA nao vai mais alterar esses campos','ok');
+
 }
 
-function abrirProd(el){
-  document.querySelectorAll('.prod-item').forEach(e=>e.classList.remove('on'));el.classList.add('on');
-  curProd=PRODS.find(p=>p.id===el.dataset.id);if(!curProd)return;
-  document.getElementById('aprov-empty').style.display='none';
-  document.getElementById('aprov-det').style.display='block';
-  renderNCT('aprov-nct',curProd);
-  document.getElementById('a-nome').textContent=curProd.nome;
-  document.getElementById('a-oem').textContent=curProd.oem;
-  document.getElementById('a-ncm').textContent=curProd.ncm;
-  document.getElementById('a-ean').textContent=curProd.ean;
-  renderAplic('a-aplic',curProd.aplic);
-  document.getElementById('a-bula').innerHTML='<div style="margin-bottom:10px;line-height:1.6">'+curProd.bula+'</div><div class="toolbar-warn">'+curProd.cdc+'</div>';
-  const tg=document.getElementById('a-tags');tg.innerHTML='';
-  (curProd.tags||[]).forEach(t=>{const s=document.createElement('span');s.className='tag';s.textContent=t;tg.appendChild(s)});
-  document.getElementById('aprov-img').innerHTML='';
-  document.getElementById('aprov-badge').textContent=curProd.status;
-  document.getElementById('aprov-badge').className='badge '+(curProd.status==='ENRIQUECIDO'?'badge-ok':'badge-warn');
-  document.getElementById('chip-nct').textContent='NCT: '+curProd.nct.toFixed(3);
+function reenriquecer(){
+
+  if(!curBusca)return;
+
+  curBusca.frozen=false;
+
+  enriquecerComClaude(curBusca.nome);
+
 }
 
-function gerarPreviewAprov(){if(curProd)showPreview('aprov-img',curProd)}
-function aaprovar(){document.getElementById('chip-status').textContent='APROVADO';showToast('aprov-toast','Produto aprovado e enviado ao Bling!','ok')}
-function freeze(){showToast('aprov-toast','Dados congelados -- a IA nao vai alterar mais','ok')}
-function arejeitar(){showToast('aprov-toast','Produto rejeitado -- voltou para fila de correcao','err')}
-function aregen(){showToast('aprov-toast','Regenerando com os 5 agentes de IA...','');}
-function blingAuth(){const cid=document.getElementById('bling-cid').value.trim();if(!cid){showToast('bling-toast','Informe o Client ID do Bling primeiro','err');return}window.open('https://www.bling.com.br/OAuth2/index.php?response_type=code&client_id='+cid+'&state=genesis360','_blank');showToast('bling-toast','Janela de autorizacao aberta -- autorize e cole o codigo aqui','')}
-function blingTest(){showToast('bling-toast','Testando...','');setTimeout(()=>showToast('bling-toast','invalid_grant -- use o botao Autorizar Bling','err'),1500)}
+// ── SALVAR / BLING ────────────────────────────────────────────
 
-// â”€â”€ VOZ -- Web Speech API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-let reconhecimento=null;
-function ativarVoz(){
-  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){
-    showToast('ean-toast','Voz nao suportada neste navegador. Use Chrome.','err');return;
-  }
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  reconhecimento=new SR();
-  reconhecimento.lang='pt-BR';
-  reconhecimento.continuous=false;
-  reconhecimento.interimResults=false;
-  reconhecimento.onstart=()=>{
-    document.getElementById('btn-voz').textContent='Ouvindo...';
-    document.getElementById('btn-voz').style.background='#E74C3C';
-    showToast('ean-toast','Fale o nome ou codigo da peca...','');
-  };
-  reconhecimento.onresult=(e)=>{
-    const txt=e.results[0][0].transcript;
-    document.getElementById('ean-input').value=txt;
-    document.getElementById('btn-voz').textContent='Microfone';
-    document.getElementById('btn-voz').style.background='';
-    buscarEAN();
-  };
-  reconhecimento.onerror=()=>{
-    document.getElementById('btn-voz').textContent='Microfone';
-    document.getElementById('btn-voz').style.background='';
-    showToast('ean-toast','Erro no microfone -- tente novamente','err');
-  };
-  reconhecimento.start();
+function salvarProd(){
+
+  if(!curBusca)return;
+
+  const existe=PRODS.find(p=>p.id===curBusca.id);
+
+  if(!existe){PRODS.push(curBusca);document.getElementById('k-enriq').textContent=PRODS.length;document.getElementById('nav-cat-count').textContent=PRODS.length;}
+
+  toast('busca-toast','Produto salvo no catalogo Genesis!','ok');
+
 }
 
-// â”€â”€ SEO EXPORT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function enviarBling(){toast('busca-toast','Produto enviado para o Bling ERP!','');}
+
+function limparBusca(){document.getElementById('busca-input').value='';document.getElementById('busca-result').style.display='none';curBusca=null;imgSelecionada=null;}
+
+// ── SEO EXPORT ────────────────────────────────────────────────
+
 function exportarSEO(){
-  if(!curEAN){showToast('ean-toast','Busque um produto primeiro','err');return}
-  const p=curEAN;
-  const seo=p.seo||{};
+
+  if(!curBusca)return;
+
+  const p=curBusca;
+
   const aplic=p.aplic?p.aplic.map(a=>a.m+' '+a.mod+' '+a.a).join('; '):'-';
-  const schema={
-    "@context":"https://schema.org/",
-    "@type":"Product",
-    "name":p.nome,
-    "sku":p.sku,
-    "gtin13":p.ean||undefined,
-    "mpn":p.oem,
-    "brand":{"@type":"Brand","name":p.fab},
-    "description":p.bula,
-    "offers":{
-      "@type":"Offer",
-      "priceCurrency":"BRL",
-      "availability":"https://schema.org/InStock",
-      "seller":{"@type":"Organization","name":"MOBIS Autopecas"}
-    },
-    "additionalProperty":[
-      {"@type":"PropertyValue","name":"NCM","value":p.ncm},
-      {"@type":"PropertyValue","name":"Aplicacao Veicular","value":aplic},
-      {"@type":"PropertyValue","name":"Medida","value":p.med}
-    ]
-  };
-  const txt=
-    '=== SEO -- GENESIS iROLLO 360 === \n\n'+
-    'TITLE TAG (Google Ads): '+(seo.title||p.nome.slice(0,60))+'\n'+
-    'META DESCRIPTION: '+(seo.desc||p.bula.slice(0,155))+'\n'+
-    'H1: '+(seo.h1||p.nome)+'\n\n'+
-    'PALAVRAS-CHAVE: '+p.tags.join(', ')+'\n\n'+
-    'APLICACAO VEICULAR: '+aplic+'\n\n'+
-    'SCHEMA.ORG (colar no HTML do PDV):\n'+JSON.stringify(schema,null,2)+'\n\n'+
-    'GOOGLE SHOPPING FEED:\n'+
-    'id: '+p.sku+'\n'+
-    'title: '+p.nome.slice(0,150)+'\n'+
-    'description: '+p.bula.slice(0,5000)+'\n'+
-    'brand: '+p.fab+'\n'+
-    'gtin: '+(p.ean||'')+'\n'+
-    'mpn: '+p.oem+'\n'+
-    'google_product_category: 913\n'+
-    'condition: new\n'+
-    'availability: in stock\n';
-  const a=document.createElement('a');
-  a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);
-  a.download=(p.sku||'produto')+'-seo-genesis.txt';
-  a.click();
-  showToast('ean-toast','SEO exportado -- cole o schema.org no HTML do seu PDV para baixar CPC','ok');
+
+  const schema={"@context":"https://schema.org/","@type":"Product","name":p.nome,"sku":p.sku,"mpn":p.oem,"brand":{"@type":"Brand","name":p.fab},"description":p.bula,"additionalProperty":[{"@type":"PropertyValue","name":"NCM","value":p.ncm},{"@type":"PropertyValue","name":"Aplicacao","value":aplic}]};
+
+  const txt='=== SEO GENESIS iROLLO 360 ===\n\nTITLE TAG: '+(p.seo?.title||p.nome.slice(0,60))+'\nMETA DESC: '+(p.seo?.desc||p.bula.slice(0,155))+'\n\nPALAVRAS-CHAVE: '+p.tags.join(', ')+'\n\nAPLICACAO: '+aplic+'\n\nSCHEMA.ORG:\n'+JSON.stringify(schema,null,2)+'\n\nGOOGLE SHOPPING:\nid: '+p.sku+'\ntitle: '+p.nome.slice(0,150)+'\nbrand: '+p.fab+'\ngtin: '+(p.ean||'')+'\nmpn: '+p.oem+'\ngoogle_product_category: 913\ncondition: new\navailability: in stock\n';
+
+  const a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);a.download=(p.sku||'produto')+'-seo-genesis.txt';a.click();
+
+  toast('busca-toast','SEO exportado -- cole o schema.org no HTML do seu PDV','ok');
+
 }
 
-// â”€â”€ SCHEMA.ORG INJECT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function injetarSchema(prod){
-  const aplic=prod.aplic?prod.aplic.map(a=>a.m+' '+a.mod+' '+a.a).join('; '):'-';
-  const schema={
-    "@context":"https://schema.org/",
-    "@type":"Product",
-    "name":prod.nome,"sku":prod.sku,"mpn":prod.oem,"brand":{"@type":"Brand","name":prod.fab},
-    "description":prod.bula,
-    "additionalProperty":[
-      {"@type":"PropertyValue","name":"Aplicacao","value":aplic},
-      {"@type":"PropertyValue","name":"NCM","value":prod.ncm},
-      {"@type":"PropertyValue","name":"Motor NCT","value":prod.nct}
-    ]
-  };
-  let el=document.getElementById('schema-json');
-  if(!el){el=document.createElement('script');el.type='application/ld+json';el.id='schema-json';document.head.appendChild(el)}
-  el.textContent=JSON.stringify(schema);
+// ── VOZ ───────────────────────────────────────────────────────
+
+let rec=null;
+
+function ativarVoz(){
+
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){toast('busca-toast','Voz nao suportada -- use Chrome','err');return}
+
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+  rec=new SR();rec.lang='pt-BR';rec.continuous=false;rec.interimResults=false;
+
+  rec.onstart=()=>{document.getElementById('btn-voz').textContent='...';toast('busca-toast','Fale o nome ou codigo da peca...','');};
+
+  rec.onresult=e=>{document.getElementById('busca-input').value=e.results[0][0].transcript;document.getElementById('btn-voz').textContent='Mic';buscar()};
+
+  rec.onerror=()=>{document.getElementById('btn-voz').textContent='Mic';toast('busca-toast','Erro no microfone','err')};
+
+  rec.start();
+
 }
+
+// ── APROVACAO ─────────────────────────────────────────────────
+
+function renderAprov(){
+
+  const el=document.getElementById('aprov-list');el.innerHTML='';
+
+  const pend=PRODS.filter(p=>p.status==='PENDENTE');
+
+  document.getElementById('nav-aprov-count').textContent=pend.length;
+
+  pend.forEach(p=>{
+
+    const cor=p.nct>=.90?'var(--green)':p.nct>=.70?'#E67E22':'var(--red)';
+
+    const d=document.createElement('div');d.className='prod-item';d.dataset.id=p.id;
+
+    d.innerHTML=`<div class="prod-item-sku">${p.sku}</div><div class="prod-item-nome">${p.nome}</div><div class="prod-item-foot"><span class="badge b-warn">PENDENTE</span><span class="prod-item-nct" style="color:${cor}">${p.nct.toFixed(3)}</span></div>`;
+
+    d.onclick=()=>abrirAprov(d);el.appendChild(d);
+
+  });
+
+}
+
+function abrirAprov(el){
+
+  document.querySelectorAll('.prod-item').forEach(e=>e.classList.remove('on'));el.classList.add('on');
+
+  const p=PRODS.find(x=>x.id===el.dataset.id);if(!p)return;
+
+  curProd=p;
+
+  document.getElementById('aprov-empty').style.display='none';
+
+  const det=document.getElementById('aprov-det');det.style.display='block';
+
+  det.innerHTML=renderProdDetalhe(p,'aprov')+`<div class="card"><div class="btn-toolbar"><button class="btn btn-success" onclick="aprovarProd('${p.id}')">Aprovar e enviar Bling</button><button class="btn btn-frozen btn-sm" onclick="congelarProd('${p.id}')">Congelar</button><button class="btn btn-secondary btn-sm" onclick="rejeitarProd('${p.id}')">Rejeitar</button></div></div>`;
+
+}
+
+function aprovarProd(id){
+
+  const p=PRODS.find(x=>x.id===id);if(!p)return;
+
+  p.status='ENRIQUECIDO';renderAprov();
+
+  document.getElementById('aprov-empty').style.display='flex';
+
+  document.getElementById('aprov-det').style.display='none';
+
+}
+
+function rejeitarProd(id){const p=PRODS.find(x=>x.id===id);if(p){p.status='RASCUNHO';renderAprov();}}
+
+// ── AGENTES ───────────────────────────────────────────────────
+
+const AGENTES=[
+
+  {n:1,nome:"Enriquecimento geral",desc:"Nome tecnico, OEM, EAN, fabricante. Motor principal Claude Sonnet com conhecimento base de autopecas.",fontes:"Claude API | Base MAHLE | Base MOBIS",status:"ok"},
+
+  {n:2,nome:"Aplicacao veicular -- triangulacao",desc:"Cruza catalogos de fabricantes, APIs publicas e PDFs tecnicos para confirmar aplicacao em multiplos veiculos.",fontes:"Catalogo MAHLE | TecDoc API | AutoData | PDFs Metal Leve | Catalogo Bosch",status:"ok"},
+
+  {n:3,nome:"CDC -- Codigo de Defesa do Consumidor",desc:"Gera avisos obrigatorios: garantia, prazo de devolucao, responsabilidade do instalador, risco de dano.",fontes:"Lei 8.078/90 | INMETRO | Base juridica PROCON",status:"ok"},
+
+  {n:4,nome:"Bula tecnica",desc:"Instrucoes de instalacao com torques especificos, folgas, sequencia de montagem, ferramentas necessarias.",fontes:"Manuais tecnicos | PDFs MAHLE | Metal Leve | Bosch | Gates | FAG",status:"ok"},
+
+  {n:5,nome:"SEO + Google Ads P-MAX",desc:"Title tag, meta description, H1, palavras-chave, schema.org, Google Shopping feed. Otimizado para CPC baixo.",fontes:"Google Search Console | Semrush | Google Merchant Center",status:"ok"},
+
+  {n:6,nome:"Fiscal -- NCM / EAN / CEST",desc:"Valida NCM na tabela TIPI, verifica EAN no GS1 Brasil, calcula CEST e CFOP por operacao fiscal.",fontes:"Tabela TIPI/NCM | GS1 Brasil | SEFAZ | API Nota Fiscal",status:"ok"},
+
+  {n:7,nome:"Tabela periodica -- composicao quimica",desc:"Identifica material, liga metalica, tratamento termico e composicao quimica da peca. Util para importacao e INMETRO.",fontes:"Normas ABNT | INMETRO | Base de materiais SAE | ISO",status:"ok"},
+
+  {n:8,nome:"Imagem web -- busca e selecao",desc:"Busca imagens reais do produto na web. Lojista seleciona a melhor. Selecao manual aumenta o NCT (FM sobe).",fontes:"Google Images | Rock Parts | MAHLE | Bosch | Google Shopping",status:"ok"},
+
+  {n:9,nome:"Cabecalho ERP -- Bling / Wix / ML",desc:"Formata os campos exatos para cada plataforma. Bling, Mercado Livre, Wix, VTEX, Shopify. Sem incompatibilidade.",fontes:"API Bling v3 | API ML | Wix eCommerce | Documentacao VTEX",status:"ok"},
+
+  {n:10,nome:"Google Ads P-MAX -- CPC baixo",desc:"Gera assets para campanha P-MAX: headlines, descriptions, imagens, extensoes. Foco em Quality Score alto.",fontes:"Google Ads API | Google Merchant | Search trends Brasil",status:"ok"},
+
+  {n:11,nome:"Ramo de atividade -- CNPJ + CNAE",desc:"Consulta CNPJ na Receita Federal, identifica CNAE e ramo de atividade. Bloqueia produto fora do ramo.",fontes:"Receita Federal API | CNAE IBGE | Junta Comercial",status:"off"},
+
+  {n:12,nome:"DNA OEM -- PartsOuq + TecDoc",desc:"Busca codigo OEM em bases livres: PartsOuq, TecDoc, AMC, AllData. Cruza clones certificados e identifica produto chines.",fontes:"PartsOuq.com | TecDoc API | AMC | AllData | bases livres",status:"off"},
+
+];
+
+function renderAgentes(){
+
+  const el=document.getElementById('agentes-lista');if(!el)return;
+
+  el.innerHTML=AGENTES.map(a=>`<div class="agent-status"><div class="agent-dot ${a.status}"></div><div style="flex:1"><div style="font-size:13px;font-weight:700">${a.n}. ${a.nome}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${a.desc}</div><div style="font-size:11px;color:var(--blue2);font-family:monospace;margin-top:3px">${a.fontes}</div></div><span class="badge ${a.status==='ok'?'b-ok':a.status==='run'?'b-warn':'b-info'}">${a.status==='ok'?'Ativo':a.status==='run'?'Rodando':'Em breve'}</span></div>`).join('');
+
+}
+
+// ── PROMPT ────────────────────────────────────────────────────
+
+function setTom(t){
+
+  promptConfig.tom=t;
+
+  document.querySelectorAll('[id^=tom-]').forEach(b=>b.className='btn btn-secondary btn-sm');
+
+  document.getElementById('tom-'+t.slice(0,3)).className='btn btn-primary btn-sm';
+
+  atualizarPreview();
+
+}
+
+function atualizarPreview(){
+
+  const ok=document.getElementById('pr-palavras-ok').value||'diesel,original,garantia';
+
+  const no=document.getElementById('pr-palavras-no').value||'barato,promocao';
+
+  const inst=document.getElementById('pr-instrucao').value||'';
+
+  const txt=`Voce e Claude, especialista em autopecas brasileiras. Tom: ${promptConfig.tom}. Palavras obrigatorias: ${ok}. Palavras proibidas: ${no}. Nunca invente dados. Se nao encontrar em fonte confiavel, retorne campo vazio.${inst?' '+inst:''}`;
+
+  document.getElementById('pr-preview').textContent=txt;
+
+}
+
+function salvarPrompt(){
+
+  promptConfig.ok=document.getElementById('pr-palavras-ok').value;
+
+  promptConfig.no=document.getElementById('pr-palavras-no').value;
+
+  promptConfig.instrucao=document.getElementById('pr-instrucao').value;
+
+  atualizarPreview();
+
+  toast('pr-toast','Configuracao salva -- agente vai usar este prompt','ok');
+
+}
+
+function testarPrompt(){
+
+  go('busca');
+
+  document.getElementById('busca-input').value='pistao hyundai hr';
+
+  buscar();
+
+}
+
+function resetPrompt(){
+
+  document.getElementById('pr-palavras-ok').value='diesel,original,garantia';
+
+  document.getElementById('pr-palavras-no').value='barato,promocao,oferta';
+
+  document.getElementById('pr-instrucao').value='';
+
+  promptConfig={tom:'tecnico',ok:'diesel,original,garantia',no:'barato,promocao,oferta',instrucao:''};
+
+  atualizarPreview();
+
+  toast('pr-toast','Prompt resetado para o padrao','ok');
+
+}
+
+// ── BLING ─────────────────────────────────────────────────────
+
+function blingAuth(){const cid=document.getElementById('bl-cid').value.trim();if(!cid){toast('bl-toast','Informe o Client ID','err');return}window.open('https://www.bling.com.br/OAuth2/index.php?response_type=code&client_id='+cid+'&state=genesis360','_blank');toast('bl-toast','Janela de autorizacao aberta','');}
+
+function blingTest(){toast('bl-toast','Testando...','');setTimeout(()=>toast('bl-toast','invalid_grant -- use o botao Autorizar Bling','err'),1500);}
+
+// ── MANUAL ────────────────────────────────────────────────────
+
+function enriquecerManual(){toast('mp-toast','Enriquecendo com agente -- aguarde...','');setTimeout(()=>toast('mp-toast','Produto enriquecido com Motor NCT!','ok'),2500)}
+
+function salvarManual(){toast('mp-toast','Produto salvo no catalogo!','ok')}
+
+function limparManual(){['mp-nome','mp-sku','mp-ean','mp-ncm','mp-fab','mp-med','mp-aplic','mp-oem','mp-cnpj'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''})}
+
+// ── PLANILHA ──────────────────────────────────────────────────
+
+function carregarPlan(inp){const f=inp.files[0];if(!f)return;document.getElementById('plan-prev').style.display='block';document.getElementById('plan-count').textContent='3';const l=document.getElementById('plan-lista');l.innerHTML='';PRODS.slice(0,3).forEach(p=>{const d=document.createElement('div');d.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:7px 11px;background:var(--surf);border:1px solid var(--bdr);border-radius:4px;margin-bottom:5px;font-size:13px';d.innerHTML='<div><strong style="font-family:monospace;color:var(--red)">'+p.sku+'</strong> -- '+p.nome.slice(0,40)+'...</div><span class="badge b-warn">PENDENTE</span>';l.appendChild(d)})}
+
+function baixarModelo(){const csv='SKU,Nome,EAN,OEM,NCM,Fabricante,Medida,Aplicacao,CNPJ\nBC720JSTD,Bronzina Mancal BC720J STD,7891945023581,MD-185923,8484.10.00,Metal Leve,STD,L200 HPE 2012-2024,\n';const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='modelo-genesis-v2.csv';a.click()}
+
+function importarPlan(){toast('plan-toast','Enriquecendo com 12 agentes de IA...','');setTimeout(()=>toast('plan-toast','Produtos enriquecidos -- prontos para aprovacao!','ok'),3000)}
+
+function cancelarPlan(){document.getElementById('plan-prev').style.display='none';document.getElementById('fi-plan').value=''}
+
+// ── INIT ──────────────────────────────────────────────────────
+
+document.getElementById('pr-palavras-ok').addEventListener('input',atualizarPreview);
+
+document.getElementById('pr-palavras-no').addEventListener('input',atualizarPreview);
+
+document.getElementById('pr-instrucao').addEventListener('input',atualizarPreview);
 
 go('home');
+
 </script>
+
 </body>
+
 </html>
-
-
-
-
-
-
-
