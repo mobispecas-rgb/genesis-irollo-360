@@ -1768,11 +1768,11 @@ async function enriquecerComClaude(descricao){
 
       bula:g.bula||'Consultar catalogo.',cdc:g.cdc||'CDC Art.26.',
 
-      tags:g.tags||[],nct:Number(g.confianca)||0.72,
+      tags:g.tags||[],nct:(()=>{const TF=(g.oem&&g.oem!='VERIFICAR'&&g.ean&&g.ean!='')?0.93:(g.oem&&g.oem!='VERIFICAR')?0.85:0.50;const FM=0.90;const CO=(g.bula&&g.bula.length>100)?1.0:0.75;const AV=(g.aplic&&g.aplic.length>0&&g.certeza_aplicacao!='VERIFICAR')?1.0:0.40;return Math.round((TF*0.50+FM*0.20+CO*0.20+AV*0.10)*1000)/1000;})(),
 
       hash:'NCT-ia-'+Math.random().toString(36).slice(2,8),
 
-      status:Number(g.confianca)>=0.85?'ENRIQUECIDO':'VERIFICAR',
+      status:(g.aplic&&g.aplic.length>0&&g.certeza_aplicacao!='VERIFICAR'&&g.oem&&g.oem!='VERIFICAR')?'ENRIQUECIDO':'VERIFICAR',
 
       seo:{title:g.seo_title||'',desc:g.seo_desc||''},
 
