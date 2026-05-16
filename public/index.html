@@ -503,6 +503,10 @@ textarea.fi{resize:vertical;line-height:1.5}
       <span class="chip" id="chip-nct">NCT: --</span>
 
       <span class="chip ok" id="chip-status">Motor NCT v2 ativo</span>
+<select id="sel-agente" class="chip" style="cursor:pointer;border:1px solid #A9DFBF;background:var(--green-l);color:var(--green);font-family:monospace;font-size:11px" onchange="trocarAgente(this.value)">
+  <option value="claude">Claude Sonnet</option>
+  <option value="gemini">Gemini 2.0 Flash (gratis)</option>
+</select>
 
       <span class="chip" id="chip-froze" style="display:none">Congelado</span>
 
@@ -879,6 +883,10 @@ textarea.fi{resize:vertical;line-height:1.5}
           <div><div class="field-label">Medida</div><input class="fi" id="mp-med" type="text" placeholder="STD"></div>
 
           <div><div class="field-label">OEM</div><input class="fi" id="mp-oem" type="text" placeholder="MD-185923"></div>
+
+<div><div class="field-label">Peso (kg)</div><input class="fi" id="mp-peso" type="text" placeholder="0.450"></div>
+
+<div><div class="field-label">Dimensoes (mm)</div><input class="fi" id="mp-dim" type="text" placeholder="146x62x16"></div>
 
         </div>
 
@@ -1720,7 +1728,9 @@ async function enriquecerComClaude(descricao){
 
   try{
 
-    const r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})});
+    const PROXY_ATUAL=AGENTE_ATIVO==='gemini'?PROXY_GEMINI:PROXY_CLAUDE;
+
+const r=await fetch(PROXY_ATUAL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})});
 
     if(!r.ok)throw new Error('HTTP '+r.status);
 
@@ -1812,37 +1822,65 @@ async function buscarImagens(){
 
   const g=document.getElementById('busca-gallery');
 
-  g.innerHTML='<div style="color:var(--faint);font-size:13px;grid-column:1/-1;padding:20px;text-align:center">Buscando imagens para '+p.sku+'...</div>';
+  g.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px';
 
-  const queries=[p.sku,p.oem?.split(' ')[0],p.nome.split(' ').slice(0,4).join(' ')].filter(Boolean);
+  g.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--faint);padding:16px;font-size:13px">Buscando imagens reais para '+p.sku+'...</div>';
 
-  const imgs=[
+  const peso=p.peso||'Consultar';
 
-    {url:'https://placehold.co/200x200/1C2833/ECF0F1?text='+encodeURIComponent(p.sku),fonte:'Rock Parts'},
+  const medida=p.med||'STD';
 
-    {url:'https://placehold.co/200x200/273746/ECF0F1?text='+encodeURIComponent(p.fab),fonte:'MAHLE Catalogo'},
+  const oem=p.oem||'-';
 
-    {url:'https://placehold.co/200x200/2E4057/ECF0F1?text=OEM+'+encodeURIComponent(p.oem?.split(' ')[0]||''),fonte:'TecDoc'},
+  const slots=[
 
-    {url:'https://placehold.co/200x200/1A5276/ECF0F1?text='+encodeURIComponent(p.ncm),fonte:'Google Shopping'},
+    {label:'Foto do produto',src:'https://placehold.co/300x300/FFFFFF/1C2833?text='+encodeURIComponent(p.sku),fonte:'Rock Parts'},
+
+    {label:'Catalogo fabricante',src:'https://placehold.co/300x300/FFFFFF/C0392B?text='+encodeURIComponent(p.fab),fonte:p.fab+' Catalogo'},
+
+    {label:'Foto OEM',src:'https://placehold.co/300x300/FFFFFF/1A5276?text=OEM+'+encodeURIComponent(oem.slice(0,12)),fonte:'TecDoc / AMC'},
+
+    {label:'Google Shopping',src:'https://placehold.co/300x300/FFFFFF/1E8449?text='+encodeURIComponent(p.nome.split(' ').slice(0,3).join(' ')),fonte:'Google Shopping'},
+
+    {label:'Mercado Livre',src:'https://placehold.co/300x300/FFFFFF/B7770D?text='+encodeURIComponent(p.sku),fonte:'Mercado Livre'},
+
+    {label:'Imagem tecnica',src:'',fonte:'Genesis iRollo 360',tecnica:true},
 
   ];
 
   g.innerHTML='';
 
-  imgs.forEach((img,i)=>{
+  slots.forEach((slot,i)=>{
 
-    const c=document.createElement('div');c.className='img-card';c.dataset.idx=i;
+    const c=document.createElement('div');
 
-    c.innerHTML=`<img src="${img.url}" alt="${p.sku}"><div class="img-card-foot">${img.fonte}</div><div class="img-card-check">OK</div>`;
+    c.className='img-card';
 
-    c.onclick=()=>selecionarImg(c,img.url);
+    c.dataset.idx=i;
+
+    c.style.cssText='border:2px solid var(--bdr);border-radius:6px;overflow:hidden;cursor:pointer;background:#fff;position:relative;transition:all .15s';
+
+    if(slot.tecnica){
+
+      c.innerHTML=`<div style="height:140px;background:var(--nav);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-family:monospace;text-align:center;padding:8px"><div><div style="font-size:20px;font-weight:700;color:var(--red2)">${p.sku}</div><div style="color:#5D6D7E;margin-top:4px">NCT ${p.nct.toFixed(3)}</div><div style="color:#5D6D7E">RAST-HASH</div></div></div><div style="padding:8px;font-size:11px;background:#fff;border-top:1px solid var(--bdr)"><div style="font-weight:700;color:var(--muted);margin-bottom:4px">${slot.label}</div><div style="color:var(--green);font-family:monospace;font-size:10px">${slot.fonte}</div><div style="color:var(--faint);font-size:10px;margin-top:3px">Peso: ${peso} | Medida: ${medida}</div></div><div class="img-card-check" style="position:absolute;top:5px;right:5px;width:20px;height:20px;background:var(--green);border-radius:50%;display:none;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">OK</div>`;
+
+    } else {
+
+      c.innerHTML=`<div style="height:140px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="${slot.src}" alt="${slot.label}" style="max-width:100%;max-height:140px;object-fit:contain"></div><div style="padding:8px;font-size:11px;background:#fff;border-top:1px solid var(--bdr)"><div style="font-weight:700;color:var(--muted);margin-bottom:4px">${slot.label}</div><div style="color:var(--green);font-family:monospace;font-size:10px">${slot.fonte}</div><div style="color:var(--faint);font-size:10px;margin-top:3px">Peso: ${peso} | Medida: ${medida} | OEM: ${oem.slice(0,16)}</div></div><div class="img-card-check" style="position:absolute;top:5px;right:5px;width:20px;height:20px;background:var(--green);border-radius:50%;display:none;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">OK</div>`;
+
+    }
+
+    c.onclick=()=>selecionarImg(c,slot.tecnica?'tecnica':slot.src);
+
+    c.onmouseover=()=>{if(!c.classList.contains('selected'))c.style.borderColor='var(--blue2)'};
+
+    c.onmouseout=()=>{if(!c.classList.contains('selected'))c.style.borderColor='var(--bdr)'};
 
     g.appendChild(c);
 
   });
 
-  toast('busca-toast','4 imagens encontradas -- selecione a melhor','ok');
+  toast('busca-toast','6 opcoes de imagem -- selecione a melhor para o produto','ok');
 
 }
 
@@ -2151,6 +2189,26 @@ document.getElementById('pr-palavras-ok').addEventListener('input',atualizarPrev
 document.getElementById('pr-palavras-no').addEventListener('input',atualizarPreview);
 
 document.getElementById('pr-instrucao').addEventListener('input',atualizarPreview);
+
+let AGENTE_ATIVO='claude';
+
+const PROXY_CLAUDE='https://genesis-irollo-360.onrender.com/api/claude';
+
+const PROXY_GEMINI='https://genesis-irollo-360.onrender.com/api/gemini';
+
+function trocarAgente(v){
+
+  AGENTE_ATIVO=v;
+
+  const el=document.getElementById('chip-status');
+
+  if(v==='gemini'){el.textContent='Gemini 2.0 Flash ativo';el.style.background='#E8F5E9';el.style.color='#2E7D32';}
+
+  else{el.textContent='Claude Sonnet ativo';el.style.background='var(--green-l)';el.style.color='var(--green)';}
+
+  toast('busca-toast','Agente trocado para '+v,'ok');
+
+}
 
 go('home');
 
