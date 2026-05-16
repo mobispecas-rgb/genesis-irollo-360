@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.post('/api/gemini', (req, res) => {
   const https = require('https');
   const key = (process.env.GEMINI_API_KEY||'').trim();
-  const body = JSON.stringify({contents:[{parts:[{text: req.body.messages?.[0]?.content||''}]}],generationConfig:{maxOutputTokens:2000}});
+  const body = JSON.stringify({contents:[{parts:[{text: (req.body.messages?.[0]?.content || req.body.prompt || req.body.text || 'teste')}]}],generationConfig:{maxOutputTokens:2000}});
   const options = {hostname:'generativelanguage.googleapis.com',path:'/v1beta/models/gemini-2.0-flash:generateContent?key='+key,method:'POST',headers:{'Content-Type':'application/json','Content-Length':Buffer.byteLength(body)}};
   const r = https.request(options, (response) => {
     let data = '';
@@ -299,6 +299,7 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
 
 
 
