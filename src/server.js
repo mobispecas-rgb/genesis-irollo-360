@@ -38,7 +38,7 @@ app.post('/api/gemini', (req, res) => {
     response.on('end', () => {
       try {
         const g = JSON.parse(data);
-        const text = g.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const text = g.candidates?.[0]?.content?.parts?.[0]?.text || ''; console.error('GEMINI RAW:',JSON.stringify(g).slice(0,300));
         res.json({content:[{type:'text',text}]});
       } catch(e) { res.status(500).json({error: data}); }
     });
@@ -299,6 +299,7 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
 
 
 
