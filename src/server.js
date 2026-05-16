@@ -27,6 +27,26 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 
+app.post('/api/gemini', (req, res) => {
+  const https = require('https');
+  const key = (process.env.GEMINI_API_KEY||'').trim();
+  const body = JSON.stringify({contents:[{parts:[{text: req.body.messages?.[0]?.content||''}]}],generationConfig:{maxOutputTokens:2000}});
+  const options = {hostname:'generativelanguage.googleapis.com',path:'/v1beta/models/gemini-2.0-flash:generateContent?key='+key,method:'POST',headers:{'Content-Type':'application/json','Content-Length':Buffer.byteLength(body)}};
+  const r = https.request(options, (response) => {
+    let data = '';
+    response.on('data', chunk => data += chunk);
+    response.on('end', () => {
+      try {
+        const g = JSON.parse(data);
+        const text = g.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        res.json({content:[{type:'text',text}]});
+      } catch(e) { res.status(500).json({error: data}); }
+    });
+  });
+  r.on('error', e => res.status(500).json({error: e.message}));
+  r.write(body);
+  r.end();
+});
 app.post('/api/claude', (req, res) => {
   const https = require('https');
   const body = JSON.stringify(req.body);
