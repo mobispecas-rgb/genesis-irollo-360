@@ -1,4 +1,4 @@
-/**
+﻿/**
  * server.js - v5.0
  * Genesis iRollo 360
  * @copyright 2026 Jose Nunes Junior / MOBIS Pecas
@@ -120,3 +120,4 @@ module.exports = app;
 
 app.listen(PORT, () => { console.log('Genesis iRollo 360 v5.0 porta ' + PORT); });
 module.exports = app;
+
