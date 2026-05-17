@@ -23,7 +23,8 @@ router.get('/imagens', async (req, res) => {
     const resultado = await buscarImagensProduto(oem, nome, 6);
     const selecionada = getImagemSalva(oem);
     res.json({ ...resultado, ja_selecionada: selecionada });
-feat: rota /api/cruzada triangulacao + imagens logista});
+  } catch(err) { res.status(500).json({ ok:false, erro:err.message }); }
+});
 
 // POST /api/cruzada/imagens/selecionar
 router.post('/imagens/selecionar', (req, res) => {
