@@ -1,5 +1,5 @@
-﻿/**
- * server.js - v5.0
+/**
+ * server.js - v5.1
  * Genesis iRollo 360
  * @copyright 2026 Jose Nunes Junior / MOBIS Pecas
  */
@@ -20,10 +20,9 @@ app.use(express.static(path.join(__dirname, '../public')));
 try { const { setupMCP } = require('./mcp'); setupMCP(app); } catch (e) { console.warn('[AVISO] mcp:', e.message); }
 try { app.use('/api/indexador', require('./indexador')); } catch (e) { console.warn('[AVISO] indexador:', e.message); }
 
-try {
-  app.use('/api/cruzada', require('./routes/cruzada'));
-  console.log('Rota /api/cruzada OK');
-} catch (e) { console.error('[ERRO] cruzada:', e.message, e.stack); }
+// Rota cruzada — sem try/catch para expor erros reais
+app.use('/api/cruzada', require('./routes/cruzada'));
+console.log('[OK] Rota /api/cruzada carregada');
 
 try {
   const skills = require('./playbooks/genesis-skills');
@@ -47,7 +46,7 @@ app.post('/api/gemini', (req, res) => {
     let data = '';
     response.on('data', chunk => data += chunk);
     response.on('end', () => {
-      try { const g = JSON.parse(data); console.error('GEMINI RAW:', JSON.stringify(g).slice(0, 300)); res.json({ content: [{ type: 'text', text: g.candidates?.[0]?.content?.parts?.[0]?.text || '' }] }); }
+      try { const g = JSON.parse(data); res.json({ content: [{ type: 'text', text: g.candidates?.[0]?.content?.parts?.[0]?.text || '' }] }); }
       catch (e) { res.status(500).json({ error: data }); }
     });
   });
@@ -73,8 +72,8 @@ let conectores = null; try { conectores = require('./conector-base'); } catch (e
 let banner = null; try { banner = require('./banner-gerador'); } catch (e) { console.warn('[AVISO]', e.message); }
 let blingToken = null; try { blingToken = require('./bling-auto-token'); } catch (e) { console.warn('[AVISO]', e.message); }
 
-app.get('/', (req, res) => res.json({ sistema: 'Genesis iRollo 360', versao: '5.0', status: 'online' }));
-app.get('/api/health', (req, res) => res.json({ ok: true, versao: '5.0', ts: new Date().toISOString(), motor: !!motorNCT }));
+app.get('/', (req, res) => res.json({ sistema: 'Genesis iRollo 360', versao: '5.1', status: 'online' }));
+app.get('/api/health', (req, res) => res.json({ ok: true, versao: '5.1', ts: new Date().toISOString(), motor: !!motorNCT }));
 
 if (motorNCT && motorNCT.registrarRotas) motorNCT.registrarRotas(app);
 if (conectores && conectores.registrarRotas) conectores.registrarRotas(app);
@@ -111,13 +110,9 @@ app.post('/api/motor/nct', async (req, res) => {
   try { return res.json({ ok: true, ...await motorNCT.triangular(req.body) }); } catch (e) { return res.status(500).json({ ok: false, erro: e.message }); }
 });
 
-app.get('/api', (req, res) => res.json({ ok: true, versao: '5.0', status: 'online' }));
+app.get('/api', (req, res) => res.json({ ok: true, versao: '5.1', status: 'online' }));
 app.use((req, res) => res.status(404).json({ ok: false, erro: 'Rota nao encontrada', rota: req.originalUrl }));
 app.use((err, req, res, next) => { console.error('[Genesis] Erro:', err.message); res.status(500).json({ ok: false, erro: err.message }); });
 
-app.listen(PORT, () => { console.log('Genesis iRollo 360 v5.0 porta ' + PORT); });
+app.listen(PORT, () => { console.log('Genesis iRollo 360 v5.1 porta ' + PORT); });
 module.exports = app;
-
-app.listen(PORT, () => { console.log('Genesis iRollo 360 v5.0 porta ' + PORT); });
-module.exports = app;
-
