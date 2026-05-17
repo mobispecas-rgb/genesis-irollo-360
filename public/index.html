@@ -1160,13 +1160,18 @@ textarea.fi{resize:vertical;line-height:1.5}
 
         <div class="info-bar" style="margin-bottom:14px">Bling &#8594; Configuracoes &#8594; API &#8594; Meus Aplicativos &#8594; clique no app Genesis iRollo 360</div>
 
-        <div class="form-row c2">
+        <div class="form-row c3">
 
           <div><div class="field-label">Client ID</div><input class="fi" id="bl-cid" type="text" placeholder="Client ID do app Genesis no Bling"></div>
 
           <div><div class="field-label">Client Secret</div><input class="fi" id="bl-secret" type="password" placeholder="Client Secret"></div>
 
+          <div><div class="field-label">Access Token</div><input class="fi" id="bl-token" type="text" placeholder="Cole o token apos autorizar"></div>
+
         </div>
+
+        <div class="field-label" style="margin-bottom:4px;margin-top:10px">URL de autorizacao</div>
+        <div class="field-val mono" id="bl-url" style="font-size:11px;word-break:break-all;color:var(--blue2)">Preencha o Client ID e clique Autorizar</div>
 
         <div class="sep"></div>
 
@@ -2180,7 +2185,7 @@ function resetPrompt(){
 
 // ââ BLING âââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
-function blingAuth(){const cid=document.getElementById('bl-cid').value.trim();if(!cid){toast('bl-toast','Informe o Client ID','err');return}window.open('https://www.bling.com.br/OAuth2/index.php?response_type=code&client_id='+cid+'&state=genesis360','_blank');toast('bl-toast','Janela de autorizacao aberta','');}
+function blingAuth(){const cid=document.getElementById('bl-cid').value.trim();if(!cid){toast('bl-toast','Informe o Client ID','err');return}const url='https://www.bling.com.br/OAuth2/index.php?response_type=code&client_id='+cid+'&state=genesis360';const urlEl=document.getElementById('bl-url');if(urlEl)urlEl.textContent=url;window.open(url,'_blank');toast('bl-toast','Janela aberta -- copie o codigo e cole no Access Token','');}
 
 function blingTest(){toast('bl-toast','Testando...','');setTimeout(()=>toast('bl-toast','invalid_grant -- use o botao Autorizar Bling','err'),1500);}
 
