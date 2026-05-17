@@ -23,7 +23,7 @@ try { app.use('/api/indexador', require('./indexador')); } catch (e) { console.w
 try {
   app.use('/api/cruzada', require('./routes/cruzada'));
   console.log('Rota /api/cruzada OK');
-} catch (e) { console.warn('[AVISO] cruzada:', e.message); }
+} catch (e) { console.error('[ERRO] cruzada:', e.message, e.stack); }
 
 try {
   const skills = require('./playbooks/genesis-skills');
