@@ -7,6 +7,55 @@
  * Motor NCT by Junior / MOBIS Pecas
  */
 
+
+require('dotenv').config();
+const express = require('express');
+const cors    = require('cors');
+const path    = require('path');
+
+
+const app  = express();
+const { setupMCP } = require('./mcp');
+setupMCP(app);
+app.use('/api/indexador', require('./indexador'));
+// ── NOVAS ROTAS v5.0 — Triangulação Cruzada + Skills ──────
+app.use('/api/cruzada', require('./routes/cruzada'));
+const skills = require('./playbooks/genesis-skills');
+app.post('/api/skills/classificar',      async (req,res)=>{ res.json(await skills.classificarProduto(req.body.texto||'')); });
+app.post('/api/skills/ncm',              async (req,res)=>{ res.json(await skills.sugerirNCM(req.body.nome||'')); });
+app.post('/api/skills/anomalia',         async (req,res)=>{ res.json(await skills.detectarAnomalia(req.body)); });
+app.post('/api/skills/compativel',       async (req,res)=>{ res.json(await skills.validarCompatibilidade(req.body.oem||'',req.body.veiculo||'')); });
+app.post('/api/skills/chat',             async (req,res)=>{ res.json(await skills.playbookChatLogista(req.body.mensagem||'',req.body.historico||[])); });
+app.post('/api/skills/playbook/entrada', async (req,res)=>{ res.json(await skills.playbookEntradaProduto(req.body)); });
+const PORT = process.env.PORT || 3001;
+
+
+// ============================================================
+// MIDDLEWARES
+// ============================================================
+app.use(cors());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../public')));
+
+
+
+
+app.post('/api/gemini', (req, res) => {
+  const https = require('https');
+  const key = (process.env.GEMINI_API_KEY||'').trim();
+  const body = JSON.stringify({contents:[{parts:[{text: (req.body.messages?.[0]?.content || req.body.prompt || req.body.text || 'teste')}]}],generationConfig:{maxOutputTokens:2000}});
+  const options = {hostname:'generativelanguage.googleapis.com',path:'/v1beta/models/gemini-2.0-flash:generateContent?key='+key,method:'POST',headers:{'Content-Type':'application/json','Content-Length':Buffer.byteLength(body)}};
+  const r = https.request(options, (response) => {
+    let data = '';﻿/**
+ * @copyright 2026 Jose Nunes Junior / MOBIS Pecas
+ * @license Proprietario â€” Todos os direitos reservados
+ *
+ * server.js â€” v4.0
+ * Genesis iRollo 360 Â· genesisindexia.com.br
+ * Motor NCT by Junior / MOBIS Pecas
+ */
+
 require('dotenv').config();
 const express = require('express');
 const cors    = require('cors');
