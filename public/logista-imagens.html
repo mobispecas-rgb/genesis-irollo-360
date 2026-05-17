@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genesis iRollo — Selecao de Imagens</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e0e0e0;padding:20px}
+h1{color:#00d4ff;margin-bottom:6px;font-size:1.4rem}
+.sub{color:#888;margin-bottom:20px;font-size:.9rem}
+.busca{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+.busca input{flex:1;min-width:180px;padding:10px 14px;background:#1e2230;border:1px solid #333;border-radius:8px;color:#fff;font-size:.95rem}
+.busca button{padding:10px 22px;background:#00d4ff;color:#000;border:none;border-radius:8px;cursor:pointer;font-weight:bold}
+.busca button:hover{background:#00b8d9}
+.tri-box{background:#1a1f2e;border:1px solid #2a3040;border-radius:10px;padding:16px;margin-bottom:24px}
+.tri-box h2{color:#00d4ff;font-size:1rem;margin-bottom:12px}
+.marcas{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.marca{background:#222736;border-radius:8px;padding:12px;border-left:3px solid #00d4ff}
+.marca .nm{font-weight:bold;color:#fff}
+.marca .cd{font-size:.85rem;color:#00d4ff;font-family:monospace}
+.marca .tp{font-size:.75rem;color:#888;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr)}}
+.card{background:#1a1f2e;border-radius:10px;overflow:hidden;border:2px solid transparent;cursor:pointer;transition:all .2s}
+.card:hover{border-color:#00d4ff;transform:translateY(-2px)}
+.card.sel{border-color:#00ff88;box-shadow:0 0 12px rgba(0,255,136,.3)}
+.card img{width:100%;height:160px;object-fit:cover;display:block;background:#222}
+.card .info{padding:8px 10px}
+.card .num{font-size:.75rem;color:#888}
+.card .ck{font-size:1.2rem;color:#00ff88;display:none}
+.card.sel .ck{display:inline}
+.nothumb{width:100%;height:160px;display:flex;align-items:center;justify-content:center;background:#222;color:#555;font-size:.8rem;text-align:center;padding:10px}
+.btn-ok{padding:12px 32px;background:#00ff88;color:#000;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1rem;display:none}
+.btn-ok:hover{background:#00cc6a}
+.st{margin-top:16px;padding:12px;border-radius:8px;font-size:.9rem;display:none}
+.st.ok{background:#0d2e1a;border:1px solid #00ff88;color:#00ff88}
+.st.err{background:#2e0d0d;border:1px solid #f44;color:#f44}
+.load{color:#888;font-style:italic;padding:20px 0}
+.av{background:#2a2000;border:1px solid #f90;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#f90;margin-bottom:16px}
+</style>
+</head>
+<body>
+<h1>Genesis iRollo — Triangulacao + Selecao de Imagens</h1>
+<p class="sub">Logista: busque o produto, veja equivalencias entre marcas e selecione a melhor imagem</p>
+<div class="busca">
+  <input id="oem" placeholder="Codigo OEM (ex: 26300-35505)"/>
+  <input id="nome" placeholder="Nome do produto (ex: Filtro de Oleo)"/>
+  <input id="aplicacao" placeholder="Aplicacao (ex: Hyundai ix35 2012)"/>
+  <button onclick="buscar()">Buscar</button>
+</div>
+<div id="tri" class="tri-box" style="display:none">
+  <h2>Pecas Equivalentes / Cambiaveis</h2>
+  <div id="marcas" class="marcas"></div>
+  <div id="avt" style="margin-top:10px;font-size:.8rem;color:#888"></div>
+</div>
+<div id="imgs" style="display:none">
+  <p style="margin-bottom:14px;color:#ccc">Selecione a melhor imagem (clique para escolher)</p>
+  <div id="avi"></div>
+  <div id="grid" class="grid"></div>
+  <button class="btn-ok" id="btnok" onclick="confirmar()">Confirmar Imagem Selecionada</button>
+  <div id="st" class="st"></div>
+</div>
+<div id="load" class="load" style="display:none">Consultando IA e buscando imagens...</div>
+<script>
+let sel=null, oemAtual='';
+async function buscar(){
+  const oem=document.getElementById('oem').value.trim();
+  const nome=document.getElementById('nome').value.trim();
+  const aplic=document.getElementById('aplicacao').value.trim();
+  if(!oem&&!nome){alert('Informe OEM ou nome');return}
+  oemAtual=oem; sel=null;
+  document.getElementById('load').style.display='block';
+  document.getElementById('tri').style.display='none';
+  document.getElementById('imgs').style.display='none';
+  document.getElementById('btnok').style.display='none';
+  document.getElementById('st').style.display='none';
+  try{
+    const r=await fetch('/api/cruzada/completo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({oem,nome,aplicacao:aplic})});
+    const d=await r.json();
+    document.getElementById('load').style.display='none';
+    if(!d.ok){alert('Erro: '+(d.erro||'Falha'));return}
+    renderTri(d.triangulo); renderImgs(d.imagens);
+  }catch(e){document.getElementById('load').style.display='none';alert('Erro: '+e.message)}
+}
+function renderTri(t){
+  const s=document.getElementById('tri');
+  if(!t?.ok||!t?.triangulo?.length){s.style.display='none';return}
+  document.getElementById('marcas').innerHTML=t.triangulo.map(m=>
+    '<div class="marca"><div class="nm">'+m.marca+'</div><div class="cd">'+(m.codigo||'—')+'</div><div class="tp">'+(m.tipo||'')+' · '+(m.qualidade||'')+'</div>'+(m.observacao?'<div style="font-size:.72rem;color:#aaa;margin-top:4px">'+m.observacao+'</div>':'')+'</div>'
+  ).join('');
+  if(t.aviso)document.getElementById('avt').textContent='Aviso: '+t.aviso;
+  s.style.display='block';
+}
+function renderImgs(im){
+  const s=document.getElementById('imgs');
+  if(!im?.imagens?.length){s.style.display='none';return}
+  if(im.aviso)document.getElementById('avi').innerHTML='<div class="av">'+im.aviso+'</div>';
+  document.getElementById('grid').innerHTML=im.imagens.map((img,i)=>
+    '<div class="card" id="c'+i+'" onclick="escolher('+i+',\''+esc(img.url)+'\')">'
+    +(img.thumb?'<img src="'+img.thumb+'" alt="" onerror="this.style.display='none'">':'')
+    +'<div class="nothumb" style="'+(img.thumb?'display:none':'')+'"><a href="'+img.url+'" target="_blank" style="color:#00d4ff">Abrir imagem #'+(i+1)+'</a></div>'
+    +'<div class="info"><span class="ck">OK </span><span class="num">Imagem '+(i+1)+'</span></div>'
+    +'</div>'
+  ).join('');
+  s.style.display='block';
+}
+function escolher(i,url){
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('c'+i).classList.add('sel');
+  sel={url,posicao:i+1};
+  document.getElementById('btnok').style.display='inline-block';
+}
+async function confirmar(){
+  if(!sel)return;
+  try{
+    const r=await fetch('/api/cruzada/imagens/selecionar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({oem:oemAtual,url:sel.url,posicao:sel.posicao})});
+    const d=await r.json();
+    const st=document.getElementById('st');
+    st.className='st '+(d.ok?'ok':'err');
+    st.textContent=d.ok?'Imagem #'+sel.posicao+' salva para OEM '+oemAtual:'Erro: '+d.erro;
+    st.style.display='block';
+  }catch(e){
+    const st=document.getElementById('st');
+    st.className='st err'; st.textContent='Erro: '+e.message; st.style.display='block';
+  }
+}
+function esc(u){return(u||'').replace(/'/g,"\\'")}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')buscar()});
+</script>
+</body>
+</html>
