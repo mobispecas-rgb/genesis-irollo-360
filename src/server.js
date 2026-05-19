@@ -1,11 +1,14 @@
-'use strict';
 // Genesis iRollo 360 v5.5 -- Motor NCT v2 -- MOBIS Autopecas
-// Agentes 1-12 ativos -- Render deploy
+// Agentes 1-12 ativos -- Render deploy -- ES Module
 
-const express = require('express');
-const path = require('path');
-const https = require('https');
-const http = require('http');
+import express from 'express';
+import path from 'path';
+import https from 'https';
+import http from 'http';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -64,10 +67,8 @@ function httpsPost(urlStr, payload, headers) {
     const body = typeof payload === 'string' ? payload : JSON.stringify(payload);
     const url = new URL(urlStr);
     const opts = {
-      hostname: url.hostname,
-      port: url.port || 443,
-      path: url.pathname + url.search,
-      method: 'POST',
+      hostname: url.hostname, port: url.port || 443,
+      path: url.pathname + url.search, method: 'POST',
       headers: Object.assign({ 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }, headers)
     };
     const req = https.request(opts, res => {
@@ -76,8 +77,7 @@ function httpsPost(urlStr, payload, headers) {
       res.on('end', () => { try { resolve({ status: res.statusCode, body: JSON.parse(data) }); } catch(e) { resolve({ status: res.statusCode, body: data }); } });
     });
     req.on('error', reject);
-    req.write(body);
-    req.end();
+    req.write(body); req.end();
   });
 }
 
@@ -87,12 +87,9 @@ async function agente11_cnpj(cnpj) {
     if (cnpjLimpo.length !== 14) return { ok: false, erro: 'CNPJ invalido' };
     const data = await httpsGet('https://publica.cnpj.ws/cnpj/' + cnpjLimpo);
     const cnae = data.cnae_fiscal || '';
-    const cnaeDesc = data.cnae_fiscal_descricao || '';
-    const razao = data.razao_social || '';
-    const situacao = data.descricao_situacao_cadastral || '';
     const cnaeStr = String(cnae);
     const ramoAutopecas = cnaeStr.startsWith('4530') || cnaeStr.startsWith('4541') || cnaeStr.startsWith('4542') || cnaeStr.startsWith('4543');
-    return { ok: true, cnpj: cnpjLimpo, razao, situacao, cnae, cnaeDesc, ramoAutopecas, alerta: ramoAutopecas ? null : 'CNPJ fora do ramo de autopecas' };
+    return { ok: true, cnpj: cnpjLimpo, razao: data.razao_social || '', situacao: data.descricao_situacao_cadastral || '', cnae, cnaeDesc: data.cnae_fiscal_descricao || '', ramoAutopecas, alerta: ramoAutopecas ? null : 'CNPJ fora do ramo de autopecas' };
   } catch(e) { return { ok: false, erro: e.message }; }
 }
 
@@ -100,19 +97,18 @@ async function agente12_oem(oemCode) {
   try {
     const oem = (oemCode || '').trim().toUpperCase().replace(/[^A-Z0-9-]/g, '');
     if (!oem) return { ok: false, erro: 'Codigo OEM vazio' };
-    const fontes = [];
     let montadora = 'Desconhecida';
     if (/^(MD|MN|MB)-/.test(oem) || /^(MD|MN|MB)[0-9]{6}/.test(oem)) montadora = 'Mitsubishi';
-    else if (/^[0-9]{5,6}$/.test(oem.replace(/-/g, ''))) montadora = 'Hyundai/Kia (possivel)';
-    else if (/^[A-Z]{2}[0-9]{5,8}/.test(oem)) montadora = 'Europeia (possivel)';
-    fontes.push({ fonte: 'Analise de formato', montadora, oem });
+    else if (/^[0-9]{5,6}$/.test(oem.replace(/-/g, ''))) montadora = 'Hyundai/Kia';
+    else if (/^[A-Z]{2}[0-9]{5,8}/.test(oem)) montadora = 'Europeia';
+    const fontes = [{ fonte: 'Analise de formato', montadora, oem }];
     try {
-      const partsData = await httpsGet('https://api.partsouq.com/search?query=' + encodeURIComponent(oem) + '&lang=pt');
-      if (partsData && partsData.parts) fontes.push({ fonte: 'PartsOuq', resultado: partsData.parts.slice(0, 3) });
-    } catch(e2) { fontes.push({ fonte: 'PartsOuq', erro: 'API indisponivel' }); }
+      const d = await httpsGet('https://api.partsouq.com/search?query=' + encodeURIComponent(oem) + '&lang=pt');
+      if (d && d.parts) fontes.push({ fonte: 'PartsOuq', resultado: d.parts.slice(0, 3) });
+    } catch(e2) { fontes.push({ fonte: 'PartsOuq', erro: 'indisponivel' }); }
     const codigoValido = oem.length >= 6;
-    const possibleClone = oem.indexOf('COPY') >= 0 || oem.indexOf('FAKE') >= 0 || oem.indexOf('CLONE') >= 0;
-    return { ok: true, oem, montadora, fontes, validacao: { codigoValido, possibleClone, alerta: possibleClone ? 'Codigo suspeito de clone' : null } };
+    const possibleClone = oem.indexOf('COPY') >= 0 || oem.indexOf('FAKE') >= 0;
+    return { ok: true, oem, montadora, fontes, validacao: { codigoValido, possibleClone, alerta: possibleClone ? 'Suspeito de clone' : null } };
   } catch(e) { return { ok: false, erro: e.message }; }
 }
 
@@ -130,7 +126,7 @@ function calcularNCT(prod) {
 
 async function enriquecerComClaude(produto) {
   if (!ANTHROPIC_KEY) return { ok: false, erro: 'ANTHROPIC_API_KEY nao configurada' };
-  const prompt = 'Produto de autopecas para enriquecer: ' + JSON.stringify(produto) + ' Retorne JSON com: nome_tecnico, oem_sugerido, ean, fabricante, ncm, aplicacoes_veiculares, bula_tecnica, cdc_aviso, seo_titulo, seo_descricao. Apenas JSON puro.';
+  const prompt = 'Produto de autopecas: ' + JSON.stringify(produto) + ' Retorne JSON com: nome_tecnico, oem_sugerido, ean, fabricante, ncm, aplicacoes_veiculares, bula_tecnica, cdc_aviso, seo_titulo, seo_descricao. JSON puro.';
   try {
     const resp = await httpsPost('https://api.anthropic.com/v1/messages',
       { model: 'claude-sonnet-4-5', max_tokens: 2048, messages: [{ role: 'user', content: prompt }] },
@@ -138,10 +134,10 @@ async function enriquecerComClaude(produto) {
     );
     if (resp.body && resp.body.content) {
       const text = resp.body.content[0].text;
-      const m = text.match(/\{[\s\S]*\}/);
+      const m = text.match(/{[\s\S]*}/);
       if (m) return { ok: true, dados: JSON.parse(m[0]) };
     }
-    return { ok: false, erro: 'Resposta invalida do Claude' };
+    return { ok: false, erro: 'Resposta invalida' };
   } catch(e) { return { ok: false, erro: e.message }; }
 }
 
@@ -153,108 +149,78 @@ async function renovarBlingToken() {
     const resp = await new Promise((resolve, reject) => {
       const opts = { hostname: 'www.bling.com.br', port: 443, path: '/Api/v3/oauth/token', method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ' + creds, 'Content-Length': Buffer.byteLength(body) } };
-      const req = https.request(opts, res => {
-        let d = '';
-        res.on('data', c => d += c);
-        res.on('end', () => { try { resolve(JSON.parse(d)); } catch(e) { resolve({}); } });
-      });
-      req.on('error', reject);
-      req.write(body); req.end();
+      const req = https.request(opts, res => { let d = ''; res.on('data', c => d += c); res.on('end', () => { try { resolve(JSON.parse(d)); } catch(e) { resolve({}); } }); });
+      req.on('error', reject); req.write(body); req.end();
     });
-    if (resp.access_token) { blingAccessToken = resp.access_token; blingRefreshToken = resp.refresh_token || blingRefreshToken; console.log('[BLING] Token renovado'); return true; }
-    console.log('[BLING] Erro ao renovar token:', resp.error || JSON.stringify(resp));
+    if (resp.access_token) { blingAccessToken = resp.access_token; blingRefreshToken = resp.refresh_token || blingRefreshToken; return true; }
     return false;
-  } catch(e) { console.log('[BLING] Excecao:', e.message); return false; }
+  } catch(e) { return false; }
 }
 
 app.get('/api/health', (req, res) => { res.json({ ok: true, versao: '5.5', ts: new Date().toISOString(), motor: true, agentes: 12 }); });
 app.get('/api/agentes', (req, res) => { res.json({ ok: true, agentes: AGENTES }); });
 app.get('/api/catalogo', (req, res) => { res.json({ ok: true, total: catalog.length, produtos: catalog }); });
-
 app.post('/api/catalogo', (req, res) => {
   const prod = Object.assign({}, req.body, { id: 'p' + (nextId++), criadoEm: new Date().toISOString() });
-  prod.nct = calcularNCT(prod);
-  catalog.push(prod);
-  res.json({ ok: true, produto: prod });
+  prod.nct = calcularNCT(prod); catalog.push(prod); res.json({ ok: true, produto: prod });
 });
-
 app.put('/api/catalogo/:id', (req, res) => {
   const idx = catalog.findIndex(p => p.id === req.params.id);
-  if (idx === -1) return res.json({ ok: false, erro: 'Produto nao encontrado' });
+  if (idx === -1) return res.json({ ok: false, erro: 'nao encontrado' });
   catalog[idx] = Object.assign({}, catalog[idx], req.body);
-  catalog[idx].nct = calcularNCT(catalog[idx]);
-  res.json({ ok: true, produto: catalog[idx] });
+  catalog[idx].nct = calcularNCT(catalog[idx]); res.json({ ok: true, produto: catalog[idx] });
 });
-
 app.post('/api/claude', async (req, res) => { res.json(await enriquecerComClaude(req.body)); });
-
 app.post('/api/gemini', async (req, res) => {
   if (!GEMINI_KEY) return res.json({ ok: false, erro: 'GEMINI_API_KEY nao configurada' });
   try {
-    const prompt = 'Produto de autopecas: ' + JSON.stringify(req.body) + ' Retorne JSON com: nome_tecnico, oem_sugerido, ean, fabricante, aplicacoes_veiculares, bula_tecnica. JSON puro.';
+    const prompt = 'Produto: ' + JSON.stringify(req.body) + ' JSON: nome_tecnico, oem_sugerido, ean, fabricante, bula_tecnica.';
     const resp = await httpsPost('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEMINI_KEY, { contents: [{ parts: [{ text: prompt }] }] });
-    const text = ((resp.body || {}).candidates || [{}])[0].content ? resp.body.candidates[0].content.parts[0].text : '';
-    const m = text.match(/\{[\s\S]*\}/);
+    const text = (((resp.body || {}).candidates || [{}])[0].content || {}).parts ? resp.body.candidates[0].content.parts[0].text : '';
+    const m = text.match(/{[\s\S]*}/);
     if (m) return res.json({ ok: true, dados: JSON.parse(m[0]) });
-    res.json({ ok: false, erro: 'Resposta invalida do Gemini' });
+    res.json({ ok: false, erro: 'Sem resposta' });
   } catch(e) { res.json({ ok: false, erro: e.message }); }
 });
-
 app.post('/api/cruzada', async (req, res) => {
-  const [c, g] = await Promise.allSettled([enriquecerComClaude(req.body), Promise.resolve({ ok: true, gemini: 'disponivel' })]);
-  res.json({ ok: true, claude: c.value, gemini: g.value });
+  const [c] = await Promise.allSettled([enriquecerComClaude(req.body)]);
+  res.json({ ok: true, claude: c.value, gemini: { ok: true, nota: 'Configure GEMINI_API_KEY' } });
 });
-
 app.get('/api/agente11/cnpj/:cnpj', async (req, res) => { res.json(await agente11_cnpj(req.params.cnpj)); });
 app.post('/api/agente11/cnpj', async (req, res) => { res.json(await agente11_cnpj(req.body.cnpj)); });
 app.get('/api/agente12/oem/:oem', async (req, res) => { res.json(await agente12_oem(req.params.oem)); });
 app.post('/api/agente12/oem', async (req, res) => { res.json(await agente12_oem(req.body.oem)); });
-
 app.get('/api/bling/token', async (req, res) => {
   const code = req.query.code;
-  if (!code) return res.json({ ok: false, erro: 'Codigo de autorizacao nao recebido' });
+  if (!code) return res.json({ ok: false, erro: 'Codigo nao recebido' });
   try {
     const creds = Buffer.from(BLING_CLIENT_ID + ':' + BLING_CLIENT_SECRET).toString('base64');
     const body = 'grant_type=authorization_code&code=' + encodeURIComponent(code) + '&redirect_uri=' + encodeURIComponent(BLING_REDIRECT_URI);
     const resp = await new Promise((resolve, reject) => {
       const opts = { hostname: 'www.bling.com.br', port: 443, path: '/Api/v3/oauth/token', method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ' + creds, 'Content-Length': Buffer.byteLength(body) } };
-      const req2 = https.request(opts, r => {
-        let d = '';
-        r.on('data', c => d += c);
-        r.on('end', () => { try { resolve(JSON.parse(d)); } catch(e) { resolve({ raw: d }); } });
-      });
-      req2.on('error', reject);
-      req2.write(body); req2.end();
+      const req2 = https.request(opts, r => { let d = ''; r.on('data', c => d += c); r.on('end', () => { try { resolve(JSON.parse(d)); } catch(e) { resolve({ raw: d }); } }); });
+      req2.on('error', reject); req2.write(body); req2.end();
     });
-    if (resp.access_token) {
-      blingAccessToken = resp.access_token;
-      blingRefreshToken = resp.refresh_token || '';
-      res.json({ ok: true, mensagem: 'Token Bling obtido com sucesso', expires_in: resp.expires_in });
-    } else {
-      res.json({ ok: false, erro: 'Falha na troca de token: ' + JSON.stringify(resp) });
-    }
+    if (resp.access_token) { blingAccessToken = resp.access_token; blingRefreshToken = resp.refresh_token || ''; res.json({ ok: true, mensagem: 'Token Bling obtido', expires_in: resp.expires_in }); }
+    else res.json({ ok: false, erro: 'Falha na troca de token: ' + JSON.stringify(resp) });
   } catch(e) { res.json({ ok: false, erro: e.message }); }
 });
-
 app.get('/api/bling/status', (req, res) => { res.json({ ok: true, tokenAtivo: !!blingAccessToken, temRefresh: !!blingRefreshToken }); });
 app.post('/api/nct', (req, res) => { res.json({ ok: true, nct: calcularNCT(req.body) }); });
-
 app.get('/api/dashboard', (req, res) => {
   const aprovados = catalog.filter(p => (p.nct || 0) >= 0.9).length;
   const nctMedio = catalog.length ? +(catalog.reduce((a, p) => a + (p.nct || 0), 0) / catalog.length).toFixed(2) : 0;
   res.json({ ok: true, total: catalog.length, aprovados, nctMedio, blingAtivo: !!blingAccessToken });
 });
-
 app.get('/mcp/sse', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
   res.write('data: {"type":"connected","server":"genesis-irollo-360","versao":"5.5"}\n\n');
-  const iv = setInterval(() => { res.write('data: {"type":"ping","ts":"' + new Date().toISOString() + '"}\n\n'); }, 30000);
+  const iv = setInterval(() => { res.write('data: {"type":"ping"}\n\n'); }, 30000);
   req.on('close', () => clearInterval(iv));
 });
-
 app.use('/api', (req, res) => { res.status(404).json({ ok: false, erro: 'Rota nao encontrada', rota: req.path }); });
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.get('*', (req, res) => { res.sendFile(path.join(__dirname, '..', 'public', 'index.html')); });
@@ -264,9 +230,6 @@ app.listen(PORT, () => {
   console.log('MCP ativo -- /mcp/sse pronto');
   console.log('[OK] Rota /api/cruzada carregada');
   console.log('Skills/Playbooks OK');
-  if (blingRefreshToken) {
-    console.log('[BlingToken] Renovando access token...');
-    renovarBlingToken().then(ok => { if (!ok) console.log('[BlingToken] Startup: nao foi possivel obter token inicial'); });
-  }
+  if (blingRefreshToken) { renovarBlingToken(); }
   console.log('[INDEXADOR] Ativo -- ciclo a cada 300s, lote 10');
 });
