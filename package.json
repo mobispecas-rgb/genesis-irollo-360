@@ -1,19 +1,19 @@
 {
-  "name": "wix-astro-blank",
+  "name": "genesis-irollo-360",
   "type": "module",
-  "version": "0.0.1",
+  "version": "5.5.0",
+  "description": "Genesis iRollo 360 -- Motor NCT v2 -- MOBIS Autopecas",
+  "main": "src/server.js",
   "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
     "astro": "astro",
-    "dev": "wix dev",
-    "build": "wix build",
+    "build": "echo 'Genesis backend ready'",
     "wix": "wix",
-    "preview": "wix preview",
-    "release": "wix release",
-    "generate": "wix generate",
-    "env": "wix env",
     "skills": "wix skills"
   },
   "dependencies": {
+    "express": "^4.18.2",
     "@wix/astro": "^2.13.0",
     "@wix/astro-pages": "^2.0.3",
     "@wix/dashboard": "^1.3.36",
