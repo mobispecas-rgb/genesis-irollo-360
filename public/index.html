@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genesis iRollo 360 v2 | MOBIS Autopecas</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#333}
+.app{display:flex;min-height:100vh}
+nav{width:230px;background:#1a1a2e;color:#fff;display:flex;flex-direction:column;position:fixed;height:100vh;overflow-y:auto}
+.nav-header{padding:20px 15px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.nav-brand{font-size:18px;font-weight:700}
+.nav-brand em{color:#e94560;font-style:normal}
+.nav-version{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px}
+.nav-section{padding:10px 15px 5px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.4)}
+.nav-item{display:flex;align-items:center;padding:10px 15px;cursor:pointer;color:rgba(255,255,255,0.7);font-size:13px;border:none;background:none;width:100%;text-align:left;transition:background 0.2s}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,0.1);color:#fff}
+.nav-item .badge{background:#e94560;color:#fff;border-radius:10px;font-size:10px;padding:1px 6px;margin-left:auto}
+.main{margin-left:230px;flex:1;padding:25px}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:25px}
+.page-title{font-size:20px;font-weight:600}
+.page-title span{color:#666;font-weight:400;font-size:14px;margin-left:8px}
+.top-bar{display:flex;gap:10px}
+.status-pill{background:#e8f5e9;color:#2e7d32;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500}
+.status-pill.warn{background:#fff3e0;color:#ef6c00}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:25px}
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.card-value{font-size:32px;font-weight:700;margin-bottom:4px}
+.card-value.orange{color:#ef6c00}
+.card-value.red{color:#c62828}
+.card-label{font-size:12px;color:#666;font-weight:500}
+.card-sub{font-size:11px;color:#999;margin-top:2px}
+.feature-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}
+.feature-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.feature-card h3{font-size:14px;font-weight:600;margin-bottom:6px}
+.feature-card p{font-size:12px;color:#666;line-height:1.5}
+.actions-section{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:25px}
+.actions-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#666;margin-bottom:15px}
+.actions-row{display:flex;gap:10px}
+.btn{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:opacity 0.2s}
+.btn:hover{opacity:0.85}
+.btn-primary{background:#1a1a2e;color:#fff}
+.btn-success{background:#2e7d32;color:#fff}
+.btn-info{background:#1565c0;color:#fff}
+.btn-warning{background:#ef6c00;color:#fff}
+.agents-grid{display:flex;flex-direction:column;gap:0}
+.agent-item{background:#fff;border-radius:0;padding:15px 20px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:15px}
+.agent-item:first-child{border-radius:12px 12px 0 0}
+.agent-item:last-child{border-radius:0 0 12px 12px;border-bottom:none}
+.agent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.agent-dot.active{background:#4caf50}
+.agent-dot.inactive{background:#ccc}
+.agent-info{flex:1}
+.agent-name{font-size:13px;font-weight:600;margin-bottom:3px}
+.agent-desc{font-size:12px;color:#666}
+.agent-sources{font-size:11px;color:#1565c0;margin-top:4px}
+.agent-status{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:500}
+.agent-status.active{background:#e8f5e9;color:#2e7d32}
+.agent-status.soon{background:#fff3e0;color:#ef6c00}
+.section-box{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:25px}
+.nct-formula{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}
+.nct-item{background:#f5f5f5;border-radius:8px;padding:10px}
+.nct-key{font-size:12px;font-weight:700;color:#1565c0}
+.nct-val{font-size:12px;color:#333;margin-top:2px}
+.nct-rating{margin-top:15px}
+.rating-item{padding:8px 12px;border-radius:8px;font-size:12px;font-weight:500;margin-bottom:6px}
+.rating-item.green{background:#e8f5e9;color:#2e7d32}
+.rating-item.orange{background:#fff3e0;color:#ef6c00}
+.rating-item.red{background:#ffebee;color:#c62828}
+.footer-nav{padding:15px;margin-top:auto;border-top:1px solid rgba(255,255,255,0.1);font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6}
+#content-area{display:none}
+#content-area.visible{display:block}
+</style>
+</head>
+<body>
+<div class="app">
+<nav>
+  <div class="nav-header">
+    <div class="nav-brand">Genesis <em>iRollo</em> 360</div>
+    <div class="nav-version">v2.0 | Motor NCT v2 | MOBIS</div>
+  </div>
+  <div class="nav-section">Painel</div>
+  <button class="nav-item active" onclick="go('dashboard')">&#127968; Dashboard</button>
+  <button class="nav-item" onclick="go('catalogo')">&#128218; Catalogo de produtos <span class="badge" id="badge-cat">0</span></button>
+  <div class="nav-section">Cadastro</div>
+  <button class="nav-item" onclick="go('buscar')">&#128269; Buscar e enriquecer</button>
+  <button class="nav-item" onclick="go('manual')">&#43; Cadastro manual</button>
+  <button class="nav-item" onclick="go('importar')">&#128196; Importar planilha</button>
+  <div class="nav-section">Aprovacao</div>
+  <button class="nav-item" onclick="go('aprovar')">&#10003; Revisar e aprovar <span class="badge" id="badge-rev">0</span></button>
+  <div class="nav-section">Plataforma</div>
+  <button class="nav-item" onclick="go('agentes')">&#129302; Agentes de IA (12)</button>
+  <button class="nav-item" onclick="go('prompt')">&#128196; Prompt personalizado</button>
+  <button class="nav-item" onclick="go('bling')">&#128178; Bling ERP</button>
+  <button class="nav-item" onclick="go('planos')">&#11088; Planos</button>
+  <div class="footer-nav">
+    genesisindexia.com.br<br>
+    mobispecas&#64;gmail.com<br>
+    Hidrolandia, GO
+  </div>
+</nav>
+
+<main class="main" id="main-content">
+  <!-- Dashboard -->
+  <div id="page-dashboard">
+    <div class="page-header">
+      <div class="page-title">Dashboard <span>Genesis iRollo 360</span></div>
+      <div class="top-bar">
+        <span class="status-pill">NCT: --</span>
+        <span class="status-pill">Motor NCT v2 ativo</span>
+        <span class="status-pill">Claude Sonnet</span>
+      </div>
+    </div>
+    <div class="cards" id="dash-cards">
+      <div class="card"><div class="card-value" id="d-total">--</div><div class="card-label">Produtos no Catalogo</div><div class="card-sub">Enriquecidos e aprovados</div></div>
+      <div class="card"><div class="card-value orange" id="d-nct">--</div><div class="card-label">NCT Medio</div><div class="card-sub">Meta: 0.90 premium</div></div>
+      <div class="card"><div class="card-value" id="d-congelados">0</div><div class="card-label">Congelados</div><div class="card-sub">Dados travados pela IA</div></div>
+      <div class="card"><div class="card-value red" id="d-bling">0</div><div class="card-label">Sincronizados Bling</div><div class="card-sub" id="d-bling-sub">Verificando token...</div></div>
+    </div>
+    <div class="feature-cards">
+      <div class="feature-card"><h3>Motor NCT</h3><p>Score matematico de 0 a 1. Bloqueia produtos com dados inconsistentes antes de publicar. Nenhum clone passa sem ser detectado.</p></div>
+      <div class="feature-card" onclick="go('agentes')" style="cursor:pointer"><h3>12 Agentes especializados</h3><p>Cada agente tem uma fonte especifica. OEM, fiscal, veicular, CDC, SEO, imagem. Nenhum chuta. Nenhum alucina.</p></div>
+      <div class="feature-card"><h3>Galeria de imagens</h3><p>Agente busca imagens reais na web. Voce seleciona a melhor visualmente. Selecao manual aumenta o NCT.</p></div>
+    </div>
+    <div class="actions-section">
+      <div class="actions-title">Acoes Rapidas</div>
+      <div class="actions-row">
+        <button class="btn btn-primary" onclick="go('buscar')">Buscar produto</button>
+        <button class="btn btn-success" onclick="go('catalogo')">Ver catalogo</button>
+        <button class="btn btn-info" onclick="go('agentes')">Agentes de IA</button>
+        <button class="btn btn-warning" onclick="go('bling')">Corrigir Bling</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agentes -->
+  <div id="page-agentes" style="display:none">
+    <div class="page-header">
+      <div class="page-title">Agentes de IA <span>12 agentes especializados</span></div>
+    </div>
+    <div class="agents-grid" id="agents-list">
+      <!-- Filled by JS -->
+    </div>
+    <div class="section-box" style="margin-top:20px">
+      <div style="font-weight:600;margin-bottom:15px">Motor NCT -- Formula de Certificacao</div>
+      <div class="nct-formula">
+        <div class="nct-item"><div class="nct-key">TF x 0.50</div><div class="nct-val">Triangulacao de fontes: OEM confirmado + EAN validado + DNA cruzado</div></div>
+        <div class="nct-item"><div class="nct-key">FM x 0.20</div><div class="nct-val">Foto/Midia: imagem selecionada e certificada pelo lojista</div></div>
+        <div class="nct-item"><div class="nct-key">CO x 0.20</div><div class="nct-val">Conteudo: descricao tecnica completa com torques e medidas</div></div>
+        <div class="nct-item"><div class="nct-key">AV x 0.10</div><div class="nct-val">Aplicacao veicular: confirmada em minimo 2 fontes independentes</div></div>
+      </div>
+      <div class="nct-rating">
+        <div class="rating-item green">NCT maior ou igual 0.90 -- PREMIUM -- aprovado para Bling e marketplaces</div>
+        <div class="rating-item orange">NCT 0.70 a 0.89 -- BOM -- revisar antes de publicar</div>
+        <div class="rating-item red">NCT menor que 0.70 -- BAIXO -- bloqueado ate completar os dados</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bling -->
+  <div id="page-bling" style="display:none">
+    <div class="page-header">
+      <div class="page-title">Bling ERP <span>Integracao OAuth v3</span></div>
+    </div>
+    <div class="section-box">
+      <h3 style="margin-bottom:15px">Status da Conexao</h3>
+      <div id="bling-status-info">Verificando...</div>
+      <div style="margin-top:20px">
+        <h4 style="margin-bottom:10px">Autorizar Bling</h4>
+        <p style="font-size:13px;color:#666;margin-bottom:10px">Clique para iniciar o fluxo OAuth do Bling e conectar sua conta.</p>
+        <button class="btn btn-warning" onclick="autorizarBling()">Autorizar Bling OAuth</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Default pages -->
+  <div id="page-buscar" style="display:none"><div class="page-header"><div class="page-title">Buscar e Enriquecer</div></div><div class="section-box"><p style="color:#666">Use esta secao para buscar produtos e enriquecer com os 12 agentes de IA.</p></div></div>
+  <div id="page-catalogo" style="display:none"><div class="page-header"><div class="page-title">Catalogo de Produtos</div></div><div class="section-box" id="catalogo-content"><p style="color:#666">Carregando catalogo...</p></div></div>
+  <div id="page-manual" style="display:none"><div class="page-header"><div class="page-title">Cadastro Manual</div></div><div class="section-box"><p>Cadastro manual de produto em desenvolvimento.</p></div></div>
+  <div id="page-importar" style="display:none"><div class="page-header"><div class="page-title">Importar Planilha</div></div><div class="section-box"><p>Importacao de planilha em desenvolvimento.</p></div></div>
+  <div id="page-aprovar" style="display:none"><div class="page-header"><div class="page-title">Revisar e Aprovar</div></div><div class="section-box"><p>Revisao de produtos pendentes.</p></div></div>
+  <div id="page-prompt" style="display:none"><div class="page-header"><div class="page-title">Prompt Personalizado</div></div><div class="section-box"><p>Configuracao de prompt personalizado em desenvolvimento.</p></div></div>
+  <div id="page-planos" style="display:none"><div class="page-header"><div class="page-title">Planos</div></div><div class="section-box"><p>Informacoes sobre planos disponíveis.</p></div></div>
+</main>
+</div>
+
+<script>
+const AGENTES_DATA = [
+  {id:1,nome:'Enriquecimento geral',desc:'Nome tecnico, OEM, EAN, fabricante. Motor principal Claude Sonnet com conhecimento base de autopecas.',fontes:'Claude API | Base MAHLE | Base MOBIS',ativo:true},
+  {id:2,nome:'Aplicacao veicular -- triangulacao',desc:'Cruza catalogos de fabricantes, APIs publicas e PDFs tecnicos para confirmar aplicacao em multiplos veiculos.',fontes:'Catalogo MAHLE | TecDoc API | AutoData | PDFs Metal Leve | Catalogo Bosch',ativo:true},
+  {id:3,nome:'CDC -- Codigo de Defesa do Consumidor',desc:'Gera avisos obrigatorios: garantia, prazo de devolucao, responsabilidade do instalador, risco de dano.',fontes:'Lei 8.078/90 | INMETRO | Base juridica PROCON',ativo:true},
+  {id:4,nome:'Bula tecnica',desc:'Instrucoes de instalacao com torques especificos, folgas, sequencia de montagem, ferramentas necessarias.',fontes:'Manuais tecnicos | PDFs MAHLE | Metal Leve | Bosch | Gates | FAG',ativo:true},
+  {id:5,nome:'SEO + Google Ads P-MAX',desc:'Title tag, meta description, H1, palavras-chave, schema.org, Google Shopping feed. Otimizado para CPC baixo.',fontes:'Google Search Console | Semrush | Google Merchant Center',ativo:true},
+  {id:6,nome:'Fiscal -- NCM / EAN / CEST',desc:'Valida NCM na tabela TIPI, verifica EAN no GS1 Brasil, calcula CEST e CFOP por operacao fiscal.',fontes:'Tabela TIPI/NCM | GS1 Brasil | SEFAZ | API Nota Fiscal',ativo:true},
+  {id:7,nome:'Tabela periodica -- composicao quimica',desc:'Identifica material, liga metalica, tratamento termico e composicao quimica da peca. Util para importacao e INMETRO.',fontes:'Normas ABNT | INMETRO | Base de materiais SAE | ISO',ativo:true},
+  {id:8,nome:'Imagem web -- busca e selecao',desc:'Busca imagens reais do produto na web. Lojista seleciona a melhor. Selecao manual aumenta o NCT (FM sobe).',fontes:'Google Images | Rock Parts | MAHLE | Bosch | Google Shopping',ativo:true},
+  {id:9,nome:'Cabecalho ERP -- Bling / Wix / ML',desc:'Formata os campos exatos para cada plataforma. Bling, Mercado Livre, Wix, VTEX, Shopify. Sem incompatibilidade.',fontes:'API Bling v3 | API ML | Wix eCommerce | Documentacao VTEX',ativo:true},
+  {id:10,nome:'Google Ads P-MAX -- CPC baixo',desc:'Gera assets para campanha P-MAX: headlines, descriptions, imagens, extensoes. Foco em Quality Score alto.',fontes:'Google Ads API | Google Merchant | Search trends Brasil',ativo:true},
+  {id:11,nome:'Ramo de atividade -- CNPJ + CNAE',desc:'Consulta CNPJ na Receita Federal, identifica CNAE e ramo de atividade. Bloqueia produto fora do ramo.',fontes:'Receita Federal API | CNAE IBGE | Junta Comercial',ativo:true},
+  {id:12,nome:'DNA OEM -- PartsOuq + TecDoc',desc:'Busca codigo OEM em bases livres: PartsOuq, TecDoc, AMC, AllData. Cruza clones certificados e identifica produto chines.',fontes:'PartsOuq.com | TecDoc API | AMC | AllData | bases livres',ativo:true}
+];
+
+let currentPage = 'dashboard';
+
+function go(page) {
+  document.querySelectorAll('[id^="page-"]').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const pageEl = document.getElementById('page-' + page);
+  if (pageEl) pageEl.style.display = 'block';
+  currentPage = page;
+  if (page === 'agentes') renderAgentes();
+  if (page === 'catalogo') loadCatalogo();
+  if (page === 'bling') loadBlingStatus();
+  if (page === 'dashboard') loadDashboard();
+}
+
+function renderAgentes() {
+  const list = document.getElementById('agents-list');
+  list.innerHTML = '<div style="background:#fff;border-radius:12px 12px 0 0;padding:12px 20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#666;border-bottom:2px solid #e94560">12 Agentes de IA Especializados -- Nunca Alucinam</div>';
+  AGENTES_DATA.forEach(a => {
+    list.innerHTML += '<div class="agent-item"><div class="agent-dot ' + (a.ativo ? 'active' : 'inactive') + '"></div><div class="agent-info"><div class="agent-name">' + a.id + '. ' + a.nome + '</div><div class="agent-desc">' + a.desc + '</div><div class="agent-sources">' + a.fontes + '</div></div><span class="agent-status ' + (a.ativo ? 'active' : 'soon') + '">' + (a.ativo ? 'Ativo' : 'Em breve') + '</span></div>';
+  });
+}
+
+function loadDashboard() {
+  fetch('/api/dashboard').then(r => r.json()).then(d => {
+    document.getElementById('d-total').textContent = d.total || 0;
+    document.getElementById('d-nct').textContent = d.nctMedio || '--';
+    document.getElementById('d-bling-sub').textContent = d.blingAtivo ? 'Token ativo' : 'Token expirado';
+  }).catch(() => {});
+  fetch('/api/bling/status').then(r => r.json()).then(d => {
+    if (!d.tokenAtivo) document.getElementById('d-bling').textContent = '0';
+  }).catch(() => {});
+}
+
+function loadCatalogo() {
+  fetch('/api/catalogo').then(r => r.json()).then(d => {
+    const el = document.getElementById('catalogo-content');
+    if (!d.produtos || d.produtos.length === 0) { el.innerHTML = '<p style="color:#666">Nenhum produto no catalogo ainda.</p>'; return; }
+    el.innerHTML = '<p style="color:#666">' + d.total + ' produtos no catalogo.</p>';
+  }).catch(() => {});
+}
+
+function loadBlingStatus() {
+  fetch('/api/bling/status').then(r => r.json()).then(d => {
+    document.getElementById('bling-status-info').innerHTML = d.tokenAtivo ? '<span style="color:#2e7d32;font-weight:600">Token ativo</span>' : '<span style="color:#c62828;font-weight:600">Token expirado -- Faca o fluxo OAuth abaixo</span>';
+  }).catch(() => { document.getElementById('bling-status-info').textContent = 'Erro ao verificar status.'; });
+}
+
+function autorizarBling() {
+  const clientId = '837cda747405553caae6ecaf542e96abe4498317';
+  const redirectUri = encodeURIComponent(window.location.origin + '/api/bling/token');
+  const state = Math.random().toString(36).substring(2);
+  const url = 'https://www.bling.com.br/Api/v3/oauth/authorize?response_type=code&client_id=' + clientId + '&state=' + state + '&redirect_uri=' + redirectUri;
+  window.open(url, '_blank');
+}
+
+// Init
+loadDashboard();
+</script>
+</body>
+</html>
