@@ -2,262 +2,257 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Genesis iRollo 360 v2 | MOBIS Autopecas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+<title>Genesis iRollo 360 v3.0</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#333}
-.app{display:flex;min-height:100vh}
-nav{width:230px;background:#1a1a2e;color:#fff;display:flex;flex-direction:column;position:fixed;height:100vh;overflow-y:auto}
-.nav-header{padding:20px 15px;border-bottom:1px solid rgba(255,255,255,0.1)}
-.nav-brand{font-size:18px;font-weight:700}
-.nav-brand em{color:#e94560;font-style:normal}
-.nav-version{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px}
-.nav-section{padding:10px 15px 5px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.4)}
-.nav-item{display:flex;align-items:center;padding:10px 15px;cursor:pointer;color:rgba(255,255,255,0.7);font-size:13px;border:none;background:none;width:100%;text-align:left;transition:background 0.2s}
-.nav-item:hover,.nav-item.active{background:rgba(255,255,255,0.1);color:#fff}
-.nav-item .badge{background:#e94560;color:#fff;border-radius:10px;font-size:10px;padding:1px 6px;margin-left:auto}
-.main{margin-left:230px;flex:1;padding:25px}
-.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:25px}
-.page-title{font-size:20px;font-weight:600}
-.page-title span{color:#666;font-weight:400;font-size:14px;margin-left:8px}
-.top-bar{display:flex;gap:10px}
-.status-pill{background:#e8f5e9;color:#2e7d32;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500}
-.status-pill.warn{background:#fff3e0;color:#ef6c00}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:25px}
-.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-.card-value{font-size:32px;font-weight:700;margin-bottom:4px}
-.card-value.orange{color:#ef6c00}
-.card-value.red{color:#c62828}
-.card-label{font-size:12px;color:#666;font-weight:500}
-.card-sub{font-size:11px;color:#999;margin-top:2px}
-.feature-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}
-.feature-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-.feature-card h3{font-size:14px;font-weight:600;margin-bottom:6px}
-.feature-card p{font-size:12px;color:#666;line-height:1.5}
-.actions-section{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:25px}
-.actions-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#666;margin-bottom:15px}
-.actions-row{display:flex;gap:10px}
-.btn{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:opacity 0.2s}
-.btn:hover{opacity:0.85}
-.btn-primary{background:#1a1a2e;color:#fff}
-.btn-success{background:#2e7d32;color:#fff}
-.btn-info{background:#1565c0;color:#fff}
-.btn-warning{background:#ef6c00;color:#fff}
-.agents-grid{display:flex;flex-direction:column;gap:0}
-.agent-item{background:#fff;border-radius:0;padding:15px 20px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:15px}
-.agent-item:first-child{border-radius:12px 12px 0 0}
-.agent-item:last-child{border-radius:0 0 12px 12px;border-bottom:none}
-.agent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.agent-dot.active{background:#4caf50}
-.agent-dot.inactive{background:#ccc}
-.agent-info{flex:1}
-.agent-name{font-size:13px;font-weight:600;margin-bottom:3px}
-.agent-desc{font-size:12px;color:#666}
-.agent-sources{font-size:11px;color:#1565c0;margin-top:4px}
-.agent-status{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:500}
-.agent-status.active{background:#e8f5e9;color:#2e7d32}
-.agent-status.soon{background:#fff3e0;color:#ef6c00}
-.section-box{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:25px}
-.nct-formula{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}
-.nct-item{background:#f5f5f5;border-radius:8px;padding:10px}
-.nct-key{font-size:12px;font-weight:700;color:#1565c0}
-.nct-val{font-size:12px;color:#333;margin-top:2px}
-.nct-rating{margin-top:15px}
-.rating-item{padding:8px 12px;border-radius:8px;font-size:12px;font-weight:500;margin-bottom:6px}
-.rating-item.green{background:#e8f5e9;color:#2e7d32}
-.rating-item.orange{background:#fff3e0;color:#ef6c00}
-.rating-item.red{background:#ffebee;color:#c62828}
-.footer-nav{padding:15px;margin-top:auto;border-top:1px solid rgba(255,255,255,0.1);font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6}
-#content-area{display:none}
-#content-area.visible{display:block}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:"#fff";--bg2:#f8fafc;--bg3:#f1f5f9;
+  --border:#e2e8f0;--border2:#cbd5e1;
+  --text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --info:#3b82f6;--info-bg:#eff6ff;
+  --success:#1d9e75;--success-bg:#f0fdf4;--success-border:#86efac;
+  --warn:#ba7517;--warn-bg:#fffbeb;--warn-border:#fcd34d;
+  --danger:#e24b4a;--danger-bg:#fef2f2;--danger-border:#fca5a5;
+  --sb:52px;--sb-full:214px;--fil:210px;
+  --r:10px;--r2:8px;--gap:clamp(8px,2vw,14px);--pad:clamp(12px,3.5vw,26px)
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f5f9;color:#0f172a;font-size:14px;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+input,select,textarea{font-family:inherit;font-size:16px;width:100%;padding:10px 12px;border:0.5px solid var(--border2);border-radius:var(--r2);background:#fff;color:var(--text);outline:none;transition:border .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--info)}
+textarea{resize:vertical}
+button{font-family:inherit;cursor:pointer}
+.shell{display:flex;min-height:100dvh}
+.sidebar{width:var(--sb-full);flex-shrink:0;background:#fff;border-right:.5px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100dvh;overflow-y:auto;transition:width .2s}
+.sidebar.collapsed{width:var(--sb)}
+.sb-logo{padding:14px 16px 10px;border-bottom:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:52px}
+.sb-logo-text{font-size:14px;font-weight:600;white-space:nowrap}
+.sb-logo-text span{color:var(--info)}
+.sb-logo-sub{font-size:10px;color:var(--text3);margin-top:1px}
+.sb-credits{padding:8px 16px 4px;display:flex;justify-content:space-between;align-items:center}
+.sb-group{padding:8px 16px 2px;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);font-weight:600}
+.sb-item{display:flex;align-items:center;gap:8px;padding:8px 16px;border:none;background:transparent;color:var(--text2);font-size:12px;cursor:pointer;text-align:left;width:100%;border-left:2px solid transparent;min-height:38px;transition:background .1s}
+.sb-item:hover{background:var(--bg3);color:var(--text)}
+.sb-item.active{background:#f0f9ff;color:var(--info);border-left-color:var(--info)}
+.sb-item i{font-size:15px;flex-shrink:0}
+.sidebar.collapsed .sb-item{padding:10px 0;justify-content:center}
+.sidebar.collapsed .sb-label,.sidebar.collapsed .sb-badge,.sidebar.collapsed .sb-group,.sidebar.collapsed .sb-logo-text,.sidebar.collapsed .sb-credits{display:none}
+.sb-badge{margin-left:auto;font-size:9px;padding:1px 6px;border-radius:10px;background:var(--info-bg);color:var(--info)}
+.sb-badge.green{background:var(--success-bg);color:var(--success)}
+.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0}
+.top-bar{display:none;align-items:center;padding:0 var(--pad);background:#fff;border-bottom:.5px solid var(--border);min-height:52px;position:sticky;top:0;z-index:100;gap:12px}
+.main{flex:1;padding:var(--pad);overflow-y:auto}
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#fff;border-top:.5px solid var(--border);padding-bottom:env(safe-area-inset-bottom,0)}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border:none;background:transparent;color:var(--text3);font-size:9px;cursor:pointer;min-height:54px;line-height:1.2;position:relative}
+.bn-item.active{color:var(--info)}
+.bn-item i{font-size:20px}
+.bn-fab{background:var(--text);border-radius:50%;width:50px;height:50px;flex:0 0 50px;margin:-8px 0 0;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.bn-fab i{font-size:22px;color:#fff}
+.bn-dot{position:absolute;top:8px;right:calc(50% - 14px);width:7px;height:7px;border-radius:50%;background:var(--success)}
+.page{display:none}.page.active{display:block}
+.page-head{margin-bottom:clamp(14px,2.5vw,22px)}
+.page-head h2{font-size:clamp(15px,4vw,19px);font-weight:600}
+.page-head p{font-size:13px;color:var(--text2);margin-top:3px}
+.card{background:#fff;border:.5px solid var(--border);border-radius:var(--r);padding:clamp(12px,3vw,18px)}
+.card-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:10px}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap);margin-bottom:var(--gap)}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.form-grid-4{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.codes-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.cat-wrap{display:flex;flex-direction:column}
+.filter-panel{display:none;flex-direction:column;gap:16px;padding:0 16px 16px 0}
+.prod-area{min-width:0}
+.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap)}
+.prod-card{background:#fff;border:.5px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.prod-card-img{width:100%;aspect-ratio:1;background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.prod-card-img img{width:100%;height:100%;object-fit:contain;padding:8px}
+.prod-card-body{padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.prod-name{font-size:11px;font-weight:500;line-height:1.3}
+.prod-code{font-size:10px;font-family:monospace;color:var(--text3)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 18px;border-radius:var(--r2);font-size:13px;font-weight:500;border:none;cursor:pointer;transition:opacity .15s}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--text);color:#fff}
+.btn-ghost{background:transparent;border:.5px solid var(--border2);color:var(--text)}
+.btn-green{background:var(--success-bg);border:.5px solid var(--success-border);color:var(--success)}
+.btn-info{background:var(--info-bg);border:.5px solid #bfdbfe;color:var(--info)}
+.btn-full{width:100%}
+.tag{display:inline-flex;align-items:center;gap:3px;font-size:11px;padding:2px 8px;border-radius:4px;background:var(--bg3);border:.5px solid var(--border);color:var(--text2)}
+.chip{display:inline-flex;align-items:center;font-size:11px;padding:4px 10px;border-radius:20px;border:.5px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;min-height:36px;transition:all .1s}
+.chip.on{border-width:2px;border-color:var(--info);background:var(--info-bg);color:var(--info);font-weight:500}
+.nct-bar{height:5px;border-radius:3px;background:var(--bg3);overflow:hidden}
+.nct-fill{height:100%;border-radius:3px;transition:width .4s}
+.lbl{display:block;font-size:11px;color:var(--text3);margin-bottom:3px}
+.search-wrap{position:relative}
+.search-wrap input{padding-left:38px}
+.search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:17px;color:var(--text3)}
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300}
+.drawer-overlay.open{display:block}
+.drawer{position:fixed;bottom:0;left:0;right:0;z-index:301;background:#fff;border-radius:16px 16px 0 0;padding:20px var(--pad);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 20px);max-height:85dvh;overflow-y:auto;transform:translateY(100%);transition:transform .3s ease}
+.drawer.open{transform:translateY(0)}
+.drawer-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 16px}
+.menu-item{display:flex;align-items:center;gap:14px;width:100%;padding:13px 0;border:none;background:none;cursor:pointer;border-bottom:.5px solid var(--border);color:var(--text);font-size:14px;min-height:50px;text-align:left}
+.menu-item i{font-size:20px;color:var(--text2)}
+.menu-item.active{color:var(--info)}
+.menu-item.active i{color:var(--info)}
+.cam-wrap{border-radius:var(--r);overflow:hidden;position:relative;background:#000;margin-bottom:14px}
+.cam-wrap video{width:100%;display:block;max-height:260px}
+.cam-line{position:absolute;top:50%;left:10%;right:10%;height:2px;background:rgba(29,158,117,.8);transform:translateY(-50%)}
+.cam-border{position:absolute;inset:0;border:2px solid var(--success);border-radius:var(--r);pointer-events:none}
+.cam-close{position:absolute;top:10px;right:10px;padding:7px 14px;border-radius:var(--r2);border:none;background:rgba(0,0,0,.7);color:#fff;font-size:13px;cursor:pointer;min-height:40px}
+.step-log{background:var(--bg3);border-radius:var(--r);padding:12px 16px;margin-bottom:12px}
+.step-item{display:flex;gap:8px;font-size:11px;padding:2px 0;color:var(--text3)}
+.step-item.current{color:var(--text)}
+.step-check{color:var(--success);flex-shrink:0}
+.codes-required{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.badge-danger{font-size:9px;background:var(--danger-bg);color:var(--danger);border-radius:4px;padding:1px 7px}
+.badge-success{font-size:9px;background:var(--success-bg);color:var(--success);border-radius:4px;padding:2px 7px}
+.badge-warn{font-size:9px;background:var(--warn-bg);color:var(--warn);border-radius:4px;padding:2px 7px}
+.frozen-card{border-color:var(--success-border) !important}
+.pending-card{border-color:var(--warn-border) !important}
+.seo-row{display:flex;align-items:center;gap:0;border-bottom:.5px solid var(--border)}
+.seo-bar{width:4px;align-self:stretch}
+.seo-content{flex:1;display:flex;flex-wrap:wrap;gap:4px 12px;padding:10px 14px;align-items:center}
+.plan-card{background:#fff;border:.5px solid var(--border);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:0;position:relative}
+.plan-card.popular{border:2px solid var(--success-border)}
+.plan-features div{font-size:11px;color:var(--text2);padding:3px 0;border-bottom:.5px solid var(--border);display:flex;gap:6px}
+.plan-features div:before{content:'\u2713';color:var(--success);flex-shrink:0}
+.empty{text-align:center;padding:clamp(28px,6vw,48px) 16px}
+.empty i{font-size:36px;color:var(--text3)}
+.empty p{font-size:13px;color:var(--text2);margin-top:10px}
+@media(max-width:767px){.sidebar{display:none}.top-bar{display:flex}.bottom-nav{display:flex}.main{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 68px)}}
+@media(min-width:768px){input,select,textarea{font-size:13px}.stat-grid{grid-template-columns:repeat(4,1fr)}.form-grid-3{grid-template-columns:repeat(3,1fr)}.form-grid-4{grid-template-columns:repeat(3,1fr)}.codes-grid{grid-template-columns:repeat(3,1fr)}.prod-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1100px){.form-grid-4{grid-template-columns:repeat(4,1fr)}.prod-grid{grid-template-columns:repeat(4,1fr)}.cat-wrap{flex-direction:row;align-items:flex-start}.filter-panel{display:flex;width:var(--fil);flex-shrink:0;position:sticky;top:0;max-height:calc(100dvh - 52px);overflow-y:auto}.prod-area{flex:1;min-width:0;padding-left:20px}}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.mono{font-family:monospace}
+.flex{display:flex}.flex-1{flex:1}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-8{gap:8px}.gap-6{gap:6px}.flex-wrap{flex-wrap:wrap}
+.mb-10{margin-bottom:10px}.mb-12{margin-bottom:12px}.mb-14{margin-bottom:14px}.mb-16{margin-bottom:16px}
+.text-success{color:var(--success)}.text-warn{color:var(--warn)}.text-danger{color:var(--danger)}.text-info{color:var(--info)}.text-muted{color:var(--text3)}
+.overflow-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;font-size:11px;min-width:100%}
+th,td{padding:5px 7px;border-bottom:.5px solid var(--border);text-align:left}
+th{color:var(--text3);font-weight:500;white-space:nowrap}
 </style>
 </head>
 <body>
-<div class="app">
-<nav>
-  <div class="nav-header">
-    <div class="nav-brand">Genesis <em>iRollo</em> 360</div>
-    <div class="nav-version">v2.0 | Motor NCT v2 | MOBIS</div>
-  </div>
-  <div class="nav-section">Painel</div>
-  <button class="nav-item active" onclick="go('dashboard')">&#127968; Dashboard</button>
-  <button class="nav-item" onclick="go('catalogo')">&#128218; Catalogo de produtos <span class="badge" id="badge-cat">0</span></button>
-  <div class="nav-section">Cadastro</div>
-  <button class="nav-item" onclick="go('buscar')">&#128269; Buscar e enriquecer</button>
-  <button class="nav-item" onclick="go('manual')">&#43; Cadastro manual</button>
-  <button class="nav-item" onclick="go('importar')">&#128196; Importar planilha</button>
-  <div class="nav-section">Aprovacao</div>
-  <button class="nav-item" onclick="go('aprovar')">&#10003; Revisar e aprovar <span class="badge" id="badge-rev">0</span></button>
-  <div class="nav-section">Plataforma</div>
-  <button class="nav-item" onclick="go('agentes')">&#129302; Agentes de IA (12)</button>
-  <button class="nav-item" onclick="go('prompt')">&#128196; Prompt personalizado</button>
-  <button class="nav-item" onclick="go('bling')">&#128178; Bling ERP</button>
-  <button class="nav-item" onclick="go('planos')">&#11088; Planos</button>
-  <div class="footer-nav">
-    genesisindexia.com.br<br>
-    mobispecas&#64;gmail.com<br>
-    Hidrolandia, GO
-  </div>
-</nav>
-
-<main class="main" id="main-content">
-  <!-- Dashboard -->
-  <div id="page-dashboard">
-    <div class="page-header">
-      <div class="page-title">Dashboard <span>Genesis iRollo 360</span></div>
-      <div class="top-bar">
-        <span class="status-pill">NCT: --</span>
-        <span class="status-pill">Motor NCT v2 ativo</span>
-        <span class="status-pill">Claude Sonnet</span>
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-logo"><div class="sb-logo-text">Genesis <span>iRollo</span> 360<div class="sb-logo-sub">v3.0 · MOBIS · Autopeças</div></div>
+      <button onclick="toggleSb()" style="border:none;background:none;cursor:pointer;color:var(--text3);padding:4px;min-height:36px;min-width:36px;border-radius:6px"><i class="ti ti-layout-sidebar-left" id="sb-icon" style="font-size:16px"></i></button>
+    </div>
+    <div class="sb-credits"><span style="font-size:10px;color:var(--text3)">Créditos</span><span style="font-size:11px;font-weight:600;background:var(--warn-bg);color:var(--warn);border-radius:4px;padding:1px 7px">247</span></div>
+    <div id="sb-nav"></div>
+    <div style="margin-top:auto;padding:10px 16px;border-top:.5px solid var(--border);font-size:10px;color:var(--text3);line-height:1.8" id="sb-footer">genesisindexia.com.br<br>Hidrolândia, GO</div>
+  </aside>
+  <div class="main-wrap">
+    <header class="top-bar"><div style="font-size:14px;font-weight:600;flex:1">Genesis <span style="color:var(--info)">iRollo</span> 360</div><span style="font-size:10px;background:var(--warn-bg);color:var(--warn);border-radius:4px;padding:2px 8px">247 créditos</span></header>
+    <main class="main" id="main-content">
+      <div class="page active" id="p-dashboard">
+        <div class="page-head"><div class="flex items-center justify-between"><div><h2>Dashboard</h2><p>Genesis iRollo 360 · v3.0</p></div><div class="flex gap-6"><span style="font-size:10px;background:var(--success-bg);color:var(--success);border-radius:20px;padding:3px 10px">NCT v2</span><span style="font-size:10px;background:var(--success-bg);color:var(--success);border-radius:20px;padding:3px 10px">Autopeças</span></div></div></div>
+        <div class="stat-grid" id="dash-stats">
+          <div class="card"><div style="font-size:24px;font-weight:600;margin-bottom:2px" id="st-catalog">0</div><div style="font-size:11px;font-weight:500;color:var(--text2)">Catálogo</div><div style="font-size:10px;color:var(--text3)">produtos indexados</div></div>
+          <div class="card"><div style="font-size:24px;font-weight:600;color:var(--success);margin-bottom:2px" id="st-frozen">0</div><div style="font-size:11px;font-weight:500;color:var(--text2)">Congelados</div><div style="font-size:10px;color:var(--text3)">NCT ≥ 0.90</div></div>
+          <div class="card"><div style="font-size:24px;font-weight:600;margin-bottom:2px" id="st-nct">—</div><div style="font-size:11px;font-weight:500;color:var(--text2)">NCT médio</div><div style="font-size:10px;color:var(--text3)">meta ≥ 0.90</div></div>
+          <div class="card"><div style="font-size:24px;font-weight:600;margin-bottom:2px">247</div><div style="font-size:11px;font-weight:500;color:var(--text2)">Créditos</div><div style="font-size:10px;color:var(--text3)">restantes</div></div>
+        </div>
+        <div class="card mb-12"><div class="card-title">Ações rápidas</div><div class="flex flex-wrap gap-8"><button class="btn btn-ghost" onclick="goTo('ean')"><i class="ti ti-barcode"></i>EAN + Câmera</button><button class="btn btn-ghost" onclick="goTo('buscar')"><i class="ti ti-search"></i>Buscar</button><button class="btn btn-ghost" onclick="goTo('manual')"><i class="ti ti-forms"></i>Manual</button><button class="btn btn-ghost" onclick="goTo('importar')"><i class="ti ti-file-spreadsheet"></i>Planilha</button><button class="btn btn-ghost" onclick="goTo('seo')"><i class="ti ti-brand-google"></i>SEO/CPC</button></div></div>
+        <div id="dash-recentes"></div>
       </div>
-    </div>
-    <div class="cards" id="dash-cards">
-      <div class="card"><div class="card-value" id="d-total">--</div><div class="card-label">Produtos no Catalogo</div><div class="card-sub">Enriquecidos e aprovados</div></div>
-      <div class="card"><div class="card-value orange" id="d-nct">--</div><div class="card-label">NCT Medio</div><div class="card-sub">Meta: 0.90 premium</div></div>
-      <div class="card"><div class="card-value" id="d-congelados">0</div><div class="card-label">Congelados</div><div class="card-sub">Dados travados pela IA</div></div>
-      <div class="card"><div class="card-value red" id="d-bling">0</div><div class="card-label">Sincronizados Bling</div><div class="card-sub" id="d-bling-sub">Verificando token...</div></div>
-    </div>
-    <div class="feature-cards">
-      <div class="feature-card"><h3>Motor NCT</h3><p>Score matematico de 0 a 1. Bloqueia produtos com dados inconsistentes antes de publicar. Nenhum clone passa sem ser detectado.</p></div>
-      <div class="feature-card" onclick="go('agentes')" style="cursor:pointer"><h3>12 Agentes especializados</h3><p>Cada agente tem uma fonte especifica. OEM, fiscal, veicular, CDC, SEO, imagem. Nenhum chuta. Nenhum alucina.</p></div>
-      <div class="feature-card"><h3>Galeria de imagens</h3><p>Agente busca imagens reais na web. Voce seleciona a melhor visualmente. Selecao manual aumenta o NCT.</p></div>
-    </div>
-    <div class="actions-section">
-      <div class="actions-title">Acoes Rapidas</div>
-      <div class="actions-row">
-        <button class="btn btn-primary" onclick="go('buscar')">Buscar produto</button>
-        <button class="btn btn-success" onclick="go('catalogo')">Ver catalogo</button>
-        <button class="btn btn-info" onclick="go('agentes')">Agentes de IA</button>
-        <button class="btn btn-warning" onclick="go('bling')">Corrigir Bling</button>
-      </div>
-    </div>
+      <div class="page" id="p-catalogo"><div class="page-head"><div class="flex items-center justify-between gap-8"><div><h2>Produtos</h2><p id="cat-count">0 produtos</p></div><button class="btn btn-ghost" onclick="openFilterDrawer()" id="filter-btn" style="flex-shrink:0"><i class="ti ti-adjustments-horizontal"></i>Filtros<span id="filter-dot" style="display:none;width:8px;height:8px;border-radius:50%;background:var(--info);margin-left:2px"></span></button></div></div><div class="cat-wrap"><div class="filter-panel" id="filter-panel-desktop"></div><div class="prod-area"><div class="prod-grid" id="prod-grid"></div><div class="empty" id="prod-empty" style="display:none"><i class="ti ti-package"></i><p>Nenhum produto ainda.</p><div class="flex flex-wrap gap-8 mt-12" style="justify-content:center;margin-top:12px"><button class="btn btn-ghost" onclick="goTo('ean')">EAN</button><button class="btn btn-ghost" onclick="goTo('buscar')">Buscar</button><button class="btn btn-ghost" onclick="goTo('manual')">Manual</button></div></div></div></div></div>
+      <div class="page" id="p-ean"><div class="page-head"><h2>Cadastro pelo EAN</h2><p>Digite ou escaneie o código de barras · iOS e Android</p></div><div class="card mb-14"><label class="lbl">Código EAN / código de barras</label><div class="flex gap-8 mb-10"><input id="ean-input" placeholder="7894766669907" style="font-family:monospace;font-size:18px;letter-spacing:2px;flex:1" onkeydown="if(event.key==='Enter')buscarEan()"><button class="btn btn-ghost" onclick="buscarEan()" style="flex-shrink:0;min-width:48px"><i class="ti ti-search" style="font-size:18px"></i></button><button class="btn btn-info" onclick="startCamera()" style="flex-shrink:0;min-width:48px"><i class="ti ti-camera" style="font-size:18px"></i></button></div><p style="font-size:11px;color:var(--text3)">📱 Funciona no celular iOS e Android</p></div><div id="cam-wrap" class="cam-wrap" style="display:none"><video id="cam-video" autoplay playsinline muted></video><div class="cam-line"></div><div class="cam-border"></div><button class="cam-close" onclick="stopCamera()">✕ Fechar</button></div><div id="ean-loading" style="display:none" class="card"><div style="text-align:center;padding:24px"><i class="ti ti-loader" style="font-size:28px;color:var(--text3)"></i><p style="font-size:12px;color:var(--text2);margin-top:10px">Consultando GS1 · TecDoc · Partsouq…</p></div></div><div id="ean-result"></div></div>
+      <div class="page" id="p-buscar"><div class="page-head"><h2>Buscar e enriquecer</h2><p>Nome, código ou referência → 14 agentes Genesis</p></div><div class="flex gap-8 mb-14"><div style="flex:1;position:relative"><i class="ti ti-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:17px;color:var(--text3)"></i><input id="buscar-input" placeholder="Ex: Filtro OC1224 Metal Leve…" style="padding-left:40px" onkeydown="if(event.key==='Enter')enriquecer()"></div><button class="btn btn-primary" onclick="enriquecer()" style="flex-shrink:0"><i class="ti ti-search"></i>Enriquecer</button></div><div id="buscar-loading" style="display:none" class="card mb-12"><div style="text-align:center;padding:24px"><i class="ti ti-loader" style="font-size:28px;color:var(--text3)"></i><p style="font-size:12px;color:var(--text2);margin-top:10px">14 agentes consultando…</p></div></div><div id="buscar-result"></div><div id="buscar-empty" class="card" style="text-align:center;padding:32px"><i class="ti ti-search" style="font-size:32px;color:var(--text3)"></i><p style="font-size:12px;color:var(--text2);margin-top:10px">OEM · IOM · SKU · EAN · Aplicações · Peças cruzadas · SEO · DNA hash</p></div></div>
+      <div class="page" id="p-manual"><div class="page-head"><h2>Cadastro manual</h2><p>OEM · IOM · SKU · EAN · imagem obrigatórios para NCT ≥ 0.90</p></div><div style="display:flex;flex-direction:column;gap:12px"><div class="card"><div class="card-title">Identificação do produto</div><div class="mb-10"><label class="lbl">Nome técnico completo</label><input id="m-nome" placeholder="Ex: Filtro de Óleo OC1224 Metal Leve"></div><div class="form-grid-3 mb-10"><div><label class="lbl">OEM (montadora)</label><input id="m-oem" placeholder="26300-35503" style="font-family:monospace"></div><div><label class="lbl">IOM (fabricante)</label><input id="m-iom" placeholder="Metal Leve S.A."></div><div><label class="lbl">SKU interno</label><input id="m-sku" placeholder="FILT-OC1224" style="font-family:monospace"></div></div><div class="form-grid-3"><div><label class="lbl">EAN-13</label><input id="m-ean" placeholder="7894766669907" style="font-family:monospace"></div><div><label class="lbl">NCM</label><input id="m-ncm" placeholder="8421.23.00" style="font-family:monospace"></div><div><label class="lbl">CEST</label><input id="m-cest" placeholder="01.015.00" style="font-family:monospace"></div></div></div><div class="card"><div class="card-title">Fiscal</div><div class="form-grid-4"><div><label class="lbl">IPI (%)</label><input id="m-ipi" placeholder="0" style="font-family:monospace"></div><div><label class="lbl">Origem</label><select id="m-origem"><option>Nacional</option><option>Importado</option></select></div><div><label class="lbl">Classificação</label><select id="m-classif"><option>Original OEM Certificado</option><option>Importado Certificado</option><option>Importado Paralelo</option></select></div><div><label class="lbl">Marca fabricante</label><input id="m-marca" placeholder="Metal Leve"></div></div></div><div class="card" id="m-img-card"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div class="card-title" style="margin:0">Imagem</div><span class="badge-danger" id="m-img-badge">obrigatória</span></div><input id="m-imagem" placeholder="https://…imagem.jpg" onchange="previewManualImg()"><img id="m-img-preview" src="" alt="" style="margin-top:8px;width:72px;height:72px;object-fit:contain;border-radius:8px;border:.5px solid var(--border);display:none"></div><div class="card"><div class="card-title">Categorias ERP / PDV</div><div class="form-grid-2 mb-12"><div><label class="lbl">Categoria</label><select id="m-cat" onchange="updateSubCat()"><option value="">Selecionar…</option></select></div><div><label class="lbl">Subcategoria</label><select id="m-sub"><option value="">Selecionar…</option></select></div></div><div class="mb-12"><label class="lbl">Tags frente de caixa ERP</label><div id="m-tags-wrap" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px"></div><input id="m-tag-input" placeholder="Tag + Enter" onkeydown="addManualTag(event)"></div><div><label class="lbl">Marcas de montadora</label><div id="m-marcas-wrap" class="flex flex-wrap gap-6" style="margin-top:4px"></div></div></div><div class="card"><div class="card-title">Aplicações veiculares</div><div class="overflow-x"><table id="m-aplic-table"><thead><tr><th>Veículo</th><th>Versão</th><th>Motor</th><th>Cil.</th><th>Válv.</th><th>Câmbio</th><th>Ini</th><th>Fim</th><th></th></tr></thead><tbody id="m-aplic-body"></tbody></table></div><button class="btn btn-ghost" onclick="addAplicRow('m-aplic-body')" style="margin-top:8px;font-size:12px;min-height:36px"><i class="ti ti-plus"></i>Adicionar linha</button></div><button class="btn btn-green btn-full" onclick="saveManual()" style="font-size:14px"><i class="ti ti-check" style="font-size:16px"></i>Salvar produto → Bling + Wix</button></div></div>
+      <div class="page" id="p-importar"><div class="page-head"><h2>Importar planilha</h2><p>CSV · XLSX · XLS · até 500 linhas</p></div><div id="import-done" style="display:none" class="card mb-12"></div><div id="drop-zone" class="card" style="text-align:center;padding:clamp(28px,6vw,48px);cursor:pointer;border:1.5px dashed var(--border2);background:var(--bg3)" onclick="document.getElementById('file-input').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)"><input type="file" id="file-input" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFile(event)"><i class="ti ti-file-spreadsheet" style="font-size:36px;color:var(--text3)"></i><div style="font-size:14px;font-weight:500;margin-top:10px">Arraste ou toque para selecionar</div><div style="font-size:12px;color:var(--text3);margin-top:4px">CSV · XLSX · XLS</div></div><div id="import-map" style="display:none"><div class="card mt-12" style="margin-top:12px"><div class="card-title" id="import-count-label">0 linhas — mapeie as colunas</div><div class="form-grid-2" id="import-fields"></div></div><button class="btn btn-green btn-full" onclick="doImport()" style="margin-top:12px"><i class="ti ti-upload"></i>Importar</button></div></div>
+      <div class="page" id="p-congelados"><div class="page-head"><h2>Produtos Congelados</h2><p>NCT ≥ 0.90 — DNA hash travado · CPC R$0,00</p></div><div class="stat-grid mb-16" id="frozen-stats"></div><div id="frozen-list"></div></div>
+      <div class="page" id="p-seo"><div class="page-head"><h2>SEO Google / CPC</h2><p>Objetivo: <b style="color:var(--success)">CPC R$0,00</b> — NCT ≥ 0.90 = Quality Score 10</p></div><div class="card mb-12"><div class="card-title">Fórmula do CPC R$0</div><div class="flex flex-wrap gap-6 items-center"><div style="background:var(--success-bg);border-radius:8px;padding:8px 14px;text-align:center"><div style="font-size:12px;font-weight:600;color:var(--success)">NCT ≥ 0.90</div></div><span style="font-size:20px;color:var(--text3)">→</span><div style="background:var(--info-bg);border-radius:8px;padding:8px 14px;text-align:center"><div style="font-size:12px;font-weight:600;color:var(--info)">DNA hash único</div></div><span style="font-size:20px;color:var(--text3)">→</span><div style="background:var(--success-bg);border-radius:8px;padding:8px 14px;text-align:center"><div style="font-size:12px;font-weight:600;color:var(--success)">CPC R$0,00</div></div></div></div><div class="card mb-12"><div class="card-title">NCT × Quality Score × CPC</div><div style="border-radius:8px;overflow:hidden;border:.5px solid var(--border)" id="seo-table"></div></div><div class="card mb-12" id="seo-progress"></div><div id="seo-products"></div></div>
+      <div class="page" id="p-agentes"><div class="page-head"><h2>Agentes de IA — 14 especializados</h2><p>Cada agente tem fonte própria. Ramo: 🔧 Autopeças</p></div><div style="border-radius:var(--r);overflow:hidden;border:.5px solid var(--border)" id="agentes-list"></div></div>
+      <div class="page" id="p-integracoes"><div class="page-head"><h2>Integrações</h2><p>Conecte sua loja para sincronizar catálogo automaticamente</p></div><div class="form-grid-2" id="integracoes-grid"></div></div>
+      <div class="page" id="p-planos"><div class="page-head"><h2>Planos e créditos</h2></div><div class="form-grid-3" id="planos-grid" style="margin-bottom:16px"></div><div class="card"><div style="font-size:13px;font-weight:500;margin-bottom:8px">Créditos avulsos — 1 crédito = 1 enriquecimento</div><input type="range" id="cred-range" min="100" max="5000" step="100" value="500" oninput="updateCredPrice()" style="width:100%;margin-bottom:8px"><div style="font-size:13px;color:var(--text2)" id="cred-label">500 créditos · R$ 195,00</div></div></div>
+      <div class="page" id="p-perfil"></div>
+      <div class="page" id="p-raspador"></div>
+    </main>
+    <nav class="bottom-nav" aria-label="Navegação principal">
+      <button class="bn-item active" data-page="dashboard" onclick="goTo('dashboard')"><i class="ti ti-dashboard"></i><span>Início</span></button>
+      <button class="bn-item" data-page="catalogo" onclick="goTo('catalogo')"><i class="ti ti-package"></i><span>Produtos</span></button>
+      <button class="bn-item bn-fab" data-page="ean" onclick="goTo('ean')" aria-label="Cadastro EAN"><i class="ti ti-barcode"></i></button>
+      <button class="bn-item" data-page="buscar" onclick="goTo('buscar')"><i class="ti ti-search"></i><span>Buscar</span></button>
+      <button class="bn-item" onclick="openMenuDrawer()"><i class="ti ti-menu-2"></i><span>Menu</span></button>
+    </nav>
   </div>
-
-  <!-- Agentes -->
-  <div id="page-agentes" style="display:none">
-    <div class="page-header">
-      <div class="page-title">Agentes de IA <span>12 agentes especializados</span></div>
-    </div>
-    <div class="agents-grid" id="agents-list">
-      <!-- Filled by JS -->
-    </div>
-    <div class="section-box" style="margin-top:20px">
-      <div style="font-weight:600;margin-bottom:15px">Motor NCT -- Formula de Certificacao</div>
-      <div class="nct-formula">
-        <div class="nct-item"><div class="nct-key">TF x 0.50</div><div class="nct-val">Triangulacao de fontes: OEM confirmado + EAN validado + DNA cruzado</div></div>
-        <div class="nct-item"><div class="nct-key">FM x 0.20</div><div class="nct-val">Foto/Midia: imagem selecionada e certificada pelo lojista</div></div>
-        <div class="nct-item"><div class="nct-key">CO x 0.20</div><div class="nct-val">Conteudo: descricao tecnica completa com torques e medidas</div></div>
-        <div class="nct-item"><div class="nct-key">AV x 0.10</div><div class="nct-val">Aplicacao veicular: confirmada em minimo 2 fontes independentes</div></div>
-      </div>
-      <div class="nct-rating">
-        <div class="rating-item green">NCT maior ou igual 0.90 -- PREMIUM -- aprovado para Bling e marketplaces</div>
-        <div class="rating-item orange">NCT 0.70 a 0.89 -- BOM -- revisar antes de publicar</div>
-        <div class="rating-item red">NCT menor que 0.70 -- BAIXO -- bloqueado ate completar os dados</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bling -->
-  <div id="page-bling" style="display:none">
-    <div class="page-header">
-      <div class="page-title">Bling ERP <span>Integracao OAuth v3</span></div>
-    </div>
-    <div class="section-box">
-      <h3 style="margin-bottom:15px">Status da Conexao</h3>
-      <div id="bling-status-info">Verificando...</div>
-      <div style="margin-top:20px">
-        <h4 style="margin-bottom:10px">Autorizar Bling</h4>
-        <p style="font-size:13px;color:#666;margin-bottom:10px">Clique para iniciar o fluxo OAuth do Bling e conectar sua conta.</p>
-        <button class="btn btn-warning" onclick="autorizarBling()">Autorizar Bling OAuth</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Default pages -->
-  <div id="page-buscar" style="display:none"><div class="page-header"><div class="page-title">Buscar e Enriquecer</div></div><div class="section-box"><p style="color:#666">Use esta secao para buscar produtos e enriquecer com os 12 agentes de IA.</p></div></div>
-  <div id="page-catalogo" style="display:none"><div class="page-header"><div class="page-title">Catalogo de Produtos</div></div><div class="section-box" id="catalogo-content"><p style="color:#666">Carregando catalogo...</p></div></div>
-  <div id="page-manual" style="display:none"><div class="page-header"><div class="page-title">Cadastro Manual</div></div><div class="section-box"><p>Cadastro manual de produto em desenvolvimento.</p></div></div>
-  <div id="page-importar" style="display:none"><div class="page-header"><div class="page-title">Importar Planilha</div></div><div class="section-box"><p>Importacao de planilha em desenvolvimento.</p></div></div>
-  <div id="page-aprovar" style="display:none"><div class="page-header"><div class="page-title">Revisar e Aprovar</div></div><div class="section-box"><p>Revisao de produtos pendentes.</p></div></div>
-  <div id="page-prompt" style="display:none"><div class="page-header"><div class="page-title">Prompt Personalizado</div></div><div class="section-box"><p>Configuracao de prompt personalizado em desenvolvimento.</p></div></div>
-  <div id="page-planos" style="display:none"><div class="page-header"><div class="page-title">Planos</div></div><div class="section-box"><p>Informacoes sobre planos disponíveis.</p></div></div>
-</main>
 </div>
-
+<div class="drawer-overlay" id="filter-overlay" onclick="closeFilterDrawer()"></div>
+<div class="drawer" id="filter-drawer"><div class="drawer-handle"></div><div style="font-size:15px;font-weight:600;margin-bottom:16px">Filtros</div><div id="filter-panel-mobile"></div><button class="btn btn-primary btn-full" onclick="closeFilterDrawer()" style="margin-top:16px">Aplicar filtros</button></div>
+<div class="drawer-overlay" id="menu-overlay" onclick="closeMenuDrawer()"></div>
+<div class="drawer" id="menu-drawer"><div class="drawer-handle"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div style="font-size:15px;font-weight:600">Navegação</div><button onclick="closeMenuDrawer()" style="border:none;background:none;cursor:pointer;color:var(--text3);font-size:22px;min-height:44px;min-width:44px">×</button></div><div id="menu-drawer-items"></div></div>
 <script>
-const AGENTES_DATA = [
-  {id:1,nome:'Enriquecimento geral',desc:'Nome tecnico, OEM, EAN, fabricante. Motor principal Claude Sonnet com conhecimento base de autopecas.',fontes:'Claude API | Base MAHLE | Base MOBIS',ativo:true},
-  {id:2,nome:'Aplicacao veicular -- triangulacao',desc:'Cruza catalogos de fabricantes, APIs publicas e PDFs tecnicos para confirmar aplicacao em multiplos veiculos.',fontes:'Catalogo MAHLE | TecDoc API | AutoData | PDFs Metal Leve | Catalogo Bosch',ativo:true},
-  {id:3,nome:'CDC -- Codigo de Defesa do Consumidor',desc:'Gera avisos obrigatorios: garantia, prazo de devolucao, responsabilidade do instalador, risco de dano.',fontes:'Lei 8.078/90 | INMETRO | Base juridica PROCON',ativo:true},
-  {id:4,nome:'Bula tecnica',desc:'Instrucoes de instalacao com torques especificos, folgas, sequencia de montagem, ferramentas necessarias.',fontes:'Manuais tecnicos | PDFs MAHLE | Metal Leve | Bosch | Gates | FAG',ativo:true},
-  {id:5,nome:'SEO + Google Ads P-MAX',desc:'Title tag, meta description, H1, palavras-chave, schema.org, Google Shopping feed. Otimizado para CPC baixo.',fontes:'Google Search Console | Semrush | Google Merchant Center',ativo:true},
-  {id:6,nome:'Fiscal -- NCM / EAN / CEST',desc:'Valida NCM na tabela TIPI, verifica EAN no GS1 Brasil, calcula CEST e CFOP por operacao fiscal.',fontes:'Tabela TIPI/NCM | GS1 Brasil | SEFAZ | API Nota Fiscal',ativo:true},
-  {id:7,nome:'Tabela periodica -- composicao quimica',desc:'Identifica material, liga metalica, tratamento termico e composicao quimica da peca. Util para importacao e INMETRO.',fontes:'Normas ABNT | INMETRO | Base de materiais SAE | ISO',ativo:true},
-  {id:8,nome:'Imagem web -- busca e selecao',desc:'Busca imagens reais do produto na web. Lojista seleciona a melhor. Selecao manual aumenta o NCT (FM sobe).',fontes:'Google Images | Rock Parts | MAHLE | Bosch | Google Shopping',ativo:true},
-  {id:9,nome:'Cabecalho ERP -- Bling / Wix / ML',desc:'Formata os campos exatos para cada plataforma. Bling, Mercado Livre, Wix, VTEX, Shopify. Sem incompatibilidade.',fontes:'API Bling v3 | API ML | Wix eCommerce | Documentacao VTEX',ativo:true},
-  {id:10,nome:'Google Ads P-MAX -- CPC baixo',desc:'Gera assets para campanha P-MAX: headlines, descriptions, imagens, extensoes. Foco em Quality Score alto.',fontes:'Google Ads API | Google Merchant | Search trends Brasil',ativo:true},
-  {id:11,nome:'Ramo de atividade -- CNPJ + CNAE',desc:'Consulta CNPJ na Receita Federal, identifica CNAE e ramo de atividade. Bloqueia produto fora do ramo.',fontes:'Receita Federal API | CNAE IBGE | Junta Comercial',ativo:true},
-  {id:12,nome:'DNA OEM -- PartsOuq + TecDoc',desc:'Busca codigo OEM em bases livres: PartsOuq, TecDoc, AMC, AllData. Cruza clones certificados e identifica produto chines.',fontes:'PartsOuq.com | TecDoc API | AMC | AllData | bases livres',ativo:true}
-];
-
-let currentPage = 'dashboard';
-
-function go(page) {
-  document.querySelectorAll('[id^="page-"]').forEach(el => el.style.display = 'none');
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  const pageEl = document.getElementById('page-' + page);
-  if (pageEl) pageEl.style.display = 'block';
-  currentPage = page;
-  if (page === 'agentes') renderAgentes();
-  if (page === 'catalogo') loadCatalogo();
-  if (page === 'bling') loadBlingStatus();
-  if (page === 'dashboard') loadDashboard();
-}
-
-function renderAgentes() {
-  const list = document.getElementById('agents-list');
-  list.innerHTML = '<div style="background:#fff;border-radius:12px 12px 0 0;padding:12px 20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#666;border-bottom:2px solid #e94560">12 Agentes de IA Especializados -- Nunca Alucinam</div>';
-  AGENTES_DATA.forEach(a => {
-    list.innerHTML += '<div class="agent-item"><div class="agent-dot ' + (a.ativo ? 'active' : 'inactive') + '"></div><div class="agent-info"><div class="agent-name">' + a.id + '. ' + a.nome + '</div><div class="agent-desc">' + a.desc + '</div><div class="agent-sources">' + a.fontes + '</div></div><span class="agent-status ' + (a.ativo ? 'active' : 'soon') + '">' + (a.ativo ? 'Ativo' : 'Em breve') + '</span></div>';
-  });
-}
-
-function loadDashboard() {
-  fetch('/api/dashboard').then(r => r.json()).then(d => {
-    document.getElementById('d-total').textContent = d.total || 0;
-    document.getElementById('d-nct').textContent = d.nctMedio || '--';
-    document.getElementById('d-bling-sub').textContent = d.blingAtivo ? 'Token ativo' : 'Token expirado';
-  }).catch(() => {});
-  fetch('/api/bling/status').then(r => r.json()).then(d => {
-    if (!d.tokenAtivo) document.getElementById('d-bling').textContent = '0';
-  }).catch(() => {});
-}
-
-function loadCatalogo() {
-  fetch('/api/catalogo').then(r => r.json()).then(d => {
-    const el = document.getElementById('catalogo-content');
-    if (!d.produtos || d.produtos.length === 0) { el.innerHTML = '<p style="color:#666">Nenhum produto no catalogo ainda.</p>'; return; }
-    el.innerHTML = '<p style="color:#666">' + d.total + ' produtos no catalogo.</p>';
-  }).catch(() => {});
-}
-
-function loadBlingStatus() {
-  fetch('/api/bling/status').then(r => r.json()).then(d => {
-    document.getElementById('bling-status-info').innerHTML = d.tokenAtivo ? '<span style="color:#2e7d32;font-weight:600">Token ativo</span>' : '<span style="color:#c62828;font-weight:600">Token expirado -- Faca o fluxo OAuth abaixo</span>';
-  }).catch(() => { document.getElementById('bling-status-info').textContent = 'Erro ao verificar status.'; });
-}
-
-function autorizarBling() {
-  const clientId = '837cda747405553caae6ecaf542e96abe4498317';
-  const redirectUri = encodeURIComponent(window.location.origin + '/api/bling/token');
-  const state = Math.random().toString(36).substring(2);
-  const url = 'https://www.bling.com.br/Api/v3/oauth/authorize?response_type=code&client_id=' + clientId + '&state=' + state + '&redirect_uri=' + redirectUri;
-  window.open(url, '_blank');
-}
-
-// Init
-loadDashboard();
+let catalog=[],currentPage='dashboard',cameraStream=null,importRows=[],importCols=[],manualTags=[],manualMarcas=[],filterState={};
+const CATS={Motor:["Pistões/Anéis","Bronzinas","Cabeçote","Virabrequim","Juntas","Bomba de Óleo"],Filtros:["Filtro de Ar","Filtro de Óleo","Filtro Combustível","Filtro Cabine"],Freios:["Pastilhas","Discos","Lonas","Cilindro","Pinça"],Suspenção:["Amortecedor","Mola","Buchas","Coxim","Pivô"],Transmissão:["Embreagem","Câmbio","Semi-eixo","Cruzeta"],Arrefecimento:["Radiador","Bomba d'gua","Termostato","Ventoinha"],Elétrica:["Alternador","Arranque","Sensores","Bateria"],Direção:["Caixa Direção","Bomba Direção","Terminal"],Combustível:["Bomba","Injetor"],Escapamento:["Catalisador","Coletor","Silencioso"]};
+const MARCAS=["Hyundai","Kia","Ford","Chevrolet","VW","Fiat","Toyota","Honda","Renault","Nissan","Mitsubishi","Mercedes"];
+const AGENTES=[[1,"Enriquecimento geral","Nome técnico, OEM, EAN, fabricante.","Claude API · MAHLE · MOBIS"],[2,"Aplicação veicular","Cruza catálogos para confirmar aplicação.","MAHLE · TecDoc · AutoData"],[3,"CDC","Avisos CDC obrigatórios.","Lei 8.078/90 · INMETRO"],[4,"Bula técnica","Torques, folgas, montagem.","Manuais · MAHLE · Metal Leve"],[5,"SEO + P-MAX","Title, meta, H1, schema.org.","Search Console · Semrush"],[6,"Fiscal NCM/EAN/CEST","Valida NCM, EAN GS1, CEST.","TIPI/NCM · GS1 Brasil"],[7,"Composição","Liga metálica, tratamento.","ABNT · SAE · ISO"],[8,"Imagem web","URLs reais via web search.","Google Images · MAHLE"],[9,"Cabeçalho ERP","Formata Bling, Wix, ML.","API Bling v3 · Wix"],[10,"Google Ads assets","Headlines, descriptions.","Google Ads · Merchant"],[11,"CNPJ+CNAE","Consulta CNPJ, CNAE.","Receita Federal"],[12,"DNA hash + NCT","Hash SHA-256 único.","Algoritmo Genesis · GS1"],[13,"Peças cruzadas","OEM multi-montadora.","Partsouq · TecDoc"],[14,"Aplicação expandida","Outras montadoras.","Partsouq · AutoData"]];
+const INTEGRACOES=["Bling v3","Bling v2","Wix","Mercado Livre","Tiny ERP","Shopify","VTEX","Nuvemshop","Tray","Magento 2"];
+const PLANOS=[{n:"Básico",p:"R$97/mês",dest:false,f:["200 produtos","10 buscas/dia","Agentes OEM+EAN","Bling básico","Suporte e-mail"]},{n:"Profissional",p:"R$297/mês",dest:true,f:["Produtos ilimitados","14 agentes completos","Bling+Wix+ML","Partsouq+TecDoc","Câmera EAN","P-MAX automático","DNA hash + NCT","Suporte WhatsApp"]},{n:"Enterprise",p:"Consulta",dest:false,f:["Tudo + API REST","10 usuários","Plugins custom","SLA 99.9%","Gerente dedicado"]}];
+const NAV_ITEMS=[{g:"Principal",items:[{id:"dashboard",icon:"ti-dashboard",label:"Dashboard"},{id:"perfil",icon:"ti-user-circle",label:"Perfil de Voz"}]},{g:"Cadastro",items:[{id:"ean",icon:"ti-barcode",label:"Cadastro pelo EAN"},{id:"buscar",icon:"ti-search",label:"Buscar e enriquecer"},{id:"raspador",icon:"ti-spider",label:"Raspador web"},{id:"manual",icon:"ti-forms",label:"Cadastro manual"},{id:"importar",icon:"ti-file-spreadsheet",label:"Por planilha"}]},{g:"Status",items:[{id:"congelados",icon:"ti-lock",label:"Congelados",badge:"frozen"},{id:"seo",icon:"ti-brand-google",label:"SEO / CPC"}]},{g:"Plataforma",items:[{id:"agentes",icon:"ti-robot",label:"Agentes de IA (14)"},{id:"integracoes",icon:"ti-plug",label:"Integrações"},{id:"planos",icon:"ti-star",label:"Planos e créditos"}]}];
+window.addEventListener('DOMContentLoaded',()=>{buildSidebar();buildMenuDrawer();buildManualForm();buildAgentes();buildIntegracoes();buildPlanos();buildFilterPanels();updateDashboard();renderCatalog();renderCongelados();renderSEO();if(document.getElementById('p-perfil'))document.getElementById('p-perfil').innerHTML='<div class="page-head"><h2>Perfil de Voz</h2><p>Configure CNPJ para detecção automática.</p></div><div class="card"><div class="card-title">CNPJ</div><div class="flex gap-8"><input id="cnpj-input" placeholder="00.000.000/0001-00" style="font-family:monospace;flex:1"><button class="btn btn-ghost" onclick="alert('Consultando CNPJ...')">Consultar</button></div></div>';if(document.getElementById('p-raspador'))document.getElementById('p-raspador').innerHTML='<div class="page-head"><h2>Raspador web</h2><p>Cole a URL do produto.</p></div><div class="card"><div class="flex gap-8"><input placeholder="https://..."><button class="btn btn-primary" onclick="alert('Recurso no plano Profissional.')"><i class="ti ti-spider"></i>Raspar</button></div></div>';});
+function nctColor(v){return v>=.9?'var(--success)':v>=.7?'var(--warn)':'var(--danger)';}
+function goTo(id){if(!document.getElementById('p-'+id))id='dashboard';document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+id).classList.add('active');document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('active',el.dataset.page===id));document.querySelectorAll('.bn-item[data-page]').forEach(el=>el.classList.toggle('active',el.dataset.page===id));currentPage=id;window.scrollTo(0,0);if(id==='catalogo')renderCatalog();if(id==='congelados')renderCongelados();if(id==='seo')renderSEO();if(id==='dashboard')updateDashboard();}
+function buildSidebar(){const frozen=catalog.filter(p=>(p.nct_estimado||0)>=.9).length;let html='';NAV_ITEMS.forEach(g=>{html+=`<div class="sb-group">${g.g}</div>`;g.items.forEach(item=>{const badge=item.badge==='frozen'&&frozen>0?`<span class="sb-badge green">${frozen}</span>`:'';html+=`<button class="sb-item${item.id===currentPage?' active':''}" data-page="${item.id}" onclick="goTo('${item.id}')"><i class="ti ${item.icon}"></i><span class="sb-label">${item.label}</span>${badge}</button>`;});});document.getElementById('sb-nav').innerHTML=html;}
+let sbCollapsed=false;
+function toggleSb(){sbCollapsed=!sbCollapsed;document.getElementById('sidebar').classList.toggle('collapsed',sbCollapsed);document.getElementById('sb-icon').className=sbCollapsed?'ti ti-layout-sidebar-right':'ti ti-layout-sidebar-left';}
+function buildMenuDrawer(){let html='';NAV_ITEMS.forEach(g=>{g.items.filter(i=>!['dashboard','catalogo','buscar','ean','congelados'].includes(i.id)).forEach(item=>{html+=`<button class="menu-item" onclick="goTo('${item.id}');closeMenuDrawer()"><i class="ti ${item.icon}"></i>${item.label}</button>`;});});document.getElementById('menu-drawer-items').innerHTML=html;}
+function openMenuDrawer(){document.getElementById('menu-overlay').classList.add('open');document.getElementById('menu-drawer').classList.add('open');}
+function closeMenuDrawer(){document.getElementById('menu-overlay').classList.remove('open');document.getElementById('menu-drawer').classList.remove('open');}
+function buildFilterPanels(){const html=buildFilterHTML();document.getElementById('filter-panel-desktop').innerHTML=html;document.getElementById('filter-panel-mobile').innerHTML=html;}
+function buildFilterHTML(){return `<div><div class="card-title">Buscar</div><div style="position:relative"><i class="ti ti-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3)"></i><input id="filt-q" placeholder="Nome, OEM, EAN..." style="padding-left:34px" oninput="applyFilter()" value="${filterState.q||''}"></div></div><div><div class="card-title">NCT</div>${[['Todos',''],['Premium ≥ 0.90','premium'],['Bom 0.70-0.89','bom'],['Baixo < 0.70','baixo']].map(([l,v])=>`<label style="display:flex;align-items:center;gap:8px;padding:3px 0;cursor:pointer;font-size:12px"><input type="radio" name="filt-nct" ${(filterState.nct||'')===v?'checked':''} onchange="filterState.nct='${v}';renderCatalog()" style="width:auto;min-height:auto;padding:0">${l}</label>`).join('')}</div><label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;padding:2px 0"><input type="checkbox" ${filterState.congelados?'checked':''} onchange="filterState.congelados=this.checked;renderCatalog()" style="width:auto;min-height:auto;padding:0">Só congelados</label><button class="btn btn-ghost" onclick="filterState={};buildFilterPanels();renderCatalog()" style="font-size:12px;min-height:36px;width:100%">Limpar filtros</button>`;}
+function applyFilter(){filterState.q=document.getElementById('filt-q').value;renderCatalog();}
+function openFilterDrawer(){document.getElementById('filter-overlay').classList.add('open');document.getElementById('filter-drawer').classList.add('open');buildFilterPanels();}
+function closeFilterDrawer(){document.getElementById('filter-overlay').classList.remove('open');document.getElementById('filter-drawer').classList.remove('open');}
+function getFiltered(){return catalog.filter(p=>{if(filterState.q){const q=filterState.q.toLowerCase();if(![p.nome_tecnico,p.oem,p.ean,p.sku].some(v=>v?.toLowerCase().includes(q)))return false;}if(filterState.nct==='premium'&&(p.nct_estimado||0)<.9)return false;if(filterState.nct==='bom'){const n=p.nct_estimado||0;if(n<.7||n>=.9)return false;}if(filterState.nct==='baixo'&&(p.nct_estimado||0)>=.7)return false;if(filterState.congelados&&(p.nct_estimado||0)<.9)return false;return true;});}
+function renderCatalog(){const filtered=getFiltered();const cnt=document.getElementById('cat-count');if(cnt)cnt.textContent=`${filtered.length}/${catalog.length} produto${catalog.length!==1?'s':''}`;const grid=document.getElementById('prod-grid');const empty=document.getElementById('prod-empty');buildFilterPanels();if(!grid)return;if(catalog.length===0){grid.innerHTML='';if(empty)empty.style.display='block';return;}if(empty)empty.style.display='none';if(filtered.length===0){grid.innerHTML='<div class="empty" style="grid-column:1/-1"><i class="ti ti-filter-off"></i><p>Nenhum produto com estes filtros.</p></div>';return;}grid.innerHTML=filtered.map(prodCardHTML).join('');}
+function prodCardHTML(p){const n=p.nct_estimado||0;const hasImg=p.imagem&&!["(imagem selecionada)"].includes(p.imagem);const marcasHtml=(p.marcas_final||p.marcas_montadoras||[]).slice(0,2).map(m=>`<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:var(--info-bg);color:var(--info)">${m}</span>`).join('');return `<div class="prod-card"><div class="prod-card-img">${hasImg?`<img src="${p.imagem}" alt="" onerror="this.parentNode.innerHTML='<i class=\\"ti ti-photo-off\\" style=\\"font-size:28px;color:var(--text3)\\"></i>'">`:'<i class="ti ti-photo-off" style="font-size:28px;color:var(--text3)"></i>'}</div><div class="prod-card-body"><div class="prod-name">${p.nome_tecnico||'Sem nome'}</div><div class="prod-code">${p.oem||p.ean||'—'}</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:2px">${marcasHtml}</div><div style="margin-top:5px"><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-bottom:3px"><span>NCT</span><span style="color:${nctColor(n)};font-weight:600">${n.toFixed(2)}</span></div><div class="nct-bar"><div class="nct-fill" style="width:${Math.min(100,n*100)}%;background:${nctColor(n)}"></div></div></div>${n>=.9?'<div style="font-size:9px;color:var(--success);margin-top:3px">✓ Congelado · CPC R$0</div>':''}</div></div>`;}
+</script>
+<script>
+async function callClaude(prompt){const r=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});const d=await r.json();return(d.content||[]).map(b=>b.text||'').join('\n');}
+function parseJson(txt){try{const m=txt.match(/\{[\s\S]*\}/);return m?JSON.parse(m[0]):null;}catch{return null;}}
+async function buscarEan(codigo){const num=(codigo||document.getElementById('ean-input').value).replace(/\D/g,'');if(num.length<8)return;document.getElementById('ean-loading').style.display='block';document.getElementById('ean-result').innerHTML='';const txt=await callClaude('Agente Genesis 360. EAN: "'+num+'". Retorne APENAS JSON:{"nome_tecnico":"","oem":"","iom":"","sku":"","ean":"'+num+'","ncm":"","marca":"","classificacao":"Original OEM Certificado","descricao_seo":"","categoria":"","tags_erp":[],"marcas_montadoras":[],"aplicacoes":[{"veiculo":"","versao":"","motor":"","cilindrada":"","valvulas":"","cambio":"","ano_ini":2007,"ano_fim":2025}],"codigos_equivalentes":[],"nct_estimado":0.72,"dna_hash":"genesis360"}');document.getElementById('ean-loading').style.display='none';const p=parseJson(txt);if(p)renderResult('ean-result',p);else document.getElementById('ean-result').innerHTML='<div class="card" style="border-color:var(--danger-border);color:var(--danger)">EAN não encontrado.</div>';}
+async function startCamera(){if(!navigator.mediaDevices){alert('Câmera não disponível.');return;}try{const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});cameraStream=s;const video=document.getElementById('cam-video');document.getElementById('cam-wrap').style.display='block';video.srcObject=s;video.play();if('BarcodeDetector' in window){const det=new BarcodeDetector({formats:['ean_13','ean_8','code_128','upc_a']});const scan=async()=>{if(!cameraStream)return;try{const c=await det.detect(video);if(c.length>0){document.getElementById('ean-input').value=c[0].rawValue;stopCamera();buscarEan(c[0].rawValue);return;}}catch{}if(cameraStream)requestAnimationFrame(scan);};setTimeout(scan,500);}}catch{alert('Permissão de câmera negada.');}}
+function stopCamera(){if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null;}document.getElementById('cam-wrap').style.display='none';}
+async function enriquecer(){const q=document.getElementById('buscar-input').value.trim();if(!q)return;document.getElementById('buscar-loading').style.display='block';document.getElementById('buscar-result').innerHTML='';document.getElementById('buscar-empty').style.display='none';const txt=await callClaude('Agente Genesis 360 autopeças. Produto: "'+q+'". Retorne APENAS JSON:{"nome_tecnico":"","oem":"","iom":"","sku":"","ean":"","ncm":"","marca":"","classificacao":"Original OEM Certificado","descricao_seo":"","categoria":"","tags_erp":[],"marcas_montadoras":[],"aplicacoes":[{"veiculo":"","versao":"","motor":"","cilindrada":"","valvulas":"","cambio":"","ano_ini":2007,"ano_fim":2025}],"codigos_equivalentes":[],"pecas_cruzadas":[{"fabricante":"","codigo":"","tipo":"OEM"}],"imagens_web":[],"nct_estimado":0.85,"dna_hash":"genesis360"}');document.getElementById('buscar-loading').style.display='none';const p=parseJson(txt);if(p)renderResult('buscar-result',p);else{document.getElementById('buscar-result').innerHTML='<div class="card" style="border-color:var(--danger-border);color:var(--danger)">Erro. Verifique a conexão.</div>';document.getElementById('buscar-empty').style.display='block';}}
+let selectedImages={};
+function selectImg(id,src){selectedImages[id]=src;const card=document.getElementById(id+'-card');const badge=document.getElementById(id+'-badge');if(card)card.style.borderColor='var(--success-border)';if(badge){badge.className='badge-success';badge.textContent='✓ selecionada';}}
+function renderResult(containerId,p){const n=p.nct_estimado||0;const imgId='img-'+Date.now();const html=`<div style="display:flex;flex-direction:column;gap:12px"><div class="card flex justify-between items-center gap-8"><div><div style="font-size:15px;font-weight:600">${p.nome_tecnico||'Produto'}</div><div style="font-size:12px;color:var(--text2);margin-top:3px">${p.marca||''} · ${p.classificacao||''}</div></div><div style="text-align:right"><div style="font-size:22px;font-weight:600;color:${nctColor(n)}">${n.toFixed(2)}</div><div style="font-size:10px;color:${nctColor(n)}">${n>=.9?'PREMIUM ✓':n>=.7?'BOM':'BAIXO'}</div></div></div>${p.aplicacoes?.length?`<div class="card"><div class="card-title">Aplicações — ${p.aplicacoes.length} versões</div><div class="overflow-x"><table><thead><tr><th>Veículo</th><th>Versão</th><th>Motor</th><th>Ini</th><th>Fim</th></tr></thead><tbody>${p.aplicacoes.map(a=>`<tr><td>${a.veiculo||'—'}</td><td>${a.versao||'—'}</td><td style="font-family:monospace;font-size:10px">${a.motor||'—'}</td><td>${a.ano_ini||'—'}</td><td>${a.ano_fim||'—'}</td></tr>`).join('')}</tbody></table></div></div>`:''}<div class="card" id="${imgId}-card" style="border-color:var(--danger-border)"><div class="flex items-center gap-8 mb-10"><div class="card-title" style="margin:0">Imagem</div><span class="badge-danger" id="${imgId}-badge">obrigatória</span></div><div style="display:flex;flex-wrap:wrap;gap:8px">${(p.imagens_web?.length?p.imagens_web:['ph1','ph2']).map((src,i)=>`<button onclick="selectImg('${imgId}','${src}')" style="border:.5px solid var(--border);border-radius:8px;padding:4px;cursor:pointer;background:var(--bg3);min-height:44px;min-width:44px"><img src="${src.startsWith('ph')?'https://placehold.co/64x64?text=Foto'+(i+1):src}" onerror="this.src='https://placehold.co/64x64?text=Foto${i+1}'" style="width:64px;height:64px;object-fit:contain;display:block;border-radius:4px"></button>`).join('')}<button onclick="addImgUrl('${imgId}')" style="width:80px;height:80px;border:.5px dashed var(--border2);border-radius:8px;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--text3);font-size:11px"><i class="ti ti-plus" style="font-size:18px"></i>URL</button></div></div><div style="background:var(--bg3);border-radius:var(--r);padding:10px 14px;display:flex;align-items:center;gap:10px"><i class="ti ti-fingerprint" style="font-size:18px;color:var(--text3)"></i><div style="flex:1"><div style="font-size:9px;color:var(--text3)">DNA hash Genesis 360</div><div style="font-size:10px;font-family:monospace;color:var(--text2)">${p.dna_hash||'genesis360-'+Math.random().toString(36).slice(2,16)}</div></div></div><div style="display:flex;gap:8px"><button class="btn btn-green" style="flex:1" onclick='approveProduct(${JSON.stringify(p).replace(/"/g,"&quot;")})'>✓ Aprovar → Bling + Wix</button><button class="btn btn-ghost" onclick="document.getElementById('${containerId}').innerHTML=''">Cancelar</button></div></div>`;document.getElementById(containerId).innerHTML=html;}
+function addImgUrl(id){const u=prompt('URL da imagem:');if(u)selectImg(id,u);}
+function approveProduct(p){const imgKey=Object.keys(selectedImages)[0];if(!imgKey){alert('⚠️ Selecione uma imagem.');return;}const prod={...p,imagem:selectedImages[imgKey],aprovado_em:new Date().toLocaleDateString('pt-BR')};catalog.unshift(prod);selectedImages={};updateDashboard();buildSidebar();renderCatalog();renderCongelados();renderSEO();syncProduto(prod);alert('✓ "'+prod.nome_tecnico+'" aprovado!');goTo('catalogo');}
+</script>
+<script>
+function buildManualForm(){const catSel=document.getElementById('m-cat');catSel.innerHTML='<option value="">Selecionar...</option>';Object.keys(CATS).forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;catSel.appendChild(o);});document.getElementById('m-marcas-wrap').innerHTML=MARCAS.map(m=>`<button type="button" class="chip" onclick="toggleManualMarca('${m}',this)">${m}</button>`).join('');}
+function updateSubCat(){const cat=document.getElementById('m-cat').value;const sub=document.getElementById('m-sub');sub.innerHTML='<option value="">Selecionar...</option>';(CATS[cat]||[]).forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sub.appendChild(o);});}
+function addManualTag(e){if(e.key==='Enter'){e.preventDefault();const v=e.target.value.trim().toLowerCase();if(v&&!manualTags.includes(v)){manualTags.push(v);renderManualTags();}e.target.value='';}}
+function renderManualTags(){document.getElementById('m-tags-wrap').innerHTML=manualTags.map(t=>`<span class="tag">${t}<button onclick="manualTags=manualTags.filter(x=>x!=='${t}');renderManualTags()" style="border:none;background:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0">×</button></span>`).join('');}
+function toggleManualMarca(m,el){const i=manualMarcas.indexOf(m);if(i>=0){manualMarcas.splice(i,1);el.classList.remove('on');}else{manualMarcas.push(m);el.classList.add('on');}}
+function addAplicRow(tbodyId){const tbody=document.getElementById(tbodyId);const tr=document.createElement('tr');tr.innerHTML=['veiculo','versao','motor','cilindrada','valvulas','cambio','ano_ini','ano_fim'].map(k=>`<td><input data-key="${k}" style="min-width:60px;font-size:11px;padding:3px 5px;width:100%"></td>`).join('')+`<td><button onclick="this.closest('tr').remove()" style="background:none;border:none;cursor:pointer;color:var(--text3)">×</button></td>`;tbody.appendChild(tr);}
+function previewManualImg(){const url=document.getElementById('m-imagem').value;const preview=document.getElementById('m-img-preview');const badge=document.getElementById('m-img-badge');const card=document.getElementById('m-img-card');if(url){preview.src=url;preview.style.display='block';badge.className='badge-success';badge.textContent='✓ ok';card.style.borderColor='var(--success-border)';}else{preview.style.display='none';badge.className='badge-danger';badge.textContent='obrigatória';card.style.borderColor='';}}
+function getAplicRows(tbodyId){const rows=[];document.querySelectorAll(`#${tbodyId} tr`).forEach(tr=>{const row={};tr.querySelectorAll('input[data-key]').forEach(inp=>{row[inp.dataset.key]=inp.value;});rows.push(row);});return rows;}
+function saveManual(){const nome=document.getElementById('m-nome').value.trim();const img=document.getElementById('m-imagem').value.trim();if(!nome){alert('Nome técnico obrigatório');return;}if(!img){alert('Imagem obrigatória');return;}const oem=document.getElementById('m-oem').value;const ean=document.getElementById('m-ean').value;const ncm=document.getElementById('m-ncm').value;const aplicacoes=getAplicRows('m-aplic-body');const nct=Math.min(.99,.45+(oem?.length>2?.1:0)+(ean?.length>7?.1:0)+.2+(aplicacoes.length>0?.1:0)+(ncm?.length>3?.05:0));const prod={nome_tecnico:nome,oem,iom:document.getElementById('m-iom').value,sku:document.getElementById('m-sku').value,ean,ncm,cest:document.getElementById('m-cest').value,ipi:document.getElementById('m-ipi').value,origem:document.getElementById('m-origem').value,classificacao:document.getElementById('m-classif').value,marca:document.getElementById('m-marca').value,imagem:img,categoria:document.getElementById('m-cat').value,subcategoria:document.getElementById('m-sub').value,tags:manualTags,marcas_montadoras:manualMarcas,aplicacoes,nct_estimado:+nct.toFixed(2),aprovado_em:new Date().toLocaleDateString('pt-BR')};catalog.unshift(prod);updateDashboard();buildSidebar();renderCatalog();renderCongelados();renderSEO();syncProduto(prod);alert('✓ "'+nome+'" salvo!');goTo('catalogo');}
+const IMPORT_CAMPOS=['nome_tecnico','oem','iom','sku','ean','ncm','marca','categoria','descricao_pdv','imagem'];
+function dragOver(e){e.preventDefault();document.getElementById('drop-zone').style.background='var(--info-bg)';}
+function dragLeave(){document.getElementById('drop-zone').style.background='var(--bg3)';}
+function dropFile(e){e.preventDefault();dragLeave();const f=e.dataTransfer.files[0];if(f)processFile(f);}
+function handleFile(e){const f=e.target.files[0];if(f)processFile(f);}
+function processFile(f){const ext=f.name.split('.').pop().toLowerCase();if(ext==='csv'){const r=new FileReader();r.onload=e=>{const lines=e.target.result.split('\n').filter(Boolean);const cols=lines[0].split(',').map(c=>c.trim().replace(/"/g,''));importCols=cols;importRows=lines.slice(1).map(l=>{const vals=l.split(',').map(v=>v.trim().replace(/"/g,''));const obj={};cols.forEach((c,i)=>obj[c]=vals[i]||'');return obj;}).slice(0,500);showImportMap();};r.readAsText(f);}else alert('Use CSV exportado do Excel.');}
+function showImportMap(){document.getElementById('import-map').style.display='block';document.getElementById('import-count-label').textContent=importRows.length+' linhas — mapeie as colunas';document.getElementById('import-fields').innerHTML=IMPORT_CAMPOS.map(c=>`<div><label class="lbl">${c}</label><select id="imp-${c}"><option value="">— ignorar —</option>${importCols.map(col=>`<option value="${col}"${col.toLowerCase().includes(c.toLowerCase())?'selected':''}>${col}</option>`).join('')}</select></div>`).join('');}
+function doImport(){let count=0;importRows.forEach(r=>{const p={nct_estimado:.55,aprovado_em:new Date().toLocaleDateString('pt-BR')};IMPORT_CAMPOS.forEach(c=>{const sel=document.getElementById('imp-'+c);if(sel?.value&&r[sel.value]!==undefined)p[c]=String(r[sel.value]);});if(p.nome_tecnico){catalog.unshift(p);count++;}});const done=document.getElementById('import-done');done.style.display='block';done.style.borderColor='var(--success-border)';done.style.color='var(--success)';done.textContent='✓ '+count+' produto'+(count!==1?'s':'')+' importado'+(count!==1?'s':'')+'!';document.getElementById('import-map').style.display='none';importRows=[];importCols=[];updateDashboard();buildSidebar();renderCatalog();renderCongelados();renderSEO();}
+const CRITS=[{k:'oem',l:'OEM',f:p=>p.oem?.length>2},{k:'ean',l:'EAN',f:p=>p.ean?.length>7},{k:'img',l:'Imagem',f:p=>!!p.imagem},{k:'apl',l:'Aplicação',f:p=>(p.aplicacoes?.length||0)>0},{k:'ncm',l:'NCM',f:p=>p.ncm?.length>3},{k:'seo',l:'SEO',f:p=>p.descricao_seo?.length>30}];
+function renderCongelados(){const frozen=catalog.filter(p=>(p.nct_estimado||0)>=.9);const pending=catalog.filter(p=>(p.nct_estimado||0)<.9);const stats=document.getElementById('frozen-stats');if(stats)stats.innerHTML=[{l:'Congelados',v:frozen.length,c:'var(--success)'},{l:'Aguardando',v:pending.length,c:'var(--warn)'},{l:'% catálogo',v:catalog.length?Math.round(frozen.length/catalog.length*100)+'%':'—',c:'var(--text)'},{l:'NCT médio',v:frozen.length?(frozen.reduce((a,c)=>a+(c.nct_estimado||0),0)/frozen.length).toFixed(2):'—',c:'var(--success)'}].map(c=>`<div class="card"><div style="font-size:22px;font-weight:600;color:${c.c};margin-bottom:2px">${c.v}</div><div style="font-size:11px;color:var(--text2)">${c.l}</div></div>`).join('');const list=document.getElementById('frozen-list');if(!list)return;if(catalog.length===0){list.innerHTML='<div class="empty card"><i class="ti ti-lock"></i><p>Enriqueça produtos até NCT ≥ 0.90.</p></div>';return;}let html='';if(frozen.length>0){html+='<div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--success);margin-bottom:10px">✦ Congelados — DNA travado</div><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">'+frozen.map(p=>`<div class="card frozen-card"><div class="flex gap-8 items-center"><i class="ti ti-lock" style="color:var(--success)"></i><span style="flex:1;font-weight:500">${p.nome_tecnico}</span><span class="badge-success">NCT ${(p.nct_estimado||0).toFixed(2)} ✓</span></div></div>`).join('')+'</div>';}if(pending.length>0){html+='<div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--warn);margin-bottom:10px">◎ Aguardando</div><div style="display:flex;flex-direction:column;gap:10px">'+pending.map(p=>{const nct=p.nct_estimado||0;const falta=CRITS.filter(c=>!c.f(p));return `<div class="card pending-card"><div class="flex items-center gap-8 mb-10"><i class="ti ti-lock-open" style="color:var(--warn)"></i><span style="flex:1">${p.nome_tecnico||'Sem nome'}</span><span class="badge-warn">+${(0.9-nct).toFixed(2)}</span></div><div style="display:flex;flex-wrap:wrap;gap:4px">${falta.map(c=>`<span style="font-size:10px;padding:1px 6px;border-radius:3px;background:var(--warn-bg);color:var(--warn)">+${c.l}</span>`).join('')}</div></div>`;}).join('')+'</div>';}list.innerHTML=html;}
+function renderSEO(){const frozen=catalog.filter(p=>(p.nct_estimado||0)>=.9);const bom=catalog.filter(p=>{const n=p.nct_estimado||0;return n>=.7&&n<.9;});const baixo=catalog.filter(p=>(p.nct_estimado||0)<.7);const tbl=document.getElementById('seo-table');if(tbl)tbl.innerHTML=[{r:'NCT 0.90–1.00',qs:'9–10',cpc:'R$0,00',c:'var(--success)',bg:'var(--success-bg)',n:frozen.length},{r:'NCT 0.70–0.89',qs:'6–8',cpc:'R$1,20–R$2,80',c:'var(--warn)',bg:'var(--warn-bg)',n:bom.length},{r:'NCT 0.00–0.69',qs:'1–5',cpc:'R$3,50+',c:'var(--danger)',bg:'var(--danger-bg)',n:baixo.length}].map((row,i)=>`<div style="display:flex;align-items:center;border-bottom:${i<2?'.5px solid var(--border)':'none'}"><div style="width:4px;align-self:stretch;background:${row.c}"></div><div style="flex:1;display:flex;flex-wrap:wrap;gap:4px 12px;padding:10px 14px;align-items:center"><span style="font-size:12px;font-weight:500;color:${row.c};min-width:80px">${row.r}</span><span style="font-size:11px;color:var(--text2)">QS ${row.qs}</span><span style="font-size:12px;font-weight:500;color:${row.c)">${row.cpc}</span><span><b>${row.n}</b> prod.</span></div></div>`).join('');const prog=document.getElementById('seo-progress');if(prog)prog.innerHTML=`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:500">Progresso → CPC R$0,00</span><span>${frozen.length}/${catalog.length||'–'}</span></div><div class="nct-bar" style="height:8px"><div class="nct-fill" style="width:${catalog.length?Math.round(frozen.length/catalog.length*100):0}%;background:var(--success)"></div></div>`;}
+function updateDashboard(){const frozen=catalog.filter(p=>(p.nct_estimado||0)>=.9);const nctMed=catalog.length?(catalog.reduce((a,c)=>a+(c.nct_estimado||0),0)/catalog.length).toFixed(2):'—';const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};s('st-catalog',catalog.length);s('st-frozen',frozen.length);s('st-nct',nctMed);const rec=document.getElementById('dash-recentes');if(rec&&catalog.length>0)rec.innerHTML='<div class="card-title">Últimos produtos</div><div class="prod-grid" style="margin-top:10px">'+catalog.slice(0,4).map(prodCardHTML).join('')+'</div>'+(catalog.length>4?`<button class="btn btn-ghost btn-full" onclick="goTo('catalogo')" style="margin-top:10px">Ver todos ${catalog.length} produtos</button>`:'');else if(rec)rec.innerHTML='<div class="empty card"><i class="ti ti-package"></i><p>Comece indexando seu primeiro produto</p></div>';}
+function buildAgentes(){const el=document.getElementById('agentes-list');if(!el)return;el.innerHTML=AGENTES.map(([id,n,d,f],i)=>`<div style="background:#fff;padding:11px 16px;border-bottom:${i<AGENTES.length-1?'.5px solid var(--border)':'none'};display:flex;gap:10px"><div style="width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0;margin-top:4px"></div><div style="flex:1"><div style="font-size:13px;font-weight:500">#${id} ${n}</div><div style="font-size:11px;color:var(--text2)">${d}</div><div style="font-size:10px;color:var(--info)">${f}</div></div><span style="font-size:10px;padding:2px 7px;border-radius:20px;background:var(--success-bg);color:var(--success)">ativo</span></div>`).join('');}
+function buildIntegracoes(){const el=document.getElementById('integracoes-grid');if(!el)return;el.innerHTML=INTEGRACOES.map(n=>`<div class="card flex items-center gap-8"><div style="flex:1;font-size:13px;font-weight:500">${n}</div><button class="btn btn-ghost" style="font-size:12px;padding:0 14px;min-height:36px">Conectar</button></div>`).join('');}
+function buildPlanos(){const el=document.getElementById('planos-grid');if(!el)return;el.innerHTML=PLANOS.map(pl=>`<div class="plan-card${pl.dest?' popular':''}"><div style="font-size:14px;font-weight:600;margin-bottom:3px">${pl.n}</div><div style="font-size:22px;font-weight:500;margin-bottom:12px;color:${pl.dest?'var(--success)':'var(--text)'}">${pl.p}</div><div class="plan-features mb-14">${pl.f.map(f=>`<div>${f}</div>`).join('')}</div><button class="btn btn-full${pl.dest?' btn-green':' btn-ghost'}" style="font-size:12px">${pl.n==='Enterprise'?'Consultar':'Contratar'}</button></div>`).join('');}
+function updateCredPrice(){const v=document.getElementById('cred-range').value;document.getElementById('cred-label').textContent=v+' créditos · R$ '+(v*.39).toFixed(2).replace('.',',')+' — R$ 0,39/crédito';}
+async function syncProduto(prod){const toast=msg=>{const t=document.createElement('div');t.style.cssText='position:fixed;top:16px;right:16px;background:#1d9e75;color:#fff;padding:12px 18px;border-radius:8px;font-size:13px;z-index:9999';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);};try{const bRes=await fetch('/api/bling/produto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(prod)});const bData=await bRes.json();if(bData.ok)toast('✓ Bling: '+prod.nome_tecnico+' sincronizado');}catch(e){console.warn('[Bling]',e.message);}try{const wRes=await fetch('/api/wix/produto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(prod)});const wData=await wRes.json();if(wData.ok)toast('✓ Wix: publicado');}catch(e){console.warn('[Wix]',e.message);}}
+fetch('/api/status').then(r=>r.json()).then(s=>{window._appStatus=s;}).catch(()=>{});
 </script>
 </body>
 </html>
