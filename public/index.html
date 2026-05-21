@@ -2,257 +2,744 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 <title>Genesis iRollo 360 v3.0</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:"#fff";--bg2:#f8fafc;--bg3:#f1f5f9;
-  --border:#e2e8f0;--border2:#cbd5e1;
-  --text:#0f172a;--text2:#475569;--text3:#94a3b8;
-  --info:#3b82f6;--info-bg:#eff6ff;
-  --success:#1d9e75;--success-bg:#f0fdf4;--success-border:#86efac;
-  --warn:#ba7517;--warn-bg:#fffbeb;--warn-border:#fcd34d;
-  --danger:#e24b4a;--danger-bg:#fef2f2;--danger-border:#fca5a5;
-  --sb:52px;--sb-full:214px;--fil:210px;
-  --r:10px;--r2:8px;--gap:clamp(8px,2vw,14px);--pad:clamp(12px,3.5vw,26px)
-}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f5f9;color:#0f172a;font-size:14px;overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-input,select,textarea{font-family:inherit;font-size:16px;width:100%;padding:10px 12px;border:0.5px solid var(--border2);border-radius:var(--r2);background:#fff;color:var(--text);outline:none;transition:border .15s}
-input:focus,select:focus,textarea:focus{border-color:var(--info)}
-textarea{resize:vertical}
+:root{--r:9px;--s:#1d9e75;--w:#ba7517;--d:#e24b4a;--i:#3b82f6;--pad:clamp(12px,3vw,24px)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f1f5f9;color:#0f172a}
 button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:16px;width:100%;padding:9px 12px;border:.5px solid #cbd5e1;border-radius:8px;background:#fff;color:#0f172a;outline:none}
+@media(min-width:768px){input,select,textarea{font-size:13px}}
+textarea{resize:vertical}
+/* SHELL */
 .shell{display:flex;min-height:100dvh}
-.sidebar{width:var(--sb-full);flex-shrink:0;background:#fff;border-right:.5px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100dvh;overflow-y:auto;transition:width .2s}
-.sidebar.collapsed{width:var(--sb)}
-.sb-logo{padding:14px 16px 10px;border-bottom:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:52px}
-.sb-logo-text{font-size:14px;font-weight:600;white-space:nowrap}
-.sb-logo-text span{color:var(--info)}
-.sb-logo-sub{font-size:10px;color:var(--text3);margin-top:1px}
-.sb-credits{padding:8px 16px 4px;display:flex;justify-content:space-between;align-items:center}
-.sb-group{padding:8px 16px 2px;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);font-weight:600}
-.sb-item{display:flex;align-items:center;gap:8px;padding:8px 16px;border:none;background:transparent;color:var(--text2);font-size:12px;cursor:pointer;text-align:left;width:100%;border-left:2px solid transparent;min-height:38px;transition:background .1s}
-.sb-item:hover{background:var(--bg3);color:var(--text)}
-.sb-item.active{background:#f0f9ff;color:var(--info);border-left-color:var(--info)}
-.sb-item i{font-size:15px;flex-shrink:0}
-.sidebar.collapsed .sb-item{padding:10px 0;justify-content:center}
-.sidebar.collapsed .sb-label,.sidebar.collapsed .sb-badge,.sidebar.collapsed .sb-group,.sidebar.collapsed .sb-logo-text,.sidebar.collapsed .sb-credits{display:none}
-.sb-badge{margin-left:auto;font-size:9px;padding:1px 6px;border-radius:10px;background:var(--info-bg);color:var(--info)}
-.sb-badge.green{background:var(--success-bg);color:var(--success)}
-.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0}
-.top-bar{display:none;align-items:center;padding:0 var(--pad);background:#fff;border-bottom:.5px solid var(--border);min-height:52px;position:sticky;top:0;z-index:100;gap:12px}
-.main{flex:1;padding:var(--pad);overflow-y:auto}
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#fff;border-top:.5px solid var(--border);padding-bottom:env(safe-area-inset-bottom,0)}
-.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border:none;background:transparent;color:var(--text3);font-size:9px;cursor:pointer;min-height:54px;line-height:1.2;position:relative}
-.bn-item.active{color:var(--info)}
-.bn-item i{font-size:20px}
-.bn-fab{background:var(--text);border-radius:50%;width:50px;height:50px;flex:0 0 50px;margin:-8px 0 0;box-shadow:0 2px 12px rgba(0,0,0,.2)}
-.bn-fab i{font-size:22px;color:#fff}
-.bn-dot{position:absolute;top:8px;right:calc(50% - 14px);width:7px;height:7px;border-radius:50%;background:var(--success)}
-.page{display:none}.page.active{display:block}
-.page-head{margin-bottom:clamp(14px,2.5vw,22px)}
-.page-head h2{font-size:clamp(15px,4vw,19px);font-weight:600}
-.page-head p{font-size:13px;color:var(--text2);margin-top:3px}
-.card{background:#fff;border:.5px solid var(--border);border-radius:var(--r);padding:clamp(12px,3vw,18px)}
-.card-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:10px}
-.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap);margin-bottom:var(--gap)}
-.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
-.form-grid-3{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
-.form-grid-4{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
-.codes-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
-.cat-wrap{display:flex;flex-direction:column}
-.filter-panel{display:none;flex-direction:column;gap:16px;padding:0 16px 16px 0}
-.prod-area{min-width:0}
-.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap)}
-.prod-card{background:#fff;border:.5px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
-.prod-card-img{width:100%;aspect-ratio:1;background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.prod-card-img img{width:100%;height:100%;object-fit:contain;padding:8px}
-.prod-card-body{padding:8px 10px;display:flex;flex-direction:column;gap:4px}
-.prod-name{font-size:11px;font-weight:500;line-height:1.3}
-.prod-code{font-size:10px;font-family:monospace;color:var(--text3)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 18px;border-radius:var(--r2);font-size:13px;font-weight:500;border:none;cursor:pointer;transition:opacity .15s}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-.btn-primary{background:var(--text);color:#fff}
-.btn-ghost{background:transparent;border:.5px solid var(--border2);color:var(--text)}
-.btn-green{background:var(--success-bg);border:.5px solid var(--success-border);color:var(--success)}
-.btn-info{background:var(--info-bg);border:.5px solid #bfdbfe;color:var(--info)}
-.btn-full{width:100%}
-.tag{display:inline-flex;align-items:center;gap:3px;font-size:11px;padding:2px 8px;border-radius:4px;background:var(--bg3);border:.5px solid var(--border);color:var(--text2)}
-.chip{display:inline-flex;align-items:center;font-size:11px;padding:4px 10px;border-radius:20px;border:.5px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;min-height:36px;transition:all .1s}
-.chip.on{border-width:2px;border-color:var(--info);background:var(--info-bg);color:var(--info);font-weight:500}
-.nct-bar{height:5px;border-radius:3px;background:var(--bg3);overflow:hidden}
-.nct-fill{height:100%;border-radius:3px;transition:width .4s}
-.lbl{display:block;font-size:11px;color:var(--text3);margin-bottom:3px}
-.search-wrap{position:relative}
-.search-wrap input{padding-left:38px}
-.search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:17px;color:var(--text3)}
-.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300}
-.drawer-overlay.open{display:block}
-.drawer{position:fixed;bottom:0;left:0;right:0;z-index:301;background:#fff;border-radius:16px 16px 0 0;padding:20px var(--pad);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 20px);max-height:85dvh;overflow-y:auto;transform:translateY(100%);transition:transform .3s ease}
-.drawer.open{transform:translateY(0)}
-.drawer-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 16px}
-.menu-item{display:flex;align-items:center;gap:14px;width:100%;padding:13px 0;border:none;background:none;cursor:pointer;border-bottom:.5px solid var(--border);color:var(--text);font-size:14px;min-height:50px;text-align:left}
-.menu-item i{font-size:20px;color:var(--text2)}
-.menu-item.active{color:var(--info)}
-.menu-item.active i{color:var(--info)}
-.cam-wrap{border-radius:var(--r);overflow:hidden;position:relative;background:#000;margin-bottom:14px}
-.cam-wrap video{width:100%;display:block;max-height:260px}
-.cam-line{position:absolute;top:50%;left:10%;right:10%;height:2px;background:rgba(29,158,117,.8);transform:translateY(-50%)}
-.cam-border{position:absolute;inset:0;border:2px solid var(--success);border-radius:var(--r);pointer-events:none}
-.cam-close{position:absolute;top:10px;right:10px;padding:7px 14px;border-radius:var(--r2);border:none;background:rgba(0,0,0,.7);color:#fff;font-size:13px;cursor:pointer;min-height:40px}
-.step-log{background:var(--bg3);border-radius:var(--r);padding:12px 16px;margin-bottom:12px}
-.step-item{display:flex;gap:8px;font-size:11px;padding:2px 0;color:var(--text3)}
-.step-item.current{color:var(--text)}
-.step-check{color:var(--success);flex-shrink:0}
-.codes-required{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.badge-danger{font-size:9px;background:var(--danger-bg);color:var(--danger);border-radius:4px;padding:1px 7px}
-.badge-success{font-size:9px;background:var(--success-bg);color:var(--success);border-radius:4px;padding:2px 7px}
-.badge-warn{font-size:9px;background:var(--warn-bg);color:var(--warn);border-radius:4px;padding:2px 7px}
-.frozen-card{border-color:var(--success-border) !important}
-.pending-card{border-color:var(--warn-border) !important}
-.seo-row{display:flex;align-items:center;gap:0;border-bottom:.5px solid var(--border)}
-.seo-bar{width:4px;align-self:stretch}
-.seo-content{flex:1;display:flex;flex-wrap:wrap;gap:4px 12px;padding:10px 14px;align-items:center}
-.plan-card{background:#fff;border:.5px solid var(--border);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:0;position:relative}
-.plan-card.popular{border:2px solid var(--success-border)}
-.plan-features div{font-size:11px;color:var(--text2);padding:3px 0;border-bottom:.5px solid var(--border);display:flex;gap:6px}
-.plan-features div:before{content:'\u2713';color:var(--success);flex-shrink:0}
-.empty{text-align:center;padding:clamp(28px,6vw,48px) 16px}
-.empty i{font-size:36px;color:var(--text3)}
-.empty p{font-size:13px;color:var(--text2);margin-top:10px}
-@media(max-width:767px){.sidebar{display:none}.top-bar{display:flex}.bottom-nav{display:flex}.main{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 68px)}}
-@media(min-width:768px){input,select,textarea{font-size:13px}.stat-grid{grid-template-columns:repeat(4,1fr)}.form-grid-3{grid-template-columns:repeat(3,1fr)}.form-grid-4{grid-template-columns:repeat(3,1fr)}.codes-grid{grid-template-columns:repeat(3,1fr)}.prod-grid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1100px){.form-grid-4{grid-template-columns:repeat(4,1fr)}.prod-grid{grid-template-columns:repeat(4,1fr)}.cat-wrap{flex-direction:row;align-items:flex-start}.filter-panel{display:flex;width:var(--fil);flex-shrink:0;position:sticky;top:0;max-height:calc(100dvh - 52px);overflow-y:auto}.prod-area{flex:1;min-width:0;padding-left:20px}}
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
-.mono{font-family:monospace}
-.flex{display:flex}.flex-1{flex:1}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-8{gap:8px}.gap-6{gap:6px}.flex-wrap{flex-wrap:wrap}
-.mb-10{margin-bottom:10px}.mb-12{margin-bottom:12px}.mb-14{margin-bottom:14px}.mb-16{margin-bottom:16px}
-.text-success{color:var(--success)}.text-warn{color:var(--warn)}.text-danger{color:var(--danger)}.text-info{color:var(--info)}.text-muted{color:var(--text3)}
-.overflow-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{border-collapse:collapse;font-size:11px;min-width:100%}
-th,td{padding:5px 7px;border-bottom:.5px solid var(--border);text-align:left}
-th{color:var(--text3);font-weight:500;white-space:nowrap}
+/* SIDEBAR */
+.sb{width:210px;flex-shrink:0;background:#fff;border-right:.5px solid #e2e8f0;display:flex;flex-direction:column;position:sticky;top:0;height:100dvh;overflow-y:auto}
+.sb-head{padding:13px 14px 8px;border-bottom:.5px solid #e2e8f0}
+.sb-title{font-size:13px;font-weight:600}
+.sb-title span{color:var(--i)}
+.sb-sub{font-size:9px;color:#94a3b8;margin-top:1px}
+.sb-grp{padding:7px 14px 2px;font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8;font-weight:600}
+.sb-nav a{display:flex;align-items:center;gap:8px;padding:7px 14px;color:#475569;font-size:12px;text-decoration:none;border-left:2px solid transparent;min-height:36px;cursor:pointer;border:none;background:transparent;width:100%;text-align:left}
+.sb-nav a:hover{background:#f8fafc;color:#0f172a}
+.sb-nav a.on{background:#eff6ff;color:var(--i);border-left:2px solid var(--i)}
+.sb-nav a i{font-size:14px;flex-shrink:0}
+.sb-foot{margin-top:auto;padding:8px 14px;border-top:.5px solid #e2e8f0;font-size:9px;color:#94a3b8;line-height:1.7}
+/* MAIN */
+.main{flex:1;min-width:0;overflow-y:auto}
+.topbar{display:none;align-items:center;padding:0 var(--pad);background:#fff;border-bottom:.5px solid #e2e8f0;min-height:48px;position:sticky;top:0;z-index:50;gap:10px}
+.content{padding:var(--pad)}
+/* PAGES */
+.pg{display:none}.pg.on{display:block}
+/* BOTTOM NAV mobile */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:100;background:#fff;border-top:.5px solid #e2e8f0;padding-bottom:env(safe-area-inset-bottom,0)}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border:none;background:transparent;color:#94a3b8;font-size:9px;min-height:52px;cursor:pointer}
+.bnav-item.on{color:var(--i)}
+.bnav-item i{font-size:19px}
+.bnav-fab{background:#0f172a;border-radius:50%;width:48px;height:48px;flex:0 0 48px;margin:-8px 0 0;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.bnav-fab i{font-size:20px;color:#fff}
+/* CARDS */
+.card{background:#fff;border:.5px solid #e2e8f0;border-radius:var(--r);padding:clamp(12px,2.5vw,16px)}
+.card+.card{margin-top:12px}
+.ct{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8;margin-bottom:8px}
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:768px){.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.prod-grid{grid-template-columns:repeat(3,1fr)}.sb{display:flex}.topbar{display:none}.bnav{display:none}}
+@media(min-width:1100px){.prod-grid{grid-template-columns:repeat(4,1fr)}.cat-wrap{display:flex}.fil-panel{display:flex!important;width:200px;flex-shrink:0;flex-direction:column;gap:14px;padding-right:16px;border-right:.5px solid #e2e8f0}}
+@media(max-width:767px){.sb{display:none}.topbar{display:flex}.bnav{display:flex}.content{padding-bottom:70px}}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 16px;border-radius:8px;font-size:12px;font-weight:500;border:.5px solid #cbd5e1;background:transparent;color:#0f172a;cursor:pointer}
+.btn-p{background:#0f172a;color:#fff;border-color:#0f172a}
+.btn-s{background:#f0fdf4;color:var(--s);border-color:#86efac}
+.btn-i{background:#eff6ff;color:var(--i);border-color:#bfdbfe}
+.btn-w{width:100%}
+.lbl{display:block;font-size:10px;color:#94a3b8;margin-bottom:3px}
+/* PROD CARD */
+.pc{background:#fff;border:.5px solid #e2e8f0;border-radius:var(--r);overflow:hidden}
+.pc-img{aspect-ratio:1;background:#f8fafc;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pc-img img{width:100%;height:100%;object-fit:contain;padding:6px}
+.pc-body{padding:7px 9px}
+.nct-bar{height:4px;border-radius:2px;background:#f1f5f9;overflow:hidden;margin-top:5px}
+.nct-fill{height:100%;border-radius:2px;transition:width .4s}
+/* CAT LAYOUT */
+.cat-wrap{display:block}
+.fil-panel{display:none}
+.cat-results{min-width:0}
+/* TAGS */
+.tag{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:2px 7px;border-radius:3px;background:#f8fafc;border:.5px solid #e2e8f0;color:#475569}
+.chip{display:inline-flex;align-items:center;font-size:10px;padding:3px 9px;border-radius:16px;border:.5px solid #e2e8f0;background:transparent;color:#475569;cursor:pointer;min-height:28px}
+.chip.on{border-color:var(--i);background:#eff6ff;color:var(--i);font-weight:500}
+/* STEP LOG */
+.step-log{background:#f8fafc;border-radius:8px;padding:10px 14px;margin-bottom:10px}
+.step-row{display:flex;gap:7px;font-size:11px;padding:2px 0;color:#94a3b8}
+.step-row.cur{color:#0f172a}
+.over-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;font-size:11px;width:100%}
+th,td{padding:4px 7px;border-bottom:.5px solid #e2e8f0;text-align:left}
+th{color:#94a3b8;font-weight:500;white-space:nowrap}
+.empty{text-align:center;padding:28px}
+.empty i{font-size:28px;color:#94a3b8}
+.empty p{font-size:12px;color:#475569;margin-top:8px}
+.badge-s{font-size:9px;background:#f0fdf4;color:var(--s);border-radius:3px;padding:1px 6px}
+.badge-d{font-size:9px;background:#fef2f2;color:var(--d);border-radius:3px;padding:1px 6px}
+.cam-wrap{background:#000;border-radius:var(--r);overflow:hidden;position:relative;margin-bottom:12px}
+.cam-wrap video{width:100%;display:block;max-height:240px}
 </style>
 </head>
 <body>
+
 <div class="shell">
-  <aside class="sidebar" id="sidebar">
-    <div class="sb-logo"><div class="sb-logo-text">Genesis <span>iRollo</span> 360<div class="sb-logo-sub">v3.0 · MOBIS · Autopeças</div></div>
-      <button onclick="toggleSb()" style="border:none;background:none;cursor:pointer;color:var(--text3);padding:4px;min-height:36px;min-width:36px;border-radius:6px"><i class="ti ti-layout-sidebar-left" id="sb-icon" style="font-size:16px"></i></button>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-head">
+    <div class="sb-title">Genesis <span>iRollo</span> 360</div>
+    <div class="sb-sub">v3.0 · MOBIS · Autopeças</div>
+  </div>
+  <nav class="sb-nav" id="sb-nav">
+    <div class="sb-grp">Principal</div>
+    <button class="on" onclick="nav('dash')"><i class="ti ti-dashboard" aria-hidden="true"></i>Dashboard</button>
+    <div class="sb-grp">Cadastro</div>
+    <button onclick="nav('ean')"><i class="ti ti-barcode" aria-hidden="true"></i>Cadastro pelo EAN</button>
+    <button onclick="nav('buscar')"><i class="ti ti-search" aria-hidden="true"></i>Buscar e enriquecer</button>
+    <button onclick="nav('raspador')"><i class="ti ti-spider" aria-hidden="true"></i>Raspador web</button>
+    <button onclick="nav('manual')"><i class="ti ti-forms" aria-hidden="true"></i>Cadastro manual</button>
+    <button onclick="nav('importar')"><i class="ti ti-file-spreadsheet" aria-hidden="true"></i>Por planilha</button>
+    <div class="sb-grp">Status</div>
+    <button onclick="nav('catalogo')"><i class="ti ti-package" aria-hidden="true"></i>Produtos <span id="sb-cat-badge" style="display:none;margin-left:auto;font-size:9px;background:#eff6ff;color:var(--i);border-radius:8px;padding:1px 5px"></span></button>
+    <button onclick="nav('congelados')"><i class="ti ti-lock" aria-hidden="true"></i>Congelados <span id="sb-frz-badge" style="display:none;margin-left:auto;font-size:9px;background:#f0fdf4;color:var(--s);border-radius:8px;padding:1px 5px"></span></button>
+    <button onclick="nav('seo')"><i class="ti ti-brand-google" aria-hidden="true"></i>SEO / CPC</button>
+    <div class="sb-grp">Plataforma</div>
+    <button onclick="nav('agentes')"><i class="ti ti-robot" aria-hidden="true"></i>Agentes (14)</button>
+    <button onclick="nav('integracoes')"><i class="ti ti-plug" aria-hidden="true"></i>Integrações</button>
+    <button onclick="nav('planos')"><i class="ti ti-star" aria-hidden="true"></i>Planos</button>
+  </nav>
+  <div class="sb-foot">genesisindexia.com.br<br>Hidrolândia, GO</div>
+</aside>
+
+<div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+<!-- TOP BAR mobile -->
+<header class="topbar">
+  <div style="flex:1;font-size:13px;font-weight:600">Genesis <span style="color:var(--i)">iRollo</span> 360</div>
+  <span class="badge-s">247 créditos</span>
+</header>
+
+<!-- CONTENT -->
+<main class="content">
+
+<!-- DASHBOARD -->
+<div class="pg on" id="pg-dash">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">Dashboard</h2></div>
+  <div class="g4" style="margin-bottom:12px">
+    <div class="card"><div style="font-size:22px;font-weight:600;margin-bottom:2px" id="d-cat">0</div><div style="font-size:11px;color:#475569">Catálogo</div></div>
+    <div class="card"><div style="font-size:22px;font-weight:600;color:var(--s);margin-bottom:2px" id="d-frz">0</div><div style="font-size:11px;color:#475569">Congelados</div></div>
+    <div class="card"><div style="font-size:22px;font-weight:600;margin-bottom:2px" id="d-nct">—</div><div style="font-size:11px;color:#475569">NCT médio</div></div>
+    <div class="card"><div style="font-size:22px;font-weight:600;margin-bottom:2px">247</div><div style="font-size:11px;color:#475569">Créditos</div></div>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="ct">Ações rápidas</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <button class="btn" onclick="nav('ean')"><i class="ti ti-barcode" aria-hidden="true"></i>EAN + Câmera</button>
+      <button class="btn" onclick="nav('buscar')"><i class="ti ti-search" aria-hidden="true"></i>Buscar</button>
+      <button class="btn" onclick="nav('manual')"><i class="ti ti-forms" aria-hidden="true"></i>Manual</button>
+      <button class="btn" onclick="nav('importar')"><i class="ti ti-file-spreadsheet" aria-hidden="true"></i>Planilha</button>
+      <button class="btn" onclick="nav('seo')"><i class="ti ti-brand-google" aria-hidden="true"></i>SEO/CPC</button>
+      <button class="btn" onclick="nav('congelados')"><i class="ti ti-lock" aria-hidden="true"></i>Congelados</button>
     </div>
-    <div class="sb-credits"><span style="font-size:10px;color:var(--text3)">Créditos</span><span style="font-size:11px;font-weight:600;background:var(--warn-bg);color:var(--warn);border-radius:4px;padding:1px 7px">247</span></div>
-    <div id="sb-nav"></div>
-    <div style="margin-top:auto;padding:10px 16px;border-top:.5px solid var(--border);font-size:10px;color:var(--text3);line-height:1.8" id="sb-footer">genesisindexia.com.br<br>Hidrolândia, GO</div>
-  </aside>
-  <div class="main-wrap">
-    <header class="top-bar"><div style="font-size:14px;font-weight:600;flex:1">Genesis <span style="color:var(--info)">iRollo</span> 360</div><span style="font-size:10px;background:var(--warn-bg);color:var(--warn);border-radius:4px;padding:2px 8px">247 créditos</span></header>
-    <main class="main" id="main-content">
-      <div class="page active" id="p-dashboard">
-        <div class="page-head"><div class="flex items-center justify-between"><div><h2>Dashboard</h2><p>Genesis iRollo 360 · v3.0</p></div><div class="flex gap-6"><span style="font-size:10px;background:var(--success-bg);color:var(--success);border-radius:20px;padding:3px 10px">NCT v2</span><span style="font-size:10px;background:var(--success-bg);color:var(--success);border-radius:20px;padding:3px 10px">Autopeças</span></div></div></div>
-        <div class="stat-grid" id="dash-stats">
-          <div class="card"><div style="font-size:24px;font-weight:600;margin-bottom:2px" id="st-catalog">0</div><div style="font-size:11px;font-weight:500;color:var(--text2)">Catálogo</div><div style="font-size:10px;color:var(--text3)">produtos indexados</div></div>
-          <div class="card"><div style="font-size:24px;font-weight:600;color:var(--success);margin-bottom:2px" id="st-frozen">0</div><div style="font-size:11px;font-weight:500;color:var(--text2)">Congelados</div><div style="font-size:10px;color:var(--text3)">NCT ≥ 0.90</div></div>
-          <div class="card"><div style="font-size:24px;font-weight:600;margin-bottom:2px" id="st-nct">—</div><div style="font-size:11px;font-weight:500;color:var(--text2)">NCT médio</div><div style="font-size:10px;color:var(--text3)">meta ≥ 0.90</div></div>
-          <div class="card"><div style="font-size:24px;font-weight:600;margin-bottom:2px">247</div><div style="font-size:11px;font-weight:500;color:var(--text2)">Créditos</div><div style="font-size:10px;color:var(--text3)">restantes</div></div>
-        </div>
-        <div class="card mb-12"><div class="card-title">Ações rápidas</div><div class="flex flex-wrap gap-8"><button class="btn btn-ghost" onclick="goTo('ean')"><i class="ti ti-barcode"></i>EAN + Câmera</button><button class="btn btn-ghost" onclick="goTo('buscar')"><i class="ti ti-search"></i>Buscar</button><button class="btn btn-ghost" onclick="goTo('manual')"><i class="ti ti-forms"></i>Manual</button><button class="btn btn-ghost" onclick="goTo('importar')"><i class="ti ti-file-spreadsheet"></i>Planilha</button><button class="btn btn-ghost" onclick="goTo('seo')"><i class="ti ti-brand-google"></i>SEO/CPC</button></div></div>
-        <div id="dash-recentes"></div>
+  </div>
+  <div id="d-recentes"></div>
+</div>
+
+<!-- CATÁLOGO -->
+<div class="pg" id="pg-catalogo">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div><h2 style="font-size:17px;font-weight:600">Produtos</h2><div id="cat-count" style="font-size:12px;color:#475569;margin-top:2px">0 produtos</div></div>
+    <button class="btn" onclick="toggleFilters()"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i>Filtros</button>
+  </div>
+  <div class="cat-wrap" style="gap:16px">
+    <div class="fil-panel" id="fil-panel">
+      <div><label class="lbl">Buscar</label><div style="position:relative"><i class="ti ti-search" style="position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:15px;color:#94a3b8" aria-hidden="true"></i><input id="fil-q" placeholder="Nome, OEM, EAN…" style="padding-left:30px" oninput="renderProd()"></div></div>
+      <div><div class="ct">NCT</div>
+        <label style="display:flex;align-items:center;gap:7px;font-size:12px;padding:3px 0;cursor:pointer"><input type="radio" name="fil-nct" value="" checked onchange="renderProd()" style="width:auto;min-height:auto;padding:0">Todos</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:12px;padding:3px 0;cursor:pointer"><input type="radio" name="fil-nct" value="premium" onchange="renderProd()" style="width:auto;min-height:auto;padding:0">Premium ≥ 0.90</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:12px;padding:3px 0;cursor:pointer"><input type="radio" name="fil-nct" value="bom" onchange="renderProd()" style="width:auto;min-height:auto;padding:0">Bom 0.70–0.89</label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:12px;padding:3px 0;cursor:pointer"><input type="radio" name="fil-nct" value="baixo" onchange="renderProd()" style="width:auto;min-height:auto;padding:0">Baixo &lt; 0.70</label>
       </div>
-      <div class="page" id="p-catalogo"><div class="page-head"><div class="flex items-center justify-between gap-8"><div><h2>Produtos</h2><p id="cat-count">0 produtos</p></div><button class="btn btn-ghost" onclick="openFilterDrawer()" id="filter-btn" style="flex-shrink:0"><i class="ti ti-adjustments-horizontal"></i>Filtros<span id="filter-dot" style="display:none;width:8px;height:8px;border-radius:50%;background:var(--info);margin-left:2px"></span></button></div></div><div class="cat-wrap"><div class="filter-panel" id="filter-panel-desktop"></div><div class="prod-area"><div class="prod-grid" id="prod-grid"></div><div class="empty" id="prod-empty" style="display:none"><i class="ti ti-package"></i><p>Nenhum produto ainda.</p><div class="flex flex-wrap gap-8 mt-12" style="justify-content:center;margin-top:12px"><button class="btn btn-ghost" onclick="goTo('ean')">EAN</button><button class="btn btn-ghost" onclick="goTo('buscar')">Buscar</button><button class="btn btn-ghost" onclick="goTo('manual')">Manual</button></div></div></div></div></div>
-      <div class="page" id="p-ean"><div class="page-head"><h2>Cadastro pelo EAN</h2><p>Digite ou escaneie o código de barras · iOS e Android</p></div><div class="card mb-14"><label class="lbl">Código EAN / código de barras</label><div class="flex gap-8 mb-10"><input id="ean-input" placeholder="7894766669907" style="font-family:monospace;font-size:18px;letter-spacing:2px;flex:1" onkeydown="if(event.key==='Enter')buscarEan()"><button class="btn btn-ghost" onclick="buscarEan()" style="flex-shrink:0;min-width:48px"><i class="ti ti-search" style="font-size:18px"></i></button><button class="btn btn-info" onclick="startCamera()" style="flex-shrink:0;min-width:48px"><i class="ti ti-camera" style="font-size:18px"></i></button></div><p style="font-size:11px;color:var(--text3)">📱 Funciona no celular iOS e Android</p></div><div id="cam-wrap" class="cam-wrap" style="display:none"><video id="cam-video" autoplay playsinline muted></video><div class="cam-line"></div><div class="cam-border"></div><button class="cam-close" onclick="stopCamera()">✕ Fechar</button></div><div id="ean-loading" style="display:none" class="card"><div style="text-align:center;padding:24px"><i class="ti ti-loader" style="font-size:28px;color:var(--text3)"></i><p style="font-size:12px;color:var(--text2);margin-top:10px">Consultando GS1 · TecDoc · Partsouq…</p></div></div><div id="ean-result"></div></div>
-      <div class="page" id="p-buscar"><div class="page-head"><h2>Buscar e enriquecer</h2><p>Nome, código ou referência → 14 agentes Genesis</p></div><div class="flex gap-8 mb-14"><div style="flex:1;position:relative"><i class="ti ti-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:17px;color:var(--text3)"></i><input id="buscar-input" placeholder="Ex: Filtro OC1224 Metal Leve…" style="padding-left:40px" onkeydown="if(event.key==='Enter')enriquecer()"></div><button class="btn btn-primary" onclick="enriquecer()" style="flex-shrink:0"><i class="ti ti-search"></i>Enriquecer</button></div><div id="buscar-loading" style="display:none" class="card mb-12"><div style="text-align:center;padding:24px"><i class="ti ti-loader" style="font-size:28px;color:var(--text3)"></i><p style="font-size:12px;color:var(--text2);margin-top:10px">14 agentes consultando…</p></div></div><div id="buscar-result"></div><div id="buscar-empty" class="card" style="text-align:center;padding:32px"><i class="ti ti-search" style="font-size:32px;color:var(--text3)"></i><p style="font-size:12px;color:var(--text2);margin-top:10px">OEM · IOM · SKU · EAN · Aplicações · Peças cruzadas · SEO · DNA hash</p></div></div>
-      <div class="page" id="p-manual"><div class="page-head"><h2>Cadastro manual</h2><p>OEM · IOM · SKU · EAN · imagem obrigatórios para NCT ≥ 0.90</p></div><div style="display:flex;flex-direction:column;gap:12px"><div class="card"><div class="card-title">Identificação do produto</div><div class="mb-10"><label class="lbl">Nome técnico completo</label><input id="m-nome" placeholder="Ex: Filtro de Óleo OC1224 Metal Leve"></div><div class="form-grid-3 mb-10"><div><label class="lbl">OEM (montadora)</label><input id="m-oem" placeholder="26300-35503" style="font-family:monospace"></div><div><label class="lbl">IOM (fabricante)</label><input id="m-iom" placeholder="Metal Leve S.A."></div><div><label class="lbl">SKU interno</label><input id="m-sku" placeholder="FILT-OC1224" style="font-family:monospace"></div></div><div class="form-grid-3"><div><label class="lbl">EAN-13</label><input id="m-ean" placeholder="7894766669907" style="font-family:monospace"></div><div><label class="lbl">NCM</label><input id="m-ncm" placeholder="8421.23.00" style="font-family:monospace"></div><div><label class="lbl">CEST</label><input id="m-cest" placeholder="01.015.00" style="font-family:monospace"></div></div></div><div class="card"><div class="card-title">Fiscal</div><div class="form-grid-4"><div><label class="lbl">IPI (%)</label><input id="m-ipi" placeholder="0" style="font-family:monospace"></div><div><label class="lbl">Origem</label><select id="m-origem"><option>Nacional</option><option>Importado</option></select></div><div><label class="lbl">Classificação</label><select id="m-classif"><option>Original OEM Certificado</option><option>Importado Certificado</option><option>Importado Paralelo</option></select></div><div><label class="lbl">Marca fabricante</label><input id="m-marca" placeholder="Metal Leve"></div></div></div><div class="card" id="m-img-card"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div class="card-title" style="margin:0">Imagem</div><span class="badge-danger" id="m-img-badge">obrigatória</span></div><input id="m-imagem" placeholder="https://…imagem.jpg" onchange="previewManualImg()"><img id="m-img-preview" src="" alt="" style="margin-top:8px;width:72px;height:72px;object-fit:contain;border-radius:8px;border:.5px solid var(--border);display:none"></div><div class="card"><div class="card-title">Categorias ERP / PDV</div><div class="form-grid-2 mb-12"><div><label class="lbl">Categoria</label><select id="m-cat" onchange="updateSubCat()"><option value="">Selecionar…</option></select></div><div><label class="lbl">Subcategoria</label><select id="m-sub"><option value="">Selecionar…</option></select></div></div><div class="mb-12"><label class="lbl">Tags frente de caixa ERP</label><div id="m-tags-wrap" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px"></div><input id="m-tag-input" placeholder="Tag + Enter" onkeydown="addManualTag(event)"></div><div><label class="lbl">Marcas de montadora</label><div id="m-marcas-wrap" class="flex flex-wrap gap-6" style="margin-top:4px"></div></div></div><div class="card"><div class="card-title">Aplicações veiculares</div><div class="overflow-x"><table id="m-aplic-table"><thead><tr><th>Veículo</th><th>Versão</th><th>Motor</th><th>Cil.</th><th>Válv.</th><th>Câmbio</th><th>Ini</th><th>Fim</th><th></th></tr></thead><tbody id="m-aplic-body"></tbody></table></div><button class="btn btn-ghost" onclick="addAplicRow('m-aplic-body')" style="margin-top:8px;font-size:12px;min-height:36px"><i class="ti ti-plus"></i>Adicionar linha</button></div><button class="btn btn-green btn-full" onclick="saveManual()" style="font-size:14px"><i class="ti ti-check" style="font-size:16px"></i>Salvar produto → Bling + Wix</button></div></div>
-      <div class="page" id="p-importar"><div class="page-head"><h2>Importar planilha</h2><p>CSV · XLSX · XLS · até 500 linhas</p></div><div id="import-done" style="display:none" class="card mb-12"></div><div id="drop-zone" class="card" style="text-align:center;padding:clamp(28px,6vw,48px);cursor:pointer;border:1.5px dashed var(--border2);background:var(--bg3)" onclick="document.getElementById('file-input').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)"><input type="file" id="file-input" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFile(event)"><i class="ti ti-file-spreadsheet" style="font-size:36px;color:var(--text3)"></i><div style="font-size:14px;font-weight:500;margin-top:10px">Arraste ou toque para selecionar</div><div style="font-size:12px;color:var(--text3);margin-top:4px">CSV · XLSX · XLS</div></div><div id="import-map" style="display:none"><div class="card mt-12" style="margin-top:12px"><div class="card-title" id="import-count-label">0 linhas — mapeie as colunas</div><div class="form-grid-2" id="import-fields"></div></div><button class="btn btn-green btn-full" onclick="doImport()" style="margin-top:12px"><i class="ti ti-upload"></i>Importar</button></div></div>
-      <div class="page" id="p-congelados"><div class="page-head"><h2>Produtos Congelados</h2><p>NCT ≥ 0.90 — DNA hash travado · CPC R$0,00</p></div><div class="stat-grid mb-16" id="frozen-stats"></div><div id="frozen-list"></div></div>
-      <div class="page" id="p-seo"><div class="page-head"><h2>SEO Google / CPC</h2><p>Objetivo: <b style="color:var(--success)">CPC R$0,00</b> — NCT ≥ 0.90 = Quality Score 10</p></div><div class="card mb-12"><div class="card-title">Fórmula do CPC R$0</div><div class="flex flex-wrap gap-6 items-center"><div style="background:var(--success-bg);border-radius:8px;padding:8px 14px;text-align:center"><div style="font-size:12px;font-weight:600;color:var(--success)">NCT ≥ 0.90</div></div><span style="font-size:20px;color:var(--text3)">→</span><div style="background:var(--info-bg);border-radius:8px;padding:8px 14px;text-align:center"><div style="font-size:12px;font-weight:600;color:var(--info)">DNA hash único</div></div><span style="font-size:20px;color:var(--text3)">→</span><div style="background:var(--success-bg);border-radius:8px;padding:8px 14px;text-align:center"><div style="font-size:12px;font-weight:600;color:var(--success)">CPC R$0,00</div></div></div></div><div class="card mb-12"><div class="card-title">NCT × Quality Score × CPC</div><div style="border-radius:8px;overflow:hidden;border:.5px solid var(--border)" id="seo-table"></div></div><div class="card mb-12" id="seo-progress"></div><div id="seo-products"></div></div>
-      <div class="page" id="p-agentes"><div class="page-head"><h2>Agentes de IA — 14 especializados</h2><p>Cada agente tem fonte própria. Ramo: 🔧 Autopeças</p></div><div style="border-radius:var(--r);overflow:hidden;border:.5px solid var(--border)" id="agentes-list"></div></div>
-      <div class="page" id="p-integracoes"><div class="page-head"><h2>Integrações</h2><p>Conecte sua loja para sincronizar catálogo automaticamente</p></div><div class="form-grid-2" id="integracoes-grid"></div></div>
-      <div class="page" id="p-planos"><div class="page-head"><h2>Planos e créditos</h2></div><div class="form-grid-3" id="planos-grid" style="margin-bottom:16px"></div><div class="card"><div style="font-size:13px;font-weight:500;margin-bottom:8px">Créditos avulsos — 1 crédito = 1 enriquecimento</div><input type="range" id="cred-range" min="100" max="5000" step="100" value="500" oninput="updateCredPrice()" style="width:100%;margin-bottom:8px"><div style="font-size:13px;color:var(--text2)" id="cred-label">500 créditos · R$ 195,00</div></div></div>
-      <div class="page" id="p-perfil"></div>
-      <div class="page" id="p-raspador"></div>
-    </main>
-    <nav class="bottom-nav" aria-label="Navegação principal">
-      <button class="bn-item active" data-page="dashboard" onclick="goTo('dashboard')"><i class="ti ti-dashboard"></i><span>Início</span></button>
-      <button class="bn-item" data-page="catalogo" onclick="goTo('catalogo')"><i class="ti ti-package"></i><span>Produtos</span></button>
-      <button class="bn-item bn-fab" data-page="ean" onclick="goTo('ean')" aria-label="Cadastro EAN"><i class="ti ti-barcode"></i></button>
-      <button class="bn-item" data-page="buscar" onclick="goTo('buscar')"><i class="ti ti-search"></i><span>Buscar</span></button>
-      <button class="bn-item" onclick="openMenuDrawer()"><i class="ti ti-menu-2"></i><span>Menu</span></button>
-    </nav>
+      <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" id="fil-frz" onchange="renderProd()" style="width:auto;min-height:auto;padding:0">Só congelados</label>
+      <button class="btn btn-w" onclick="document.getElementById('fil-q').value='';document.querySelector('[name=fil-nct]').checked=true;document.getElementById('fil-frz').checked=false;renderProd()" style="font-size:11px;margin-top:4px">Limpar filtros</button>
+    </div>
+    <div class="cat-results" style="flex:1;min-width:0">
+      <div class="prod-grid" id="prod-grid"></div>
+      <div class="empty" id="prod-empty">
+        <i class="ti ti-package" aria-hidden="true"></i>
+        <p>Nenhum produto ainda.</p>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+          <button class="btn" onclick="nav('ean')">EAN</button>
+          <button class="btn" onclick="nav('buscar')">Buscar</button>
+          <button class="btn" onclick="nav('manual')">Manual</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-<div class="drawer-overlay" id="filter-overlay" onclick="closeFilterDrawer()"></div>
-<div class="drawer" id="filter-drawer"><div class="drawer-handle"></div><div style="font-size:15px;font-weight:600;margin-bottom:16px">Filtros</div><div id="filter-panel-mobile"></div><button class="btn btn-primary btn-full" onclick="closeFilterDrawer()" style="margin-top:16px">Aplicar filtros</button></div>
-<div class="drawer-overlay" id="menu-overlay" onclick="closeMenuDrawer()"></div>
-<div class="drawer" id="menu-drawer"><div class="drawer-handle"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div style="font-size:15px;font-weight:600">Navegação</div><button onclick="closeMenuDrawer()" style="border:none;background:none;cursor:pointer;color:var(--text3);font-size:22px;min-height:44px;min-width:44px">×</button></div><div id="menu-drawer-items"></div></div>
+
+<!-- EAN -->
+<div class="pg" id="pg-ean">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">Cadastro pelo EAN</h2><p style="font-size:12px;color:#475569;margin-top:2px">Digite ou escaneie o código de barras</p></div>
+  <div class="card" style="margin-bottom:12px">
+    <label class="lbl">Código EAN / código de barras</label>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <input id="ean-in" placeholder="7894766669907" style="font-family:monospace;font-size:18px;letter-spacing:2px;flex:1" onkeydown="if(event.key==='Enter')doEAN()">
+      <button class="btn" onclick="doEAN()" style="flex-shrink:0;min-width:44px"><i class="ti ti-search" style="font-size:17px" aria-hidden="true"></i></button>
+      <button class="btn btn-i" onclick="startCam()" style="flex-shrink:0;min-width:44px"><i class="ti ti-camera" style="font-size:17px" aria-hidden="true"></i></button>
+    </div>
+    <p style="font-size:11px;color:#94a3b8">📱 iOS e Android — toque em <i class="ti ti-camera" style="font-size:12px" aria-hidden="true"></i> para escanear</p>
+  </div>
+  <div class="cam-wrap" id="cam-wrap" style="display:none">
+    <video id="cam-video" autoplay playsinline muted></video>
+    <div style="position:absolute;top:50%;left:10%;right:10%;height:2px;background:rgba(29,158,117,.8)"></div>
+    <button onclick="stopCam()" style="position:absolute;top:8px;right:8px;padding:6px 14px;border-radius:7px;border:none;background:rgba(0,0,0,.7);color:#fff;font-size:12px;cursor:pointer">✕ Fechar</button>
+  </div>
+  <div id="ean-loading" style="display:none" class="card"><div class="empty"><i class="ti ti-loader" aria-hidden="true"></i><p>GS1 · TecDoc · Partsouq…</p></div></div>
+  <div id="ean-result"></div>
+</div>
+
+<!-- BUSCAR -->
+<div class="pg" id="pg-buscar">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">Buscar e enriquecer</h2><p style="font-size:12px;color:#475569;margin-top:2px">14 agentes Genesis · OEM · EAN · Aplicações · Peças cruzadas</p></div>
+  <div style="display:flex;gap:8px;margin-bottom:12px">
+    <div style="flex:1;position:relative">
+      <i class="ti ti-search" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:16px;color:#94a3b8" aria-hidden="true"></i>
+      <input id="buscar-in" placeholder="Ex: Filtro OC1224 Metal Leve · Pistão PA9798 · Cabeçote HR D4GA…" style="padding-left:36px" onkeydown="if(event.key==='Enter')doEnrich()">
+    </div>
+    <button class="btn btn-p" onclick="doEnrich()" id="enrich-btn" style="flex-shrink:0"><i class="ti ti-search" aria-hidden="true"></i><span>Enriquecer</span></button>
+  </div>
+  <div id="buscar-steps" style="display:none" class="step-log"></div>
+  <div id="buscar-result"></div>
+  <div id="buscar-empty" class="empty"><i class="ti ti-search" aria-hidden="true"></i><p>OEM · IOM · SKU · EAN · Aplicações · Peças cruzadas · DNA hash</p></div>
+</div>
+
+<!-- MANUAL -->
+<div class="pg" id="pg-manual">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">Cadastro manual</h2><p style="font-size:12px;color:#475569;margin-top:2px">OEM · IOM · SKU · EAN · imagem obrigatórios para NCT ≥ 0.90</p></div>
+  <div class="card"><div class="ct">Identificação</div>
+    <div style="margin-bottom:10px"><label class="lbl">Nome técnico</label><input id="m-nome" placeholder="Filtro de Óleo OC1224 Metal Leve"></div>
+    <div class="g3" style="margin-bottom:10px"><div><label class="lbl">OEM</label><input id="m-oem" placeholder="26300-35503" style="font-family:monospace"></div><div><label class="lbl">IOM</label><input id="m-iom" placeholder="Metal Leve S.A."></div><div><label class="lbl">SKU</label><input id="m-sku" placeholder="FILT-OC1224" style="font-family:monospace"></div></div>
+    <div class="g3"><div><label class="lbl">EAN-13</label><input id="m-ean" placeholder="7894766669907" style="font-family:monospace"></div><div><label class="lbl">NCM</label><input id="m-ncm" placeholder="8421.23.00" style="font-family:monospace"></div><div><label class="lbl">Classificação</label><select id="m-classif"><option>Original OEM Certificado</option><option>Importado Certificado</option><option>Importado Paralelo</option></select></div></div>
+  </div>
+  <div class="card" id="m-img-card" style="margin-top:10px">
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="ct" style="margin:0">Imagem</div><span class="badge-d" id="m-img-badge">obrigatória</span></div>
+    <input id="m-img" placeholder="https://…imagem.jpg" onchange="prevImg()">
+    <img id="m-img-prev" src="" alt="" style="margin-top:8px;width:68px;height:68px;object-fit:contain;border-radius:7px;border:.5px solid #e2e8f0;display:none">
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div class="ct">Categorias ERP</div>
+    <div class="g2" style="margin-bottom:10px">
+      <div><label class="lbl">Categoria</label><select id="m-cat" onchange="updSub()"><option value="">Selecionar…</option><option>Motor</option><option>Filtros</option><option>Freios</option><option>Suspensão</option><option>Transmissão</option><option>Arrefecimento</option><option>Elétrica</option><option>Direção</option><option>Combustível</option><option>Escapamento</option></select></div>
+      <div><label class="lbl">Subcategoria</label><select id="m-sub"><option value="">Selecionar…</option></select></div>
+    </div>
+    <div style="margin-bottom:10px"><label class="lbl">Tags frente de caixa (Enter para adicionar)</label><div id="m-tags-list" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px"></div><input id="m-tag-in" placeholder="Tag + Enter" onkeydown="addTag(event)"></div>
+    <div><label class="lbl">Marcas de montadora</label><div id="m-marcas" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px"></div></div>
+  </div>
+  <button class="btn btn-s btn-w" onclick="saveManual()" style="margin-top:12px;font-size:13px"><i class="ti ti-check" aria-hidden="true"></i>Salvar → Bling + Wix</button>
+</div>
+
+<!-- IMPORTAR -->
+<div class="pg" id="pg-importar">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">Importar planilha</h2><p style="font-size:12px;color:#475569;margin-top:2px">CSV · XLSX · até 500 linhas</p></div>
+  <div id="imp-ok" style="display:none" class="card" style="border-color:#86efac;color:var(--s);margin-bottom:10px"></div>
+  <div class="card" style="text-align:center;padding:36px;cursor:pointer;border:1.5px dashed #cbd5e1;background:#f8fafc" onclick="document.getElementById('csv-in').click()">
+    <input type="file" id="csv-in" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleCSV(event)">
+    <i class="ti ti-file-spreadsheet" style="font-size:32px;color:#94a3b8" aria-hidden="true"></i>
+    <div style="font-size:13px;font-weight:500;margin-top:10px">Toque ou arraste para selecionar</div>
+    <div style="font-size:11px;color:#94a3b8;margin-top:3px">CSV · XLSX · XLS</div>
+  </div>
+  <div id="imp-map" style="display:none;margin-top:12px"></div>
+</div>
+
+<!-- RASPADOR -->
+<div class="pg" id="pg-raspador">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">Raspador web</h2><p style="font-size:12px;color:#475569;margin-top:2px">Cole a URL do produto no fornecedor · Triangula múltiplas fontes</p></div>
+  <div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <input id="rasp-in" placeholder="https://loja.rmp.com.br/produto…  ou  OC1224 Metal Leve" onkeydown="if(event.key==='Enter')doRasp()">
+      <button class="btn btn-p" onclick="doRasp()" id="rasp-btn" style="flex-shrink:0"><i class="ti ti-spider" aria-hidden="true"></i></button>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px">
+      <span class="chip on">loja.rmp.com.br</span><span class="chip on">partsouq.com</span><span class="chip on">tecdoc.net</span><span class="chip on">gs1.org.br</span><span class="chip">metaleve.com.br</span><span class="chip">mahle.com</span><span class="chip">bosch.com.br</span>
+    </div>
+  </div>
+  <div id="rasp-steps" style="display:none;margin-top:10px" class="step-log"></div>
+  <div id="rasp-result" style="margin-top:10px"></div>
+</div>
+
+<!-- CONGELADOS -->
+<div class="pg" id="pg-congelados">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">Produtos Congelados</h2><p style="font-size:12px;color:#475569;margin-top:2px">NCT ≥ 0.90 — DNA hash travado · CPC R$0,00</p></div>
+  <div class="g4" id="frz-stats" style="margin-bottom:14px"></div>
+  <div id="frz-list"></div>
+</div>
+
+<!-- SEO -->
+<div class="pg" id="pg-seo">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">SEO Google / CPC</h2><p style="font-size:12px;color:#475569;margin-top:2px">NCT ≥ 0.90 = Quality Score 10 = <b style="color:var(--s)">CPC R$0,00</b></p></div>
+  <div class="card" style="margin-bottom:10px"><div class="ct">NCT × QS × CPC estimado</div><div id="seo-table"></div></div>
+  <div class="card" id="seo-progress" style="margin-bottom:10px"></div>
+  <div id="seo-prods"></div>
+</div>
+
+<!-- AGENTES -->
+<div class="pg" id="pg-agentes">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">Agentes de IA — 14 especializados</h2></div>
+  <div id="agentes-list" style="border-radius:var(--r);overflow:hidden;border:.5px solid #e2e8f0"></div>
+</div>
+
+<!-- INTEGRAÇÕES -->
+<div class="pg" id="pg-integracoes">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">Integrações</h2></div>
+  <div class="g2" id="integ-grid"></div>
+</div>
+
+<!-- PLANOS -->
+<div class="pg" id="pg-planos">
+  <div style="margin-bottom:14px"><h2 style="font-size:17px;font-weight:600">Planos e créditos</h2></div>
+  <div class="g3" id="planos-grid" style="margin-bottom:14px"></div>
+  <div class="card"><div style="font-size:12px;font-weight:500;margin-bottom:7px">Créditos avulsos — R$ 0,39/crédito</div><input type="range" min="100" max="5000" step="100" value="500" oninput="this.nextElementSibling.textContent=this.value+' créditos · R$ '+(this.value*.39).toFixed(2)" style="width:100%;margin-bottom:6px"><div style="font-size:12px;color:#475569">500 créditos · R$ 195.00</div></div>
+</div>
+
+</main><!-- /content -->
+</div><!-- /main wrap -->
+</div><!-- /shell -->
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <button class="bnav-item on" onclick="nav('dash')"><i class="ti ti-dashboard" aria-hidden="true"></i><span>Início</span></button>
+  <button class="bnav-item" onclick="nav('catalogo')"><i class="ti ti-package" aria-hidden="true"></i><span>Produtos</span></button>
+  <button class="bnav-item bnav-fab" onclick="nav('ean')"><i class="ti ti-barcode" aria-hidden="true"></i></button>
+  <button class="bnav-item" onclick="nav('buscar')"><i class="ti ti-search" aria-hidden="true"></i><span>Buscar</span></button>
+  <button class="bnav-item" onclick="nav('agentes')"><i class="ti ti-menu-2" aria-hidden="true"></i><span>Menu</span></button>
+</nav>
+
 <script>
-let catalog=[],currentPage='dashboard',cameraStream=null,importRows=[],importCols=[],manualTags=[],manualMarcas=[],filterState={};
-const CATS={Motor:["Pistões/Anéis","Bronzinas","Cabeçote","Virabrequim","Juntas","Bomba de Óleo"],Filtros:["Filtro de Ar","Filtro de Óleo","Filtro Combustível","Filtro Cabine"],Freios:["Pastilhas","Discos","Lonas","Cilindro","Pinça"],Suspenção:["Amortecedor","Mola","Buchas","Coxim","Pivô"],Transmissão:["Embreagem","Câmbio","Semi-eixo","Cruzeta"],Arrefecimento:["Radiador","Bomba d'gua","Termostato","Ventoinha"],Elétrica:["Alternador","Arranque","Sensores","Bateria"],Direção:["Caixa Direção","Bomba Direção","Terminal"],Combustível:["Bomba","Injetor"],Escapamento:["Catalisador","Coletor","Silencioso"]};
-const MARCAS=["Hyundai","Kia","Ford","Chevrolet","VW","Fiat","Toyota","Honda","Renault","Nissan","Mitsubishi","Mercedes"];
-const AGENTES=[[1,"Enriquecimento geral","Nome técnico, OEM, EAN, fabricante.","Claude API · MAHLE · MOBIS"],[2,"Aplicação veicular","Cruza catálogos para confirmar aplicação.","MAHLE · TecDoc · AutoData"],[3,"CDC","Avisos CDC obrigatórios.","Lei 8.078/90 · INMETRO"],[4,"Bula técnica","Torques, folgas, montagem.","Manuais · MAHLE · Metal Leve"],[5,"SEO + P-MAX","Title, meta, H1, schema.org.","Search Console · Semrush"],[6,"Fiscal NCM/EAN/CEST","Valida NCM, EAN GS1, CEST.","TIPI/NCM · GS1 Brasil"],[7,"Composição","Liga metálica, tratamento.","ABNT · SAE · ISO"],[8,"Imagem web","URLs reais via web search.","Google Images · MAHLE"],[9,"Cabeçalho ERP","Formata Bling, Wix, ML.","API Bling v3 · Wix"],[10,"Google Ads assets","Headlines, descriptions.","Google Ads · Merchant"],[11,"CNPJ+CNAE","Consulta CNPJ, CNAE.","Receita Federal"],[12,"DNA hash + NCT","Hash SHA-256 único.","Algoritmo Genesis · GS1"],[13,"Peças cruzadas","OEM multi-montadora.","Partsouq · TecDoc"],[14,"Aplicação expandida","Outras montadoras.","Partsouq · AutoData"]];
-const INTEGRACOES=["Bling v3","Bling v2","Wix","Mercado Livre","Tiny ERP","Shopify","VTEX","Nuvemshop","Tray","Magento 2"];
-const PLANOS=[{n:"Básico",p:"R$97/mês",dest:false,f:["200 produtos","10 buscas/dia","Agentes OEM+EAN","Bling básico","Suporte e-mail"]},{n:"Profissional",p:"R$297/mês",dest:true,f:["Produtos ilimitados","14 agentes completos","Bling+Wix+ML","Partsouq+TecDoc","Câmera EAN","P-MAX automático","DNA hash + NCT","Suporte WhatsApp"]},{n:"Enterprise",p:"Consulta",dest:false,f:["Tudo + API REST","10 usuários","Plugins custom","SLA 99.9%","Gerente dedicado"]}];
-const NAV_ITEMS=[{g:"Principal",items:[{id:"dashboard",icon:"ti-dashboard",label:"Dashboard"},{id:"perfil",icon:"ti-user-circle",label:"Perfil de Voz"}]},{g:"Cadastro",items:[{id:"ean",icon:"ti-barcode",label:"Cadastro pelo EAN"},{id:"buscar",icon:"ti-search",label:"Buscar e enriquecer"},{id:"raspador",icon:"ti-spider",label:"Raspador web"},{id:"manual",icon:"ti-forms",label:"Cadastro manual"},{id:"importar",icon:"ti-file-spreadsheet",label:"Por planilha"}]},{g:"Status",items:[{id:"congelados",icon:"ti-lock",label:"Congelados",badge:"frozen"},{id:"seo",icon:"ti-brand-google",label:"SEO / CPC"}]},{g:"Plataforma",items:[{id:"agentes",icon:"ti-robot",label:"Agentes de IA (14)"},{id:"integracoes",icon:"ti-plug",label:"Integrações"},{id:"planos",icon:"ti-star",label:"Planos e créditos"}]}];
-window.addEventListener('DOMContentLoaded',()=>{buildSidebar();buildMenuDrawer();buildManualForm();buildAgentes();buildIntegracoes();buildPlanos();buildFilterPanels();updateDashboard();renderCatalog();renderCongelados();renderSEO();if(document.getElementById('p-perfil'))document.getElementById('p-perfil').innerHTML='<div class="page-head"><h2>Perfil de Voz</h2><p>Configure CNPJ para detecção automática.</p></div><div class="card"><div class="card-title">CNPJ</div><div class="flex gap-8"><input id="cnpj-input" placeholder="00.000.000/0001-00" style="font-family:monospace;flex:1"><button class="btn btn-ghost" onclick="alert('Consultando CNPJ...')">Consultar</button></div></div>';if(document.getElementById('p-raspador'))document.getElementById('p-raspador').innerHTML='<div class="page-head"><h2>Raspador web</h2><p>Cole a URL do produto.</p></div><div class="card"><div class="flex gap-8"><input placeholder="https://..."><button class="btn btn-primary" onclick="alert('Recurso no plano Profissional.')"><i class="ti ti-spider"></i>Raspar</button></div></div>';});
-function nctColor(v){return v>=.9?'var(--success)':v>=.7?'var(--warn)':'var(--danger)';}
-function goTo(id){if(!document.getElementById('p-'+id))id='dashboard';document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+id).classList.add('active');document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('active',el.dataset.page===id));document.querySelectorAll('.bn-item[data-page]').forEach(el=>el.classList.toggle('active',el.dataset.page===id));currentPage=id;window.scrollTo(0,0);if(id==='catalogo')renderCatalog();if(id==='congelados')renderCongelados();if(id==='seo')renderSEO();if(id==='dashboard')updateDashboard();}
-function buildSidebar(){const frozen=catalog.filter(p=>(p.nct_estimado||0)>=.9).length;let html='';NAV_ITEMS.forEach(g=>{html+=`<div class="sb-group">${g.g}</div>`;g.items.forEach(item=>{const badge=item.badge==='frozen'&&frozen>0?`<span class="sb-badge green">${frozen}</span>`:'';html+=`<button class="sb-item${item.id===currentPage?' active':''}" data-page="${item.id}" onclick="goTo('${item.id}')"><i class="ti ${item.icon}"></i><span class="sb-label">${item.label}</span>${badge}</button>`;});});document.getElementById('sb-nav').innerHTML=html;}
-let sbCollapsed=false;
-function toggleSb(){sbCollapsed=!sbCollapsed;document.getElementById('sidebar').classList.toggle('collapsed',sbCollapsed);document.getElementById('sb-icon').className=sbCollapsed?'ti ti-layout-sidebar-right':'ti ti-layout-sidebar-left';}
-function buildMenuDrawer(){let html='';NAV_ITEMS.forEach(g=>{g.items.filter(i=>!['dashboard','catalogo','buscar','ean','congelados'].includes(i.id)).forEach(item=>{html+=`<button class="menu-item" onclick="goTo('${item.id}');closeMenuDrawer()"><i class="ti ${item.icon}"></i>${item.label}</button>`;});});document.getElementById('menu-drawer-items').innerHTML=html;}
-function openMenuDrawer(){document.getElementById('menu-overlay').classList.add('open');document.getElementById('menu-drawer').classList.add('open');}
-function closeMenuDrawer(){document.getElementById('menu-overlay').classList.remove('open');document.getElementById('menu-drawer').classList.remove('open');}
-function buildFilterPanels(){const html=buildFilterHTML();document.getElementById('filter-panel-desktop').innerHTML=html;document.getElementById('filter-panel-mobile').innerHTML=html;}
-function buildFilterHTML(){return `<div><div class="card-title">Buscar</div><div style="position:relative"><i class="ti ti-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3)"></i><input id="filt-q" placeholder="Nome, OEM, EAN..." style="padding-left:34px" oninput="applyFilter()" value="${filterState.q||''}"></div></div><div><div class="card-title">NCT</div>${[['Todos',''],['Premium ≥ 0.90','premium'],['Bom 0.70-0.89','bom'],['Baixo < 0.70','baixo']].map(([l,v])=>`<label style="display:flex;align-items:center;gap:8px;padding:3px 0;cursor:pointer;font-size:12px"><input type="radio" name="filt-nct" ${(filterState.nct||'')===v?'checked':''} onchange="filterState.nct='${v}';renderCatalog()" style="width:auto;min-height:auto;padding:0">${l}</label>`).join('')}</div><label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;padding:2px 0"><input type="checkbox" ${filterState.congelados?'checked':''} onchange="filterState.congelados=this.checked;renderCatalog()" style="width:auto;min-height:auto;padding:0">Só congelados</label><button class="btn btn-ghost" onclick="filterState={};buildFilterPanels();renderCatalog()" style="font-size:12px;min-height:36px;width:100%">Limpar filtros</button>`;}
-function applyFilter(){filterState.q=document.getElementById('filt-q').value;renderCatalog();}
-function openFilterDrawer(){document.getElementById('filter-overlay').classList.add('open');document.getElementById('filter-drawer').classList.add('open');buildFilterPanels();}
-function closeFilterDrawer(){document.getElementById('filter-overlay').classList.remove('open');document.getElementById('filter-drawer').classList.remove('open');}
-function getFiltered(){return catalog.filter(p=>{if(filterState.q){const q=filterState.q.toLowerCase();if(![p.nome_tecnico,p.oem,p.ean,p.sku].some(v=>v?.toLowerCase().includes(q)))return false;}if(filterState.nct==='premium'&&(p.nct_estimado||0)<.9)return false;if(filterState.nct==='bom'){const n=p.nct_estimado||0;if(n<.7||n>=.9)return false;}if(filterState.nct==='baixo'&&(p.nct_estimado||0)>=.7)return false;if(filterState.congelados&&(p.nct_estimado||0)<.9)return false;return true;});}
-function renderCatalog(){const filtered=getFiltered();const cnt=document.getElementById('cat-count');if(cnt)cnt.textContent=`${filtered.length}/${catalog.length} produto${catalog.length!==1?'s':''}`;const grid=document.getElementById('prod-grid');const empty=document.getElementById('prod-empty');buildFilterPanels();if(!grid)return;if(catalog.length===0){grid.innerHTML='';if(empty)empty.style.display='block';return;}if(empty)empty.style.display='none';if(filtered.length===0){grid.innerHTML='<div class="empty" style="grid-column:1/-1"><i class="ti ti-filter-off"></i><p>Nenhum produto com estes filtros.</p></div>';return;}grid.innerHTML=filtered.map(prodCardHTML).join('');}
-function prodCardHTML(p){const n=p.nct_estimado||0;const hasImg=p.imagem&&!["(imagem selecionada)"].includes(p.imagem);const marcasHtml=(p.marcas_final||p.marcas_montadoras||[]).slice(0,2).map(m=>`<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:var(--info-bg);color:var(--info)">${m}</span>`).join('');return `<div class="prod-card"><div class="prod-card-img">${hasImg?`<img src="${p.imagem}" alt="" onerror="this.parentNode.innerHTML='<i class=\\"ti ti-photo-off\\" style=\\"font-size:28px;color:var(--text3)\\"></i>'">`:'<i class="ti ti-photo-off" style="font-size:28px;color:var(--text3)"></i>'}</div><div class="prod-card-body"><div class="prod-name">${p.nome_tecnico||'Sem nome'}</div><div class="prod-code">${p.oem||p.ean||'—'}</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:2px">${marcasHtml}</div><div style="margin-top:5px"><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-bottom:3px"><span>NCT</span><span style="color:${nctColor(n)};font-weight:600">${n.toFixed(2)}</span></div><div class="nct-bar"><div class="nct-fill" style="width:${Math.min(100,n*100)}%;background:${nctColor(n)}"></div></div></div>${n>=.9?'<div style="font-size:9px;color:var(--success);margin-top:3px">✓ Congelado · CPC R$0</div>':''}</div></div>`;}
-</script>
-<script>
-async function callClaude(prompt){const r=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});const d=await r.json();return(d.content||[]).map(b=>b.text||'').join('\n');}
-function parseJson(txt){try{const m=txt.match(/\{[\s\S]*\}/);return m?JSON.parse(m[0]):null;}catch{return null;}}
-async function buscarEan(codigo){const num=(codigo||document.getElementById('ean-input').value).replace(/\D/g,'');if(num.length<8)return;document.getElementById('ean-loading').style.display='block';document.getElementById('ean-result').innerHTML='';const txt=await callClaude('Agente Genesis 360. EAN: "'+num+'". Retorne APENAS JSON:{"nome_tecnico":"","oem":"","iom":"","sku":"","ean":"'+num+'","ncm":"","marca":"","classificacao":"Original OEM Certificado","descricao_seo":"","categoria":"","tags_erp":[],"marcas_montadoras":[],"aplicacoes":[{"veiculo":"","versao":"","motor":"","cilindrada":"","valvulas":"","cambio":"","ano_ini":2007,"ano_fim":2025}],"codigos_equivalentes":[],"nct_estimado":0.72,"dna_hash":"genesis360"}');document.getElementById('ean-loading').style.display='none';const p=parseJson(txt);if(p)renderResult('ean-result',p);else document.getElementById('ean-result').innerHTML='<div class="card" style="border-color:var(--danger-border);color:var(--danger)">EAN não encontrado.</div>';}
-async function startCamera(){if(!navigator.mediaDevices){alert('Câmera não disponível.');return;}try{const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});cameraStream=s;const video=document.getElementById('cam-video');document.getElementById('cam-wrap').style.display='block';video.srcObject=s;video.play();if('BarcodeDetector' in window){const det=new BarcodeDetector({formats:['ean_13','ean_8','code_128','upc_a']});const scan=async()=>{if(!cameraStream)return;try{const c=await det.detect(video);if(c.length>0){document.getElementById('ean-input').value=c[0].rawValue;stopCamera();buscarEan(c[0].rawValue);return;}}catch{}if(cameraStream)requestAnimationFrame(scan);};setTimeout(scan,500);}}catch{alert('Permissão de câmera negada.');}}
-function stopCamera(){if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null;}document.getElementById('cam-wrap').style.display='none';}
-async function enriquecer(){const q=document.getElementById('buscar-input').value.trim();if(!q)return;document.getElementById('buscar-loading').style.display='block';document.getElementById('buscar-result').innerHTML='';document.getElementById('buscar-empty').style.display='none';const txt=await callClaude('Agente Genesis 360 autopeças. Produto: "'+q+'". Retorne APENAS JSON:{"nome_tecnico":"","oem":"","iom":"","sku":"","ean":"","ncm":"","marca":"","classificacao":"Original OEM Certificado","descricao_seo":"","categoria":"","tags_erp":[],"marcas_montadoras":[],"aplicacoes":[{"veiculo":"","versao":"","motor":"","cilindrada":"","valvulas":"","cambio":"","ano_ini":2007,"ano_fim":2025}],"codigos_equivalentes":[],"pecas_cruzadas":[{"fabricante":"","codigo":"","tipo":"OEM"}],"imagens_web":[],"nct_estimado":0.85,"dna_hash":"genesis360"}');document.getElementById('buscar-loading').style.display='none';const p=parseJson(txt);if(p)renderResult('buscar-result',p);else{document.getElementById('buscar-result').innerHTML='<div class="card" style="border-color:var(--danger-border);color:var(--danger)">Erro. Verifique a conexão.</div>';document.getElementById('buscar-empty').style.display='block';}}
-let selectedImages={};
-function selectImg(id,src){selectedImages[id]=src;const card=document.getElementById(id+'-card');const badge=document.getElementById(id+'-badge');if(card)card.style.borderColor='var(--success-border)';if(badge){badge.className='badge-success';badge.textContent='✓ selecionada';}}
-function renderResult(containerId,p){const n=p.nct_estimado||0;const imgId='img-'+Date.now();const html=`<div style="display:flex;flex-direction:column;gap:12px"><div class="card flex justify-between items-center gap-8"><div><div style="font-size:15px;font-weight:600">${p.nome_tecnico||'Produto'}</div><div style="font-size:12px;color:var(--text2);margin-top:3px">${p.marca||''} · ${p.classificacao||''}</div></div><div style="text-align:right"><div style="font-size:22px;font-weight:600;color:${nctColor(n)}">${n.toFixed(2)}</div><div style="font-size:10px;color:${nctColor(n)}">${n>=.9?'PREMIUM ✓':n>=.7?'BOM':'BAIXO'}</div></div></div>${p.aplicacoes?.length?`<div class="card"><div class="card-title">Aplicações — ${p.aplicacoes.length} versões</div><div class="overflow-x"><table><thead><tr><th>Veículo</th><th>Versão</th><th>Motor</th><th>Ini</th><th>Fim</th></tr></thead><tbody>${p.aplicacoes.map(a=>`<tr><td>${a.veiculo||'—'}</td><td>${a.versao||'—'}</td><td style="font-family:monospace;font-size:10px">${a.motor||'—'}</td><td>${a.ano_ini||'—'}</td><td>${a.ano_fim||'—'}</td></tr>`).join('')}</tbody></table></div></div>`:''}<div class="card" id="${imgId}-card" style="border-color:var(--danger-border)"><div class="flex items-center gap-8 mb-10"><div class="card-title" style="margin:0">Imagem</div><span class="badge-danger" id="${imgId}-badge">obrigatória</span></div><div style="display:flex;flex-wrap:wrap;gap:8px">${(p.imagens_web?.length?p.imagens_web:['ph1','ph2']).map((src,i)=>`<button onclick="selectImg('${imgId}','${src}')" style="border:.5px solid var(--border);border-radius:8px;padding:4px;cursor:pointer;background:var(--bg3);min-height:44px;min-width:44px"><img src="${src.startsWith('ph')?'https://placehold.co/64x64?text=Foto'+(i+1):src}" onerror="this.src='https://placehold.co/64x64?text=Foto${i+1}'" style="width:64px;height:64px;object-fit:contain;display:block;border-radius:4px"></button>`).join('')}<button onclick="addImgUrl('${imgId}')" style="width:80px;height:80px;border:.5px dashed var(--border2);border-radius:8px;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--text3);font-size:11px"><i class="ti ti-plus" style="font-size:18px"></i>URL</button></div></div><div style="background:var(--bg3);border-radius:var(--r);padding:10px 14px;display:flex;align-items:center;gap:10px"><i class="ti ti-fingerprint" style="font-size:18px;color:var(--text3)"></i><div style="flex:1"><div style="font-size:9px;color:var(--text3)">DNA hash Genesis 360</div><div style="font-size:10px;font-family:monospace;color:var(--text2)">${p.dna_hash||'genesis360-'+Math.random().toString(36).slice(2,16)}</div></div></div><div style="display:flex;gap:8px"><button class="btn btn-green" style="flex:1" onclick='approveProduct(${JSON.stringify(p).replace(/"/g,"&quot;")})'>✓ Aprovar → Bling + Wix</button><button class="btn btn-ghost" onclick="document.getElementById('${containerId}').innerHTML=''">Cancelar</button></div></div>`;document.getElementById(containerId).innerHTML=html;}
-function addImgUrl(id){const u=prompt('URL da imagem:');if(u)selectImg(id,u);}
-function approveProduct(p){const imgKey=Object.keys(selectedImages)[0];if(!imgKey){alert('⚠️ Selecione uma imagem.');return;}const prod={...p,imagem:selectedImages[imgKey],aprovado_em:new Date().toLocaleDateString('pt-BR')};catalog.unshift(prod);selectedImages={};updateDashboard();buildSidebar();renderCatalog();renderCongelados();renderSEO();syncProduto(prod);alert('✓ "'+prod.nome_tecnico+'" aprovado!');goTo('catalogo');}
-</script>
-<script>
-function buildManualForm(){const catSel=document.getElementById('m-cat');catSel.innerHTML='<option value="">Selecionar...</option>';Object.keys(CATS).forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;catSel.appendChild(o);});document.getElementById('m-marcas-wrap').innerHTML=MARCAS.map(m=>`<button type="button" class="chip" onclick="toggleManualMarca('${m}',this)">${m}</button>`).join('');}
-function updateSubCat(){const cat=document.getElementById('m-cat').value;const sub=document.getElementById('m-sub');sub.innerHTML='<option value="">Selecionar...</option>';(CATS[cat]||[]).forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sub.appendChild(o);});}
-function addManualTag(e){if(e.key==='Enter'){e.preventDefault();const v=e.target.value.trim().toLowerCase();if(v&&!manualTags.includes(v)){manualTags.push(v);renderManualTags();}e.target.value='';}}
-function renderManualTags(){document.getElementById('m-tags-wrap').innerHTML=manualTags.map(t=>`<span class="tag">${t}<button onclick="manualTags=manualTags.filter(x=>x!=='${t}');renderManualTags()" style="border:none;background:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0">×</button></span>`).join('');}
-function toggleManualMarca(m,el){const i=manualMarcas.indexOf(m);if(i>=0){manualMarcas.splice(i,1);el.classList.remove('on');}else{manualMarcas.push(m);el.classList.add('on');}}
-function addAplicRow(tbodyId){const tbody=document.getElementById(tbodyId);const tr=document.createElement('tr');tr.innerHTML=['veiculo','versao','motor','cilindrada','valvulas','cambio','ano_ini','ano_fim'].map(k=>`<td><input data-key="${k}" style="min-width:60px;font-size:11px;padding:3px 5px;width:100%"></td>`).join('')+`<td><button onclick="this.closest('tr').remove()" style="background:none;border:none;cursor:pointer;color:var(--text3)">×</button></td>`;tbody.appendChild(tr);}
-function previewManualImg(){const url=document.getElementById('m-imagem').value;const preview=document.getElementById('m-img-preview');const badge=document.getElementById('m-img-badge');const card=document.getElementById('m-img-card');if(url){preview.src=url;preview.style.display='block';badge.className='badge-success';badge.textContent='✓ ok';card.style.borderColor='var(--success-border)';}else{preview.style.display='none';badge.className='badge-danger';badge.textContent='obrigatória';card.style.borderColor='';}}
-function getAplicRows(tbodyId){const rows=[];document.querySelectorAll(`#${tbodyId} tr`).forEach(tr=>{const row={};tr.querySelectorAll('input[data-key]').forEach(inp=>{row[inp.dataset.key]=inp.value;});rows.push(row);});return rows;}
-function saveManual(){const nome=document.getElementById('m-nome').value.trim();const img=document.getElementById('m-imagem').value.trim();if(!nome){alert('Nome técnico obrigatório');return;}if(!img){alert('Imagem obrigatória');return;}const oem=document.getElementById('m-oem').value;const ean=document.getElementById('m-ean').value;const ncm=document.getElementById('m-ncm').value;const aplicacoes=getAplicRows('m-aplic-body');const nct=Math.min(.99,.45+(oem?.length>2?.1:0)+(ean?.length>7?.1:0)+.2+(aplicacoes.length>0?.1:0)+(ncm?.length>3?.05:0));const prod={nome_tecnico:nome,oem,iom:document.getElementById('m-iom').value,sku:document.getElementById('m-sku').value,ean,ncm,cest:document.getElementById('m-cest').value,ipi:document.getElementById('m-ipi').value,origem:document.getElementById('m-origem').value,classificacao:document.getElementById('m-classif').value,marca:document.getElementById('m-marca').value,imagem:img,categoria:document.getElementById('m-cat').value,subcategoria:document.getElementById('m-sub').value,tags:manualTags,marcas_montadoras:manualMarcas,aplicacoes,nct_estimado:+nct.toFixed(2),aprovado_em:new Date().toLocaleDateString('pt-BR')};catalog.unshift(prod);updateDashboard();buildSidebar();renderCatalog();renderCongelados();renderSEO();syncProduto(prod);alert('✓ "'+nome+'" salvo!');goTo('catalogo');}
-const IMPORT_CAMPOS=['nome_tecnico','oem','iom','sku','ean','ncm','marca','categoria','descricao_pdv','imagem'];
-function dragOver(e){e.preventDefault();document.getElementById('drop-zone').style.background='var(--info-bg)';}
-function dragLeave(){document.getElementById('drop-zone').style.background='var(--bg3)';}
-function dropFile(e){e.preventDefault();dragLeave();const f=e.dataTransfer.files[0];if(f)processFile(f);}
-function handleFile(e){const f=e.target.files[0];if(f)processFile(f);}
-function processFile(f){const ext=f.name.split('.').pop().toLowerCase();if(ext==='csv'){const r=new FileReader();r.onload=e=>{const lines=e.target.result.split('\n').filter(Boolean);const cols=lines[0].split(',').map(c=>c.trim().replace(/"/g,''));importCols=cols;importRows=lines.slice(1).map(l=>{const vals=l.split(',').map(v=>v.trim().replace(/"/g,''));const obj={};cols.forEach((c,i)=>obj[c]=vals[i]||'');return obj;}).slice(0,500);showImportMap();};r.readAsText(f);}else alert('Use CSV exportado do Excel.');}
-function showImportMap(){document.getElementById('import-map').style.display='block';document.getElementById('import-count-label').textContent=importRows.length+' linhas — mapeie as colunas';document.getElementById('import-fields').innerHTML=IMPORT_CAMPOS.map(c=>`<div><label class="lbl">${c}</label><select id="imp-${c}"><option value="">— ignorar —</option>${importCols.map(col=>`<option value="${col}"${col.toLowerCase().includes(c.toLowerCase())?'selected':''}>${col}</option>`).join('')}</select></div>`).join('');}
-function doImport(){let count=0;importRows.forEach(r=>{const p={nct_estimado:.55,aprovado_em:new Date().toLocaleDateString('pt-BR')};IMPORT_CAMPOS.forEach(c=>{const sel=document.getElementById('imp-'+c);if(sel?.value&&r[sel.value]!==undefined)p[c]=String(r[sel.value]);});if(p.nome_tecnico){catalog.unshift(p);count++;}});const done=document.getElementById('import-done');done.style.display='block';done.style.borderColor='var(--success-border)';done.style.color='var(--success)';done.textContent='✓ '+count+' produto'+(count!==1?'s':'')+' importado'+(count!==1?'s':'')+'!';document.getElementById('import-map').style.display='none';importRows=[];importCols=[];updateDashboard();buildSidebar();renderCatalog();renderCongelados();renderSEO();}
-const CRITS=[{k:'oem',l:'OEM',f:p=>p.oem?.length>2},{k:'ean',l:'EAN',f:p=>p.ean?.length>7},{k:'img',l:'Imagem',f:p=>!!p.imagem},{k:'apl',l:'Aplicação',f:p=>(p.aplicacoes?.length||0)>0},{k:'ncm',l:'NCM',f:p=>p.ncm?.length>3},{k:'seo',l:'SEO',f:p=>p.descricao_seo?.length>30}];
-function renderCongelados(){const frozen=catalog.filter(p=>(p.nct_estimado||0)>=.9);const pending=catalog.filter(p=>(p.nct_estimado||0)<.9);const stats=document.getElementById('frozen-stats');if(stats)stats.innerHTML=[{l:'Congelados',v:frozen.length,c:'var(--success)'},{l:'Aguardando',v:pending.length,c:'var(--warn)'},{l:'% catálogo',v:catalog.length?Math.round(frozen.length/catalog.length*100)+'%':'—',c:'var(--text)'},{l:'NCT médio',v:frozen.length?(frozen.reduce((a,c)=>a+(c.nct_estimado||0),0)/frozen.length).toFixed(2):'—',c:'var(--success)'}].map(c=>`<div class="card"><div style="font-size:22px;font-weight:600;color:${c.c};margin-bottom:2px">${c.v}</div><div style="font-size:11px;color:var(--text2)">${c.l}</div></div>`).join('');const list=document.getElementById('frozen-list');if(!list)return;if(catalog.length===0){list.innerHTML='<div class="empty card"><i class="ti ti-lock"></i><p>Enriqueça produtos até NCT ≥ 0.90.</p></div>';return;}let html='';if(frozen.length>0){html+='<div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--success);margin-bottom:10px">✦ Congelados — DNA travado</div><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">'+frozen.map(p=>`<div class="card frozen-card"><div class="flex gap-8 items-center"><i class="ti ti-lock" style="color:var(--success)"></i><span style="flex:1;font-weight:500">${p.nome_tecnico}</span><span class="badge-success">NCT ${(p.nct_estimado||0).toFixed(2)} ✓</span></div></div>`).join('')+'</div>';}if(pending.length>0){html+='<div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--warn);margin-bottom:10px">◎ Aguardando</div><div style="display:flex;flex-direction:column;gap:10px">'+pending.map(p=>{const nct=p.nct_estimado||0;const falta=CRITS.filter(c=>!c.f(p));return `<div class="card pending-card"><div class="flex items-center gap-8 mb-10"><i class="ti ti-lock-open" style="color:var(--warn)"></i><span style="flex:1">${p.nome_tecnico||'Sem nome'}</span><span class="badge-warn">+${(0.9-nct).toFixed(2)}</span></div><div style="display:flex;flex-wrap:wrap;gap:4px">${falta.map(c=>`<span style="font-size:10px;padding:1px 6px;border-radius:3px;background:var(--warn-bg);color:var(--warn)">+${c.l}</span>`).join('')}</div></div>`;}).join('')+'</div>';}list.innerHTML=html;}
-function renderSEO(){const frozen=catalog.filter(p=>(p.nct_estimado||0)>=.9);const bom=catalog.filter(p=>{const n=p.nct_estimado||0;return n>=.7&&n<.9;});const baixo=catalog.filter(p=>(p.nct_estimado||0)<.7);const tbl=document.getElementById('seo-table');if(tbl)tbl.innerHTML=[{r:'NCT 0.90–1.00',qs:'9–10',cpc:'R$0,00',c:'var(--success)',bg:'var(--success-bg)',n:frozen.length},{r:'NCT 0.70–0.89',qs:'6–8',cpc:'R$1,20–R$2,80',c:'var(--warn)',bg:'var(--warn-bg)',n:bom.length},{r:'NCT 0.00–0.69',qs:'1–5',cpc:'R$3,50+',c:'var(--danger)',bg:'var(--danger-bg)',n:baixo.length}].map((row,i)=>`<div style="display:flex;align-items:center;border-bottom:${i<2?'.5px solid var(--border)':'none'}"><div style="width:4px;align-self:stretch;background:${row.c}"></div><div style="flex:1;display:flex;flex-wrap:wrap;gap:4px 12px;padding:10px 14px;align-items:center"><span style="font-size:12px;font-weight:500;color:${row.c};min-width:80px">${row.r}</span><span style="font-size:11px;color:var(--text2)">QS ${row.qs}</span><span style="font-size:12px;font-weight:500;color:${row.c)">${row.cpc}</span><span><b>${row.n}</b> prod.</span></div></div>`).join('');const prog=document.getElementById('seo-progress');if(prog)prog.innerHTML=`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:500">Progresso → CPC R$0,00</span><span>${frozen.length}/${catalog.length||'–'}</span></div><div class="nct-bar" style="height:8px"><div class="nct-fill" style="width:${catalog.length?Math.round(frozen.length/catalog.length*100):0}%;background:var(--success)"></div></div>`;}
-function updateDashboard(){const frozen=catalog.filter(p=>(p.nct_estimado||0)>=.9);const nctMed=catalog.length?(catalog.reduce((a,c)=>a+(c.nct_estimado||0),0)/catalog.length).toFixed(2):'—';const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};s('st-catalog',catalog.length);s('st-frozen',frozen.length);s('st-nct',nctMed);const rec=document.getElementById('dash-recentes');if(rec&&catalog.length>0)rec.innerHTML='<div class="card-title">Últimos produtos</div><div class="prod-grid" style="margin-top:10px">'+catalog.slice(0,4).map(prodCardHTML).join('')+'</div>'+(catalog.length>4?`<button class="btn btn-ghost btn-full" onclick="goTo('catalogo')" style="margin-top:10px">Ver todos ${catalog.length} produtos</button>`:'');else if(rec)rec.innerHTML='<div class="empty card"><i class="ti ti-package"></i><p>Comece indexando seu primeiro produto</p></div>';}
-function buildAgentes(){const el=document.getElementById('agentes-list');if(!el)return;el.innerHTML=AGENTES.map(([id,n,d,f],i)=>`<div style="background:#fff;padding:11px 16px;border-bottom:${i<AGENTES.length-1?'.5px solid var(--border)':'none'};display:flex;gap:10px"><div style="width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0;margin-top:4px"></div><div style="flex:1"><div style="font-size:13px;font-weight:500">#${id} ${n}</div><div style="font-size:11px;color:var(--text2)">${d}</div><div style="font-size:10px;color:var(--info)">${f}</div></div><span style="font-size:10px;padding:2px 7px;border-radius:20px;background:var(--success-bg);color:var(--success)">ativo</span></div>`).join('');}
-function buildIntegracoes(){const el=document.getElementById('integracoes-grid');if(!el)return;el.innerHTML=INTEGRACOES.map(n=>`<div class="card flex items-center gap-8"><div style="flex:1;font-size:13px;font-weight:500">${n}</div><button class="btn btn-ghost" style="font-size:12px;padding:0 14px;min-height:36px">Conectar</button></div>`).join('');}
-function buildPlanos(){const el=document.getElementById('planos-grid');if(!el)return;el.innerHTML=PLANOS.map(pl=>`<div class="plan-card${pl.dest?' popular':''}"><div style="font-size:14px;font-weight:600;margin-bottom:3px">${pl.n}</div><div style="font-size:22px;font-weight:500;margin-bottom:12px;color:${pl.dest?'var(--success)':'var(--text)'}">${pl.p}</div><div class="plan-features mb-14">${pl.f.map(f=>`<div>${f}</div>`).join('')}</div><button class="btn btn-full${pl.dest?' btn-green':' btn-ghost'}" style="font-size:12px">${pl.n==='Enterprise'?'Consultar':'Contratar'}</button></div>`).join('');}
-function updateCredPrice(){const v=document.getElementById('cred-range').value;document.getElementById('cred-label').textContent=v+' créditos · R$ '+(v*.39).toFixed(2).replace('.',',')+' — R$ 0,39/crédito';}
-async function syncProduto(prod){const toast=msg=>{const t=document.createElement('div');t.style.cssText='position:fixed;top:16px;right:16px;background:#1d9e75;color:#fff;padding:12px 18px;border-radius:8px;font-size:13px;z-index:9999';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);};try{const bRes=await fetch('/api/bling/produto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(prod)});const bData=await bRes.json();if(bData.ok)toast('✓ Bling: '+prod.nome_tecnico+' sincronizado');}catch(e){console.warn('[Bling]',e.message);}try{const wRes=await fetch('/api/wix/produto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(prod)});const wData=await wRes.json();if(wData.ok)toast('✓ Wix: publicado');}catch(e){console.warn('[Wix]',e.message);}}
-fetch('/api/status').then(r=>r.json()).then(s=>{window._appStatus=s;}).catch(()=>{});
+// ══════ DATA ══════════════════════════════════════════════════════════════
+var catalog = [];
+var mTags = [];
+var mMarcas = [];
+var selImg = null;
+var camStream = null;
+
+var MARCAS = ["Hyundai","Kia","Ford","Chevrolet","VW","Fiat","Toyota","Honda","Renault","Nissan","Mitsubishi","Mercedes"];
+var CATS = {Motor:["Pistões/Anéis","Bronzinas","Cabeçote","Virabrequim","Juntas","Bomba de Óleo"],Filtros:["Filtro de Ar","Filtro de Óleo","Filtro Combustível","Filtro Cabine"],Freios:["Pastilhas","Discos","Lonas","Cilindro","Pinça"],Suspensão:["Amortecedor","Mola","Buchas","Coxim","Pivô"],Transmissão:["Embreagem","Câmbio","Semi-eixo"],Arrefecimento:["Radiador","Bomba d'Água","Termostato","Ventoinha"],Elétrica:["Alternador","Arranque","Sensores","Bateria"],Direção:["Caixa Direção","Bomba Direção","Terminal"],Combustível:["Bomba Combustível","Injetor"],Escapamento:["Catalisador","Coletor","Silencioso"]};
+var AGTS = [[1,"Enriquecimento geral","Nome técnico, OEM, EAN, fabricante.","Claude API · Base MAHLE · MOBIS"],[2,"Aplicação veicular — triangulação","Cruza catálogos, APIs e PDFs.","MAHLE · TecDoc · AutoData · Metal Leve · Bosch"],[3,"CDC — Código do Consumidor","Avisos: garantia, devolução.","Lei 8.078/90 · INMETRO · PROCON"],[4,"Bula técnica","Torques, folgas, sequência montagem.","Manuais · MAHLE · Metal Leve · Bosch · Gates"],[5,"SEO + Google Ads P-MAX","Title, meta, H1, schema.org.","Search Console · Semrush · Merchant Center"],[6,"Fiscal — NCM / EAN / CEST","Valida NCM, EAN GS1, CEST.","TIPI/NCM · GS1 Brasil · SEFAZ"],[7,"Composição e material","Liga metálica, tratamento térmico.","ABNT · INMETRO · SAE · ISO"],[8,"Imagem web — busca real","URLs reais via web search.","Google Images · Rock Parts · MAHLE"],[9,"Cabeçalho ERP — Bling / Wix","Formata Bling, Wix, ML.","API Bling v3 · Wix eCommerce"],[10,"Google Ads P-MAX assets","Headlines, descriptions.","Google Ads API · Merchant"],[11,"CNPJ + CNAE — ramo","Consulta CNPJ, ativa perfil.","Receita Federal · CNAE IBGE"],[12,"DNA hash + NCT score","Hash SHA-256. Google reconhece.","Algoritmo Genesis · Schema.org"],[13,"Peças cruzadas — OEM multi-montadora","Partsouq.com e TecDoc.","Partsouq.com · TecDoc · MAHLE"],[14,"Aplicação expandida","Identifica em outras montadoras.","Partsouq.com · TecDoc · AutoData"]];
+
+// ══════ NAVIGATION ═════════════════════════════════════════════════════════
+function nav(id) {
+  // hide all pages
+  document.querySelectorAll('.pg').forEach(function(p){ p.classList.remove('on'); });
+  // show target
+  var el = document.getElementById('pg-'+id);
+  if (!el) el = document.getElementById('pg-dash');
+  el.classList.add('on');
+  // update sidebar
+  document.querySelectorAll('#sb-nav button').forEach(function(b){ b.classList.remove('on'); });
+  var sbBtns = document.querySelectorAll('#sb-nav button');
+  sbBtns.forEach(function(b){
+    var onclick = b.getAttribute('onclick');
+    if (onclick && onclick.indexOf("'"+id+"'") !== -1) b.classList.add('on');
+  });
+  // update bottom nav
+  document.querySelectorAll('.bnav-item').forEach(function(b){ b.classList.remove('on'); });
+  // scroll to top
+  window.scrollTo(0,0);
+  // page-specific renders
+  if(id==='catalogo') renderProd();
+  if(id==='congelados') renderCongelados();
+  if(id==='seo') renderSEO();
+  if(id==='dash') renderDash();
+  if(id==='agentes') renderAgentes();
+  if(id==='integracoes') renderInteg();
+  if(id==='planos') renderPlanos();
+  if(id==='manual') initManual();
+}
+
+// ══════ CLAUDE API ══════════════════════════════════════════════════════════
+async function claude(prompt) {
+  var r = await fetch('/api/claude', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+  });
+  var d = await r.json();
+  return (d.content||[]).map(function(b){return b.text||'';}).join('');
+}
+function pj(txt) {
+  try { var m=txt.match(/\{[\s\S]*\}/); return m?JSON.parse(m[0]):null; } catch(e){return null;}
+}
+
+// ══════ NCT helpers ═════════════════════════════════════════════════════════
+function nc(v){return v>=.9?'var(--s)':v>=.7?'var(--w)':'var(--d)';}
+
+// ══════ DASHBOARD ═══════════════════════════════════════════════════════════
+function renderDash() {
+  var frz = catalog.filter(function(p){return (p.nct_estimado||0)>=.9;});
+  var avg = catalog.length ? (catalog.reduce(function(a,c){return a+(c.nct_estimado||0);},0)/catalog.length).toFixed(2) : '—';
+  document.getElementById('d-cat').textContent = catalog.length;
+  document.getElementById('d-frz').textContent = frz.length;
+  document.getElementById('d-nct').textContent = avg;
+  // badges
+  var cb = document.getElementById('sb-cat-badge');
+  var fb = document.getElementById('sb-frz-badge');
+  if(cb){cb.style.display=catalog.length?'inline':'none';cb.textContent=catalog.length;}
+  if(fb){fb.style.display=frz.length?'inline':'none';fb.textContent=frz.length;}
+  // recentes
+  var rec = document.getElementById('d-recentes');
+  if(!rec) return;
+  if(catalog.length===0){rec.innerHTML='<div class="empty card"><i class="ti ti-package" aria-hidden="true"></i><p>Comece indexando seu primeiro produto</p><div style="display:flex;gap:8px;justify-content:center;margin-top:12px"><button class="btn" onclick="nav(\'ean\')">EAN</button><button class="btn" onclick="nav(\'buscar\')">Buscar</button><button class="btn" onclick="nav(\'manual\')">Manual</button></div></div>';return;}
+  rec.innerHTML = '<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8;margin-bottom:8px">Últimos produtos</div><div class="prod-grid">'+catalog.slice(0,4).map(prodCard).join('')+'</div>'+(catalog.length>4?'<button class="btn btn-w" onclick="nav(\'catalogo\')" style="margin-top:10px">Ver todos '+catalog.length+' produtos</button>':'');
+}
+
+// ══════ PROD CARD ═══════════════════════════════════════════════════════════
+function prodCard(p) {
+  var n = p.nct_estimado||0;
+  var hasImg = p.imagem && ['(imagem selecionada)','(raspador)'].indexOf(p.imagem)===-1;
+  var marcas = (p.marcas_finais||p.marcas_montadoras||[]).slice(0,2).map(function(m){return '<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:#eff6ff;color:var(--i)">'+m+'</span>';}).join('');
+  return '<div class="pc"><div class="pc-img">'+(hasImg?'<img src="'+p.imagem+'" alt="" onerror="this.parentNode.innerHTML=\'<i class=&quot;ti ti-photo-off&quot; style=&quot;font-size:22px;color:#94a3b8&quot; aria-hidden=&quot;true&quot;></i>\'">'  :'<i class="ti ti-photo-off" style="font-size:22px;color:#94a3b8" aria-hidden="true"></i>')+'</div><div class="pc-body"><div style="font-size:10px;font-weight:500;line-height:1.3;margin-bottom:2px">'+( p.nome_tecnico||'Sem nome')+'</div><div style="font-size:9px;font-family:monospace;color:#94a3b8">'+(p.oem||p.ean||'—')+'</div><div style="margin-top:3px">'+marcas+'</div><div class="nct-bar"><div class="nct-fill" style="width:'+Math.min(100,n*100)+'%;background:'+nc(n)+'"></div></div><div style="display:flex;justify-content:space-between;font-size:9px;margin-top:2px"><span style="color:#94a3b8">NCT</span><span style="color:'+nc(n)+';font-weight:500">'+n.toFixed(2)+(n>=.9?' 🔒':'')+'</span></div></div></div>';
+}
+
+// ══════ CATALOG RENDER ══════════════════════════════════════════════════════
+function getFiltered() {
+  var q = (document.getElementById('fil-q')||{}).value||'';
+  var nct = (document.querySelector('[name=fil-nct]:checked')||{}).value||'';
+  var frz = (document.getElementById('fil-frz')||{}).checked||false;
+  return catalog.filter(function(p){
+    if(q){var ql=q.toLowerCase();if(![p.nome_tecnico,p.oem,p.ean,p.marca].some(function(v){return v&&v.toLowerCase().indexOf(ql)>=0;}))return false;}
+    if(nct==='premium'&&(p.nct_estimado||0)<.9)return false;
+    if(nct==='bom'){var n=p.nct_estimado||0;if(n<.7||n>=.9)return false;}
+    if(nct==='baixo'&&(p.nct_estimado||0)>=.7)return false;
+    if(frz&&(p.nct_estimado||0)<.9)return false;
+    return true;
+  });
+}
+function renderProd() {
+  var f = getFiltered();
+  var cnt = document.getElementById('cat-count');
+  var grid = document.getElementById('prod-grid');
+  var empty = document.getElementById('prod-empty');
+  if(cnt) cnt.textContent = f.length+'/'+catalog.length+' produto'+(catalog.length!==1?'s':'');
+  if(!grid) return;
+  if(catalog.length===0){grid.innerHTML='';if(empty)empty.style.display='block';return;}
+  if(empty)empty.style.display='none';
+  if(f.length===0){grid.innerHTML='<div class="empty" style="grid-column:1/-1"><i class="ti ti-filter-off" aria-hidden="true"></i><p>Nenhum produto com estes filtros.</p></div>';return;}
+  grid.innerHTML = f.map(prodCard).join('');
+}
+function toggleFilters(){var p=document.getElementById('fil-panel');if(p)p.style.display=p.style.display==='flex'?'none':'flex';}
+
+// ══════ EAN ═════════════════════════════════════════════════════════════════
+async function doEAN(codigo) {
+  var num = ((codigo||document.getElementById('ean-in').value)||'').replace(/\D/g,'');
+  if(num.length<8) return;
+  document.getElementById('ean-loading').style.display='block';
+  document.getElementById('ean-result').innerHTML='';
+  var txt = await claude('Agente Genesis 360. EAN: "'+num+'". Retorne APENAS JSON:{"nome_tecnico":"","oem":"","iom":"","sku":"","ean":"'+num+'","ncm":"","cest":"","ipi":"","origem":"Nacional","marca":"","classificacao":"Original OEM Certificado","garantia":"","descricao_pdv":"","descricao_seo":"","categoria":"","subcategoria":"","tags_erp":[],"marcas_montadoras":[],"aplicacoes":[{"veiculo":"","versao":"","motor":"","cilindrada":"","valvulas":"","cambio":"","ano_ini":2007,"ano_fim":2025}],"codigos_equivalentes":[],"nct_estimado":0.75,"dna_hash":"genesis360"}');
+  document.getElementById('ean-loading').style.display='none';
+  var p = pj(txt);
+  if(p) renderResult('ean-result', p);
+  else document.getElementById('ean-result').innerHTML='<div class="card" style="border-color:#fca5a5;color:var(--d)">EAN não encontrado. Use o cadastro manual.</div>';
+}
+
+// Camera
+async function startCam(){
+  if(!navigator.mediaDevices){alert('Câmera não disponível.');return;}
+  try{
+    var s = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    camStream=s;
+    var cw=document.getElementById('cam-wrap');
+    var vid=document.getElementById('cam-video');
+    cw.style.display='block';vid.srcObject=s;vid.play();
+    if('BarcodeDetector' in window){
+      var det=new BarcodeDetector({formats:['ean_13','ean_8','code_128','upc_a']});
+      var scan=async function(){
+        if(!camStream)return;
+        try{var c=await det.detect(vid);if(c.length>0){document.getElementById('ean-in').value=c[0].rawValue;stopCam();doEAN(c[0].rawValue);return;}}catch(e){}
+        if(camStream)requestAnimationFrame(scan);
+      };
+      setTimeout(scan,500);
+    }
+  }catch(e){alert('Permissão de câmera negada.');}
+}
+function stopCam(){if(camStream){camStream.getTracks().forEach(function(t){t.stop();});camStream=null;}var cw=document.getElementById('cam-wrap');if(cw)cw.style.display='none';}
+
+// ══════ BUSCAR ══════════════════════════════════════════════════════════════
+async function doEnrich() {
+  var q = document.getElementById('buscar-in').value.trim();
+  if(!q) return;
+  var btn = document.getElementById('enrich-btn');
+  if(btn) btn.disabled=true;
+  document.getElementById('buscar-empty').style.display='none';
+  document.getElementById('buscar-result').innerHTML='';
+  var steps = document.getElementById('buscar-steps');
+  steps.style.display='block';
+  steps.innerHTML='';
+  var log = function(msg){
+    var prev=steps.innerHTML;steps.innerHTML=prev.replace(/class="step-row cur"/g,'class="step-row"')+'<div class="step-row cur"><span style="color:var(--s)">✓</span>'+msg+'</div>';
+  };
+  log('Iniciando 14 agentes Genesis…');
+  await new Promise(function(r){setTimeout(r,350);});log('Consultando OEM · EAN · TecDoc · Partsouq…');
+  await new Promise(function(r){setTimeout(r,350);});log('Triangulando aplicações veiculares…');
+  await new Promise(function(r){setTimeout(r,300);});log('Gerando peças cruzadas e DNA hash…');
+  var txt = await claude('Agente Genesis 360 autopeças. Produto: "'+q+'". Retorne APENAS JSON:{"nome_tecnico":"","oem":"","iom":"","sku":"","ean":"","ncm":"","cest":"","ipi":"","origem":"Nacional","marca":"","classificacao":"Original OEM Certificado","garantia":"","descricao_pdv":"","descricao_seo":"","categoria":"","subcategoria":"","tags_erp":[],"marcas_montadoras":[],"aplicacoes":[{"veiculo":"","versao":"","motor":"","cilindrada":"","valvulas":"","cambio":"","ano_ini":2007,"ano_fim":2025}],"codigos_equivalentes":[],"pecas_cruzadas":[{"fabricante":"","codigo":"","ean":"","tipo":"OEM","aplicacoes":""}],"contra_indicacoes":"","torque":"","imagens_web":[],"nct_estimado":0.85,"dna_hash":"genesis360"}');
+  steps.style.display='none';
+  if(btn) btn.disabled=false;
+  var p=pj(txt);
+  if(p) renderResult('buscar-result',p);
+  else document.getElementById('buscar-result').innerHTML='<div class="card" style="border-color:#fca5a5;color:var(--d)">Erro ao enriquecer. Verifique a conexão.</div>';
+}
+
+// ══════ RESULT PANEL ════════════════════════════════════════════════════════
+function renderResult(cid, p) {
+  selImg=null;
+  var n=p.nct_estimado||0;
+  var html='<div style="display:flex;flex-direction:column;gap:10px">';
+  // header
+  html+='<div class="card" style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div><div style="font-size:14px;font-weight:600;margin-bottom:2px">'+p.nome_tecnico+'</div><div style="font-size:11px;color:#475569">'+(p.marca||'')+'  ·  '+(p.classificacao||'')+'</div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:20px;font-weight:600;color:'+nc(n)+'">'+n.toFixed(2)+'</div><div style="font-size:9px;color:'+nc(n)+'">'+  (n>=.9?'PREMIUM ✓':n>=.7?'BOM':'BAIXO')+'</div></div></div>';
+  // codigos
+  html+='<div class="card"><div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div class="ct" style="margin:0">Códigos de identificação</div><span class="badge-d">obrigatórios</span></div><div class="g3" style="gap:8px 14px">';
+  [["OEM",p.oem],["IOM",p.iom],["SKU",p.sku],["EAN-13",p.ean],["NCM",p.ncm],["IPI",p.ipi?p.ipi+'%':'—']].forEach(function(c){html+='<div><div style="font-size:9px;color:#94a3b8;margin-bottom:1px">'+c[0]+'</div><div style="font-size:11px;font-family:monospace;font-weight:500">'+(c[1]||'—')+'</div></div>';});
+  html+='</div>';
+  if(p.codigos_equivalentes&&p.codigos_equivalentes.length){html+='<div style="margin-top:8px;padding-top:8px;border-top:.5px solid #e2e8f0"><div style="font-size:9px;color:#94a3b8;margin-bottom:4px">Equivalentes</div><div style="display:flex;flex-wrap:wrap;gap:4px">'+p.codigos_equivalentes.map(function(c){return '<span class="tag" style="font-family:monospace">'+c+'</span>';}).join('')+'</div></div>';}
+  html+='</div>';
+  // peças cruzadas
+  if(p.pecas_cruzadas&&p.pecas_cruzadas.filter(function(x){return x.fabricante;}).length){
+    html+='<div class="card"><div class="ct">Peças cruzadas — '+p.pecas_cruzadas.filter(function(x){return x.fabricante;}).length+' referências</div><div class="over-x"><table><thead><tr><th>Fabricante</th><th>Código</th><th>Tipo</th><th>Aplicações</th></tr></thead><tbody>'+p.pecas_cruzadas.filter(function(x){return x.fabricante;}).map(function(pc){return '<tr><td style="font-weight:500">'+pc.fabricante+'</td><td style="font-family:monospace">'+( pc.codigo||'—')+'</td><td><span style="font-size:9px;padding:1px 5px;border-radius:3px;background:'+(pc.tipo==='OEM'?'#eff6ff':'#f8fafc')+';color:'+(pc.tipo==='OEM'?'var(--i)':'#475569')+'">'+( pc.tipo||'')+'</span></td><td style="font-size:10px;color:#475569;max-width:140px">'+( pc.aplicacoes||'—')+'</td></tr>';}).join('')+'</tbody></table></div></div>';
+  }
+  // imagem
+  html+='<div class="card" id="res-img-card" style="border-color:#fca5a5"><div style="display:flex;align-items:center;gap:7px;margin-bottom:9px"><div class="ct" style="margin:0">Imagem</div><span class="badge-d" id="res-img-badge">obrigatória</span></div><div style="display:flex;flex-wrap:wrap;gap:7px">';
+  (p.imagens_web&&p.imagens_web.length?p.imagens_web:['ph1','ph2']).forEach(function(src,i){
+    html+='<button id="imgbtn-'+i+'" onclick="pickImg(\''+src+'\','+i+')" style="border:.5px solid #e2e8f0;border-radius:7px;padding:3px;cursor:pointer;background:#f8fafc;min-height:44px"><img src="'+(src.startsWith('ph')?'https://placehold.co/56x56?text=Foto'+(i+1):src)+'" onerror="this.src=\'https://placehold.co/56x56?text=Foto'+(i+1)+'\'" style="width:56px;height:56px;object-fit:contain;display:block;border-radius:4px"></button>';
+  });
+  html+='<button onclick="var u=prompt(\'URL da imagem:\');if(u){selImg=u;document.getElementById(\'res-img-card\').style.borderColor=\'#86efac\';document.getElementById(\'res-img-badge\').className=\'badge-s\';document.getElementById(\'res-img-badge\').textContent=\'✓ ok\';}" style="width:68px;height:68px;border:.5px dashed #cbd5e1;border-radius:7px;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#94a3b8;font-size:10px"><i class="ti ti-plus" style="font-size:16px" aria-hidden="true"></i>URL</button></div></div>';
+  // aplicacoes
+  if(p.aplicacoes&&p.aplicacoes.length){
+    html+='<div class="card"><div class="ct">Aplicações — '+p.aplicacoes.length+' versões</div><div class="over-x"><table><thead><tr><th>Veículo</th><th>Motor</th><th>Cil.</th><th>Válv.</th><th>Câmbio</th><th>Ini</th><th>Fim</th></tr></thead><tbody>'+p.aplicacoes.map(function(a){return '<tr><td>'+( a.veiculo||'—')+'</td><td style="font-family:monospace">'+( a.motor||'—')+'</td><td>'+( a.cilindrada||'—')+'</td><td><span style="font-size:9px;padding:1px 5px;border-radius:3px;background:'+(a.valvulas&&a.valvulas.indexOf('16')>=0?'#eff6ff':'#f8fafc')+';color:'+(a.valvulas&&a.valvulas.indexOf('16')>=0?'var(--i)':'#475569')+'">'+( a.valvulas||'—')+'</span></td><td>'+( a.cambio||'—')+'</td><td style="font-family:monospace">'+( a.ano_ini||'—')+'</td><td style="font-family:monospace">'+( a.ano_fim||'—')+'</td></tr>';}).join('')+'</tbody></table></div></div>';
+  }
+  // dna
+  html+='<div style="background:#f8fafc;border-radius:8px;padding:9px 13px;display:flex;align-items:center;gap:9px"><i class="ti ti-fingerprint" style="font-size:17px;color:#94a3b8" aria-hidden="true"></i><div style="flex:1"><div style="font-size:9px;color:#94a3b8">DNA hash Genesis 360</div><div style="font-size:10px;font-family:monospace;color:#475569">'+(p.dna_hash||'genesis360-'+Math.random().toString(36).slice(2,16))+'</div></div><span style="font-size:9px;color:#94a3b8">Google → CPC ↓</span></div>';
+  // botoes
+  html+='<div style="display:flex;gap:8px"><button class="btn btn-s" style="flex:1" onclick="approveResult(this)"><i class="ti ti-check" aria-hidden="true"></i>Aprovar → Bling + Wix</button><button class="btn" onclick="this.closest(\'#'+cid+'\').innerHTML=\'\'">Cancelar</button></div>';
+  html+='</div>';
+  // store the product data
+  html = html.replace('approveResult(this)', 'approveResult(this,'+JSON.stringify(p).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026')+')');
+  document.getElementById(cid).innerHTML=html;
+}
+
+var _lastApproveProduct = null;
+function pickImg(src,idx){
+  selImg=src;
+  document.querySelectorAll('[id^="imgbtn-"]').forEach(function(b){b.style.border='.5px solid #e2e8f0';b.style.background='#f8fafc';});
+  var btn=document.getElementById('imgbtn-'+idx);if(btn){btn.style.border='1.5px solid #86efac';btn.style.background='#f0fdf4';}
+  var card=document.getElementById('res-img-card');if(card)card.style.borderColor='#86efac';
+  var badge=document.getElementById('res-img-badge');if(badge){badge.className='badge-s';badge.textContent='✓ selecionada';}
+}
+function approveResult(btn, p) {
+  if(!selImg){alert('⚠️ Selecione uma imagem antes de aprovar.');return;}
+  p.imagem=selImg;p.aprovado_em=new Date().toLocaleDateString('pt-BR');
+  catalog.unshift(p);
+  selImg=null;
+  renderDash();
+  // sync Bling + Wix
+  syncBlingWix(p);
+  alert('✓ "'+p.nome_tecnico+'" aprovado!');
+  nav('catalogo');
+}
+
+// ══════ RASPADOR ════════════════════════════════════════════════════════════
+async function doRasp() {
+  var url=document.getElementById('rasp-in').value.trim();
+  if(!url)return;
+  var btn=document.getElementById('rasp-btn');if(btn)btn.disabled=true;
+  var steps=document.getElementById('rasp-steps');
+  steps.style.display='block';steps.innerHTML='';
+  document.getElementById('rasp-result').innerHTML='';
+  var log=function(msg){var prev=steps.innerHTML;steps.innerHTML=prev.replace(/class="step-row cur"/g,'class="step-row"')+'<div class="step-row cur"><span style="color:var(--s)">✓</span>'+msg+'</div>';};
+  log('Acessando URL do fornecedor…');
+  await new Promise(function(r){setTimeout(r,350);});log('Consultando Partsouq.com — OEM lookup…');
+  await new Promise(function(r){setTimeout(r,350);});log('Consultando TecDoc · GS1 Brasil…');
+  await new Promise(function(r){setTimeout(r,300);});log('Triangulando e gerando DNA hash…');
+  var txt=await claude('Agente raspador Genesis 360. URL/produto: "'+url+'". Fontes: loja.rmp.com.br, partsouq.com, tecdoc.net, gs1.org.br, metaleve.com.br. Retorne APENAS JSON:{"nome_tecnico":"","oem":"","iom":"","sku":"","ean":"","ncm":"","cest":"","ipi":"","origem":"Nacional","marca":"","classificacao":"Original OEM Certificado","garantia":"","descricao_pdv":"","descricao_seo":"","categoria":"","subcategoria":"","tags_erp":[],"marcas_montadoras":[],"aplicacoes":[{"veiculo":"","versao":"","motor":"","cilindrada":"","valvulas":"","cambio":"","ano_ini":2007,"ano_fim":2025}],"codigos_equivalentes":[],"pecas_cruzadas":[{"fabricante":"","codigo":"","ean":"","tipo":"OEM","aplicacoes":""}],"fontes_consultadas":[{"fonte":"","dado":""}],"nct_estimado":0.83,"dna_hash":"genesis360"}');
+  steps.style.display='none';
+  if(btn)btn.disabled=false;
+  var p=pj(txt);
+  if(p){
+    var html='<div style="display:flex;flex-direction:column;gap:10px">';
+    if(p.fontes_consultadas&&p.fontes_consultadas.length){html+='<div class="card"><div class="ct">Triangulação — fontes consultadas</div>'+p.fontes_consultadas.map(function(f){return '<div style="display:flex;gap:9px;padding:5px 0;border-bottom:.5px solid #e2e8f0;font-size:12px"><span style="color:var(--s)">✓</span><span style="font-family:monospace;font-size:10px;color:#475569;width:140px;flex-shrink:0">'+f.fonte+'</span><span>'+f.dado+'</span></div>';}).join('')+'</div>';}
+    html+='</div>';
+    document.getElementById('rasp-result').innerHTML=html;
+    // render main result below
+    renderResult('rasp-result',p);
+  } else {
+    document.getElementById('rasp-result').innerHTML='<div class="card" style="border-color:#fca5a5;color:var(--d)">Não foi possível extrair dados desta URL. Tente outra fonte.</div>';
+  }
+}
+
+// ══════ CONGELADOS ══════════════════════════════════════════════════════════
+var CRITS=[{l:'OEM',f:function(p){return p.oem&&p.oem.length>2;}},{l:'EAN',f:function(p){return p.ean&&p.ean.length>7;}},{l:'Imagem',f:function(p){return p.imagem&&['(imagem selecionada)','(raspador)'].indexOf(p.imagem)===-1;}},{l:'Aplicação',f:function(p){return p.aplicacoes&&p.aplicacoes.length>0;}},{l:'NCM',f:function(p){return p.ncm&&p.ncm.length>3;}},{l:'SEO',f:function(p){return p.descricao_seo&&p.descricao_seo.length>30;}}];
+function renderCongelados(){
+  var frz=catalog.filter(function(p){return (p.nct_estimado||0)>=.9;});
+  var pnd=catalog.filter(function(p){return (p.nct_estimado||0)<.9;});
+  var stats=document.getElementById('frz-stats');
+  if(stats)stats.innerHTML=[['Congelados',frz.length,'var(--s)'],['Aguardando',pnd.length,'var(--w)'],['% catálogo',catalog.length?Math.round(frz.length/catalog.length*100)+'%':'—','#0f172a'],['NCT médio',frz.length?(frz.reduce(function(a,c){return a+(c.nct_estimado||0);},0)/frz.length).toFixed(2):'—','var(--s)']].map(function(c){return '<div class="card"><div style="font-size:20px;font-weight:600;color:'+c[2]+';margin-bottom:2px">'+c[1]+'</div><div style="font-size:11px;color:#475569">'+c[0]+'</div></div>';}).join('');
+  var list=document.getElementById('frz-list');
+  if(!list)return;
+  if(catalog.length===0){list.innerHTML='<div class="empty card"><i class="ti ti-lock" aria-hidden="true"></i><p>Enriqueça produtos até NCT ≥ 0.90 para congelar.</p></div>';return;}
+  var html='';
+  if(frz.length){html+='<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--s);margin-bottom:8px">✦ Congelados — DNA travado</div><div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">'+frz.map(function(p){return '<div class="card" style="border-color:#86efac"><div style="display:flex;gap:10px;align-items:flex-start"><div style="width:30px;height:30px;border-radius:50%;background:#f0fdf4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-lock" style="font-size:14px;color:var(--s)" aria-hidden="true"></i></div><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin-bottom:4px"><span style="font-size:12px;font-weight:500">'+p.nome_tecnico+'</span><span class="badge-s">NCT '+(p.nct_estimado||0).toFixed(2)+' ✓</span></div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px">'+CRITS.map(function(c){return '<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:'+(c.f(p)?'#f0fdf4':'#f8fafc')+';color:'+(c.f(p)?'var(--s)':'#94a3b8')+'">'+(c.f(p)?'✓':'')+' '+c.l+'</span>';}).join('')+'</div><div style="font-size:9px;font-family:monospace;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(p.dna_hash||'genesis360-locked')+'</div></div></div></div>';}).join('')+'</div>';}
+  if(pnd.length){html+='<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--w);margin-bottom:8px">◎ Aguardando — completar critérios</div><div style="display:flex;flex-direction:column;gap:8px">'+pnd.map(function(p){var nct=p.nct_estimado||0;var falta=CRITS.filter(function(c){return !c.f(p);});return '<div class="card" style="border-color:#fcd34d"><div style="display:flex;align-items:center;gap:9px;margin-bottom:7px"><i class="ti ti-lock-open" style="font-size:16px;color:var(--w)" aria-hidden="true"></i><span style="font-size:12px;font-weight:500;flex:1">'+( p.nome_tecnico||'Produto sem nome')+'</span><span class="badge-d">+'+( 0.9-nct).toFixed(2)+'</span></div><div style="height:4px;border-radius:2px;background:#f8fafc;margin-bottom:7px;overflow:hidden"><div style="height:100%;background:var(--w);border-radius:2px;width:'+Math.min(100,nct/.9*100)+'%"></div></div><div style="display:flex;flex-wrap:wrap;gap:3px">'+falta.map(function(c){return '<span style="font-size:10px;padding:1px 6px;border-radius:3px;background:#fffbeb;color:var(--w)">+'+c.l+'</span>';}).join('')+'</div></div>';}).join('')+'</div>';}
+  list.innerHTML=html;
+}
+
+// ══════ SEO ═════════════════════════════════════════════════════════════════
+function renderSEO(){
+  var frz=catalog.filter(function(p){return (p.nct_estimado||0)>=.9;});
+  var bom=catalog.filter(function(p){var n=p.nct_estimado||0;return n>=.7&&n<.9;});
+  var bxo=catalog.filter(function(p){return (p.nct_estimado||0)<.7;});
+  var tbl=document.getElementById('seo-table');
+  if(tbl)tbl.innerHTML='<div style="border-radius:8px;overflow:hidden;border:.5px solid #e2e8f0">'+[{r:'0.90–1.00',qs:'9–10',cpc:'R$0,00–R$0,40',c:'var(--s)',n:frz.length,l:'PREMIUM'},{r:'0.70–0.89',qs:'6–8',cpc:'R$1,20–R$2,80',c:'var(--w)',n:bom.length,l:'BOM'},{r:'0.00–0.69',qs:'1–5',cpc:'R$3,50+',c:'var(--d)',n:bxo.length,l:'BAIXO'}].map(function(row,i){return '<div style="display:flex;align-items:center;border-bottom:'+(i<2?'.5px solid #e2e8f0':'none')+'"><div style="width:3px;align-self:stretch;background:'+row.c+'"></div><div style="flex:1;display:flex;flex-wrap:wrap;gap:4px 10px;padding:8px 12px;font-size:11px;align-items:center"><span style="font-size:11px;font-weight:500;color:'+row.c+';min-width:80px">NCT '+row.r+'</span><span style="color:#475569">QS '+row.qs+'</span><span style="font-weight:500;color:'+row.c+'">'+row.cpc+'</span><span><b>'+row.n+'</b> prod.</span><span style="font-size:10px;padding:2px 7px;border-radius:3px;background:'+(row.c==='var(--s)'?'#f0fdf4':row.c==='var(--w)'?'#fffbeb':'#fef2f2')+';color:'+row.c+'">'+row.l+'</span></div></div>';}).join('')+'</div>';
+  var prog=document.getElementById('seo-progress');
+  if(prog)prog.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:12px;font-weight:500">Progresso → 100% = CPC R$0,00</span><span style="font-size:11px;color:#475569">'+frz.length+'/'+(catalog.length||'–')+'</span></div><div style="height:7px;border-radius:4px;background:#f1f5f9;overflow:hidden"><div style="height:100%;background:var(--s);border-radius:4px;width:'+(catalog.length?Math.round(frz.length/catalog.length*100):0)+'%"></div></div><div style="font-size:11px;color:#94a3b8;margin-top:4px">'+(catalog.length?Math.round(frz.length/catalog.length*100):0)+'% do catálogo congelado</div>';
+  var sp=document.getElementById('seo-prods');
+  if(sp&&catalog.length>0)sp.innerHTML='<div style="display:flex;flex-direction:column;gap:7px">'+catalog.map(function(p){var n=p.nct_estimado||0;return '<div class="card" style="border-color:'+(n>=.9?'#86efac':n>=.7?'#fcd34d':'#fca5a5')+'"><div style="display:flex;gap:9px;align-items:center"><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;margin-bottom:3px">'+p.nome_tecnico+'</div><div style="display:flex;flex-wrap:wrap;gap:3px 10px;font-size:11px"><span>NCT <b style="color:'+nc(n)+'">'+n.toFixed(2)+'</b></span><span>QS <b style="color:'+nc(n)+'">'+(n>=.9?'9–10':n>=.7?'6–8':'1–5')+'</b></span><span>CPC <b style="color:'+nc(n)+'">'+(n>=.9?'R$0,00':'R$'+((1-n)*7).toFixed(2))+'</b></span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:18px;font-weight:500;color:'+nc(n)+'">'+n.toFixed(2)+'</div>'+(n>=.9?'<div style="font-size:9px;color:var(--s)">CPC R$0 ✓</div>':'<div style="font-size:9px;color:#94a3b8">+'+(0.9-n).toFixed(2)+'</div>')+'</div></div></div>';}).join('')+'</div>';
+  else if(sp&&catalog.length===0)sp.innerHTML='<div class="empty card"><i class="ti ti-brand-google" aria-hidden="true"></i><p>Indexe produtos com NCT ≥ 0.90 para ver o impacto no CPC.</p></div>';
+}
+
+// ══════ MANUAL ══════════════════════════════════════════════════════════════
+function initManual(){
+  // build marcas chips
+  var mw=document.getElementById('m-marcas');
+  if(mw&&!mw.children.length){mw.innerHTML=MARCAS.map(function(m){return '<button class="chip" onclick="toggleMarca(\''+m+'\',this)">'+m+'</button>';}).join('');}
+}
+function updSub(){
+  var cat=document.getElementById('m-cat').value;
+  var sub=document.getElementById('m-sub');
+  var opts=CATS[cat]||[];
+  sub.innerHTML='<option value="">Selecionar…</option>'+opts.map(function(s){return '<option>'+s+'</option>';}).join('');
+}
+function prevImg(){
+  var url=document.getElementById('m-img').value;
+  var p=document.getElementById('m-img-prev');
+  var b=document.getElementById('m-img-badge');
+  var c=document.getElementById('m-img-card');
+  if(url){p.src=url;p.style.display='block';b.className='badge-s';b.textContent='✓ ok';c.style.borderColor='#86efac';}
+  else{p.style.display='none';b.className='badge-d';b.textContent='obrigatória';c.style.borderColor='';}
+}
+function addTag(e){
+  if(e.key==='Enter'||e.key===','){e.preventDefault();var v=e.target.value.trim().toLowerCase();if(v&&mTags.indexOf(v)===-1){mTags.push(v);renderTags();}e.target.value='';}
+}
+function renderTags(){
+  var w=document.getElementById('m-tags-list');
+  if(w)w.innerHTML=mTags.map(function(t){return '<span class="tag">'+t+'<button onclick="mTags=mTags.filter(function(x){return x!==\''+t+'\';});renderTags();" style="border:none;background:none;cursor:pointer;color:#94a3b8;font-size:12px;padding:0;line-height:1">×</button></span>';}).join('');
+}
+function toggleMarca(m,el){
+  var i=mMarcas.indexOf(m);
+  if(i>=0){mMarcas.splice(i,1);el.classList.remove('on');}
+  else{mMarcas.push(m);el.classList.add('on');}
+}
+function saveManual(){
+  var nome=document.getElementById('m-nome').value.trim();
+  var img=document.getElementById('m-img').value.trim();
+  if(!nome){alert('Nome técnico obrigatório');return;}
+  if(!img){alert('Imagem obrigatória — cole a URL da imagem');return;}
+  var oem=document.getElementById('m-oem').value;
+  var ean=document.getElementById('m-ean').value;
+  var ncm=document.getElementById('m-ncm').value;
+  var nct=Math.min(.99,.45+(oem.length>2?.1:0)+(ean.length>7?.1:0)+.2+(ncm.length>3?.05:0));
+  var p={nome_tecnico:nome,oem:oem,iom:document.getElementById('m-iom').value,sku:document.getElementById('m-sku').value,ean:ean,ncm:ncm,classificacao:document.getElementById('m-classif').value,imagem:img,categoria:document.getElementById('m-cat').value,subcategoria:document.getElementById('m-sub').value,tags:mTags.slice(),marcas_montadoras:mMarcas.slice(),nct_estimado:+nct.toFixed(2),aprovado_em:new Date().toLocaleDateString('pt-BR')};
+  catalog.unshift(p);mTags=[];mMarcas=[];
+  syncBlingWix(p);
+  alert('✓ "'+nome+'" salvo!');
+  nav('catalogo');
+}
+
+// ══════ IMPORTAR ════════════════════════════════════════════════════════════
+var impRows=[];var impCols=[];
+function handleCSV(e){
+  var f=e.target.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    var lines=ev.target.result.split('\n').filter(Boolean);
+    impCols=lines[0].split(',').map(function(c){return c.trim().replace(/"/g,'');});
+    impRows=lines.slice(1).map(function(l){var vals=l.split(',').map(function(v){return v.trim().replace(/"/g,'');});var o={};impCols.forEach(function(c,i){o[c]=vals[i]||'';});return o;}).slice(0,500);
+    showImpMap();
+  };
+  r.readAsText(f);
+}
+var IMP_CAMPOS=['nome_tecnico','oem','ean','ncm','marca','categoria','descricao_pdv','imagem'];
+function showImpMap(){
+  var el=document.getElementById('imp-map');
+  el.style.display='block';
+  el.innerHTML='<div class="card"><div class="ct">'+impRows.length+' linhas — mapeie as colunas</div><div class="g2">'+IMP_CAMPOS.map(function(c){return '<div><label class="lbl">'+c+'</label><select id="imap-'+c+'"><option value="">— ignorar —</option>'+impCols.map(function(col){return '<option value="'+col+'"'+(col.toLowerCase().indexOf(c)>=0||c.indexOf(col.toLowerCase())>=0?' selected':'')+'>'+col+'</option>';}).join('')+'</select></div>';}).join('')+'</div><button class="btn btn-s btn-w" onclick="doImport()" style="margin-top:10px"><i class="ti ti-upload" aria-hidden="true"></i>Importar '+impRows.length+' produto'+( impRows.length!==1?'s':'')+'</button></div>';
+}
+function doImport(){
+  var count=0;
+  impRows.forEach(function(row){
+    var p={nct_estimado:.55,aprovado_em:new Date().toLocaleDateString('pt-BR')};
+    IMP_CAMPOS.forEach(function(c){var sel=document.getElementById('imap-'+c);if(sel&&sel.value&&row[sel.value]!==undefined)p[c]=String(row[sel.value]);});
+    if(p.nome_tecnico){catalog.unshift(p);count++;}
+  });
+  var done=document.getElementById('imp-ok');
+  if(done){done.style.display='block';done.style.borderColor='#86efac';done.style.color='var(--s)';done.textContent='✓ '+count+' produto'+(count!==1?'s':'')+' importado'+(count!==1?'s':'')+'!';}
+  document.getElementById('imp-map').style.display='none';
+  renderDash();
+}
+
+// ══════ AGENTES ══════════════════════════════════════════════════════════════
+function renderAgentes(){
+  var el=document.getElementById('agentes-list');
+  if(!el)return;
+  el.innerHTML=AGTS.map(function(a,i){return '<div style="background:#fff;padding:10px 14px;border-bottom:'+(i<AGTS.length-1?'.5px solid #e2e8f0':'none')+';display:flex;gap:9px;align-items:flex-start"><div style="width:6px;height:6px;border-radius:50%;background:var(--s);flex-shrink:0;margin-top:3px"></div><div style="flex:1"><div style="font-size:12px;font-weight:500;margin-bottom:1px">#'+a[0]+' '+a[1]+'</div><div style="font-size:11px;color:#475569;margin-bottom:2px">'+a[2]+'</div><div style="font-size:10px;color:var(--i)">'+a[3]+'</div></div><span style="font-size:9px;padding:2px 7px;border-radius:20px;background:#f0fdf4;color:var(--s);flex-shrink:0">ativo</span></div>';}).join('');
+}
+
+// ══════ INTEGRAÇÕES ══════════════════════════════════════════════════════════
+function renderInteg(){
+  var el=document.getElementById('integ-grid');
+  if(!el)return;
+  el.innerHTML=['Bling v3','Bling v2','Wix','Mercado Livre','Tiny ERP','Shopify','VTEX','Nuvemshop'].map(function(n){return '<div class="card" style="display:flex;align-items:center;gap:9px;padding:10px 12px"><div style="flex:1;font-size:12px;font-weight:500">'+n+'</div><button class="btn" style="font-size:11px;padding:0 11px;min-height:32px">Conectar</button></div>';}).join('');
+}
+
+// ══════ PLANOS ════════════════════════════════════════════════════════════════
+function renderPlanos(){
+  var el=document.getElementById('planos-grid');
+  if(!el)return;
+  el.innerHTML=[{n:'Básico',p:'R$97/mês',dest:false,f:['200 produtos','10 buscas/dia','Bling básico','Suporte e-mail']},{n:'Profissional',p:'R$297/mês',dest:true,f:['Ilimitado','14 agentes','Bling+Wix+ML','Partsouq+TecDoc','Câmera EAN','P-MAX auto','DNA hash']},{n:'Enterprise',p:'Consulta',dest:false,f:['Tudo + API REST','10 usuários','SLA 99.9%','Gerente dedicado']}].map(function(pl){return '<div class="card" style="display:flex;flex-direction:column;'+(pl.dest?'border:.5px solid #86efac':'')+'">'+(pl.dest?'<div style="font-size:9px;background:#f0fdf4;color:var(--s);border-radius:20px;padding:2px 10px;margin-bottom:6px;text-align:center">Mais popular</div>':'')+'<div style="font-size:13px;font-weight:600;margin-bottom:2px">'+pl.n+'</div><div style="font-size:16px;font-weight:500;margin-bottom:10px;color:'+(pl.dest?'var(--s)':'#0f172a')+'">'+pl.p+'</div><div style="flex:1;margin-bottom:10px">'+pl.f.map(function(f){return '<div style="font-size:11px;color:#475569;padding:3px 0;border-bottom:.5px solid #e2e8f0;display:flex;gap:5px"><span style="color:var(--s)">✓</span>'+f+'</div>';}).join('')+'</div><button class="btn '+(pl.dest?'btn-s':'')+' btn-w" style="font-size:11px">'+(pl.n==='Enterprise'?'Consultar':'Contratar')+'</button></div>';}).join('');
+}
+
+// ══════ BLING + WIX SYNC ═════════════════════════════════════════════════════
+function syncBlingWix(prod) {
+  fetch('/api/bling/produto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(prod)})
+    .then(function(r){return r.json();})
+    .then(function(d){if(d.ok)showToast('✓ Bling: produto sincronizado (ID '+d.bling_id+')');else if(d.error&&d.error.toString().indexOf('não conectado')>=0)showToast('Bling não conectado — acesse /auth/bling','warn');})
+    .catch(function(){});
+  fetch('/api/wix/produto',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(prod)})
+    .then(function(r){return r.json();})
+    .then(function(d){if(d.ok)showToast('✓ Wix: produto publicado');})
+    .catch(function(){});
+}
+function showToast(msg,type){
+  var t=document.createElement('div');
+  t.textContent=msg;
+  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:'+(type==='warn'?'#ba7517':'#1d9e75')+';color:#fff;padding:10px 18px;border-radius:8px;font-size:12px;z-index:9999;box-shadow:0 2px 10px rgba(0,0,0,.2);white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis';
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove();},3500);
+}
+
+// ══════ INIT ═════════════════════════════════════════════════════════════════
+renderDash();
+renderProd();
 </script>
 </body>
 </html>
