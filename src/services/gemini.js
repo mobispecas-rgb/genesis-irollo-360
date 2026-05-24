@@ -1,41 +1,47 @@
 // ============================================================
-// GENESIS iROLLO v3.0 — GEMINI FLASH SERVICE
-// Enriquecimento real de dados de autopeças
+// GENESIS iROLLO v3.1 — CLAUDE (ANTHROPIC) IA SERVICE
+// Substituindo Gemini (cobrado/limitado) por Claude Haiku
+// ANTHROPIC_API_KEY já configurada no Render
 // ============================================================
 const axios = require('axios');
 require('dotenv').config();
 
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
-// gemini-2.0-flash = versão ESTÁVEL (não-experimental), free tier 15 RPM
-// gemini-2.0-flash-exp causava 429; gemini-1.5-flash foi descontinuado (404)
-const MODEL = 'gemini-2.0-flash';
+const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
+// claude-haiku-4-5 = mais rápido e econômico da Anthropic
+const MODEL = 'claude-haiku-4-5-20251001';
 
 // ------------------------------------------------------------
-// CHAMADA GEMINI
+// CHAMADA CLAUDE (Anthropic) — substitui chamarGemini
+// Mantém o mesmo nome para não quebrar chamadas existentes
 // ------------------------------------------------------------
 async function chamarGemini(prompt, maxTokens = 1000) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey || apiKey === 'SUA_GEMINI_API_KEY_AQUI') {
-    throw new Error('GEMINI_API_KEY não configurada no .env');
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey || apiKey.length < 10) {
+    throw new Error('ANTHROPIC_API_KEY não configurada no Render');
   }
 
   const resp = await axios.post(
-    `${GEMINI_URL}/${MODEL}:generateContent?key=${apiKey}`,
+    ANTHROPIC_URL,
     {
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        maxOutputTokens: maxTokens,
-        temperature: 0.1
+      model: MODEL,
+      max_tokens: maxTokens,
+      messages: [{ role: 'user', content: prompt }]
+    },
+    {
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json'
       }
     }
   );
 
-  const texto = resp.data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const texto = resp.data?.content?.[0]?.text || '';
   return texto.trim();
 }
 
 // ------------------------------------------------------------
-// BUSCA REAL — Google Search API (triangulação antes do Gemini)
+// BUSCA REAL — Google Search API (triangulação antes do Claude)
 // ------------------------------------------------------------
 async function buscarDadosReaisOEM(oem, nome) {
   const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
@@ -121,7 +127,7 @@ IMPORTANTE: Responda SOMENTE o JSON. Nenhum texto antes ou depois.`;
     };
 
   } catch (err) {
-    console.error('[GEMINI] Erro:', err.message);
+    console.error('[CLAUDE] Erro:', err.message);
     return {
       ok: false,
       erro: err.message,
@@ -156,40 +162,43 @@ Responda APENAS o título, sem aspas, sem explicação.`;
 }
 
 // ------------------------------------------------------------
-// VALIDAR IMAGEM com visão (se vier base64)
+// VALIDAR IMAGEM com visão
 // ------------------------------------------------------------
 async function validarImagem(base64Image, nomeProduto) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey || apiKey === 'SUA_GEMINI_API_KEY_AQUI') {
-    return { ok: false, erro: 'API Key não configurada', confianca: 0 };
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey || apiKey.length < 10) {
+    return { ok: false, erro: 'ANTHROPIC_API_KEY não configurada', confianca: 0 };
   }
 
   try {
     const resp = await axios.post(
-      `${GEMINI_URL}/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      ANTHROPIC_URL,
       {
-        contents: [{
-          parts: [
-            { text: `Esta imagem mostra um(a) "${nomeProduto}"? Responda APENAS: SIM ou NÃO, seguido de vírgula e um número de 0 a 100 representando a confiança. Ex: SIM, 92` },
-            { inlineData: { mimeType: 'image/jpeg', data: base64Image } }
+        model: MODEL,
+        max_tokens: 50,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: base64Image } },
+            { type: 'text', text: `Esta imagem mostra um(a) "${nomeProduto}"? Responda APENAS: SIM ou NÃO, seguido de vírgula e um número de 0 a 100. Ex: SIM, 92` }
           ]
         }]
+      },
+      {
+        headers: {
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json'
+        }
       }
     );
 
-    const texto = resp.data?.candidates?.[0]?.content?.parts?.[0]?.text || 'NÃO, 0';
+    const texto = resp.data?.content?.[0]?.text || 'NÃO, 0';
     const partes = texto.split(',');
     const decisao = partes[0].trim().toUpperCase();
     const confianca = parseInt(partes[1]?.trim() || 0);
 
-    return {
-      ok: true,
-      valida: decisao === 'SIM' && confianca >= 85,
-      decisao,
-      confianca,
-      aprovada: confianca >= 85
-    };
-
+    return { ok: true, valida: decisao === 'SIM' && confianca >= 85, decisao, confianca, aprovada: confianca >= 85 };
   } catch (err) {
     return { ok: false, erro: err.message, confianca: 0 };
   }
@@ -200,26 +209,16 @@ async function validarImagem(base64Image, nomeProduto) {
 // ------------------------------------------------------------
 async function enriquecerLote(produtos, delayMs = 500) {
   const resultados = [];
-
   for (let i = 0; i < produtos.length; i++) {
     const p = produtos[i];
-    console.log(`[GEMINI] Enriquecendo ${i + 1}/${produtos.length}: ${p.oem || p.nome}`);
-
+    console.log(`[CLAUDE] Enriquecendo ${i + 1}/${produtos.length}: ${p.oem || p.nome}`);
     const resultado = await enriquecerProduto(p);
     resultados.push({ ...p, enriquecimento: resultado });
-
     if (i < produtos.length - 1) {
       await new Promise(resolve => setTimeout(resolve, delayMs));
     }
   }
-
   return resultados;
 }
 
-module.exports = {
-  enriquecerProduto,
-  gerarTituloSEO,
-  validarImagem,
-  enriquecerLote,
-  chamarGemini
-};
+module.exports = { enriquecerProduto, gerarTituloSEO, validarImagem, enriquecerLote, chamarGemini };
