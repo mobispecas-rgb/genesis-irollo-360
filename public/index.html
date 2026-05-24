@@ -333,7 +333,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
     <div class="tb-ttl" id="pgtitle">Dashboard <span>— Genesis iRollo 360</span></div>
     <span class="api-dot pend" id="api-dot" title="Status API"></span>
     <div class="tb-badge" id="tb-api">VERIFICANDO...</div>
-    <div class="tb-badge g" id="tb-motor">Motor v3.0</div>
+    <div class="tb-badge g" id="tb-motor">Motor v3.4</div>
     <button class="ib" onclick="gp('bling')">🟧 Bling</button>
     <button class="ib" onclick="gp('wix')">⬛ Wix</button>
   </div>
@@ -486,7 +486,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 
     <!-- ENRIQUECIMENTO POR OEM -->
     <div class="page" id="pg-enrich">
-      <div class="ph"><div><h1>Enriquecimento <span>por OEM / ID</span></h1><div class="psub">Motor iRollo + Gemini Flash → NCT → Perfil de Voz → Bling + Wix + Google</div></div></div>
+      <div class="ph"><div><h1>Enriquecimento <span>por OEM / ID</span></h1><div class="psub">Motor iRollo v3.4 + Claude Haiku → Cruzamento Real → NCT → Bling + Wix + Google Shopping</div></div></div>
 
       <!-- BUSCA -->
       <div class="card">
@@ -696,7 +696,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 
     <!-- MOTOR NCT -->
     <div class="page" id="pg-motor">
-      <div class="ph"><div><h1>Motor <span>iRollo v3.0</span></h1><div class="psub">NCT = (TF×0.50) + (FM×0.20) + (CO×0.20) + (AV×0.10)</div></div></div>
+      <div class="ph"><div><h1>Motor <span>iRollo v3.4</span></h1><div class="psub">NCT = (TF×0.50) + (FM×0.20) + (CO×0.20) + (AV×0.10)</div></div></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <div class="card">
           <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Calculadora NCT via API</div>
@@ -1410,7 +1410,7 @@ async function enriquecerForm() {
     if (e.aplicacao_veicular) document.getElementById('f-aplic').value = e.aplicacao_veicular;
     if (e.ncm_sugerido) document.getElementById('f-ncm').value = e.ncm_sugerido.replace(/\D/g,'');
     calcNCT();
-    toast('✅ Produto enriquecido pelo Gemini Flash!', 's');
+    toast('✅ Produto enriquecido pelo Claude Haiku!', 's');
   } else {
     toast('Erro Gemini: ' + (r.erro || 'Verifique GEMINI_API_KEY no .env'), 'e');
   }
@@ -1793,7 +1793,7 @@ async function enriquecer() {
   if (!r || r.ok === false || r.erro) {
     const msg = r?.erro || 'Erro desconhecido no Motor iRollo';
     const dica = msg.includes('429') ? ' Aguarde 1 min e tente novamente.' :
-                 msg.includes('API Key') ? ' Configure a GEMINI_API_KEY no Render.' : '';
+                 msg.includes('API') ? ' Configure a ANTHROPIC_API_KEY no Render.' : '';
     toast(`❌ ${msg}${dica}`, 'e');
     return;
   }
@@ -1837,20 +1837,40 @@ async function enriquecer() {
       <span style="color:var(--mu);font-family:var(--mono);width:28px;text-align:right">${(val||0).toFixed(2)}</span>
     </div>`).join('');
 
+  // Imagem real do catálogo
+  const imgReal = e.imagem_real;
+  const imgGrid = document.getElementById('e-imgs-grid');
+  if (imgReal && imgGrid) {
+    const slots = imgGrid.querySelectorAll('div[style*="aspect-ratio"]');
+    if (slots[0]) {
+      slots[0].innerHTML = '<img src="' + imgReal + '" alt="' + nomeF + '" style="width:100%;height:100%;object-fit:contain;border-radius:7px;padding:4px" onerror="this.style.display=\'none\'"><div style="position:absolute;top:5px;right:5px;font-size:9px;background:#16a34a;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Real ✓</div>';
+    }
+  }
+  // Cruzamento
+  const cruz = e.cruzamento || {};
+  const equivalentes = cruz.codigos_equivalentes || [];
+  const codigoMontadora = cruz.codigo_original_montadora;
+  const eansData = (cruz.ean_codigos || []).join(', ');
+  let cruzHtml = '';
+  if (codigoMontadora) cruzHtml += '<div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px;margin-bottom:8px;font-size:12px"><span style="font-family:var(--mono);font-weight:700;color:#1d4ed8">🏭 Cód. Montadora: ' + codigoMontadora + '</span></div>';
+  if (equivalentes.length > 0) {
+    cruzHtml += '<div style="margin-bottom:6px;font-size:11px;font-family:var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:.8px">Peças Cambiadas (' + equivalentes.length + ')</div>';
+    cruzHtml += equivalentes.map(function(eq) { return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12px"><span style="font-family:var(--mono);font-weight:700;color:var(--ac);min-width:80px">' + (eq.marca||'—') + '</span><span style="font-family:var(--mono)">' + (eq.codigo||'—') + '</span><span style="margin-left:auto;font-size:10px;color:var(--mu);background:#f1f5f9;padding:1px 6px;border-radius:10px">' + (eq.tipo||'equivalente') + '</span></div>'; }).join('');
+  }
   // Dados técnicos
   document.getElementById('e-dados').innerHTML = [
     ['OEM / Código-Mãe', payload.oem],
+    ['Cód. Montadora', codigoMontadora],
     ['NCM', e.ncm_sugerido || payload.ncm],
-    ['EAN', payload.ean],
-    ['SKU', payload.sku || 'TRIMGO-' + payload.oem],
+    ['EAN', eansData || payload.ean],
+    ['SKU', payload.sku || 'MOBIS-' + payload.oem],
     ['Aplicação', e.aplicacao_veicular],
+    ['Peso', e.peso_estimado_kg ? e.peso_estimado_kg + ' kg' : null],
     ['Reino', e.reino],
     ['Composição', e.material_composicao],
-  ].filter(([,v])=>v).map(([k,v]) => `
-    <div style="display:flex;gap:8px;font-size:12px;padding:4px 0;border-bottom:1px solid #f1f5f9">
-      <span style="color:var(--mu);font-family:var(--mono);min-width:110px">${k}</span>
-      <span style="color:var(--tx);font-weight:500;flex:1">${v}</span>
-    </div>`).join('');
+    ['Modelo IA', r.modelo_usado ? '🤖 ' + r.modelo_usado : null],
+    ['Confiança', e.confianca_enriquecimento ? (e.confianca_enriquecimento * 100).toFixed(0) + '%' : null],
+  ].filter(([,v])=>v).map(([k,v]) => '<div style="display:flex;gap:8px;font-size:12px;padding:4px 0;border-bottom:1px solid #f1f5f9"><span style="color:var(--mu);font-family:var(--mono);min-width:110px">' + k + '</span><span style="color:var(--tx);font-weight:500;flex:1">' + v + '</span></div>').join('') + (cruzHtml ? '<div style="margin-top:10px">' + cruzHtml + '</div>' : '');
 
   // Status indexação
   document.getElementById('status-indexacao').innerHTML = [
