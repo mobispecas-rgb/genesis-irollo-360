@@ -1,65 +1,100 @@
 // ============================================================
-// ROUTES — /api/motor (NCT, RAST-HASH, Enriquecimento)
+// ROUTES — /api/motor (NCT, RAST-HASH, Enriquecimento, Cruzamento)
 // ============================================================
 const express = require('express');
 const router = express.Router();
 const motor = require('../services/motor');
 const gemini = require('../services/gemini');
 
-// POST /api/motor/nct
+// POST /api/motor/nct — Calcular NCT de um produto
 router.post('/nct', (req, res) => {
   try {
     const resultado = motor.calcularNCT(req.body);
     res.json({ ok: true, ...resultado });
-  } catch (err) { res.status(500).json({ erro: err.message }); }
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
 });
 
-// POST /api/motor/processar
+// POST /api/motor/processar — Processar produto completo
 router.post('/processar', (req, res) => {
   try {
     const processado = motor.processarProduto(req.body);
     res.json({ ok: true, produto: processado });
-  } catch (err) { res.status(500).json({ erro: err.message }); }
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
 });
 
-// POST /api/motor/hash
+// POST /api/motor/hash — Gerar RAST-HASH
 router.post('/hash', (req, res) => {
   const { sku, oem, empresa } = req.body;
   if (!sku && !oem) return res.status(400).json({ erro: 'SKU ou OEM obrigatório' });
   const hash = motor.gerarRastHash(sku, oem, empresa || 'MOBIS');
-  res.json({ ok: true, rast_hash: hash });
+  res.json({ ok: true, rast_hash: hash, input: `md5(${sku}+${oem}+${empresa||'MOBIS'})[:16]` });
 });
 
-// POST /api/motor/enriquecer
+// POST /api/motor/enriquecer — Enriquecimento completo com cruzamento real
 router.post('/enriquecer', async (req, res) => {
   try {
     const enrich = await gemini.enriquecerProduto(req.body);
-    if (!enrich.ok) return res.status(500).json({ erro: enrich.erro });
+    if (!enrich.ok) return res.status(500).json({ erro: enrich.erro, parcial: enrich.dados_parciais });
+
     const dadosMerged = { ...req.body, ...enrich.dados, aplicacao: enrich.dados.aplicacao_veicular };
     const nctCalc = motor.calcularNCT(dadosMerged);
-    res.json({ ok: true, enriquecimento: enrich.dados, nct: nctCalc.nct, decisao: nctCalc.decisao, rast_hash: nctCalc.rast_hash, modelo_ia: enrich.modelo_usado });
-  } catch (err) { res.status(500).json({ erro: err.message }); }
+
+    res.json({
+      ok: true,
+      enriquecimento: enrich.dados,
+      nct: nctCalc.nct,
+      decisao: nctCalc.decisao,
+      rast_hash: nctCalc.rast_hash,
+      modelo_ia: enrich.modelo_usado,
+      fonte_real: enrich.fonte_real
+    });
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
 });
 
-// POST /api/motor/titulo
+// POST /api/motor/cruzar — Cruzamento real de códigos OEM/EAN/SKU
+router.post('/cruzar', async (req, res) => {
+  try {
+    const { codigo, marca } = req.body;
+    if (!codigo) return res.status(400).json({ erro: 'Informe o campo "codigo"' });
+    const resultado = await gemini.cruzarCodigos(codigo, marca || '');
+    if (!resultado.ok) return res.status(500).json({ erro: resultado.erro });
+    res.json({ ok: true, ...resultado });
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
+});
+
+// POST /api/motor/titulo — Gerar título Full-Match SEO
 router.post('/titulo', async (req, res) => {
   try {
     const resultado = await gemini.gerarTituloSEO(req.body);
     res.json(resultado);
-  } catch (err) { res.status(500).json({ erro: err.message }); }
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
 });
 
-// POST /api/motor/lote
+// POST /api/motor/lote — Processar lote de produtos
 router.post('/lote', async (req, res) => {
   try {
     const { produtos } = req.body;
-    if (!Array.isArray(produtos) || produtos.length === 0) return res.status(400).json({ erro: 'Envie um array "produtos"' });
+    if (!Array.isArray(produtos) || produtos.length === 0) {
+      return res.status(400).json({ erro: 'Envie um array "produtos"' });
+    }
     const resultados = produtos.map(p => motor.processarProduto(p));
-    const aprovados = resultados.filter(p => p.decisao === 'APROVADO').length;
-    const pendentes = resultados.filter(p => p.decisao === 'PENDENTE').length;
+    const aprovados  = resultados.filter(p => p.decisao === 'APROVADO').length;
+    const pendentes  = resultados.filter(p => p.decisao === 'PENDENTE').length;
     const bloqueados = resultados.filter(p => p.decisao === 'BLOQUEADO').length;
     res.json({ ok: true, total: resultados.length, aprovados, pendentes, bloqueados, produtos: resultados });
-  } catch (err) { res.status(500).json({ erro: err.message }); }
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
 });
 
 // ============================================================
@@ -77,7 +112,9 @@ blingRouter.post('/token/renovar', async (req, res) => {
   try {
     await bling.renovarToken();
     res.json({ ok: true, mensagem: 'Token renovado!' });
-  } catch (err) { res.status(500).json({ erro: err.message }); }
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
 });
 
 blingRouter.get('/categorias', async (req, res) => {
