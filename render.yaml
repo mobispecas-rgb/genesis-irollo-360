@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: genesis-irollo-360
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: AUTH_USUARIO
+        sync: false
+      - key: AUTH_SENHA
+        sync: false
+      - key: BLING_CLIENT_ID
+        sync: false
+      - key: BLING_CLIENT_SECRET
+        sync: false
+      - key: BLING_REFRESH_TOKEN
+        sync: false
+      - key: BLING_ACCESS_TOKEN
+        sync: false
+      - key: BLING_BASE_URL
+        value: https://www.bling.com.br/Api/v3
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.0-flash-exp
+      - key: GOOGLE_SEARCH_API_KEY
+        sync: false
+      - key: GOOGLE_SEARCH_CX
+        sync: false
+      - key: WIX_API_KEY
+        sync: false
+      - key: WIX_SITE_ID
+        sync: false
+      - key: EMPRESA
+        value: MOBIS
+      - key: NCT_MINIMO
+        value: "0.90"
+      - key: MARCA_PADRAO
+        value: TRIMGO
+      - key: CORS_ORIGINS
+        value: https://genesis-irollo-360.onrender.com
