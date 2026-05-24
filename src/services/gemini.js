@@ -6,9 +6,9 @@ const axios = require('axios');
 require('dotenv').config();
 
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
-// Fixado em gemini-1.5-flash (15 RPM free tier) — ignoramos GEMINI_MODEL env var
-// para evitar que gemini-2.0-flash-exp cause 429 no Render
-const MODEL = 'gemini-1.5-flash';
+// gemini-2.0-flash = versão ESTÁVEL (não-experimental), free tier 15 RPM
+// gemini-2.0-flash-exp causava 429; gemini-1.5-flash foi descontinuado (404)
+const MODEL = 'gemini-2.0-flash';
 
 // ------------------------------------------------------------
 // CHAMADA GEMINI
@@ -25,7 +25,7 @@ async function chamarGemini(prompt, maxTokens = 1000) {
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
         maxOutputTokens: maxTokens,
-        temperature: 0.1 // Baixo para dados técnicos precisos
+        temperature: 0.1
       }
     }
   );
@@ -42,7 +42,7 @@ async function buscarDadosReaisOEM(oem, nome) {
   const cx     = process.env.GOOGLE_SEARCH_CX;
 
   if (!apiKey || !cx || apiKey === 'SUA_GOOGLE_SEARCH_API_KEY') {
-    return null; // sem chave, continua sem dados reais
+    return null;
   }
 
   try {
@@ -56,7 +56,6 @@ async function buscarDadosReaisOEM(oem, nome) {
 
     if (items.length === 0) return null;
 
-    // Extrai snippets dos resultados para dar ao Gemini dados reais
     const trechos = items.map(item =>
       `Fonte: ${item.displayLink}\nTítulo: ${item.title}\nSnippet: ${item.snippet}`
     ).join('\n---\n');
@@ -74,7 +73,6 @@ async function buscarDadosReaisOEM(oem, nome) {
 async function enriquecerProduto(dadosBrutos) {
   const { oem, nome, ncm, sku, aplicacao } = dadosBrutos;
 
-  // 1. Tenta buscar dados REAIS na web antes de perguntar ao Gemini
   const dadosReaisWeb = await buscarDadosReaisOEM(oem, nome);
   const secaoReal = dadosReaisWeb
     ? `\nDADOS REAIS ENCONTRADOS NA WEB (use estes como base — não invente):\n${dadosReaisWeb}\n`
@@ -111,8 +109,6 @@ IMPORTANTE: Responda SOMENTE o JSON. Nenhum texto antes ou depois.`;
 
   try {
     const resposta = await chamarGemini(prompt, 1500);
-
-    // Remove possíveis markdown fences
     const jsonLimpo = resposta.replace(/```json|```/g, '').trim();
     const dados = JSON.parse(jsonLimpo);
 
@@ -170,7 +166,7 @@ async function validarImagem(base64Image, nomeProduto) {
 
   try {
     const resp = await axios.post(
-      `${GEMINI_URL}/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `${GEMINI_URL}/gemini-2.0-flash:generateContent?key=${apiKey}`,
       {
         contents: [{
           parts: [
@@ -212,7 +208,6 @@ async function enriquecerLote(produtos, delayMs = 500) {
     const resultado = await enriquecerProduto(p);
     resultados.push({ ...p, enriquecimento: resultado });
 
-    // Delay entre chamadas para evitar rate limit
     if (i < produtos.length - 1) {
       await new Promise(resolve => setTimeout(resolve, delayMs));
     }
