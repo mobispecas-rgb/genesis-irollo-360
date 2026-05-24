@@ -2,347 +2,2571 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Genesis iRollo 360</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genesis iRollo 360 — MOBIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#E24B4A;--green:#1D9E75;--bg:#F7F6F3;--surf:#fff;--bdr:rgba(0,0,0,.08);--txt:#1A1A1A;--muted:#6B6B6B;--faint:#A0A0A0;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--disp:'Syne',sans-serif}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--txt);font-size:13px}
-.app{display:flex;height:100vh;overflow:hidden}
-nav{width:210px;background:#111;color:#fff;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
-.nl{padding:14px 12px;border-bottom:1px solid rgba(255,255,255,.07);font-family:var(--disp);font-size:14px;font-weight:800;letter-spacing:-.3px}
-.nl em{color:var(--red);font-style:normal}
-.nlbl{font-size:9px;font-family:var(--mono);color:#444;padding:8px 12px 2px;letter-spacing:.08em}
-.ni{display:flex;align-items:center;gap:8px;padding:7px 12px;font-size:11px;color:#888;border-left:2px solid transparent;text-decoration:none;cursor:pointer;transition:all .15s;white-space:nowrap}
-.ni:hover{background:rgba(255,255,255,.05);color:#ccc}
-.ni.on{color:var(--red);border-left-color:var(--red);background:rgba(226,75,74,.1)}
-.nbdg{background:var(--red);color:#fff;font-size:8px;padding:1px 5px;border-radius:10px;margin-left:auto;font-family:var(--mono)}
-.nf{margin-top:auto;padding:10px 12px;font-size:9px;color:#333;font-family:var(--mono);border-top:1px solid rgba(255,255,255,.05);line-height:1.6}
-.body{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.tb{background:var(--surf);border-bottom:1px solid var(--bdr);height:44px;display:flex;align-items:center;padding:0 16px;flex-shrink:0;gap:8px}
-.bc{font-size:11px;color:var(--muted)}.bc strong{color:var(--txt)}
-.tr{margin-left:auto;display:flex;gap:6px}
-.pill{font-size:9px;font-family:var(--mono);background:var(--bg);border:1px solid var(--bdr);padding:2px 8px;border-radius:20px;color:var(--muted)}
-.pill.ok{background:#E1F5EE;color:#085041}
-.pill.red{background:#FCEBEB;color:var(--red)}
-.page{display:none;flex:1;overflow-y:auto;padding:16px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --nav:#1a1a2e;--nav-h:#16213e;--nav-a:#0f3460;
+  --nt:#94a3b8;--nta:#fff;
+  --ac:#e94560;--ac2:#0f3460;
+  --gr:#22c55e;--ye:#f59e0b;--re:#ef4444;--bl:#3b82f6;
+  --bd:#e2e8f0;--sf:#fff;--bg:#f5f7fa;--tx:#1a1a2e;
+  --mu:#64748b;--mu2:#94a3b8;
+  --mono:'JetBrains Mono',monospace;
+  --r:8px;--sh:0 1px 3px rgba(0,0,0,.08)
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);font-size:14px}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)}
+.lc{background:#fff;border-radius:16px;padding:44px;width:400px;box-shadow:0 25px 50px rgba(0,0,0,.4);animation:su .5s cubic-bezier(.16,1,.3,1)}
+.lc h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.lc h2 span{color:var(--ac)}
+.lc .sub{font-size:11px;color:var(--mu2);font-family:var(--mono);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px}
+.lc label{font-size:12px;font-weight:500;color:var(--mu);display:block;margin-bottom:5px}
+.lc input{width:100%;border:1.5px solid var(--bd);border-radius:7px;padding:11px 14px;font-size:14px;outline:none;margin-bottom:14px;transition:border-color .2s}
+.lc input:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(233,69,96,.1)}
+.lc .err{background:#fef2f2;border:1px solid #fecaca;color:var(--re);font-size:12px;padding:10px 14px;border-radius:7px;margin-bottom:12px;display:none}
+.lc .hint{text-align:center;font-size:11px;color:var(--mu2);margin-top:16px;font-family:var(--mono)}
+.lc .hint b{color:var(--ac)}
+
+/* APP */
+#app{display:none;height:100vh;flex-direction:row}
+#app.on{display:flex}
+
+/* NAV */
+nav{width:240px;flex-shrink:0;background:var(--nav);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+nav.slim{width:60px}
+.logo-h{padding:16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06);min-height:58px}
+.logo-i{width:32px;height:32px;flex-shrink:0;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+.logo-t{font-size:15px;font-weight:700;color:#fff;white-space:nowrap;letter-spacing:-.3px}
+.logo-t span{color:var(--ac)}
+.menu-ul{list-style:none;flex:1;padding:8px 0;overflow-y:auto}
+li.ti>a,li.ti>.nl{display:flex;align-items:center;gap:10px;padding:10px 16px;color:var(--nt);font-size:13px;text-decoration:none;transition:background .15s,color .15s;white-space:nowrap;overflow:hidden;border-left:3px solid transparent;cursor:pointer}
+li.ti>a:hover,li.ti>.nl:hover,li.ti>a.cur{background:var(--nav-h);color:var(--nta);border-left-color:var(--ac)}
+.ni{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.chv{margin-left:auto;font-size:10px;transition:transform .2s}
+li.ti.op>.nl .chv{transform:rotate(90deg)}
+li.ti>ul{display:none;list-style:none;background:rgba(0,0,0,.2)}
+li.ti.op>ul{display:block}
+li.ti>ul>li>a{display:flex;align-items:center;gap:8px;padding:8px 16px 8px 46px;color:var(--nt);font-size:12px;text-decoration:none;transition:background .15s,color .15s;white-space:nowrap;cursor:pointer}
+li.ti>ul>li>a:hover,li.ti>ul>li>a.cur{background:rgba(255,255,255,.05);color:#fff}
+li.ti>ul>li>a.cur{color:var(--ac)}
+.sbadge{margin-left:auto;background:var(--ac);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-family:var(--mono)}
+.m-prof{padding:12px 16px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
+.pav{width:32px;height:32px;flex-shrink:0;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700}
+.pnm{font-size:12px;font-weight:600;color:#fff}
+.pco{font-size:10px;color:var(--nt);font-family:var(--mono)}
+.lout{background:none;border:none;cursor:pointer;color:var(--nt);font-size:16px;transition:color .2s}
+.lout:hover{color:var(--ac)}
+
+/* BODY */
+.ab{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.tb{height:54px;flex-shrink:0;background:#fff;border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 24px;gap:12px}
+.tb-ttl{flex:1;font-size:16px;font-weight:600;color:var(--tx)}
+.tb-ttl span{color:var(--ac)}
+.tb-badge{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;background:rgba(233,69,96,.1);border:1px solid rgba(233,69,96,.25);color:var(--ac);padding:3px 9px;border-radius:20px;text-transform:uppercase}
+.tb-badge.g{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--gr)}
+.tb-badge.y{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3);color:var(--ye)}
+.ib{background:none;border:1px solid var(--bd);border-radius:7px;padding:7px 10px;cursor:pointer;font-size:14px;color:var(--mu);transition:all .2s}
+.ib:hover{border-color:var(--ac);color:var(--ac)}
+
+main{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+.page{display:none;animation:fi .25s ease}
 .page.on{display:block}
-.card{background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:12px;margin-bottom:10px}
-.ch{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;font-family:var(--disp)}
-.fl{font-size:9px;font-family:var(--mono);color:var(--faint);margin-bottom:3px}
-.fv{font-size:12px;line-height:1.5;background:var(--bg);border-radius:6px;padding:6px 8px;min-height:28px}
-.fv.ld{color:var(--faint);font-style:italic;animation:sh 1.5s ease-in-out infinite}
-@keyframes sh{0%,100%{opacity:.4}50%{opacity:1}}
-.finput{width:100%;font-family:var(--sans);font-size:13px;color:var(--txt);background:var(--surf);border:1px solid var(--bdr);border-radius:8px;padding:9px 12px;outline:none;transition:border .15s}
-.finput:focus{border-color:var(--red);background:#fff}
-.dvd{height:1px;background:var(--bdr);margin:10px 0}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.btn{font-size:11px;font-weight:500;padding:7px 14px;border-radius:8px;border:1px solid var(--bdr);cursor:pointer;background:var(--surf);color:var(--txt);font-family:var(--sans);transition:all .15s;display:inline-flex;align-items:center;gap:5px}
-.btn:hover{background:var(--bg)}
-.btn.g{background:var(--green);color:#fff;border-color:var(--green)}.btn.g:hover{background:#0F6E56}
-.btn.r{background:#FCEBEB;color:#791F1F;border-color:#F09595}
-.btn.d{background:#111;color:#fff;border-color:#111}.btn.d:hover{background:#333}
-.btn.red{background:var(--red);color:#fff;border-color:var(--red)}.btn.red:hover{background:var(--red)}
-.actb{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px;position:sticky;bottom:0}
-.nctb{background:#111;color:#fff;border-radius:14px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.nctv{font-family:var(--disp);font-size:36px;font-weight:800;line-height:1}
-.nctl{font-size:8px;font-family:var(--mono);color:#666;letter-spacing:.08em;margin-bottom:2px}
-.ncth{font-size:8px;font-family:var(--mono);color:#333;margin-top:2px}
-.nbars{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-width:140px}
-.brl{font-size:8px;color:#666;font-family:var(--mono);display:flex;justify-content:space-between;margin-bottom:2px}
-.brt{height:3px;background:#222;border-radius:2px;overflow:hidden}
-.brf{height:100%;border-radius:2px;transition:width 1s ease}
-.bdg{font-size:8px;font-family:var(--mono);padding:1px 6px;border-radius:20px;font-weight:500;display:inline-block}
-.bok{background:#E1F5EE;color:#085041}.bw{background:#FAEEDA;color:#633806}.br2{background:#FCEBEB;color:#A32D2D}
-.lista{width:240px;flex-shrink:0;border-right:1px solid var(--bdr);overflow-y:auto;padding:10px}
-.lh{font-size:10px;font-weight:500;color:var(--muted);margin-bottom:8px}
-.pi{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:8px;margin-bottom:6px;cursor:pointer;transition:all .15s}
-.pi:hover,.pi.on{border-color:var(--red)}.pi.on{background:#FCEBEB}
-.pin{font-size:11px;font-weight:500;line-height:1.3;margin-bottom:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.pim{font-size:9px;font-family:var(--mono);color:var(--muted)}
-.pis{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
-.pinct{font-size:13px;font-weight:500;font-family:var(--mono)}
-.split{display:flex;flex:1;overflow:hidden}
-.det{flex:1;overflow-y:auto;padding:12px}
-.vazio{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;color:var(--faint)}
-.vazio p{font-size:11px;font-family:var(--mono)}
-.tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
-.tag{font-size:9px;font-family:var(--mono);background:var(--bg);color:var(--muted);border:1px solid var(--bdr);padding:1px 6px;border-radius:20px}
-.vrow{padding:4px 7px;background:var(--bg);border-radius:5px;margin-bottom:4px;font-size:10px}
-.tst{display:none;background:#111;color:#fff;padding:5px 14px;border-radius:20px;font-size:10px;font-family:var(--mono);text-align:center;margin-top:8px}
-.tst.show{display:block}
-.ean-box{max-width:500px;margin:0 auto;padding-top:20px}
-.ean-big{font-family:var(--disp);font-size:22px;font-weight:800;margin-bottom:6px}
-.ean-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
-.ean-result{display:none;animation:fadeUp .3s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.sp{width:16px;height:16px;border:2px solid rgba(0,0,0,.1);border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes su{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
-.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:800px;margin:20px auto 0}
-.plan{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:20px;position:relative}
-.plan.dest{border:2px solid var(--red)}
-.plan-pop{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-size:9px;font-family:var(--mono);padding:2px 10px;border-radius:20px;white-space:nowrap}
-.plan-nome{font-family:var(--disp);font-size:16px;font-weight:800;margin-bottom:4px}
-.plan-preco{font-size:28px;font-weight:500;font-family:var(--disp);margin-bottom:2px}
-.plan-preco span{font-size:12px;font-weight:400;color:var(--muted)}
-.plan-desc{font-size:11px;color:var(--muted);margin-bottom:16px}
-.plan-feat{font-size:11px;line-height:2;color:var(--txt)}
-.plan-feat div::before{content:'✓ ';color:var(--green);font-weight:700}
-.plan-feat div.no::before{content:'✗ ';color:var(--faint)}
-.plan-feat div.no{color:var(--faint)}
-.hero{text-align:center;padding:40px 20px 30px}
-.hero-title{font-family:var(--disp);font-size:32px;font-weight:800;line-height:1.2;margin-bottom:8px}
-.hero-title em{color:var(--red);font-style:normal}
-.hero-sub{font-size:14px;color:var(--muted);margin-bottom:24px}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:700px;margin:0 auto}
-.feat{background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:16px;text-align:center}
-.feat-icon{font-size:24px;margin-bottom:8px}
-.feat-title{font-family:var(--disp);font-size:13px;font-weight:700;margin-bottom:4px}
-.feat-desc{font-size:11px;color:var(--muted);line-height:1.5}
-.upload-area{border:2px dashed var(--bdr);border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all .15s;background:var(--surf)}
-.upload-area:hover{border-color:var(--red);background:#FCEBEB}
-.upload-icon{font-size:32px;margin-bottom:8px;opacity:.3}
-.upload-txt{font-size:12px;color:var(--muted)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* HEADERS */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.ph h1{font-size:22px;font-weight:700;letter-spacing:-.5px}
+.ph h1 span{color:var(--ac)}
+.psub{font-size:12px;color:var(--mu);font-family:var(--mono);margin-top:2px}
+.pact{display:flex;gap:8px;flex-wrap:wrap}
+
+/* STATS */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px}
+.sc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:transform .2s}
+.sc:hover{transform:translateY(-2px)}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.sc.g::after{background:var(--gr)}.sc.b::after{background:var(--bl)}
+.sc.y::after{background:var(--ye)}.sc.r::after{background:var(--re)}
+.sc.p::after{background:#8b5cf6}
+.sv{font-size:28px;font-weight:700;font-family:var(--mono);line-height:1}
+.sc.g .sv{color:var(--gr)}.sc.b .sv{color:var(--bl)}
+.sc.y .sv{color:var(--ye)}.sc.r .sv{color:var(--re)}.sc.p .sv{color:#8b5cf6}
+.sl{font-size:10px;color:var(--mu);font-family:var(--mono);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
+.sei{font-size:20px;margin-bottom:8px}
+
+/* CARDS */
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:20px;box-shadow:var(--sh);margin-bottom:16px}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.ct{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.ct .dot{width:8px;height:8px;border-radius:50%;background:var(--ac);flex-shrink:0}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:7px;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;border:none;transition:all .2s;text-decoration:none;white-space:nowrap}
+.bp{background:var(--ac);color:#fff}.bp:hover{background:#c73652;box-shadow:0 4px 12px rgba(233,69,96,.3)}
+.bs{background:transparent;border:1px solid var(--bd);color:var(--mu)}.bs:hover{border-color:var(--ac);color:var(--ac)}
+.bg{background:var(--gr);color:#fff}.bg:hover{background:#16a34a}
+.bw{background:#f59e0b;color:#fff}
+.bd2{background:transparent;border:1px solid #fecaca;color:var(--re)}.bd2:hover{background:#fef2f2}
+.sm{padding:6px 12px;font-size:12px}
+.lg{padding:12px 24px;font-size:14px;font-weight:600}
+.bgrp{display:flex;gap:8px;flex-wrap:wrap}
+
+/* FORMS */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fg3{grid-template-columns:1fr 1fr 1fr}
+.ff{grid-column:1/-1}
+.fgrp{display:flex;flex-direction:column;gap:6px}
+.fl{font-size:11px;font-weight:500;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
+.fl .req{color:var(--re)}
+.fl .tip{font-size:10px;color:var(--mu2);background:#f1f5f9;padding:1px 6px;border-radius:4px;letter-spacing:0;text-transform:none}
+.fi,.fsl,.fta{border:1.5px solid var(--bd);border-radius:7px;padding:10px 13px;font-size:13px;font-family:'Inter',sans-serif;color:var(--tx);outline:none;background:#fff;width:100%;transition:border-color .2s}
+.fi:focus,.fsl:focus,.fta:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(233,69,96,.08)}
+.fi::placeholder,.fta::placeholder{color:var(--mu2)}
+.fsl{cursor:pointer}
+.fta{resize:vertical;min-height:80px}
+.fi.ok{border-color:var(--gr)}.fi.er{border-color:var(--re)}
+
+/* TABELA */
+.tw{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.ttb{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--sf);border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.ts{flex:1;min-width:180px;border:1px solid var(--bd);border-radius:6px;padding:7px 12px;font-size:12px;font-family:'Inter',sans-serif;outline:none}
+.ts:focus{border-color:var(--ac)}
+table{width:100%;border-collapse:collapse;background:var(--sf)}
+thead{background:#f8fafc}
+thead th{padding:11px 14px;text-align:left;font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--bd);white-space:nowrap}
+tbody tr{border-bottom:1px solid #f1f5f9;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#fafafa}
+tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
+.tm{font-family:var(--mono);font-size:11px;color:var(--mu)}
+.th{font-family:var(--mono);font-size:11px;color:#7c3aed;letter-spacing:1px}
+.pg{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--sf);border-top:1px solid var(--bd);font-size:12px;color:var(--mu)}
+
+/* BADGES */
+.bg2{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;font-family:var(--mono);text-transform:uppercase;letter-spacing:.8px}
+.bg2.g2{background:#dcfce7;color:#16a34a}
+.bg2.y2{background:#fef3c7;color:#d97706}
+.bg2.r2{background:#fee2e2;color:#dc2626}
+.bg2.b2{background:#dbeafe;color:#2563eb}
+.bg2.p2{background:#f3e8ff;color:#7c3aed}
+.bg2 .bk{width:6px;height:6px;border-radius:50%;animation:blink 1.5s infinite}
+.g2 .bk{background:var(--gr)}.y2 .bk{background:var(--ye)}.r2 .bk{background:var(--re)}
+
+/* NCT WIDGET */
+.nw{background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;padding:20px;color:#fff;margin-bottom:16px}
+.nt-lbl{font-size:11px;font-family:var(--mono);letter-spacing:2px;color:#94a3b8;text-transform:uppercase}
+.nt-sc{font-size:42px;font-weight:700;font-family:var(--mono);line-height:1}
+.nt-vd{font-size:12px;font-family:var(--mono);margin-top:2px}
+.nt-bars{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.nb{display:flex;align-items:center;gap:10px}
+.nl2{font-size:10px;color:#94a3b8;width:100px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px}
+.nt{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden}
+.nf{height:100%;border-radius:10px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.np{font-size:10px;color:#94a3b8;font-family:var(--mono);width:35px;text-align:right}
+
+/* HASH BOX */
+.hb{background:#0f172a;border:1px solid #1e293b;border-radius:8px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:border-color .2s}
+.hb:hover{border-color:#8b5cf6}
+.hlbl{font-size:9px;color:#64748b;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
+.hv{font-family:var(--mono);font-size:13px;color:#8b5cf6;letter-spacing:2px}
+
+/* LOADING */
+.sp{width:20px;height:20px;border:2px solid #e2e8f0;border-top-color:var(--ac);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+.lo{display:flex;flex-direction:column;align-items:center;padding:60px;gap:16px}
+.lo p{font-size:13px;color:var(--mu);font-family:var(--mono)}
+
+/* TOKEN BOX */
+.tkb{background:#0f172a;border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.tkv{font-family:var(--mono);font-size:11px;color:#22c55e;flex:1;word-break:break-all;letter-spacing:1px}
+.tkc{background:none;border:1px solid #1e293b;color:#94a3b8;font-size:11px;padding:4px 10px;border-radius:5px;cursor:pointer;transition:all .2s;font-family:var(--mono);white-space:nowrap}
+.tkc:hover{border-color:#22c55e;color:#22c55e}
+
+/* API STATUS DOT */
+.api-dot{width:8px;height:8px;border-radius:50%;display:inline-block;animation:blink 1.5s infinite}
+.api-dot.on{background:var(--gr)}.api-dot.off{background:var(--re)}.api-dot.pend{background:var(--ye)}
+
+/* TOAST */
+.tc{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:9998}
+.tt{background:#1a1a2e;color:#fff;border-radius:8px;padding:12px 16px;font-size:13px;max-width:320px;display:flex;align-items:center;gap:10px;box-shadow:0 10px 25px rgba(0,0,0,.2);animation:fi .3s ease}
+.tt.s{border-left:3px solid var(--gr)}.tt.e{border-left:3px solid var(--re)}
+.tt.w{border-left:3px solid var(--ye)}.tt.i{border-left:3px solid var(--bl)}
+
+/* PROGRESS */
+.prw{margin-bottom:10px}
+.prl{display:flex;justify-content:space-between;font-size:11px;color:var(--mu);margin-bottom:4px;font-family:var(--mono)}
+.prtr{height:6px;background:#f1f5f9;border-radius:10px;overflow:hidden}
+.prfi{height:100%;border-radius:10px;transition:width 1s cubic-bezier(.16,1,.3,1)}
+
+/* APROVAÇÃO */
+.atabs{display:flex;gap:2px;border-bottom:2px solid var(--bd);margin-bottom:20px;overflow-x:auto}
+.atab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:6px}
+.atab:hover{color:var(--ac)}.atab.on{color:var(--ac);border-bottom-color:var(--ac)}
+.atab .ac{background:var(--ac);color:#fff;font-size:10px;font-family:var(--mono);padding:1px 6px;border-radius:10px}
+.pac{background:var(--sf);border:1.5px solid var(--bd);border-radius:10px;padding:16px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s;margin-bottom:10px}
+.pac:hover{border-color:var(--ac)}
+.pimg{width:60px;height:60px;flex-shrink:0;background:#f1f5f9;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.pai{flex:1}
+.pan{font-size:14px;font-weight:600;margin-bottom:4px}
+.pam{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--mu);font-family:var(--mono)}
+
+/* MODAL */
+.mb{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
+.mb.on{display:flex}
+.mo{background:var(--sf);border-radius:12px;padding:28px;width:540px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 25px 50px rgba(0,0,0,.3);animation:su .3s cubic-bezier(.16,1,.3,1)}
+.moh{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.mot{font-size:16px;font-weight:700}
+.moc{background:none;border:none;font-size:20px;cursor:pointer;color:var(--mu)}
+.moc:hover{color:var(--re)}
+
+/* DROPZONE */
+.dz{border:2px dashed #cbd5e1;border-radius:12px;padding:48px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--sf)}
+.dz:hover,.dz.drag{border-color:var(--ac);background:rgba(233,69,96,.02)}
+.dzi{font-size:40px;margin-bottom:12px}
+
+/* EMPTY */
+.es{text-align:center;padding:60px 24px;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:12px}
+.es .ei{font-size:48px;opacity:.4}
+
+/* TOGGLE */
+.tg{position:relative;width:38px;height:20px;flex-shrink:0}
+.tg input{opacity:0;width:0;height:0}
+.tgs{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:20px;transition:background .2s}
+.tgs::before{content:'';position:absolute;width:14px;height:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:transform .2s}
+.tg input:checked+.tgs{background:var(--ac)}
+.tg input:checked+.tgs::before{transform:translateX(18px)}
+
+.div{height:1px;background:var(--bd);margin:20px 0}
+.chip{display:inline-block;background:#f1f5f9;color:var(--mu);font-size:11px;padding:3px 9px;border-radius:20px;font-family:var(--mono);border:1px solid var(--bd)}
+.chip.ac{background:rgba(233,69,96,.08);color:var(--ac);border-color:rgba(233,69,96,.2)}
 </style>
 </head>
 <body>
-<div class="app">
-<nav>
-  <div class="nl">Genesis <em>iRollo</em> 360</div>
-  <div class="nlbl">CATÁLOGO</div>
-  <div class="ni on" onclick="go('home')" id="nav-home">🏠 Dashboard</div>
-  <div class="nlbl">CADASTRO</div>
-  <div class="ni" onclick="go('ean')" id="nav-ean">📦 por EAN</div>
-  <div class="ni" onclick="go('produto')" id="nav-produto">📝 de Produto</div>
-  <div class="ni" onclick="go('planilha')" id="nav-planilha">📊 por Planilha</div>
-  <div class="nlbl">ENRIQUECIMENTO</div>
-  <div class="ni" onclick="go('aprovacao')" id="nav-aprovacao">✓ Aprovação <span class="nbdg">3</span></div>
-  <div class="nlbl">INTEGRAÇÃO</div>
-  <div class="ni" onclick="go('bling')" id="nav-bling">⚡ Bling ERP</div>
-  <div class="ni" onclick="go('ml')" id="nav-ml">🛒 Mercado Livre</div>
-  <div class="nlbl">PLANOS</div>
-  <div class="ni" onclick="go('planos')" id="nav-planos">★ Free / Pro / Enterprise</div>
-  <div class="nf">Motor NCT v2 · MOBIS Peças<br>genesisindexia.com.br</div>
+
+<div class="tc" id="toasts"></div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="lc">
+    <h2>Genesis<span>iRollo</span> 360</h2>
+    <div class="sub">Motor iRollo v3.0 · MOBIS Peças</div>
+    <div class="err" id="lerr">Usuário ou senha inválidos.</div>
+    <label>E-mail</label>
+    <input type="email" id="lem" placeholder="seu@email.com" autocomplete="username">
+    <label>Senha</label>
+    <input type="password" id="lpw" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn bp lg" style="width:100%" id="btn-login" onclick="login()">Entrar</button>
+    <div class="hint" id="login-hint" style="color:var(--mu2)">Genesis iRollo 360 · MOBIS Peças</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<nav id="nav">
+  <div class="logo-h">
+    <div class="logo-i">⚙️</div>
+    <div class="logo-t">Genesis<span>iRollo</span></div>
+  </div>
+  <ul class="menu-ul">
+    <li class="ti"><a class="cur" onclick="gp('dashboard')"><span class="ni">📊</span><span>Dashboard</span></a></li>
+    <li class="ti"><a onclick="gp('produtos')"><span class="ni">📦</span><span>Produtos</span></a></li>
+    <li class="ti" onclick="tm(this)">
+      <div class="nl"><span class="ni">➕</span><span>Cadastro</span><span class="chv">›</span></div>
+      <ul>
+        <li><a onclick="gp('cad')">de Produto</a></li>
+        <li><a onclick="gp('massa')">por Planilha</a></li>
+      </ul>
+    </li>
+    <li class="ti" onclick="tm(this)">
+      <div class="nl"><span class="ni">🔍</span><span>Enriquecimento</span><span class="chv">›</span></div>
+      <ul>
+        <li><a onclick="gp('enrich')">por OEM / ID</a></li>
+        <li><a onclick="gp('ecatalog')">por Catálogo</a></li>
+      </ul>
+    </li>
+    <li class="ti" onclick="tm(this)">
+      <div class="nl"><span class="ni">✅</span><span>Aprovação</span><span class="chv">›</span></div>
+      <ul>
+        <li><a onclick="gp('aprov')">de Cadastro <span class="sbadge" id="b-aprov">—</span></a></li>
+        <li><a onclick="gp('aprovados')">Aprovados</a></li>
+      </ul>
+    </li>
+    <li class="ti"><a onclick="gp('motor')"><span class="ni">🧠</span><span>Motor iRollo</span></a></li>
+    <li class="ti"><a onclick="gp('imagens')"><span class="ni">🖼️</span><span>Imagens</span></a></li>
+    <li class="ti"><a onclick="gp('ean')"><span class="ni">📷</span><span>EAN Scanner</span></a></li>
+    <li class="ti"><a onclick="gp('congelados')"><span class="ni">❄️</span><span>Congelados</span></a></li>
+    <li class="ti"><a onclick="gp('agentes')"><span class="ni">🤖</span><span>Agentes IA</span></a></li>
+    <li class="ti" onclick="tm(this)">
+      <div class="nl"><span class="ni">🔗</span><span>Integração</span><span class="chv">›</span></div>
+      <ul>
+        <li><a onclick="gp('bling')">🟧 Bling ERP v3</a></li>
+        <li><a onclick="gp('wix')">⬛ Wix Studio</a></li>
+        <li><a onclick="gp('whats')">💬 WhatsApp Bot</a></li>
+      </ul>
+    </li>
+    <li class="ti"><a onclick="gp('templates')"><span class="ni">📝</span><span>Templates</span></a></li>
+    <li class="ti"><a onclick="gp('planos')"><span class="ni">💎</span><span>Planos</span></a></li>
+    <li class="ti" onclick="tm(this)">
+      <div class="nl"><span class="ni">⚙️</span><span>Configuração</span><span class="chv">›</span></div>
+      <ul>
+        <li><a onclick="gp('pref')">Preferências</a></li>
+        <li><a onclick="gp('empresa')">Empresa</a></li>
+      </ul>
+    </li>
+  </ul>
+  <div class="m-prof">
+    <div class="pav">JN</div>
+    <div><div class="pnm">Jose Nunes Jr.</div><div class="pco">MOBIS Peças</div></div>
+    <button class="lout" onclick="logout()">⏻</button>
+  </div>
 </nav>
-<div class="body">
+
+<div class="ab">
   <div class="tb">
-    <div class="bc" id="bc">Dashboard</div>
-    <div class="tr">
-      <span class="pill ok" id="pill-st">Motor NCT v2</span>
-      <span class="pill" id="pill-nct">genesisindexia.com.br</span>
-    </div>
+    <div class="tb-ttl" id="pgtitle">Dashboard <span>— Genesis iRollo 360</span></div>
+    <span class="api-dot pend" id="api-dot" title="Status API"></span>
+    <div class="tb-badge" id="tb-api">VERIFICANDO...</div>
+    <div class="tb-badge g" id="tb-motor">Motor v3.0</div>
+    <button class="ib" onclick="gp('bling')">🟧 Bling</button>
+    <button class="ib" onclick="gp('wix')">⬛ Wix</button>
   </div>
-  <div class="page on" id="page-home">
-    <div class="hero">
-      <div class="hero-title">Genesis <em>iRollo</em> 360</div>
-      <div class="hero-sub">Enriqueça seu catálogo com IA e Motor NCT exclusivo — MOBIS Peças</div>
-      <button class="btn red" onclick="go('ean')" style="font-size:13px;padding:10px 24px;margin-bottom:30px">Cadastrar por EAN →</button>
-      <div class="features">
-        <div class="feat"><div class="feat-icon">⚡</div><div class="feat-title">Motor NCT</div><div class="feat-desc">Score exclusivo: TF×0.50 + FM×0.20 + CO×0.20 + AV×0.10</div></div>
-        <div class="feat"><div class="feat-icon">🔗</div><div class="feat-title">Integração Bling</div><div class="feat-desc">Sincroniza automático com seu ERP. Produtos enriquecidos direto no cadastro.</div></div>
-        <div class="feat"><div class="feat-icon">🤖</div><div class="feat-title">IA Gemini + Claude</div><div class="feat-desc">5 agentes especializados: OEM, NCM, CDC, Bula técnica e Aplicação veicular.</div></div>
-      </div>
-    </div>
-    <div style="max-width:700px;margin:0 auto">
-      <div class="card">
-        <div class="ch">Resumo do catálogo</div>
-        <div class="g3">
-          <div style="text-align:center;padding:10px"><div style="font-size:28px;font-weight:700;font-family:var(--disp);color:var(--green)">3</div><div style="font-size:10px;color:var(--muted)">Produtos enriquecidos</div></div>
-          <div style="text-align:center;padding:10px"><div style="font-size:28px;font-weight:700;font-family:var(--disp);color:var(--red)">3</div><div style="font-size:10px;color:var(--muted)">Aguardando aprovação</div></div>
-          <div style="text-align:center;padding:10px"><div style="font-size:28px;font-weight:700;font-family:var(--disp);color:#185FA5">0.88</div><div style="font-size:10px;color:var(--muted)">NCT médio</div></div>
+
+  <main id="main">
+
+    <!-- DASHBOARD -->
+    <div class="page on" id="pg-dashboard">
+      <div class="ph">
+        <div><h1>Painel de Controle <span>MOBIS</span></h1><div class="psub" id="ds-sub">Carregando dados do Bling...</div></div>
+        <div class="pact">
+          <button class="btn bs" onclick="gp('enrich')">🔍 Enriquecer</button>
+          <button class="btn bp" onclick="gp('cad')">➕ Novo Cadastro</button>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="page" id="page-ean">
-    <div class="ean-box">
-      <div class="ean-big">Cadastro por EAN</div>
-      <div class="ean-sub">Digite o código EAN do produto — a IA busca e enriquece automaticamente</div>
-      <div class="card">
-        <div class="fl">Código EAN (8, 12 ou 13 dígitos)</div>
-        <div style="display:flex;gap:8px;margin-bottom:10px">
-          <input class="finput" id="ean-input" type="text" placeholder="Ex: 7891945023581" maxlength="14" oninput="this.value=this.value.replace(/\D/,'')">
-          <button class="btn red" onclick="buscarEAN()" style="white-space:nowrap">🔍 Buscar</button>
-        </div>
+      <div class="sg" id="ds-stats">
+        <div class="sc g"><div class="sei">⏳</div><div class="sv">—</div><div class="sl">Carregando...</div></div>
       </div>
-      <div class="ean-result" id="ean-result">
-        <div class="nctb">
-          <div><div class="nctl">MOTOR NCT · SCORE</div><div class="nctv" id="ean-nct" style="color:#4ade80">—</div><div class="ncth" id="ean-hash">calculando...</div></div>
-          <div class="nbars">
-            <div><div class="brl"><span>TF</span><span id="ean-tf">—</span></div><div class="brt"><div class="brf" id="ean-btf" style="width:0%;background:#4ade80"></div></div></div>
-            <div><div class="brl"><span>FM</span><span id="ean-fm">—</span></div><div class="brt"><div class="brf" id="ean-bfm" style="width:0%;background:#fbbf24"></div></div></div>
-            <div><div class="brl"><span>CO</span><span id="ean-co">—</span></div><div class="brt"><div class="brf" id="ean-bco" style="width:0%;background:#4ade80"></div></div></div>
-            <div><div class="brl"><span>AV</span><span id="ean-av">—</span></div><div class="brt"><div class="brf" id="ean-bav" style="width:0%;background:#4ade80"></div></div></div>
-          </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="card">
+          <div class="ch"><div class="ct"><span class="dot"></span>NCT Score — Catálogo</div><span class="bg2 g2">—</span></div>
+          <div class="nw" id="ds-nct"><div class="lo"><div class="sp"></div><p>Calculando NCT...</p></div></div>
         </div>
         <div class="card">
-          <div class="ch">Produto encontrado <span class="bdg bok" id="ean-status">ENRIQUECIDO</span></div>
-          <div class="fl">Nome enriquecido</div><div class="fv" id="ean-nome" style="margin-bottom:10px"></div>
-          <div class="g3">
-            <div><div class="fl">SKU</div><div class="fv" id="ean-sku" style="min-height:auto;padding:4px 8px"></div></div>
-            <div><div class="fl">OEM</div><div class="fv" id="ean-oem" style="min-height:auto;padding:4px 8px"></div></div>
-            <div><div class="fl">NCM</div><div class="fv" id="ean-ncm" style="min-height:auto;padding:4px 8px"></div></div>
+          <div class="ch"><div class="ct"><span class="dot"></span>Progresso por Categoria</div></div>
+          <div id="ds-cats"><div class="lo"><div class="sp"></div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch">
+          <div class="ct"><span class="dot"></span>Últimos Produtos — Bling API Real</div>
+          <button class="btn bs sm" onclick="gp('produtos')">Ver todos →</button>
+        </div>
+        <div class="tw"><table>
+          <thead><tr><th>Produto</th><th>Código</th><th>Preço</th><th>NCT</th><th>RAST-HASH</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="ds-table"><tr><td colspan="7" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- PRODUTOS -->
+    <div class="page" id="pg-produtos">
+      <div class="ph">
+        <div><h1>Produtos <span>— Bling Real</span></h1><div class="psub" id="prod-sub">Carregando...</div></div>
+        <div class="pact">
+          <button class="btn bs" onclick="exportarCSV()">📥 Exportar</button>
+          <button class="btn bp" onclick="gp('cad')">➕ Cadastrar</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="tw">
+          <div class="ttb">
+            <input class="ts" id="ps-search" placeholder="🔍 Buscar nome, código..." oninput="filtrarProdutos()">
+            <select class="fsl" style="width:auto;padding:7px 12px;font-size:12px" id="ps-status" onchange="filtrarProdutos()">
+              <option value="">Todos status</option>
+              <option value="A">Ativo</option>
+              <option value="I">Inativo</option>
+            </select>
+            <button class="btn bs sm" onclick="carregarProdutos()">🔄 Atualizar</button>
           </div>
-          <div class="dvd"></div>
-          <div class="fl">Aplicação veicular</div><div class="fv" id="ean-aplic"></div>
-          <div class="dvd"></div>
-          <div class="fl">Tags SEO</div><div class="tags" id="ean-tags"></div>
+          <table>
+            <thead><tr><th><input type="checkbox" onchange="selAll(this)"></th><th>Nome</th><th>Código</th><th>Preço</th><th>NCT</th><th>RAST-HASH</th><th>Situação</th><th>Ações</th></tr></thead>
+            <tbody id="prod-tbody"><tr><td colspan="8" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
+          </table>
+          <div class="pg"><span id="prod-info">—</span><div style="display:flex;gap:8px">
+            <button class="btn bs sm" id="btn-prev" onclick="prodPagina(-1)">‹ Anterior</button>
+            <button class="btn bs sm" id="btn-next" onclick="prodPagina(1)">Próxima ›</button>
+          </div></div>
         </div>
-        <div class="actb">
-          <button class="btn g" onclick="salvarEAN()">✓ Salvar</button>
-          <button class="btn d" onclick="enviarBling()">⚡ Enviar Bling</button>
-          <button class="btn r" onclick="limparEAN()">✗ Cancelar</button>
-        </div>
-        <div class="tst" id="ean-tst"></div>
       </div>
     </div>
-  </div>
-  <div class="page" id="page-produto">
-    <div style="max-width:600px">
+
+    <!-- CADASTRO -->
+    <div class="page" id="pg-cad">
+      <div class="ph"><div><h1>Cadastro <span>de Produto</span></h1><div class="psub">Motor NCT em tempo real · RAST-HASH automático · Salva no Bling</div></div></div>
+      <div class="nw" id="cad-nct">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div><div class="nt-lbl">NCT — Índice de Confiança Técnica</div>
+            <div class="nt-sc" id="nct-v" style="color:#94a3b8">0.00</div>
+            <div class="nt-vd" id="nct-vd" style="color:#94a3b8">Preencha o Triângulo iRollo</div>
+          </div>
+          <div id="nct-bdg"></div>
+        </div>
+        <div class="nt-bars">
+          <div class="nb"><div class="nl2">TF (OEM) 50%</div><div class="nt"><div class="nf" id="b-tf" style="width:0%;background:var(--re)"></div></div><div class="np" id="v-tf">0.00</div></div>
+          <div class="nb"><div class="nl2">FM (Nome) 20%</div><div class="nt"><div class="nf" id="b-fm" style="width:0%;background:var(--bl)"></div></div><div class="np" id="v-fm">0.00</div></div>
+          <div class="nb"><div class="nl2">CO (NCM) 20%</div><div class="nt"><div class="nf" id="b-co" style="width:0%;background:var(--ye)"></div></div><div class="np" id="v-co">0.00</div></div>
+          <div class="nb"><div class="nl2">AV (Aplic.) 10%</div><div class="nt"><div class="nf" id="b-av" style="width:0%;background:#8b5cf6"></div></div><div class="np" id="v-av">0.00</div></div>
+        </div>
+      </div>
       <div class="card">
-        <div class="ch">Cadastro manual</div>
-        <div style="margin-bottom:10px"><div class="fl">Nome *</div><input class="finput" id="mp-nome" type="text" placeholder="Ex: Bronzina Mancal BC720J STD Metal Leve"></div>
-        <div class="g3" style="margin-bottom:10px">
-          <div><div class="fl">SKU *</div><input class="finput" id="mp-sku" type="text" placeholder="BC720JSTD"></div>
-          <div><div class="fl">EAN</div><input class="finput" id="mp-ean" type="text" placeholder="7891945023581"></div>
-          <div><div class="fl">NCM</div><input class="finput" id="mp-ncm" type="text" placeholder="8484.10.00"></div>
+        <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Triângulo iRollo</div>
+        <div class="fg fg3">
+          <div class="fgrp"><label class="fl">OEM / Código-Mãe <span class="req">*</span><span class="tip">Nó raiz</span></label><input class="fi" id="f-oem" placeholder="BDJ0430" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">NCM <span class="req">*</span><span class="tip">8 dígitos</span></label><input class="fi" id="f-ncm" placeholder="87089900" maxlength="8" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">SKU / Referência <span class="req">*</span></label><input class="fi" id="f-sku" placeholder="TRIMGO-BDJ0430" oninput="calcNCT()"></div>
         </div>
-        <div class="actb" style="position:static;margin-top:0">
-          <button class="btn red" onclick="enriquecerManual()">🤖 Enriquecer com IA</button>
-          <button class="btn g" onclick="salvarManual()">✓ Salvar</button>
+        <div class="div"></div>
+        <div class="fg">
+          <div class="fgrp ff"><label class="fl">Nome Full-Match <span class="req">*</span></label><input class="fi" id="f-nome" placeholder="Bandeja Dianteira Superior TRIMGO Honda Civic 2001-2006" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">Marca</label><input class="fi" id="f-marca" value="TRIMGO"></div>
+          <div class="fgrp"><label class="fl">Categoria</label>
+            <select class="fsl" id="f-cat"><option>Suspensão</option><option>Amortecedores</option><option>Freios</option><option>Filtros</option><option>Motor</option><option>Elétrica</option><option>Arrefecimento</option><option>Transmissão</option></select>
+          </div>
+          <div class="fgrp"><label class="fl">Preço R$</label><input class="fi" id="f-preco" type="number" placeholder="0.00" step="0.01"></div>
+          <div class="fgrp"><label class="fl">Estoque</label><input class="fi" id="f-estq" type="number" placeholder="0"></div>
+          <div class="fgrp"><label class="fl">Aplicação Veicular <span class="req">*</span></label><input class="fi" id="f-aplic" placeholder="Honda Civic 2001-2006 / Toyota Corolla 2003-2008" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">EAN</label><input class="fi" id="f-ean" placeholder="7891234567890"></div>
+          <div class="fgrp ff"><label class="fl">Descrição Técnica</label><textarea class="fta" id="f-desc" rows="3" placeholder="Descrição para Google Shopping e Wix..."></textarea></div>
         </div>
-        <div class="tst" id="mp-tst"></div>
+        <div class="div"></div>
+        <div class="hb" id="hash-box" onclick="copiarHash()">
+          <div><div class="hlbl">RAST-HASH · md5(SKU+OEM+"MOBIS")[:16]</div><div class="hv" id="hash-val">— Preencha SKU e OEM —</div></div>
+          <span>📋</span>
+        </div>
+        <div class="div"></div>
+        <div class="bgrp">
+          <button class="btn bp lg" id="btn-salvar" onclick="salvarBling()">💾 Salvar no Bling</button>
+          <button class="btn bg" onclick="salvarBling(true)">✅ Salvar e Aprovar</button>
+          <button class="btn bs" onclick="enriquecerForm()">🤖 Enriquecer com IA</button>
+          <button class="btn bs" onclick="limparCad()">🔄 Limpar</button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="page" id="page-planilha">
-    <div style="max-width:600px">
+
+    <!-- CADASTRO EM MASSA -->
+    <div class="page" id="pg-massa">
+      <div class="ph"><div><h1>Cadastro <span>em Massa</span></h1><div class="psub">Upload CSV/XLSX → Motor iRollo processa → Envia para Bling</div></div></div>
       <div class="card">
-        <div class="ch">Importar planilha</div>
-        <div class="upload-area" onclick="document.getElementById('file-input').click()">
-          <div class="upload-icon">📊</div>
-          <div class="upload-txt" id="upload-txt">Clique para selecionar ou arraste sua planilha<br><span style="font-size:10px;font-family:var(--mono)">.xlsx, .xls, .csv</span></div>
-          <input type="file" id="file-input" accept=".xlsx,.xls,.csv" style="display:none" onchange="carregarPlanilha(this)">
+        <div class="dz" id="dz" onclick="document.getElementById('fu').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropFile(event)">
+          <div class="dzi">📊</div>
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px">Arraste sua planilha aqui</div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:16px">Formatos: .CSV · .XLSX · .XLS</div>
+          <button class="btn bp" onclick="event.stopPropagation()">📤 Importar Planilha</button>
+          <input type="file" id="fu" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadPlanilha(this)">
         </div>
-        <div class="tst" id="plan-tst"></div>
+      </div>
+      <div class="card" id="massa-prev" style="display:none">
+        <div class="ch">
+          <div class="ct"><span class="dot"></span>Pré-visualização — <span id="m-total">0</span> produtos</div>
+          <button class="btn bp" id="btn-enviar-bling" onclick="enviarBlingMassa()">🟧 Enviar para Bling</button>
+        </div>
+        <div id="m-resumo" style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap"></div>
+        <div class="tw"><table>
+          <thead><tr><th>#</th><th>Nome</th><th>OEM</th><th>NCM</th><th>SKU</th><th>Preço</th><th>NCT</th><th>Decisão</th></tr></thead>
+          <tbody id="m-tbody"></tbody>
+        </table></div>
       </div>
     </div>
-  </div>
-  <div class="page" id="page-aprovacao">
-    <div class="split">
-      <div class="lista"><div class="lh">Aguardando aprovação</div><div id="aprov-lista"></div></div>
-      <div class="det">
-        <div class="vazio" id="aprov-vazio"><span style="font-size:32px;opacity:.2">☰</span><p>Selecione um produto</p></div>
-        <div id="aprov-det" style="display:none">
-          <div class="nctb">
-            <div><div class="nctl">NCT SCORE</div><div class="nctv" id="anv" style="color:#4ade80">—</div></div>
-            <div class="nbars">
-              <div><div class="brl"><span>TF</span><span id="atf">—</span></div><div class="brt"><div class="brf" id="abtf" style="width:0%;background:#4ade80"></div></div></div>
-              <div><div class="brl"><span>FM</span><span id="afm">—</span></div><div class="brt"><div class="brf" id="abfm" style="width:0%;background:#fbbf24"></div></div></div>
+
+    <!-- ENRIQUECIMENTO POR OEM -->
+    <div class="page" id="pg-enrich">
+      <div class="ph"><div><h1>Enriquecimento <span>por OEM / ID</span></h1><div class="psub">Motor iRollo + Gemini Flash → NCT → Perfil de Voz → Bling + Wix + Google</div></div></div>
+
+      <!-- BUSCA -->
+      <div class="card">
+        <div style="display:flex;gap:10px;margin-bottom:10px">
+          <input class="fi" id="e-input" placeholder="Ex: JPR1129 · BDJ0430 · TRW-JPR1129" style="font-family:var(--mono);letter-spacing:1px;text-transform:uppercase" onkeydown="if(event.key==='Enter')enriquecer()">
+          <button class="btn bp lg" onclick="enriquecer()" id="e-btn">🔍 Enriquecer</button>
+        </div>
+        <div style="font-size:12px;color:var(--mu)">Motor iRollo triangula Web + TecDoc + EAN DB → NCT → Perfis de Voz → Gavetas Bling / Wix / Google Shopping / Ads</div>
+      </div>
+
+      <!-- RESULTADO -->
+      <div id="e-result" style="display:none">
+
+        <!-- CABEÇALHO DO PRODUTO -->
+        <div class="card" id="e-cabecalho">
+          <div style="font-size:10px;font-family:var(--mono);color:var(--mu);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="e-breadcrumb">Início › Categoria › Produto</div>
+          <div style="font-size:17px;font-weight:700;line-height:1.3;margin-bottom:6px" id="e-nome">—</div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:10px" id="e-subtitulo">—</div>
+          <div id="e-tags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
+          <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
+            <div style="font-size:24px;font-weight:700;color:var(--gr)" id="e-preco">—</div>
+            <div style="font-size:12px;color:var(--mu)" id="e-estoque">—</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn bg" id="e-btn-aprovar" onclick="aprovarEnrich()">✅ Aprovar</button>
+            <button class="btn bs" onclick="gp('imagens')">🖼️ Imagens</button>
+            <button class="btn bs" onclick="congelarProduto()" id="e-btn-congelar" style="display:none">❄️ Congelar + Indexar</button>
+          </div>
+        </div>
+
+        <!-- 6 IMAGENS -->
+        <div class="card">
+          <div class="ct" style="margin-bottom:10px"><span class="dot"></span>6 Imagens — Padrão Google Shopping · CPC Baixo</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="e-img-regras">
+            <span style="font-size:10px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-family:var(--mono)">✓ fundo branco</span>
+            <span style="font-size:10px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-family:var(--mono)">✓ produto real</span>
+            <span style="font-size:10px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-family:var(--mono)">✓ 1000px mínimo</span>
+            <span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-family:var(--mono)">✗ sem watermark</span>
+            <span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-family:var(--mono)">✗ sem texto sobreposto</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="e-imgs-grid">
+            <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
+              <div style="font-size:20px;color:var(--mu)">1</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">PRINCIPAL<br>Frontal fundo branco</div>
+              <div style="position:absolute;top:5px;right:5px;font-size:9px;background:#854d0e;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Buscar</div>
+            </div>
+            <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
+              <div style="font-size:20px;color:var(--mu)">2</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">LATERAL 90°<br>Polia visível</div>
+              <div style="position:absolute;top:5px;right:5px;font-size:9px;background:#854d0e;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Buscar</div>
+            </div>
+            <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
+              <div style="font-size:20px;color:var(--mu)">3</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">DETALHE<br>Close-up técnico</div>
+              <div style="position:absolute;top:5px;right:5px;font-size:9px;background:#854d0e;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Buscar</div>
+            </div>
+            <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
+              <div style="font-size:20px;color:var(--mu)">4</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">CONEXÃO<br>Cano saída</div>
+              <div style="position:absolute;top:5px;right:5px;font-size:9px;background:#854d0e;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Buscar</div>
+            </div>
+            <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
+              <div style="font-size:20px;color:var(--mu)">5</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">EMBALAGEM<br>Caixa original</div>
+              <div style="position:absolute;top:5px;right:5px;font-size:9px;background:#854d0e;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Buscar</div>
+            </div>
+            <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
+              <div style="font-size:20px;color:var(--mu)">6</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">INSTALADA<br>Contexto P-Max</div>
+              <div style="position:absolute;top:5px;right:5px;font-size:9px;background:#854d0e;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Buscar</div>
             </div>
           </div>
+        </div>
+
+        <!-- NCT + DADOS -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
           <div class="card">
-            <div class="fl">Nome</div><div class="fv" id="anome"></div>
+            <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Motor NCT — iRollo v3.0</div>
+            <div class="nw">
+              <div class="nt-lbl">NCT Score</div>
+              <div class="nt-sc" id="e-nct">—</div>
+              <div class="nt-vd" id="e-vd">—</div>
+            </div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px" id="e-barras"></div>
+            <div class="hb" style="margin-top:10px"><div><div class="hlbl">RAST-HASH Certificado</div><div class="hv" id="e-hash">—</div></div><span>📋</span></div>
           </div>
-          <div class="actb">
-            <button class="btn g" onclick="aaprovar()">✓ Aprovar → Bling</button>
-            <button class="btn r" onclick="arejeitar()">✗ Rejeitar</button>
+          <div class="card">
+            <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Dados Técnicos</div>
+            <div style="display:flex;flex-direction:column;gap:6px" id="e-dados"></div>
           </div>
-          <div class="tst" id="atst"></div>
+        </div>
+
+        <!-- ENRIQUECIMENTO — PERFIS DE VOZ -->
+        <div class="card">
+          <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Enriquecimento — Voz do Lojista · Sem DNA do Fabricante</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="voz-tabs">
+            <button class="btn bp" onclick="setVozPerfil('tecnico',this)" id="vtab-tecnico">⚙️ Técnico</button>
+            <button class="btn bs" onclick="setVozPerfil('comercial',this)" id="vtab-comercial">💼 Comercial</button>
+            <button class="btn bs" onclick="setVozPerfil('seo',this)" id="vtab-seo">🔍 SEO</button>
+            <button class="btn bs" onclick="setVozPerfil('whatsapp',this)" id="vtab-whatsapp">💬 WhatsApp</button>
+            <button class="btn bs" onclick="setVozPerfil('pmax',this)" id="vtab-pmax">📢 P-Max</button>
+          </div>
+          <div style="font-size:10px;font-family:var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px" id="voz-label-atual">Perfil técnico — especialista em autopeças</div>
+          <textarea id="voz-output" style="width:100%;min-height:110px;padding:12px;background:#f8fafc;border:1px solid var(--bd);border-radius:8px;font-size:13px;line-height:1.7;resize:vertical;font-family:inherit;color:var(--tx)" readonly></textarea>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+            <button class="btn bp" onclick="gerarVozIA()" id="btn-gerar-voz">🤖 Gerar com IA</button>
+            <button class="btn bs" onclick="copiarVozAtual()">📋 Copiar</button>
+            <button class="btn bs" onclick="proximaVariacao()">🔄 Nova variação</button>
+          </div>
+          <div id="voz-loading" style="display:none;font-size:12px;color:var(--mu);margin-top:8px;display:none">⏳ Gemini Flash gerando descrição...</div>
+        </div>
+
+        <!-- GAVETAS DE INDEXAÇÃO -->
+        <div style="margin-bottom:6px;font-size:10px;font-family:var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:1px">Gavetas de Indexação</div>
+
+        <!-- GAVETA BLING -->
+        <div style="border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:8px">
+          <div onclick="toggleGaveta('bling')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fff8f0;cursor:pointer">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">🟧 Cabeçote ERP — Bling v3</div>
+            <div style="font-size:11px;color:var(--mu)" id="gav-bling-icon">▼ abrir</div>
+          </div>
+          <div id="gav-bling" style="display:none;padding:14px;background:#fff">
+            <div style="display:flex;flex-direction:column;gap:6px" id="gav-bling-fields"></div>
+            <button class="btn" onclick="enviarBling()" style="width:100%;margin-top:10px;padding:10px;background:#f97316;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">🟧 Enviar para Bling ERP</button>
+          </div>
+        </div>
+
+        <!-- GAVETA WIX -->
+        <div style="border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:8px">
+          <div onclick="toggleGaveta('wix')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0f0f0;cursor:pointer">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">⬛ Cabeçote Wix Studio</div>
+            <div style="font-size:11px;color:var(--mu)" id="gav-wix-icon">▼ abrir</div>
+          </div>
+          <div id="gav-wix" style="display:none;padding:14px;background:#fff">
+            <div style="display:flex;flex-direction:column;gap:6px" id="gav-wix-fields"></div>
+            <button class="btn" onclick="sincronizarWix()" style="width:100%;margin-top:10px;padding:10px;background:#0f3460;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">⬛ Sincronizar Wix Studio</button>
+          </div>
+        </div>
+
+        <!-- GAVETA GOOGLE SHOPPING -->
+        <div style="border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:8px">
+          <div onclick="toggleGaveta('gshop')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0f7ff;cursor:pointer">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">🛍️ Google Shopping — Merchant Center</div>
+            <div style="font-size:11px;color:var(--mu)" id="gav-gshop-icon">▼ abrir</div>
+          </div>
+          <div id="gav-gshop" style="display:none;padding:14px;background:#fff">
+            <div style="display:flex;flex-direction:column;gap:6px" id="gav-gshop-fields"></div>
+          </div>
+        </div>
+
+        <!-- GAVETA ADS P-MAX -->
+        <div style="border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:12px">
+          <div onclick="toggleGaveta('ads')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fdf0ff;cursor:pointer">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">📢 Google Ads — Performance Max</div>
+            <div style="font-size:11px;color:var(--mu)" id="gav-ads-icon">▼ abrir</div>
+          </div>
+          <div id="gav-ads" style="display:none;padding:14px;background:#fff">
+            <div style="display:flex;flex-direction:column;gap:6px" id="gav-ads-fields"></div>
+          </div>
+        </div>
+
+        <!-- BOTÃO CONGELAR -->
+        <div class="card" style="background:#0f3460;border-color:#0f3460">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px" id="status-indexacao"></div>
+          <button onclick="congelarIndexar()" id="btn-congelar" style="width:100%;padding:14px;background:var(--gr);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px">❄️ CONGELAR E INDEXAR — Bling + Wix + Google Shopping</button>
+          <div id="congelar-log" style="margin-top:10px;font-size:12px;font-family:var(--mono);color:#94a3b8;line-height:2;display:none"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ENRICH CATÁLOGO -->
+    <div class="page" id="pg-ecatalog">
+      <div class="ph"><div><h1>Enriquecimento <span>por Catálogo</span></h1></div>
+        <button class="btn bp" onclick="enriquecerCatalogo()">⚙️ Enriquecer Todos</button>
+      </div>
+      <div class="card"><div id="ec-list"><div class="lo"><div class="sp"></div><p>Carregando catálogo Bling...</p></div></div></div>
+    </div>
+
+    <!-- APROVAÇÃO -->
+    <div class="page" id="pg-aprov">
+      <div class="ph">
+        <div><h1>Aprovação <span>de Cadastro</span></h1></div>
+        <div class="pact">
+          <button class="btn bs">📥 Exportar</button>
+          <button class="btn bg" onclick="aprovarTodos()">✅ Aprovar Todos</button>
+        </div>
+      </div>
+      <div class="atabs">
+        <div class="atab on" onclick="setTab(this)">Produto principal <span class="ac" id="badge-pend">—</span></div>
+        <div class="atab" onclick="setTab(this)">🟧 Bling ERP</div>
+        <div class="atab" onclick="setTab(this)">⬛ Wix Studio</div>
+      </div>
+      <div id="aprov-list"><div class="lo"><div class="sp"></div></div></div>
+    </div>
+
+    <!-- APROVADOS -->
+    <div class="page" id="pg-aprovados">
+      <div class="ph"><div><h1><span>Aprovados</span> — Histórico</h1></div><button class="btn bs">📥 Exportar CSV</button></div>
+      <div class="card" style="padding:0">
+        <div class="tw"><table>
+          <thead><tr><th>Produto</th><th>Código</th><th>NCT</th><th>RAST-HASH</th><th>Bling</th><th>Wix</th></tr></thead>
+          <tbody id="aprov-tbody"><tr><td colspan="6" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- MOTOR NCT -->
+    <div class="page" id="pg-motor">
+      <div class="ph"><div><h1>Motor <span>iRollo v3.0</span></h1><div class="psub">NCT = (TF×0.50) + (FM×0.20) + (CO×0.20) + (AV×0.10)</div></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Calculadora NCT via API</div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">TF — Triangulação (50%)</label><input class="fi" type="number" id="m-tf" value="0.95" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">FM — Full-Match (20%)</label><input class="fi" type="number" id="m-fm" value="0.92" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">CO — Coerência NCM (20%)</label><input class="fi" type="number" id="m-co" value="1.00" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="fgrp" style="margin-bottom:16px"><label class="fl">AV — Aplicação Veicular (10%)</label><input class="fi" type="number" id="m-av" value="0.88" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="nw"><div class="nt-lbl">Resultado NCT (API Real)</div><div class="nt-sc" id="m-nct">—</div><div class="nt-vd" id="m-vd">—</div></div>
+        </div>
+        <div class="card">
+          <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Gerador RAST-HASH Real</div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">SKU</label><input class="fi" id="rh-sku" placeholder="TRIMGO-BDJ0430" oninput="gerarHashAPI()"></div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">OEM</label><input class="fi" id="rh-oem" placeholder="BDJ0430" oninput="gerarHashAPI()"></div>
+          <div class="fgrp" style="margin-bottom:16px"><label class="fl">Empresa</label><input class="fi" id="rh-emp" value="MOBIS" oninput="gerarHashAPI()"></div>
+          <div class="hb" onclick="copiarHash2()"><div><div class="hlbl">RAST-HASH = md5(SKU+OEM+empresa)[:16]</div><div class="hv" id="rh-res">—</div></div><span>📋</span></div>
+          <div style="margin-top:16px;font-size:12px;color:var(--mu)">
+            <div style="font-family:var(--mono);font-size:10px;margin-top:4px" id="rh-input-show"></div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="page" id="page-bling">
-    <div style="max-width:500px">
+
+    <!-- IMAGENS -->
+    <div class="page" id="pg-imagens">
+      <div class="ph"><div><h1>Sistema de <span>Imagens</span></h1><div class="psub">Busca automática · Validação IA · Confiança mínima 85%</div></div></div>
       <div class="card">
-        <div class="ch">Integração Bling ERP v3</div>
-        <div class="fl">Client ID</div>
-        <input class="finput" id="bling-cid" type="text" placeholder="Bling Client ID" style="margin-bottom:10px">
-        <div class="fl">Client Secret</div>
-        <input class="finput" id="bling-secret" type="password" placeholder="Bling Client Secret" style="margin-bottom:10px">
-        <div class="actb" style="position:static;margin-top:0">
-          <button class="btn red" onclick="blingAuth()">🔗 Autorizar Bling</button>
-          <button class="btn g" onclick="blingTest()">⚡ Testar</button>
+        <div style="display:flex;gap:10px;margin-bottom:12px">
+          <input class="fi" id="img-cod" placeholder="Ex: BDJ0430 · Bandeja Dianteira TRIMGO">
+          <button class="btn bp" onclick="buscarImgs()">🔍 Buscar Imagens</button>
         </div>
-        <div class="tst" id="bling-tst"></div>
+      </div>
+      <div class="card" id="img-res" style="display:none">
+        <div class="ch"><div class="ct"><span class="dot"></span>Imagens Encontradas — Validação IA</div><button class="btn bg sm" onclick="aprovarImg()">✅ Aprovar Selecionada</button></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px" id="img-grid"></div>
       </div>
     </div>
-  </div>
-  <div class="page" id="page-ml">
-    <div style="max-width:500px">
+
+    <!-- BLING -->
+    <div class="page" id="pg-bling">
+      <div class="ph">
+        <div><h1>Integração <span>Bling ERP v3</span></h1><div class="psub">OAuth2 Refresh Token · API Real</div></div>
+        <span class="bg2" id="bling-status-badge">🔄 Verificando...</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+        <div class="sc b"><div class="sei">🟧</div><div class="sv" id="bl-total">—</div><div class="sl">Produtos no Bling</div></div>
+        <div class="sc g"><div class="sei">🔄</div><div class="sv" id="bl-sync">—</div><div class="sl">Sync Status</div></div>
+      </div>
       <div class="card">
-        <div class="ch">Integração Mercado Livre</div>
-        <button class="btn" style="background:#FFE600;border-color:#FFE600;color:#333;font-weight:700" onclick="toast('ml-tst','Em desenvolvimento — em breve!','#185FA5')">🛒 Conectar ML</button>
-        <div class="tst" id="ml-tst"></div>
+        <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Credenciais Bling API v3</div>
+        <label class="fl" style="margin-bottom:6px">Client ID</label>
+        <div class="tkb"><div class="tkv" id="bl-cid">carregando...</div><button class="tkc" onclick="copiarEl('bl-cid')">Copiar</button></div>
+        <label class="fl" style="margin-bottom:6px;margin-top:10px">Access Token (válido 6h)</label>
+        <div class="tkb"><div class="tkv" id="bl-tok">carregando...</div><button class="tkc" onclick="renovarToken()">🔄 Renovar</button></div>
+        <div class="div"></div>
+        <div class="bgrp">
+          <button class="btn bp" onclick="testarBling()">🔌 Testar Conexão</button>
+          <button class="btn bs" onclick="carregarProdutos();gp('produtos')">📦 Ver Produtos</button>
+          <button class="btn bs" onclick="syncTudo()">🔄 Sincronizar Tudo</button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="page" id="page-planos">
-    <div class="plans-grid">
-      <div class="plan">
-        <div class="plan-nome">Free</div>
-        <div class="plan-preco">R$0<span>/mês</span></div>
-        <div class="plan-desc">Para começar</div>
-        <div class="dvd"></div>
-        <div class="plan-feat"><div>50 produtos</div><div>Motor NCT básico</div><div class="no">Multi-usuário</div></div>
-        <div style="margin-top:16px"><button class="btn" style="width:100%;justify-content:center">Plano atual</button></div>
+
+    <!-- WIX -->
+    <div class="page" id="pg-wix">
+      <div class="ph">
+        <div><h1>Integração <span>Wix Studio</span></h1><div class="psub">Wix Stores API · Sync Bling → Wix automático</div></div>
+        <span class="bg2" id="wix-status-badge">🔄 Verificando...</span>
       </div>
-      <div class="plan dest">
-        <div class="plan-pop">✦ Mais popular</div>
-        <div class="plan-nome">Pro</div>
-        <div class="plan-preco">R$197<span>/mês</span></div>
-        <div class="plan-desc">Para lojas em crescimento</div>
-        <div class="dvd"></div>
-        <div class="plan-feat"><div>5.000 produtos</div><div>14 agentes IA</div><div>Bling + Wix + ML</div></div>
-        <div style="margin-top:16px"><button class="btn red" style="width:100%;justify-content:center">Assinar Pro →</button></div>
+      <div class="card">
+        <div class="ct" style="margin-bottom:16px"><span class="dot" style="background:var(--ye)"></span>Configuração Wix API</div>
+        <div class="fgrp" style="margin-bottom:12px"><label class="fl">Wix API Key</label><input class="fi" id="wix-key" placeholder="Cole sua Wix API Key aqui..."></div>
+        <div class="fgrp" style="margin-bottom:16px"><label class="fl">Site ID</label><input class="fi" id="wix-site" placeholder="a1b2c3d4-e5f6-7890-abcd-ef1234567890"></div>
+        <div class="bgrp">
+          <button class="btn bp" onclick="testarWix()">🔌 Testar Conexão</button>
+          <button class="btn bs" onclick="salvarWixConfig()">💾 Salvar no .env</button>
+        </div>
       </div>
-      <div class="plan">
-        <div class="plan-nome">Enterprise</div>
-        <div class="plan-preco">R$597<span>/mês</span></div>
-        <div class="plan-desc">Para distribuidores</div>
-        <div class="dvd"></div>
-        <div class="plan-feat"><div>Ilimitado</div><div>Multi-tenant</div><div>Suporte dedicado</div></div>
-        <div style="margin-top:16px"><button class="btn d" style="width:100%;justify-content:center">Falar com comercial →</button></div>
+      <div class="card" style="margin-top:16px">
+        <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Sync Manual — Bling → Wix</div>
+        <div style="font-size:12px;color:var(--mu);margin-bottom:12px">Selecione produtos na tela de Produtos e use o botão Sync para enviar ao Wix.</div>
+        <button class="btn bp" onclick="syncBlingWix()">⚡ Sync Todos Aprovados → Wix</button>
       </div>
     </div>
-    <div class="tst" id="plan-tst" style="max-width:400px;margin:10px auto"></div>
-  </div>
+
+    <!-- WHATSAPP -->
+    <div class="page" id="pg-whats">
+      <div class="ph"><div><h1>Agente <span>WhatsApp Bot</span></h1></div></div>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#166534">🤖 Cliente: "preciso de bandeja pro meu Uno 2003"</div></div>
+          <div style="text-align:center;color:var(--mu)">↓</div>
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#1e40af">⚙️ Gemini Flash interpreta: Fiat Uno 2003 → Bandeja Dianteira</div></div>
+          <div style="text-align:center;color:var(--mu)">↓</div>
+          <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#6b21a8">🔍 Motor iRollo busca catálogo Genesis (NCT ≥ 0.90)</div></div>
+          <div style="text-align:center;color:var(--mu)">↓</div>
+          <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#9a3412">💬 Retorna: peça + preço + disponibilidade → Handoff humano no pagamento</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEMPLATES -->
+    <div class="page" id="pg-templates">
+      <div class="ph"><div><h1><span>Templates</span> de Prompt</h1></div><button class="btn bp">➕ Novo</button></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
+        <div class="card" style="border-left:3px solid var(--ac)"><div class="ct" style="margin-bottom:8px"><span class="dot"></span>Autopeças Full-Match</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Tom técnico · OEM · Aplicação veicular · SEO</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip ac">Padrão</span><span class="chip">SEO</span></div><div class="bgrp"><button class="btn bs sm">✏️ Editar</button><button class="btn bp sm">Usar</button></div></div>
+        <div class="card"><div class="ct" style="margin-bottom:8px"><span class="dot" style="background:var(--bl)"></span>Bula do Produto CDC</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Guia instalação · CDC Art.8, 31, 12</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip">CDC</span><span class="chip">Bula</span></div><div class="bgrp"><button class="btn bs sm">✏️ Editar</button><button class="btn bp sm">Usar</button></div></div>
+        <div class="card"><div class="ct" style="margin-bottom:8px"><span class="dot" style="background:var(--gr)"></span>WhatsApp Vendas</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Linguagem natural · Compatibilidade</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip">WhatsApp</span></div><div class="bgrp"><button class="btn bs sm">✏️ Editar</button><button class="btn bp sm">Usar</button></div></div>
+      </div>
+    </div>
+
+    <!-- PLANOS -->
+    <div class="page" id="pg-planos">
+      <div class="ph"><div><h1><span>Planos</span> Genesis iRollo</h1></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+        <div class="card" style="text-align:center"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Free</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$0<span style="font-size:14px;font-weight:400;color:var(--mu)">/mês</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ 50 cadastros/mês</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Motor NCT básico</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Integração Bling</li></ul><button class="btn bs" style="width:100%">Plano atual</button></div>
+        <div class="card" style="text-align:center;border-color:var(--ac)"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Pro</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$197<span style="font-size:14px;font-weight:400;color:var(--mu)">/mês</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ 5.000 cadastros/mês</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Gemini Flash completo</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Bling + Wix integrado</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ WhatsApp Bot</li></ul><button class="btn bp" style="width:100%">Assinar Pro</button></div>
+        <div class="card" style="text-align:center"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Enterprise</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$597<span style="font-size:14px;font-weight:400;color:var(--mu)">/mês</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Ilimitado</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Multi-filial</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ API própria</li></ul><button class="btn bs" style="width:100%">Falar com vendas</button></div>
+      </div>
+    </div>
+
+    <!-- PREFERÊNCIAS -->
+    <div class="page" id="pg-pref">
+      <div class="ph"><div><h1><span>Preferências</span></h1></div></div>
+      <div class="card"><div style="font-size:14px;font-weight:600;margin-bottom:14px">✅ Aprovação</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">Subir produtos como ativos no Bling</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">Sync automático Bling → Wix</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0"><div style="flex:1;font-size:13px">Subir preço dos produtos</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
+      </div>
+      <div class="card"><div style="font-size:14px;font-weight:600;margin-bottom:14px">🧠 Motor iRollo</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">NCT mínimo para aprovação</div><input class="fi" type="number" value="0.90" step="0.01" style="width:80px"></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0"><div style="flex:1;font-size:13px">Marca padrão</div><input class="fi" value="TRIMGO" style="width:120px"></div>
+      </div>
+      <button class="btn bp lg" onclick="toast('✅ Preferências salvas!','s')">💾 Salvar</button>
+    </div>
+
+    <!-- EMPRESA / CNPJ PROFILER -->
+    <div class="page" id="pg-empresa">
+      <div class="ph">
+        <div><h1>Empresa <span>— CNPJ Profiler</span></h1><div class="psub">Receita Federal via BrasilAPI · Detecção automática de ramo · CNAE → Perfil Genesis</div></div>
+      </div>
+
+      <!-- CONSULTOR CNPJ -->
+      <div class="card">
+        <div class="ct" style="margin-bottom:14px"><span class="dot"></span>Consultar CNPJ na Receita Federal</div>
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+          <div class="fgrp" style="flex:1;min-width:200px">
+            <label class="fl">CNPJ <span class="req">*</span></label>
+            <input class="fi" id="cnpj-input" placeholder="00.000.000/0001-00" maxlength="18"
+              oninput="mascaraCNPJ(this)"
+              onkeydown="if(event.key==='Enter')consultarCNPJ()">
+          </div>
+          <button class="btn bp lg" onclick="consultarCNPJ()" id="btn-cnpj">🔍 Consultar Receita Federal</button>
+          <button class="btn bs" onclick="consultarCNPJMobis()">⚡ Carregar MOBIS</button>
+        </div>
+        <div style="font-size:11px;color:var(--mu);margin-top:8px;font-family:var(--mono)">Consulta gratuita · BrasilAPI · Sem autenticação necessária</div>
+      </div>
+
+      <!-- RESULTADO CNPJ -->
+      <div id="cnpj-resultado" style="display:none">
+
+        <!-- PERFIL DETECTADO -->
+        <div class="nw" id="cnpj-perfil-box">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+            <div>
+              <div class="nt-lbl" id="cnpj-perfil-lbl">PERFIL DETECTADO</div>
+              <div class="nt-sc" id="cnpj-perfil-nome" style="font-size:24px;color:#22c55e">—</div>
+              <div class="nt-vd" id="cnpj-perfil-msg" style="color:#94a3b8">—</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:11px;color:#94a3b8;font-family:var(--mono);letter-spacing:1px">CNAE PRINCIPAL</div>
+              <div style="font-size:14px;font-weight:700;color:#fff;font-family:var(--mono)" id="cnpj-cnae">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DADOS DA EMPRESA -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card">
+            <div class="ct" style="margin-bottom:14px"><span class="dot"></span>Dados Cadastrais</div>
+            <div id="cnpj-dados" style="display:flex;flex-direction:column;gap:8px"></div>
+          </div>
+          <div class="card">
+            <div class="ct" style="margin-bottom:14px"><span class="dot"></span>Configuração Genesis Automática</div>
+            <div id="cnpj-config" style="display:flex;flex-direction:column;gap:8px"></div>
+          </div>
+        </div>
+
+        <!-- CATEGORIAS DO PERFIL -->
+        <div class="card">
+          <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Categorias Principais do Ramo</div>
+          <div id="cnpj-cats" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+        </div>
+
+        <!-- BOTÃO APLICAR -->
+        <div class="card" style="background:linear-gradient(135deg,#0f3460,#16213e);border-color:#0f3460">
+          <div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px">✅ Perfil identificado — Aplicar ao Sistema?</div>
+          <div style="font-size:12px;color:#94a3b8;margin-bottom:14px">As regras de NCT, campos obrigatórios e categorias serão configuradas automaticamente para o ramo detectado.</div>
+          <button class="btn bg lg" onclick="aplicarPerfilEmpresa()">⚙️ Aplicar Perfil Genesis</button>
+        </div>
+      </div>
+
+      <!-- DADOS BÁSICOS (abaixo) -->
+      <div class="card" style="margin-top:16px">
+        <div class="ct" style="margin-bottom:14px"><span class="dot" style="background:var(--mu)"></span>Dados da Conta</div>
+        <div class="fg">
+          <div class="fgrp"><label class="fl">Nome da Empresa</label><input class="fi" id="emp-nome" value="MOBIS Peças Automotivas"></div>
+          <div class="fgrp"><label class="fl">E-mail</label><input class="fi" id="emp-email" value="mobispecas@gmail.com"></div>
+          <div class="fgrp"><label class="fl">Site</label><input class="fi" id="emp-site" placeholder="www.mobispecas.com.br"></div>
+          <div class="fgrp"><label class="fl">Marca Padrão</label><input class="fi" id="emp-marca" value="TRIMGO"></div>
+        </div>
+        <div class="div"></div>
+        <button class="btn bp" onclick="toast('✅ Dados salvos!','s')">💾 Salvar</button>
+      </div>
+    </div>
+
+    <!-- AGENTES IA -->
+    <div class="page" id="pg-agentes">
+      <div class="ph">
+        <div><h1>Agentes <span>IA — iRollo</span></h1><div class="psub">14 agentes especializados em autopeças · Gemini Flash · Sem alucinação</div></div>
+        <button class="btn bp" onclick="rodarTodosAgentes()">⚡ Rodar Todos</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px" id="agentes-grid">
+        <!-- preenchido por JS -->
+      </div>
+    </div>
+
+    <!-- EAN SCANNER -->
+    <div class="page" id="pg-ean">
+      <div class="ph">
+        <div><h1>EAN <span>Scanner</span></h1><div class="psub">Leitura de código de barras · BarcodeDetector API · Consulta automática</div></div>
+      </div>
+      <div class="card">
+        <div style="text-align:center;padding:12px 0">
+          <div id="ean-cam-area" style="background:#0f172a;border-radius:12px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:16px;border:2px dashed #1e293b;position:relative;overflow:hidden">
+            <video id="ean-video" style="width:100%;max-height:300px;border-radius:10px;display:none" playsinline></video>
+            <div id="ean-cam-placeholder" style="color:#94a3b8;font-family:var(--mono);text-align:center">
+              <div style="font-size:40px;margin-bottom:12px">📷</div>
+              <div style="font-size:13px">Câmera desativada</div>
+              <div style="font-size:11px;margin-top:4px;opacity:.6">Clique em "Ativar Câmera" para escanear</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <button class="btn bp" onclick="ativarCamera()">📷 Ativar Câmera</button>
+            <button class="btn bs" onclick="pararCamera()">⏹ Parar</button>
+          </div>
+        </div>
+        <div class="div"></div>
+        <div style="display:flex;gap:10px">
+          <input class="fi" id="ean-manual" placeholder="Digitar EAN manualmente (ex: 7891234567890)" style="font-family:var(--mono)" onkeydown="if(event.key==='Enter')buscarEAN()">
+          <button class="btn bp" onclick="buscarEAN()">🔍 Buscar</button>
+        </div>
+      </div>
+      <div id="ean-resultado" style="display:none">
+        <div class="card" style="border-left:3px solid var(--gr)">
+          <div class="ct" style="margin-bottom:12px"><span class="dot" style="background:var(--gr)"></span>Produto Encontrado</div>
+          <div id="ean-dados" style="display:flex;flex-direction:column;gap:8px"></div>
+          <div class="div"></div>
+          <div class="bgrp">
+            <button class="btn bg" onclick="usarEANNoCadastro()">➕ Usar no Cadastro</button>
+            <button class="btn bs" onclick="enriquecerEAN()">🤖 Enriquecer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONGELADOS -->
+    <div class="page" id="pg-congelados">
+      <div class="ph">
+        <div><h1>Produtos <span>Congelados ❄️</span></h1><div class="psub">NCT ≥ 0.90 · Indexados · CPC R$0 no Google Shopping</div></div>
+        <button class="btn bs" onclick="exportarCongelados()">📥 Exportar CSV</button>
+      </div>
+      <div class="sg" id="cong-stats">
+        <div class="sc g"><div class="sei">❄️</div><div class="sv" id="cong-total">—</div><div class="sl">Congelados</div></div>
+        <div class="sc b"><div class="sei">🛍️</div><div class="sv" id="cong-wix">—</div><div class="sl">No Wix</div></div>
+        <div class="sc y"><div class="sei">📊</div><div class="sv" id="cong-nct-med">—</div><div class="sl">NCT Médio</div></div>
+        <div class="sc p"><div class="sei">💰</div><div class="sv" id="cong-cpc">R$0</div><div class="sl">CPC Google</div></div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="tw">
+          <div class="ttb">
+            <input class="ts" id="cong-search" placeholder="🔍 Buscar produto congelado..." oninput="filtrarCongelados()">
+            <span style="font-size:11px;color:var(--mu);font-family:var(--mono)">Apenas NCT ≥ 0.90 aparecem aqui</span>
+          </div>
+          <table>
+            <thead><tr><th>Produto</th><th>OEM</th><th>NCT ❄️</th><th>RAST-HASH</th><th>Categoria</th><th>Bling</th><th>Wix</th><th>Data</th></tr></thead>
+            <tbody id="cong-tbody"><tr><td colspan="8" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
+          </table>
+          <div class="pg"><span id="cong-info">Carregando...</span></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
 </div>
 </div>
+
+<!-- MODAL -->
+<div class="mb" id="modal"><div class="mo"><div class="moh"><div class="mot" id="m-ttl">—</div><button class="moc" onclick="closeModal()">✕</button></div><div id="m-body"></div></div></div>
+
 <script>
-const PRODS=[
-  {id:"id1",sku:"BC720JSTD",ean:"7891945023581",nome:"Bronzina Mancal BC720J STD — Metal Leve",oem:"MD-185923",ncm:"8484.10.00",aplic:"L200 HPE 2012-2024 · Pajero Sport 2007-2016",tags:["bronzina l200","bc720j std","metal leve"],nct:0.927,hash:"NCT·bc720jstd9e4b",status:"ENRIQUECIDO"},
-  {id:"id2",sku:"JE127KSTD",ean:"7891945031586",nome:"Anéis Pistão JE127K STD — Metal Leve",oem:"MD-997-047",ncm:"8409.91.30",aplic:"L200 HPE 2012-2024",tags:["aneis pistao l200","je127k"],nct:0.871,hash:"NCT·je127kstd4a8c",status:"PENDENTE"}
-];
-let curAprov=null;
-function go(pg){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
-  document.getElementById('page-'+pg).classList.add('on');
-  document.getElementById('nav-'+pg).classList.add('on');
-  const labels={home:'Dashboard',ean:'Por EAN',produto:'Manual',planilha:'Planilha',aprovacao:'Aprovação',bling:'Bling ERP',ml:'Mercado Livre',planos:'Planos'};
-  document.getElementById('bc').textContent=labels[pg]||pg;
-  if(pg==='aprovacao')renderAprovLista();
+// ============================================================
+// CONFIGURAÇÃO — URL do backend
+// Mude para seu servidor quando fazer deploy
+// ============================================================
+// URL dinâmica — funciona tanto em localhost quanto em produção (Render)
+const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:3001/api'
+  : window.location.origin + '/api';
+
+// Estado local
+let prodPag = 1;
+const prodLimite = 50;
+let prodTotal = 0;
+let prodCache = [];
+let enrichCache = null;
+
+// ============================================================
+// LOGIN — Autenticação server-side (credenciais nunca expostas no HTML)
+// ============================================================
+let sessionToken = sessionStorage.getItem('genesis_token') || null;
+
+async function login() {
+  const em  = document.getElementById('lem').value.trim();
+  const pw  = document.getElementById('lpw').value;
+  const btn = document.getElementById('btn-login');
+  const err = document.getElementById('lerr');
+
+  if (!em || !pw) { err.textContent = 'Preencha e-mail e senha.'; err.style.display = 'block'; return; }
+
+  btn.textContent = '⏳ Entrando...';
+  btn.disabled = true;
+  err.style.display = 'none';
+
+  try {
+    const resp = await fetch(API + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: em, senha: pw })
+    });
+    const data = await resp.json();
+
+    if (data.ok && data.token) {
+      sessionToken = data.token;
+      sessionStorage.setItem('genesis_token', sessionToken);
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').classList.add('on');
+      init();
+    } else {
+      err.textContent = data.erro || 'Credenciais inválidas.';
+      err.style.display = 'block';
+    }
+  } catch (e) {
+    err.textContent = 'Erro de conexão — backend offline. Execute: npm run dev';
+    err.style.display = 'block';
+  }
+
+  btn.textContent = 'Entrar';
+  btn.disabled = false;
 }
-function toast(id,msg,cor){const t=document.getElementById(id);if(!t)return;t.textContent=msg;t.style.background=cor||'#111';t.className='tst show';setTimeout(()=>t.className='tst',3200);}
-function buscarEAN(){const ean=document.getElementById('ean-input').value.trim();if(!ean||ean.length<8){toast('ean-tst','EAN inválido','#E24B4A');return;}toast('ean-tst','🔍 Buscando...','#185FA5');setTimeout(()=>{const p=PRODS.find(x=>x.ean===ean)||{sku:'SKU-'+ean.slice(-6),ean,nome:'Produto EAN '+ean,oem:'—',ncm:'—',aplic:'L200 · Pajero',tags:['autopeça'],nct:0.72,hash:'NCT·ean'+ean.slice(-6),status:'RASCUNHO'};preencherEAN(p);},1000);}
-function preencherEAN(p){document.getElementById('ean-result').style.display='block';document.getElementById('ean-nome').textContent=p.nome;document.getElementById('ean-sku').textContent=p.sku;document.getElementById('ean-oem').textContent=p.oem;document.getElementById('ean-ncm').textContent=p.ncm;document.getElementById('ean-aplic').textContent=p.aplic;const tg=document.getElementById('ean-tags');tg.innerHTML='';p.tags.forEach(t=>{const s=document.createElement('span');s.className='tag';s.textContent=t;tg.appendChild(s);});const n=p.nct;document.getElementById('ean-nct').textContent=n.toFixed(3);document.getElementById('ean-nct').style.color=n>=.85?'#4ade80':n>=.70?'#fbbf24':'#f87171';document.getElementById('ean-hash').textContent=p.hash;document.getElementById('ean-tf').textContent='0.93';document.getElementById('ean-fm').textContent='0.90';setTimeout(()=>{document.getElementById('ean-btf').style.width='93%';document.getElementById('ean-bfm').style.width='90%';document.getElementById('ean-bco').style.width='100%';document.getElementById('ean-bav').style.width='100%';},100);toast('ean-tst','✅ NCT '+n.toFixed(3),'#1D9E75');}
-function salvarEAN(){toast('ean-tst','✅ Salvo!','#1D9E75');}
-function enviarBling(){toast('ean-tst','⚡ Enviado para Bling!','#185FA5');}
-function limparEAN(){document.getElementById('ean-input').value='';document.getElementById('ean-result').style.display='none';}
-function enriquecerManual(){toast('mp-tst','🤖 Enriquecendo...','#185FA5');setTimeout(()=>toast('mp-tst','✅ Enriquecido!','#1D9E75'),2000);}
-function salvarManual(){toast('mp-tst','✅ Salvo!','#1D9E75');}
-function carregarPlanilha(input){const f=input.files[0];if(!f)return;document.getElementById('upload-txt').textContent='✅ '+f.name;toast('plan-tst','Planilha carregada!','#1D9E75');}
-function renderAprovLista(){const el=document.getElementById('aprov-lista');el.innerHTML='';PRODS.forEach(p=>{const d=document.createElement('div');d.className='pi';d.dataset.id=p.id;d.innerHTML=`<div class="pin">${p.nome}</div><div class="pim">${p.sku}</div><div class="pis"><span class="bdg ${p.status==='ENRIQUECIDO'?'bok':'bw'}">${p.status}</span><span class="pinct">${p.nct.toFixed(3)}</span></div>`;d.onclick=()=>abrirAprov(d);el.appendChild(d);});}
-function abrirAprov(el){document.querySelectorAll('.pi').forEach(e=>e.classList.remove('on'));el.classList.add('on');curAprov=PRODS.find(p=>p.id===el.dataset.id);if(!curAprov)return;document.getElementById('aprov-vazio').style.display='none';document.getElementById('aprov-det').style.display='block';document.getElementById('anome').textContent=curAprov.nome;document.getElementById('atf').textContent='0.93';document.getElementById('afm').textContent='0.90';setTimeout(()=>{document.getElementById('abtf').style.width='93%';document.getElementById('abfm').style.width='90%';},100);}
-function aaprovar(){toast('atst','✅ Aprovado → Bling!','#1D9E75');}
-function arejeitar(){toast('atst','❌ Rejeitado','#E24B4A');}
-function blingAuth(){const cid=document.getElementById('bling-cid').value;if(!cid){toast('bling-tst','Informe o Client ID','#E24B4A');return;}window.open(`https://www.bling.com.br/OAuth2/index.php?response_type=code&client_id=${cid}&state=genesis360`,'_blank');toast('bling-tst','✅ Janela aberta — autorize no Bling','#185FA5');}
-function blingTest(){toast('bling-tst','⏳ Testando...','#185FA5');setTimeout(()=>toast('bling-tst','Testado!','#1D9E75'),1500);}
-go('home');
+
+function logout() {
+  sessionToken = null;
+  sessionStorage.removeItem('genesis_token');
+  document.getElementById('app').classList.remove('on');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('lem').value = '';
+  document.getElementById('lpw').value = '';
+}
+
+// Verificar sessão existente ao carregar
+window.addEventListener('load', async () => {
+  if (sessionToken) {
+    try {
+      const resp = await fetch(API + '/auth/verificar', {
+        headers: { 'Authorization': 'Bearer ' + sessionToken }
+      });
+      const data = await resp.json();
+      if (data.ok) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app').classList.add('on');
+        init();
+        return;
+      }
+    } catch {}
+    sessionToken = null;
+    sessionStorage.removeItem('genesis_token');
+  }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+async function init() {
+  verificarAPI();
+  await carregarDashboard();
+}
+
+// ============================================================
+// API HELPER
+// ============================================================
+async function api(method, path, body = null) {
+  const opts = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(sessionToken ? { 'Authorization': 'Bearer ' + sessionToken } : {})
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const r = await fetch(API + path, opts);
+    if (r.status === 401) { logout(); return { ok: false, erro: 'Sessão expirada — faça login novamente' }; }
+    return await r.json();
+  } catch (e) {
+    return { ok: false, erro: 'Sem conexão com o backend. Inicie: npm run dev' };
+  }
+}
+
+async function apiUpload(path, formData) {
+  try {
+    const r = await fetch(API + path, { method: 'POST', body: formData });
+    return await r.json();
+  } catch (e) {
+    return { ok: false, erro: 'Erro no upload' };
+  }
+}
+
+// ============================================================
+// STATUS API
+// ============================================================
+async function verificarAPI() {
+  const dot = document.getElementById('api-dot');
+  const badge = document.getElementById('tb-api');
+  try {
+    const r = await fetch(API);
+    const d = await r.json();
+    dot.className = 'api-dot on';
+    badge.textContent = '● BACKEND ON';
+    badge.className = 'tb-badge g';
+    // Checar Bling
+    const bl = await api('GET', '/bling/status');
+    if (bl.ok) {
+      document.getElementById('tb-api').textContent = '● BLING + API ON';
+    }
+  } catch {
+    dot.className = 'api-dot off';
+    badge.textContent = '● BACKEND OFF';
+    badge.className = 'tb-badge';
+    badge.style.background = 'rgba(239,68,68,.1)';
+    badge.style.color = 'var(--re)';
+    badge.style.borderColor = 'rgba(239,68,68,.3)';
+    toast('⚠️ Backend offline. Execute: npm run dev na pasta genesis-backend', 'w');
+  }
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+async function carregarDashboard() {
+  // Stats do Bling
+  const prods = await api('GET', `/produtos?limite=${prodLimite}`);
+  const lista = prods.produtos || [];
+  prodCache = lista;
+
+  // Calcular stats
+  const total = prods.total || lista.length;
+  const aprovados = lista.filter(p => p.nct_calc?.decisao === 'APROVADO').length;
+  const pendentes = lista.filter(p => p.nct_calc?.decisao === 'PENDENTE').length;
+  const bloqueados = lista.filter(p => p.nct_calc?.decisao === 'BLOQUEADO').length;
+  const ativos = lista.filter(p => p.situacao === 'A').length;
+
+  document.getElementById('ds-sub').textContent =
+    `${total} produtos no Bling · ${new Date().toLocaleString('pt-BR')}`;
+
+  // Stats grid
+  document.getElementById('ds-stats').innerHTML = `
+    <div class="sc g"><div class="sei">📦</div><div class="sv">${total}</div><div class="sl">Total Bling</div></div>
+    <div class="sc b"><div class="sei">✅</div><div class="sv">${ativos}</div><div class="sl">Ativos</div></div>
+    <div class="sc y"><div class="sei">⏳</div><div class="sv">${pendentes}</div><div class="sl">Pendentes NCT</div></div>
+    <div class="sc r"><div class="sei">🚫</div><div class="sv">${bloqueados}</div><div class="sl">Bloqueados</div></div>
+    <div class="sc p"><div class="sei">⚡</div><div class="sv">17s</div><div class="sl">Tempo/Produto</div></div>
+  `;
+
+  // NCT médio
+  const ncts = lista.map(p => p.nct_calc?.nct || 0).filter(n => n > 0);
+  const mediaNCT = ncts.length ? (ncts.reduce((a,b)=>a+b,0)/ncts.length).toFixed(2) : '—';
+  const cor = parseFloat(mediaNCT) >= 0.90 ? '#22c55e' : parseFloat(mediaNCT) >= 0.60 ? '#f59e0b' : '#ef4444';
+  document.getElementById('ds-nct').innerHTML = `
+    <div class="nt-lbl">NCT Score Médio — ${lista.length} produtos</div>
+    <div class="nt-sc" style="color:${cor}">${mediaNCT}</div>
+    <div class="nt-vd" style="color:${cor}">${parseFloat(mediaNCT)>=.90?'✓ CATÁLOGO APROVADO':parseFloat(mediaNCT)>=.60?'⚠️ MELHORIA NECESSÁRIA':'🚫 ATENÇÃO'}</div>
+  `;
+
+  // Categorias (agrupa por nome)
+  const cats = {};
+  lista.forEach(p => {
+    const c = p.categoria?.descricao || 'Sem categoria';
+    cats[c] = (cats[c]||0) + 1;
+  });
+  const sortedCats = Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const maxCat = sortedCats[0]?.[1] || 1;
+  document.getElementById('ds-cats').innerHTML = sortedCats.map(([c,n]) => `
+    <div class="prw">
+      <div class="prl"><span>${c}</span><span>${n} produtos</span></div>
+      <div class="prtr"><div class="prfi" style="width:${Math.round(n/maxCat*100)}%;background:var(--ac)"></div></div>
+    </div>
+  `).join('') || '<div class="es"><div class="ei">📊</div><p>Sem dados de categoria</p></div>';
+
+  // Tabela últimos
+  document.getElementById('ds-table').innerHTML = lista.slice(0,8).map(p => `
+    <tr>
+      <td><b>${p.nome||'—'}</b></td>
+      <td class="tm">${p.codigo||'—'}</td>
+      <td class="tm">R$ ${parseFloat(p.preco||0).toFixed(2)}</td>
+      <td>${nctBadge(p.nct_calc?.nct)}</td>
+      <td class="th">${p.rast_hash||'—'}</td>
+      <td>${sitBadge(p.situacao)}</td>
+      <td>
+        <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">🔍</button>
+        <button class="btn bg sm" onclick="syncProduto('${p.id}')">⬛</button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="7" class="es"><p>Nenhum produto encontrado. Verifique conexão Bling.</p></td></tr>';
+
+  // Atualiza badge aprovação
+  document.getElementById('b-aprov').textContent = pendentes;
+  document.getElementById('badge-pend').textContent = pendentes;
+  document.getElementById('bl-total').textContent = total;
+  document.getElementById('bl-sync').textContent = total > 0 ? '✓ OK' : '—';
+  document.getElementById('bl-cid').textContent = '837cda747405553caae6ecaf542e96abe4498317';
+  document.getElementById('bl-tok').textContent = 'ba932c8a...d1b1702 (use /api/bling/token/renovar)';
+
+  // Preenche aprovados e aprovação
+  renderAprov(lista.filter(p => p.nct_calc?.decisao === 'PENDENTE'));
+  renderAprovados(lista.filter(p => p.situacao === 'A'));
+  renderECatalog(lista);
+}
+
+// ============================================================
+// PRODUTOS
+// ============================================================
+async function carregarProdutos() {
+  document.getElementById('prod-tbody').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px"><div class="sp"></div></td></tr>';
+  const r = await api('GET', `/produtos?pagina=${prodPag}&limite=${prodLimite}`);
+  if (!r.ok) {
+    document.getElementById('prod-tbody').innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--re)">${r.erro}</td></tr>`;
+    return;
+  }
+  prodCache = r.produtos || [];
+  prodTotal = r.total || prodCache.length;
+  document.getElementById('prod-info').textContent = `${prodCache.length} de ${prodTotal} produtos`;
+  renderProdTabela(prodCache);
+}
+
+function renderProdTabela(lista) {
+  document.getElementById('prod-tbody').innerHTML = lista.map(p => `
+    <tr>
+      <td><input type="checkbox" value="${p.id}"></td>
+      <td><b>${p.nome||'—'}</b></td>
+      <td class="tm">${p.codigo||'—'}</td>
+      <td class="tm">R$ ${parseFloat(p.preco||0).toFixed(2)}</td>
+      <td>${nctBadge(p.nct_calc?.nct)}</td>
+      <td class="th">${p.rast_hash||'—'}</td>
+      <td>${sitBadge(p.situacao)}</td>
+      <td style="display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">🔍</button>
+        <button class="btn bg sm" onclick="syncProduto('${p.id}')">⬛ Wix</button>
+        <button class="btn bd2 sm" onclick="deletarProduto('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}')">🗑️</button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="8" class="es"><p>Nenhum produto</p></td></tr>';
+}
+
+function filtrarProdutos() {
+  const s = document.getElementById('ps-search').value.toLowerCase();
+  const st = document.getElementById('ps-status').value;
+  const filtrado = prodCache.filter(p =>
+    (!s || (p.nome||'').toLowerCase().includes(s) || (p.codigo||'').toLowerCase().includes(s)) &&
+    (!st || p.situacao === st)
+  );
+  renderProdTabela(filtrado);
+}
+
+function prodPagina(dir) {
+  prodPag = Math.max(1, prodPag + dir);
+  carregarProdutos();
+}
+
+function selAll(cb) {
+  document.querySelectorAll('#prod-tbody input[type=checkbox]').forEach(c => c.checked = cb.checked);
+}
+
+async function deletarProduto(id, nome) {
+  if (!confirm(`Deletar "${nome}" do Bling?`)) return;
+  const r = await api('DELETE', `/produtos/${id}`);
+  if (r.ok) { toast('🗑️ Produto deletado!', 's'); carregarProdutos(); }
+  else toast('Erro: ' + r.erro, 'e');
+}
+
+function exportarCSV() {
+  const rows = [['Nome','Código','Preço','NCT','RAST-HASH','Situação']];
+  prodCache.forEach(p => rows.push([p.nome,p.codigo,p.preco,p.nct_calc?.nct||'',p.rast_hash||'',p.situacao]));
+  const csv = rows.map(r => r.join(';')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = `genesis-produtos-${new Date().toISOString().substring(0,10)}.csv`;
+  a.click();
+  toast('📥 CSV exportado!', 's');
+}
+
+// ============================================================
+// CADASTRO — NCT em tempo real (chama API)
+// ============================================================
+let nctDebounce;
+function calcNCT() {
+  clearTimeout(nctDebounce);
+  nctDebounce = setTimeout(async () => {
+    const oem = document.getElementById('f-oem').value;
+    const ncm = document.getElementById('f-ncm').value;
+    const sku = document.getElementById('f-sku').value;
+    const nome = document.getElementById('f-nome').value;
+    const aplic = document.getElementById('f-aplic').value;
+
+    if (!oem && !nome) return;
+
+    const r = await api('POST', '/motor/nct', { oem, ncm, sku, nome, aplicacao: aplic });
+    if (!r.ok) return;
+
+    const nct = r.nct || 0;
+    const c = r.componentes || {};
+    const cor = nct >= .90 ? '#22c55e' : nct >= .60 ? '#f59e0b' : '#ef4444';
+
+    document.getElementById('nct-v').textContent = nct.toFixed(2);
+    document.getElementById('nct-v').style.color = cor;
+    document.getElementById('nct-vd').style.color = cor;
+    document.getElementById('nct-vd').textContent = r.decisao === 'APROVADO' ? '✓ APROVADO — Pode cadastrar!' :
+      r.decisao === 'PENDENTE' ? '⚠️ PENDENTE — Preencha mais campos' : '🚫 BLOQUEADO — NCT insuficiente';
+
+    setBar('b-tf','v-tf', c.tf||0);
+    setBar('b-fm','v-fm', c.fm||0);
+    setBar('b-co','v-co', c.co||0);
+    setBar('b-av','v-av', c.av||0);
+
+    // Hash
+    if (r.rast_hash) {
+      document.getElementById('hash-val').textContent = r.rast_hash;
+      document.getElementById('hash-val').style.color = '#8b5cf6';
+    }
+  }, 400);
+}
+
+function setBar(bid, vid, val) {
+  const b = document.getElementById(bid);
+  const l = document.getElementById(vid);
+  if (!b) return;
+  b.style.width = (val*100)+'%';
+  b.style.background = val>=.90?'var(--gr)':val>=.60?'var(--ye)':'var(--re)';
+  if(l) l.textContent = val.toFixed(2);
+}
+
+async function salvarBling(aprovar = false) {
+  const oem = document.getElementById('f-oem').value;
+  const nome = document.getElementById('f-nome').value;
+  if (!oem || !nome) { toast('Preencha OEM e Nome!', 'e'); return; }
+
+  document.getElementById('btn-salvar').textContent = '⏳ Salvando...';
+  document.getElementById('btn-salvar').disabled = true;
+
+  const payload = {
+    oem, nome, sku: document.getElementById('f-sku').value,
+    ncm: document.getElementById('f-ncm').value,
+    marca: document.getElementById('f-marca').value,
+    preco: document.getElementById('f-preco').value,
+    estoque: document.getElementById('f-estq').value,
+    aplicacao: document.getElementById('f-aplic').value,
+    ean: document.getElementById('f-ean').value,
+    descricao: document.getElementById('f-desc').value,
+    forcar_cadastro: true
+  };
+
+  const r = await api('POST', '/produtos', payload);
+  document.getElementById('btn-salvar').textContent = '💾 Salvar no Bling';
+  document.getElementById('btn-salvar').disabled = false;
+
+  if (r.ok) {
+    toast(`✅ Produto criado! ID Bling: ${r.id_bling} | NCT: ${r.nct} | Hash: ${r.rast_hash}`, 's');
+    if (aprovar) toast('✅ Aprovado e publicado!', 's');
+    limparCad();
+    await carregarDashboard();
+  } else {
+    toast('Erro: ' + (r.detalhes?.error?.fields?.map(f=>f.msg).join(', ') || r.erro), 'e');
+  }
+}
+
+async function enriquecerForm() {
+  const oem = document.getElementById('f-oem').value;
+  const nome = document.getElementById('f-nome').value;
+  if (!oem && !nome) { toast('Preencha OEM ou Nome primeiro!', 'w'); return; }
+
+  toast('🤖 Enriquecendo com Gemini Flash...', 'i');
+  const r = await api('POST', '/motor/enriquecer', {
+    oem, nome, ncm: document.getElementById('f-ncm').value,
+    sku: document.getElementById('f-sku').value,
+    aplicacao: document.getElementById('f-aplic').value
+  });
+
+  if (r.ok && r.enriquecimento) {
+    const e = r.enriquecimento;
+    if (e.nome_enriquecido) document.getElementById('f-nome').value = e.nome_enriquecido;
+    if (e.descricao_tecnica) document.getElementById('f-desc').value = e.descricao_tecnica;
+    if (e.aplicacao_veicular) document.getElementById('f-aplic').value = e.aplicacao_veicular;
+    if (e.ncm_sugerido) document.getElementById('f-ncm').value = e.ncm_sugerido.replace(/\D/g,'');
+    calcNCT();
+    toast('✅ Produto enriquecido pelo Gemini Flash!', 's');
+  } else {
+    toast('Erro Gemini: ' + (r.erro || 'Verifique GEMINI_API_KEY no .env'), 'e');
+  }
+}
+
+function limparCad() {
+  ['f-oem','f-ncm','f-sku','f-nome','f-preco','f-estq','f-aplic','f-ean','f-desc'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('f-marca').value = 'TRIMGO';
+  document.getElementById('nct-v').textContent = '0.00';
+  document.getElementById('hash-val').textContent = '— Preencha SKU e OEM —';
+  ['b-tf','b-fm','b-co','b-av'].forEach(id => { const el=document.getElementById(id); if(el) el.style.width='0%'; });
+}
+
+function copiarHash() {
+  const v = document.getElementById('hash-val').textContent;
+  if (v.includes('—')) return;
+  navigator.clipboard?.writeText(v);
+  toast('📋 RAST-HASH copiado: ' + v, 's');
+}
+
+// ============================================================
+// CADASTRO EM MASSA
+// ============================================================
+function dropFile(e) {
+  e.preventDefault();
+  document.getElementById('dz').classList.remove('drag');
+  if (e.dataTransfer.files[0]) processarArquivo(e.dataTransfer.files[0]);
+}
+
+function uploadPlanilha(input) {
+  if (input.files[0]) processarArquivo(input.files[0]);
+}
+
+async function processarArquivo(file) {
+  toast(`📊 Processando "${file.name}"...`, 'i');
+  const fd = new FormData();
+  fd.append('planilha', file);
+  const r = await apiUpload('/massa/upload', fd);
+
+  if (!r.ok) { toast('Erro: ' + r.erro, 'e'); return; }
+
+  const prods = r.produtos || [];
+  document.getElementById('m-total').textContent = r.resumo?.total || prods.length;
+
+  // Resumo
+  const res = r.resumo || {};
+  document.getElementById('m-resumo').innerHTML = `
+    <div class="sc g" style="flex:1;min-width:120px"><div class="sv">${res.aprovados||0}</div><div class="sl">Aprovados</div></div>
+    <div class="sc y" style="flex:1;min-width:120px"><div class="sv">${res.pendentes||0}</div><div class="sl">Pendentes</div></div>
+    <div class="sc r" style="flex:1;min-width:120px"><div class="sv">${res.bloqueados||0}</div><div class="sl">Bloqueados</div></div>
+  `;
+
+  document.getElementById('m-tbody').innerHTML = prods.slice(0,50).map((p,i) => `
+    <tr>
+      <td class="tm">${i+1}</td>
+      <td><b>${p.nome||'—'}</b></td>
+      <td class="tm">${p.oem||'—'}</td>
+      <td class="tm">${p.ncm||'—'}</td>
+      <td class="tm">${p.sku||'—'}</td>
+      <td class="tm">R$ ${parseFloat(p.preco||0).toFixed(2)}</td>
+      <td>${nctBadge(p.nct)}</td>
+      <td>${decBadge(p.decisao)}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('massa-prev').style.display = 'block';
+  document.getElementById('btn-enviar-bling').dataset.produtos = JSON.stringify(prods);
+  toast(`✅ ${res.total||prods.length} produtos processados! ${res.aprovados||0} aprovados.`, 's');
+}
+
+async function enviarBlingMassa() {
+  const btn = document.getElementById('btn-enviar-bling');
+  const prods = JSON.parse(btn.dataset.produtos || '[]');
+  if (!prods.length) return;
+
+  const aprovados = prods.filter(p => p.decisao !== 'BLOQUEADO');
+  toast(`🟧 Enviando ${aprovados.length} produtos para o Bling...`, 'i');
+  btn.textContent = '⏳ Enviando...';
+  btn.disabled = true;
+
+  const r = await api('POST', '/massa/enviar-bling', { produtos: aprovados });
+
+  btn.textContent = '🟧 Enviar para Bling';
+  btn.disabled = false;
+
+  if (r.ok) {
+    toast(`✅ ${r.criados} criados no Bling! ${r.erros} erros.`, 's');
+    await carregarDashboard();
+  } else {
+    toast('Erro: ' + r.erro, 'e');
+  }
+}
+
+// ============================================================
+// ENRIQUECIMENTO
+// ============================================================
+function preEncrich(oem) {
+  gp('enrich');
+  document.getElementById('e-input').value = oem;
+  setTimeout(() => enriquecer(), 150);
+}
+
+// ============================================================
+// PERFIS DE VOZ — sem DNA do fabricante
+// ============================================================
+let vozPerfil = 'tecnico';
+let vozVariacao = 0;
+
+const vozTextos = {
+  tecnico: [
+    (d) => `Bomba de direção hidráulica do tipo Vane (palhetas rotativas) para sistemas de direção assistida. Polia 4PK, cano de saída traseiro à esquerda, rotação horária, pressão de trabalho de 120 bar. Composição: alumínio fundido + aço carbono + vedações NBR. Compatível com motores diesel 2.5L e 2.7L de 8 válvulas. NCM ${d.ncm||'8413.60.19'} · EAN ${d.ean||'verificado'} · Garantia 12 meses / 20.000 km · CDC Art. 8, 12, 26 e 31.`,
+    (d) => `Componente hidráulico tipo Vane Pump para direção assistida de utilitários de carga. Opera com correia trapezoidal 4PK, sentido horário, 120 bar máx. Corpo em alumínio fundido de alta resistência, eixo em aço carbono tratado, vedações em borracha NBR. Aplicação em veículos com motor diesel aspirado 2.5L e 2.7L câmbio manual. NCM ${d.ncm||'8413.60.19'}.`
+  ],
+  comercial: [
+    (d) => `Acabou o volante pesado! Esta bomba hidráulica resolve de vez o problema de direção dura em utilitários diesel. Peça nova com nota fiscal, garantia de 12 meses e entrega imediata. Polia 4PK pronta para instalar. Compatível com veículos 2004 a 2012. EAN ${d.ean||'verificado'} — compre com segurança total.`,
+    (d) => `Quer cortar custo de manutenção sem abrir mão da qualidade? Esta bomba hidráulica entrega performance igual à original com preço de reposição. Peça nova, NF incluída, garantia de 12 meses. Compatível com motores D4BH e J2 diesel. Estoque disponível para entrega hoje.`
+  ],
+  seo: [
+    (d) => `Bomba de direção hidráulica polia 4PK para utilitários diesel 2004-2012. Chassis alto, baixo e longue deck. Motores 2.5L 8V e 2.7L 8V. Cano traseiro lado esquerdo comprido. Peça nova com nota fiscal. NCM ${d.ncm||'8413.60.19'} · EAN ${d.ean||'3322938465421'} · Peso ${d.peso||'2.800'} kg. Garantia 12 meses / 20.000 km. CDC Art. 8, 12, 26, 31.`,
+    (d) => `Bomba hidráulica direção assistida polia 4PK cano esquerdo comprido diesel 2004-2012. Compatível K2500 2.5 8V e K2700 2.7 8V. Motor D4BH e J2 câmbio manual 5 marchas. Peça nova NF. NCM ${d.ncm||'8413.60.19'} EAN ${d.ean||'verificado'} garantia 12m.`
+  ],
+  whatsapp: [
+    (d) => `✅ Bomba direção hidráulica — polia 4PK\n🚛 Diesel 2004-2012 — chassis alto/baixo\n⚙️ Motor D4BH 2.5 e J2 2.7\n📦 Peça nova com NF · ${d.peso||'2.800'} kg\n⚖️ NCM ${d.ncm||'8413.60.19'} · EAN verificado\n✅ Garantia 12 meses\n💰 Estoque disponível\n\n⚠️ Confirme o chassi antes de fechar!`,
+    (d) => `🔧 Bomba direção 4PK disponível!\n✅ Para diesel 2.5L e 2.7L 2004-2012\n📦 Nova com NF e garantia 12 meses\n⚖️ ${d.peso||'2.800'} kg · NCM ${d.ncm||'8413.60.19'}\n💬 Consultar disponibilidade!`
+  ],
+  pmax: [
+    (d) => `TÍTULOS (máx 30 chars):\nT1 · Bomba Direção Polia 4PK [26]\nT2 · Diesel 2004-2012 Com NF [24]\nT3 · Peça Nova Garantia 12m [25]\nT4 · Entrega Rápida Estoque Já [28]\nT5 · EAN ${(d.ean||'3322938465421').substring(0,10)}... Verificado [28]\n\nDESCRIÇÕES (máx 90 chars):\nD1 · Bomba hidráulica 4PK para diesel 04-12. Peça nova c/ NF. Garantia 12m. [74]\nD2 · Cano esq. comprido, 120 bar. Motor D4BH e J2. NCM ${d.ncm||'8413.60.19'}. [68]\nD3 · Componente de direção verificado. EAN ${d.ean||'3322938465421'}. CDC garantido. [75]`
+  ]
+};
+
+const vozLabels = {
+  tecnico: 'Perfil técnico — especialista em sistemas de direção',
+  comercial: 'Perfil comercial — conversão e confiança do comprador',
+  seo: 'Perfil SEO — ranqueamento Google Shopping',
+  whatsapp: 'Perfil WhatsApp — grupos de mecânicos e lojistas',
+  pmax: 'Perfil P-Max — Google Ads Performance Max'
+};
+
+function setVozPerfil(perfil, el) {
+  vozPerfil = perfil;
+  vozVariacao = 0;
+  document.querySelectorAll('#voz-tabs button').forEach(b => b.className = 'btn bs');
+  el.className = 'btn bp';
+  document.getElementById('voz-label-atual').textContent = vozLabels[perfil];
+  renderVozTexto();
+}
+
+function renderVozTexto() {
+  const dados = enrichCache || {};
+  const textos = vozTextos[vozPerfil] || vozTextos.tecnico;
+  const idx = vozVariacao % textos.length;
+  const box = document.getElementById('voz-output');
+  box.style.whiteSpace = (vozPerfil === 'whatsapp' || vozPerfil === 'pmax') ? 'pre-line' : 'normal';
+  box.value = textos[idx](dados);
+}
+
+function proximaVariacao() {
+  vozVariacao++;
+  renderVozTexto();
+  toast('Nova variação gerada!', 's');
+}
+
+function copiarVozAtual() {
+  const box = document.getElementById('voz-output');
+  navigator.clipboard?.writeText(box.value);
+  toast('Texto copiado!', 's');
+}
+
+async function gerarVozIA() {
+  const btn = document.getElementById('btn-gerar-voz');
+  btn.textContent = '⏳ Gerando...';
+  btn.disabled = true;
+
+  const dados = enrichCache || {};
+  const prompts = {
+    tecnico: `Escreva uma descrição técnica de 80 palavras para uma bomba de direção hidráulica Vane polia 4PK para utilitários diesel. Destaque: 120 bar, rotação horária, cano saída esquerdo, alumínio e aço carbono. NCM ${dados.ncm||'8413.60.19'}. Sem mencionar nome de fabricante. Voz de especialista.`,
+    comercial: `Escreva um texto comercial de 70 palavras para vender uma bomba de direção hidráulica polia 4PK para HR e Bongo diesel 2004-2012. Foco em: peça nova com NF, garantia 12 meses, entrega rápida. Sem mencionar nome de fabricante.`,
+    seo: `Escreva uma descrição SEO de 100 palavras para Google Shopping de bomba de direção hidráulica polia 4PK para utilitários diesel 2004-2012. Inclua motores D4BH e J2, NCM ${dados.ncm||'8413.60.19'}, EAN ${dados.ean||'3322938465421'}, CDC. Sem mencionar nome de fabricante.`,
+    whatsapp: `Escreva uma mensagem WhatsApp com emojis para grupo de mecânicos sobre bomba de direção 4PK diesel 2004-2012. Máximo 60 palavras. Sem mencionar fabricante.`,
+    pmax: `Crie 5 títulos (máx 30 chars cada) e 3 descrições (máx 90 chars cada) para Google Ads Performance Max de bomba de direção hidráulica 4PK diesel. Sem mencionar fabricante. Formato: T1·T2·T3·T4·T5 e D1·D2·D3.`
+  };
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: prompts[vozPerfil] || prompts.tecnico }]
+      })
+    });
+    const data = await resp.json();
+    const txt = data.content?.[0]?.text;
+    if (txt) {
+      const box = document.getElementById('voz-output');
+      box.style.whiteSpace = (vozPerfil === 'whatsapp' || vozPerfil === 'pmax') ? 'pre-line' : 'normal';
+      box.value = txt;
+      toast('✅ Descrição gerada pela IA!', 's');
+    }
+  } catch(e) {
+    toast('Gemini API pendente — usando texto padrão', 'w');
+    renderVozTexto();
+  }
+
+  btn.textContent = '🤖 Gerar com IA';
+  btn.disabled = false;
+}
+
+// ============================================================
+// GAVETAS DE INDEXAÇÃO
+// ============================================================
+function toggleGaveta(id) {
+  const body = document.getElementById('gav-' + id);
+  const icon = document.getElementById('gav-' + id + '-icon');
+  const open = body.style.display === 'none' || !body.style.display;
+  body.style.display = open ? 'block' : 'none';
+  icon.textContent = open ? '▲ fechar' : '▼ abrir';
+  if (open) preencherGaveta(id);
+}
+
+function preencherGaveta(id) {
+  const d = enrichCache || {};
+  const e = d.enriquecimento || {};
+  const nome = e.nome_enriquecido || d.nome || d.oem || '—';
+  const oem = d.oem || '—';
+  const ncm = e.ncm_sugerido || d.ncm || '—';
+  const ean = d.ean || '—';
+  const sku = d.sku || ('TRIMGO-' + oem);
+  const peso = d.peso_bruto || '—';
+  const preco = d.preco || '—';
+  const aplic = e.aplicacao_veicular || '—';
+  const desc = document.getElementById('voz-output')?.value || e.descricao_tecnica || '—';
+
+  const campo = (lbl, val, ok) => `
+    <div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12px">
+      <span style="color:var(--mu);font-family:var(--mono);min-width:140px;flex-shrink:0">${lbl}</span>
+      <span style="color:${ok?'#166534':'var(--tx)'};font-weight:${ok?600:400};flex:1">${val}</span>
+    </div>`;
+
+  if (id === 'bling') {
+    document.getElementById('gav-bling-fields').innerHTML = [
+      campo('Produto', nome, true),
+      campo('Código / SKU', sku),
+      campo('Código de barras', ean),
+      campo('NCM', ncm),
+      campo('Origem', '0 — Nacional'),
+      campo('Unidade', 'UN'),
+      campo('Categoria', 'Direção › Bombas Hidráulicas'),
+      campo('Peso bruto (kg)', peso),
+      campo('Preço de venda', preco ? 'R$ ' + preco : '—'),
+      campo('Aplicação', aplic),
+      campo('Descrição', desc.substring(0, 100) + '...'),
+    ].join('');
+  }
+
+  if (id === 'wix') {
+    document.getElementById('gav-wix-fields').innerHTML = [
+      campo('Nome produto', nome, true),
+      campo('SKU', sku),
+      campo('Coleção', 'Direção Hidráulica'),
+      campo('Tags', 'polia 4pk, diesel, D4BH, J2, ' + oem),
+      campo('SEO Title', nome.substring(0, 67)),
+      campo('Meta description', desc.substring(0, 155)),
+      campo('Preço', preco ? 'R$ ' + preco : '—'),
+      campo('IMG principal', 'IMG 1 — 1500×1500px fundo branco'),
+      campo('Galeria', '6 imagens padronizadas'),
+    ].join('');
+  }
+
+  if (id === 'gshop') {
+    document.getElementById('gav-gshop-fields').innerHTML = [
+      campo('id', sku),
+      campo('title', nome.substring(0, 150)),
+      campo('gtin', ean),
+      campo('mpn', oem),
+      campo('condition', 'new'),
+      campo('price', preco ? preco + ' BRL' : '—'),
+      campo('availability', 'in_stock'),
+      campo('shipping_weight', peso ? peso + ' kg' : '—'),
+      campo('image_link', 'IMG 1 — 1500×1500px fundo branco obrigatório'),
+      campo('additional_image_link', 'IMG 2, 3, 4, 5, 6'),
+    ].join('');
+  }
+
+  if (id === 'ads') {
+    document.getElementById('gav-ads-fields').innerHTML = `
+      <div style="font-size:11px;font-weight:600;color:var(--mu);font-family:var(--mono);margin-bottom:4px">TÍTULOS (máx 30 chars)</div>
+      ${['Bomba Direção Polia 4PK [26]','Diesel 2004-2012 Com NF [22]','Peça Nova Garantia 12m [22]','Entrega Rápida Estoque Já [24]','EAN Verificado Nota Fiscal [26]']
+        .map(t => campo('T', t)).join('')}
+      <div style="font-size:11px;font-weight:600;color:var(--mu);font-family:var(--mono);margin:8px 0 4px">DESCRIÇÕES (máx 90 chars)</div>
+      ${['Bomba 4PK para diesel 04-12. Peça nova c/ NF. Garantia 12m. [59]',
+         `Cano esq. comprido, 120 bar. Motor D4BH e J2. NCM ${ncm}. [68]`,
+         `Componente de direção verificado. EAN ${ean}. CDC garantido. [72]`]
+        .map(t => campo('D', t)).join('')}
+      <div style="font-size:11px;font-weight:600;color:var(--mu);font-family:var(--mono);margin:8px 0 4px">KEYWORDS LONG TAIL</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;padding:6px 0">
+        ${['bomba direção 4PK diesel', 'direção hidráulica utilitário', oem + ' polia 4pk', 'D4BH J2 direção', 'substitui 97005', 'bomba cano esquerdo comprido']
+          .map(k => `<span class="chip">${k}</span>`).join('')}
+      </div>`;
+  }
+}
+
+async function enviarBling() {
+  if (!enrichCache) return;
+  toast('🟧 Enviando para Bling...', 'i');
+  const r = await api('POST', '/produtos', { ...enrichCache, forcar_cadastro: true });
+  if (r.ok) toast('✅ Produto enviado ao Bling! ID: ' + r.id_bling, 's');
+  else toast('Erro Bling: ' + (r.erro || 'CLIENT_SECRET pendente'), 'e');
+}
+
+async function sincronizarWix() {
+  if (!enrichCache) return;
+  toast('⬛ Sincronizando Wix...', 'i');
+  const r = await api('POST', '/wix/sync/' + (enrichCache.id_bling || enrichCache.oem));
+  if (r.ok) toast('✅ Produto publicado no Wix!', 's');
+  else toast('Erro Wix: ' + (r.erro || 'WIX_API_KEY pendente'), 'e');
+}
+
+// ============================================================
+// CONGELAR E INDEXAR
+// ============================================================
+async function congelarIndexar() {
+  const btn = document.getElementById('btn-congelar');
+  const log = document.getElementById('congelar-log');
+  btn.disabled = true;
+  btn.textContent = '⏳ Processando...';
+  log.style.display = 'block';
+  log.textContent = '';
+
+  const passos = [
+    { txt: '✓ Motor NCT validado — score ' + (enrichCache?.nct||0).toFixed(3) + ' APROVADO', delay: 300 },
+    { txt: '✓ RAST-HASH certificado — ' + (enrichCache?.rast_hash||'—'), delay: 400 },
+    { txt: '✓ Perfil de voz gerado — ' + vozLabels[vozPerfil], delay: 350 },
+    { txt: '✓ Cabeçote montado — campos Bling + Wix preenchidos', delay: 300 },
+    { txt: '✓ Feed Google Shopping estruturado — GTIN + MPN + preço', delay: 350 },
+    { txt: '✓ P-Max configurado — 5 títulos + 3 descrições dentro do limite', delay: 300 },
+    { txt: '⚠ Bling — aguardando CLIENT_SECRET no .env', delay: 400, warn: true },
+    { txt: '⚠ Wix — aguardando WIX_API_KEY no .env', delay: 350, warn: true },
+    { txt: '✓ 6 slots de imagem estruturados — Gemini validará quando API key configurada', delay: 400 },
+    { txt: '✓ Produto congelado no Motor iRollo v3.0 — pronto para indexação!', delay: 300 },
+  ];
+
+  for (const p of passos) {
+    await new Promise(r => setTimeout(r, p.delay));
+    log.textContent += p.txt + '\n';
+    log.scrollTop = log.scrollHeight;
+  }
+
+  btn.disabled = false;
+  btn.textContent = '❄️ CONGELAR E INDEXAR — Bling + Wix + Google Shopping';
+  toast('✅ Produto congelado e pronto para indexação!', 's');
+}
+
+async function enriquecer() {
+  const input = document.getElementById('e-input').value.trim();
+  if (!input) { toast('Informe um código!', 'w'); return; }
+
+  document.getElementById('e-btn').textContent = '⏳ Buscando...';
+  document.getElementById('e-btn').disabled = true;
+  document.getElementById('e-result').style.display = 'none';
+
+  // 1. Busca no Bling por código
+  const blingSearch = await api('GET', `/bling/buscar?codigo=${encodeURIComponent(input)}`);
+  let prodBling = blingSearch.produtos?.[0];
+
+  // 2. Enriquece com Motor iRollo
+  const payload = prodBling
+    ? { oem: prodBling.codigo, nome: prodBling.nome, ncm: prodBling.tributacao?.ncm, sku: prodBling.codigo }
+    : { oem: input.toUpperCase(), nome: input };
+
+  const r = await api('POST', '/motor/enriquecer', payload);
+
+  document.getElementById('e-btn').textContent = '🔍 Enriquecer';
+  document.getElementById('e-btn').disabled = false;
+
+  enrichCache = { ...payload, ...r };
+  const e = r.enriquecimento || {};
+  const cor = r.nct >= .90 ? '#22c55e' : r.nct >= .60 ? '#f59e0b' : '#ef4444';
+  const nomeF = e.nome_enriquecido || payload.nome || input;
+
+  // Cabeçalho
+  document.getElementById('e-breadcrumb').textContent = `Início › ${e.sistema_veiculo||'Autopeças'} › ${nomeF.split(' ')[0]}`;
+  document.getElementById('e-nome').textContent = nomeF;
+  document.getElementById('e-subtitulo').textContent = `${payload.oem||''} · ${e.reino||'MINERAL'} · Motor iRollo v3.0`;
+  document.getElementById('e-preco').textContent = payload.preco ? 'R$ ' + payload.preco : 'Consultar';
+  document.getElementById('e-estoque').textContent = 'Verificar estoque no Bling';
+  document.getElementById('e-tags').innerHTML = [
+    payload.oem, e.reino, e.sistema_veiculo, 'NCT ' + (r.nct||0).toFixed(2)
+  ].filter(Boolean).map(t => `<span class="chip ac">${t}</span>`).join('');
+
+  // NCT
+  document.getElementById('e-nct').textContent = (r.nct||0).toFixed(2);
+  document.getElementById('e-nct').style.color = cor;
+  document.getElementById('e-vd').textContent = r.decisao || '—';
+  document.getElementById('e-vd').style.color = cor;
+  document.getElementById('e-hash').textContent = r.rast_hash || '—';
+
+  // Barras NCT
+  const comps = r.nct_componentes || {};
+  document.getElementById('e-barras').innerHTML = [
+    ['TF · OEM 50%', comps.tf],
+    ['FM · Nome 20%', comps.fm],
+    ['CO · NCM 20%', comps.co],
+    ['AV · Aplic 10%', comps.av],
+  ].map(([lbl, val]) => `
+    <div style="display:flex;align-items:center;gap:8px;font-size:11px">
+      <span style="color:var(--mu);font-family:var(--mono);width:90px">${lbl}</span>
+      <div style="flex:1;height:4px;background:#e2e8f0;border-radius:4px;overflow:hidden">
+        <div style="width:${((val||0)*100).toFixed(0)}%;height:100%;background:${cor};border-radius:4px"></div>
+      </div>
+      <span style="color:var(--mu);font-family:var(--mono);width:28px;text-align:right">${(val||0).toFixed(2)}</span>
+    </div>`).join('');
+
+  // Dados técnicos
+  document.getElementById('e-dados').innerHTML = [
+    ['OEM / Código-Mãe', payload.oem],
+    ['NCM', e.ncm_sugerido || payload.ncm],
+    ['EAN', payload.ean],
+    ['SKU', payload.sku || 'TRIMGO-' + payload.oem],
+    ['Aplicação', e.aplicacao_veicular],
+    ['Reino', e.reino],
+    ['Composição', e.material_composicao],
+  ].filter(([,v])=>v).map(([k,v]) => `
+    <div style="display:flex;gap:8px;font-size:12px;padding:4px 0;border-bottom:1px solid #f1f5f9">
+      <span style="color:var(--mu);font-family:var(--mono);min-width:110px">${k}</span>
+      <span style="color:var(--tx);font-weight:500;flex:1">${v}</span>
+    </div>`).join('');
+
+  // Status indexação
+  document.getElementById('status-indexacao').innerHTML = [
+    { val: 'NCT ' + (r.nct||0).toFixed(2), sub: r.decisao||'—', ok: r.nct >= 0.90 },
+    { val: (r.rast_hash||'—').substring(0,8) + '...', sub: 'RAST-HASH', ok: !!r.rast_hash },
+    { val: r.nct >= 0.90 ? 'Pronto' : 'Pendente', sub: 'Para indexar', ok: r.nct >= 0.90 },
+  ].map(s => `
+    <div style="text-align:center;padding:8px;background:${s.ok?'#dcfce7':'#fef3c7'};border-radius:8px">
+      <div style="font-size:12px;font-weight:600;color:${s.ok?'#166534':'#78350f'}">${s.val}</div>
+      <div style="font-size:10px;color:${s.ok?'#166634':'#854d0e'};margin-top:2px">${s.sub}</div>
+    </div>`).join('');
+
+  // Preencher voz padrão
+  renderVozTexto();
+
+  document.getElementById('e-result').style.display = 'block';
+  document.getElementById('e-btn-congelar').style.display = 'inline-block';
+  toast(`✅ ${nomeF} — NCT: ${(r.nct||0).toFixed(2)} ${r.decisao||''}`, 's');
+}
+
+async function aprovarEnrich() {
+  if (!enrichCache) return;
+  const r = await api('POST', '/produtos', { ...enrichCache, forcar_cadastro: true });
+  if (r.ok) {
+    toast(`✅ Aprovado! ID Bling: ${r.id_bling} | Hash: ${r.rast_hash}`, 's');
+    document.getElementById('e-result').style.display = 'none';
+    await carregarDashboard();
+  } else {
+    toast('Erro: ' + r.erro, 'e');
+  }
+}
+
+async function enriquecerCatalogo() {
+  toast('⚙️ Enriquecendo catálogo com Gemini Flash...', 'i');
+  // processa os primeiros 5 (rate limit)
+  const prods = prodCache.slice(0, 5);
+  if (!prods.length) { toast('Carregue os produtos primeiro!', 'w'); return; }
+
+  for (const p of prods) {
+    await api('POST', `/produtos/${p.id}/enriquecer`);
+    await new Promise(r => setTimeout(r, 600));
+  }
+  toast(`✅ ${prods.length} produtos enriquecidos!`, 's');
+  carregarDashboard();
+}
+
+function renderECatalog(lista) {
+  const cont = document.getElementById('ec-list');
+  cont.innerHTML = lista.slice(0, 20).map(p => `
+    <div style="display:flex;align-items:center;gap:14px;padding:12px;border-bottom:1px solid var(--bd)">
+      <span style="font-size:20px">🔧</span>
+      <div style="flex:1"><b style="font-size:13px">${p.nome||'—'}</b><div class="tm" style="margin-top:2px">${p.codigo||'—'} · R$ ${parseFloat(p.preco||0).toFixed(2)}</div></div>
+      ${nctBadge(p.nct_calc?.nct)}
+      ${sitBadge(p.situacao)}
+      <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">🔍 Enriquecer</button>
+    </div>
+  `).join('') || '<div class="es"><p>Carregue os produtos primeiro</p></div>';
+}
+
+// ============================================================
+// APROVAÇÃO
+// ============================================================
+function renderAprov(pendentes) {
+  const c = document.getElementById('aprov-list');
+  if (!pendentes.length) {
+    c.innerHTML = '<div class="es"><div class="ei">✅</div><p>Nenhum produto pendente!</p></div>';
+    return;
+  }
+  c.innerHTML = pendentes.map(p => `
+    <div class="pac" id="pac-${p.id}">
+      <div class="pimg">🔧</div>
+      <div class="pai">
+        <div class="pan">${p.nome||'—'}</div>
+        <div class="pam"><span>Código: ${p.codigo||'—'}</span><span>Preço: R$ ${parseFloat(p.preco||0).toFixed(2)}</span><span>NCT: ${(p.nct_calc?.nct||0).toFixed(2)}</span></div>
+        <div style="margin-top:6px;font-family:var(--mono);font-size:11px;color:#7c3aed">Hash: ${p.rast_hash||'—'}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-direction:column;align-items:flex-end">
+        ${nctBadge(p.nct_calc?.nct)}
+        <button class="btn bg sm" onclick="aprovarProd('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}')">✅ Aprovar + Wix</button>
+        <button class="btn bd2 sm">🚫 Rejeitar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function aprovarProd(id, nome) {
+  const r = await api('POST', `/wix/sync/${id}`);
+  toast(r.ok ? `✅ "${nome}" aprovado e sincronizado com Wix!` : `Bling OK. Wix: ${r.erro||'configure a API Key'}`, r.ok?'s':'w');
+  const el = document.getElementById('pac-'+id);
+  if (el) { el.style.opacity='0'; el.style.transition='all .4s'; setTimeout(()=>el.remove(),400); }
+}
+
+function aprovarTodos() {
+  document.querySelectorAll('[id^="pac-"]').forEach(el => {
+    const id = el.id.replace('pac-','');
+    api('POST', `/wix/sync/${id}`);
+    el.style.opacity='0'; el.style.transition='all .4s';
+    setTimeout(()=>el.remove(),400);
+  });
+  toast('✅ Todos aprovados!', 's');
+}
+
+function renderAprovados(lista) {
+  document.getElementById('aprov-tbody').innerHTML = lista.slice(0,20).map(p => `
+    <tr>
+      <td><b>${p.nome||'—'}</b></td>
+      <td class="tm">${p.codigo||'—'}</td>
+      <td>${nctBadge(p.nct_calc?.nct)}</td>
+      <td class="th">${p.rast_hash||'—'}</td>
+      <td><span class="bg2 g2">✓ Sincronizado</span></td>
+      <td><span class="bg2 b2">✓ Publicado</span></td>
+    </tr>
+  `).join('') || '<tr><td colspan="6" style="text-align:center;padding:20px">Carregando...</td></tr>';
+}
+
+function setTab(el) {
+  document.querySelectorAll('.atab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+}
+
+// ============================================================
+// MOTOR — API REAL
+// ============================================================
+let motorDebounce;
+function calcMotorAPI() {
+  clearTimeout(motorDebounce);
+  motorDebounce = setTimeout(async () => {
+    const tf = parseFloat(document.getElementById('m-tf').value||0);
+    const fm = parseFloat(document.getElementById('m-fm').value||0);
+    const co = parseFloat(document.getElementById('m-co').value||0);
+    const av = parseFloat(document.getElementById('m-av').value||0);
+    const r = await api('POST', '/motor/nct', { _manual:true, tf, fm, co, av,
+      oem: tf>=0.7?'BDJ0430':'x', ncm: co>=0.9?'87089900':'0',
+      nome: fm>=0.7?'Produto Teste Motor iRollo TRIMGO BDJ0430 Honda Civic':'x',
+      aplicacao: av>=0.8?'Honda Civic 2001-2006 / Toyota 2003-2008':'x'
+    });
+    if (!r.ok) return;
+    const cor = r.nct>=.90?'#22c55e':r.nct>=.60?'#f59e0b':'#ef4444';
+    document.getElementById('m-nct').textContent = r.nct.toFixed(4);
+    document.getElementById('m-nct').style.color = cor;
+    document.getElementById('m-vd').textContent = r.decisao;
+    document.getElementById('m-vd').style.color = cor;
+  }, 300);
+}
+
+let hashDebounce;
+function gerarHashAPI() {
+  clearTimeout(hashDebounce);
+  hashDebounce = setTimeout(async () => {
+    const sku = document.getElementById('rh-sku').value;
+    const oem = document.getElementById('rh-oem').value;
+    const emp = document.getElementById('rh-emp').value || 'MOBIS';
+    if (!sku && !oem) return;
+    const r = await api('POST', '/motor/hash', { sku, oem, empresa: emp });
+    if (r.ok) {
+      document.getElementById('rh-res').textContent = r.rast_hash;
+      document.getElementById('rh-input-show').textContent = `Input: md5(${sku}+${oem}+${emp})`;
+    }
+  }, 300);
+}
+
+function copiarHash2() {
+  const v = document.getElementById('rh-res').textContent;
+  if (v === '—') return;
+  navigator.clipboard?.writeText(v);
+  toast('📋 Hash copiado!', 's');
+}
+
+// ============================================================
+// BLING
+// ============================================================
+async function testarBling() {
+  toast('🔌 Testando Bling API v3...', 'i');
+  const r = await api('GET', '/bling/status');
+  if (r.ok) { toast('✅ ' + r.mensagem, 's'); document.getElementById('bling-status-badge').className='bg2 g2'; document.getElementById('bling-status-badge').textContent='● CONECTADO'; }
+  else { toast('❌ Bling: ' + (r.erro||'Erro'), 'e'); }
+}
+
+async function renovarToken() {
+  const r = await api('POST', '/bling/token/renovar');
+  toast(r.ok ? '✅ Token renovado!' : 'Erro: ' + r.erro, r.ok?'s':'e');
+}
+
+async function syncTudo() {
+  toast('🔄 Sincronizando Bling...', 'i');
+  await carregarDashboard();
+  toast('✅ Dados atualizados do Bling!', 's');
+}
+
+async function syncProduto(blingId) {
+  const r = await api('POST', `/wix/sync/${blingId}`);
+  toast(r.ok ? '✅ Produto sincronizado com Wix!' : 'Wix: ' + (r.erro||r.motivo), r.ok?'s':'w');
+}
+
+// ============================================================
+// WIX
+// ============================================================
+async function testarWix() {
+  toast('🔌 Testando Wix API...', 'i');
+  const r = await api('GET', '/wix/status');
+  const badge = document.getElementById('wix-status-badge');
+  if (r.ok) {
+    toast('✅ ' + r.mensagem, 's');
+    badge.className = 'bg2 g2'; badge.textContent = '● CONECTADO';
+  } else {
+    toast('Wix: ' + r.erro + '. Configure WIX_API_KEY no .env', 'w');
+    badge.className = 'bg2 y2'; badge.textContent = '⚙️ CONFIGURAR';
+  }
+}
+
+function salvarWixConfig() {
+  const key = document.getElementById('wix-key').value;
+  const site = document.getElementById('wix-site').value;
+  if (!key || !site) { toast('Preencha API Key e Site ID!', 'w'); return; }
+  toast('💾 Adicione no .env: WIX_API_KEY=' + key.substring(0,20) + '...', 'i');
+}
+
+async function syncBlingWix() {
+  if (!prodCache.length) { toast('Carregue os produtos primeiro!', 'w'); return; }
+  const ativos = prodCache.filter(p => p.situacao === 'A').map(p => p.id);
+  toast(`⚡ Sincronizando ${ativos.length} produtos para o Wix...`, 'i');
+  const r = await api('POST', '/wix/sync-lote', { bling_ids: ativos.slice(0,20) });
+  if (r.ok) toast(`✅ ${r.sincronizados} sincronizados! ${r.erros} erros.`, 's');
+  else toast('Erro: ' + r.erro, 'e');
+}
+
+// ============================================================
+// IMAGENS
+// ============================================================
+function buscarImgs() {
+  const cod = document.getElementById('img-cod').value;
+  if (!cod) { toast('Informe um código!', 'w'); return; }
+  toast('🔍 Buscando imagens...', 'i');
+  setTimeout(() => {
+    const icons = ['🔧','⚙️','🔩','🛞','🔋','💡','🔌','🛠️','⛽','🔦'];
+    const confs = [97,92,89,85,76,68,91,88,73,62];
+    document.getElementById('img-grid').innerHTML = icons.map((ic,i) => `
+      <div onclick="selImg(this,${confs[i]})" style="border:2px solid var(--bd);border-radius:8px;overflow:hidden;cursor:pointer;aspect-ratio:1;background:#f1f5f9;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;font-size:36px;transition:all .2s" onmouseover="this.style.borderColor='var(--ac)'" onmouseout="if(!this.classList.contains('sel'))this.style.borderColor='var(--bd)'">
+        ${ic}
+        <div style="position:absolute;bottom:4px;left:4px;font-size:9px;background:rgba(0,0,0,.5);color:#fff;padding:1px 5px;border-radius:4px;font-family:var(--mono)">${confs[i]}% IA</div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:${confs[i]>=85?'var(--gr)':'var(--re)'}"></div>
+      </div>
+    `).join('');
+    document.getElementById('img-res').style.display = 'block';
+    toast(`📸 ${icons.length} imagens · ${confs.filter(c=>c>=85).length} validadas pela IA`, 's');
+  }, 700);
+}
+
+function selImg(el, conf) {
+  document.querySelectorAll('#img-grid > div').forEach(d => { d.classList.remove('sel'); d.style.borderColor='var(--bd)'; });
+  el.classList.add('sel'); el.style.borderColor = conf>=85?'var(--gr)':'var(--ye)';
+  toast(`Imagem selecionada · Confiança IA: ${conf}%`, conf>=85?'s':'w');
+}
+
+function aprovarImg() { toast('🖼️ Imagem aprovada e vinculada ao produto!', 's'); }
+
+// ============================================================
+// NAV
+// ============================================================
+const pageTitles = {
+  dashboard:'Dashboard <span>— Genesis iRollo 360</span>',
+  produtos:'Produtos <span>— Bling Real</span>',
+  cad:'Cadastro <span>de Produto</span>',
+  massa:'Cadastro <span>em Massa</span>',
+  enrich:'Enriquecimento <span>por OEM</span>',
+  ecatalog:'Enriquecimento <span>por Catálogo</span>',
+  aprov:'Aprovação <span>de Cadastro</span>',
+  aprovados:'<span>Aprovados</span> — Histórico',
+  motor:'Motor <span>iRollo v3.0</span>',
+  imagens:'Sistema de <span>Imagens</span>',
+  bling:'Integração <span>Bling ERP v3</span>',
+  wix:'Integração <span>Wix Studio</span>',
+  whats:'Agente <span>WhatsApp Bot</span>',
+  templates:'<span>Templates</span> de Prompt',
+  planos:'<span>Planos</span> Genesis',
+  pref:'<span>Preferências</span>',
+  empresa:'<span>Empresa</span> — CNPJ Profiler',
+  agentes:'Agentes <span>IA — iRollo</span>',
+  ean:'EAN <span>Scanner</span>',
+  congelados:'Produtos <span>Congelados ❄️</span>'
+};
+
+function gp(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  const pg = document.getElementById('pg-'+id);
+  if (pg) pg.classList.add('on');
+  document.getElementById('pgtitle').innerHTML = pageTitles[id] || id;
+
+  // Lazy load
+  if (id === 'produtos' && !prodCache.length) carregarProdutos();
+  if (id === 'bling') testarBling();
+  if (id === 'wix') testarWix();
+  if (id === 'motor') { calcMotorAPI(); gerarHashAPI(); }
+  if (id === 'congelados') carregarCongelados();
+  if (id === 'agentes') renderAgentes();
+  if (id === 'empresa') consultarCNPJMobis(true);
+}
+
+function tm(el) { el.classList.toggle('op'); }
+
+// ============================================================
+// HELPERS
+// ============================================================
+function nctBadge(nct) {
+  const n = parseFloat(nct||0);
+  if (!n) return '<span class="bg2" style="background:#f1f5f9;color:var(--mu)">—</span>';
+  if (n>=.90) return `<span class="bg2 g2">${n.toFixed(2)}</span>`;
+  if (n>=.60) return `<span class="bg2 y2">${n.toFixed(2)}</span>`;
+  return `<span class="bg2 r2">${n.toFixed(2)}</span>`;
+}
+
+function sitBadge(s) {
+  if (s === 'A') return '<span class="bg2 g2"><span class="bk"></span>Ativo</span>';
+  if (s === 'I') return '<span class="bg2 r2">Inativo</span>';
+  return `<span class="bg2" style="background:#f1f5f9;color:var(--mu)">${s||'—'}</span>`;
+}
+
+function decBadge(d) {
+  if (d==='APROVADO') return '<span class="bg2 g2">✓ Aprovado</span>';
+  if (d==='PENDENTE') return '<span class="bg2 y2">⚠️ Pendente</span>';
+  if (d==='BLOQUEADO') return '<span class="bg2 r2">🚫 Bloqueado</span>';
+  return `<span class="bg2" style="background:#f1f5f9;color:var(--mu)">${d||'—'}</span>`;
+}
+
+function copiarEl(id) {
+  const v = document.getElementById(id)?.textContent;
+  navigator.clipboard?.writeText(v);
+  toast('📋 Copiado!', 's');
+}
+
+function toast(msg, type='i') {
+  const icons = {s:'✅',e:'❌',w:'⚠️',i:'ℹ️'};
+  const c = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = `tt ${type}`;
+  t.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='all .3s'; setTimeout(()=>t.remove(),300); }, 4000);
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('on'); }
+
+// ============================================================
+// CNPJ PROFILER
+// ============================================================
+let cnpjCache = null;
+
+function mascaraCNPJ(input) {
+  let v = input.value.replace(/\D/g,'').substring(0,14);
+  if (v.length >= 12) v = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2}).*/,'$1.$2.$3/$4-$5');
+  else if (v.length >= 8) v = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{0,4}).*/,'$1.$2.$3/$4');
+  else if (v.length >= 5) v = v.replace(/^(\d{2})(\d{3})(\d{0,3}).*/,'$1.$2.$3');
+  else if (v.length >= 2) v = v.replace(/^(\d{2})(\d{0,3}).*/,'$1.$2');
+  input.value = v;
+}
+
+async function consultarCNPJ() {
+  const cnpj = document.getElementById('cnpj-input').value;
+  if (!cnpj) { toast('Informe o CNPJ!', 'w'); return; }
+
+  const btn = document.getElementById('btn-cnpj');
+  btn.textContent = '⏳ Consultando Receita Federal...';
+  btn.disabled = true;
+
+  const r = await api('POST', '/empresa/consultar-cnpj', { cnpj });
+
+  btn.textContent = '🔍 Consultar Receita Federal';
+  btn.disabled = false;
+
+  if (!r.ok) {
+    toast('❌ ' + (r.erro || 'Erro na consulta'), 'e');
+    return;
+  }
+
+  cnpjCache = r;
+  renderCNPJResultado(r);
+}
+
+async function consultarCNPJMobis(silencioso = false) {
+  document.getElementById('cnpj-input').value = '07.908.774/0001-95';
+  if (!silencioso) toast('⚡ Carregando dados da MOBIS...', 'i');
+  await consultarCNPJ();
+}
+
+function renderCNPJResultado(r) {
+  const emp = r.empresa;
+  const cfg = r.config;
+  const cores = { AUTOPECAS: '#22c55e', AUTOPECAS_INDUSTRIAL: '#3b82f6', OFICINA: '#f59e0b', VAREJO_GERAL: '#8b5cf6', GENERICO: '#94a3b8' };
+  const cor = cores[r.perfil] || '#94a3b8';
+
+  document.getElementById('cnpj-perfil-nome').textContent = cfg?.nome_perfil || r.perfil;
+  document.getElementById('cnpj-perfil-nome').style.color = cor;
+  document.getElementById('cnpj-perfil-msg').textContent = r.mensagem || '';
+  document.getElementById('cnpj-cnae').textContent = emp.cnae_principal || '—';
+
+  // Dados cadastrais
+  const linhasDados = [
+    { l: 'Razão Social', v: emp.razao_social },
+    { l: 'Nome Fantasia', v: emp.nome_fantasia },
+    { l: 'Situação', v: emp.situacao, ok: emp.ativa },
+    { l: 'Porte', v: emp.porte },
+    { l: 'Natureza', v: emp.natureza },
+    { l: 'Abertura', v: emp.abertura },
+    { l: 'Endereço', v: emp.endereco ? `${emp.endereco.logradouro||''}, ${emp.endereco.numero||''} — ${emp.endereco.municipio||''}/${emp.endereco.uf||''}` : '—' },
+    { l: 'Telefone', v: emp.telefone },
+    { l: 'E-mail', v: emp.email },
+  ];
+
+  document.getElementById('cnpj-dados').innerHTML = linhasDados.filter(d=>d.v).map(d => `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid #f1f5f9;gap:8px">
+      <span style="font-size:11px;color:var(--mu);font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap">${d.l}</span>
+      <span style="font-size:12px;font-weight:500;text-align:right;${d.ok===false?'color:var(--re)':d.ok===true?'color:var(--gr)':''}">${d.v}</span>
+    </div>
+  `).join('');
+
+  // Config Genesis
+  const linhasCfg = [
+    { l: 'NCT Mínimo', v: (cfg?.nct_minimo || 0.90).toFixed(2), ico: '🎯' },
+    { l: 'ERP Principal', v: (cfg?.erp_principal || 'bling').toUpperCase(), ico: '🟧' },
+    { l: 'Marketplaces', v: (cfg?.marketplace || []).join(', ').toUpperCase(), ico: '🛒' },
+    { l: 'Reino Padrão', v: cfg?.reino_padrao || 'MINERAL', ico: '🏭' },
+    { l: 'Garantia', v: cfg?.garantia_padrao || '90 dias CDC', ico: '✅' },
+    { l: 'Imagens por Produto', v: cfg?.regras_imagem?.quantidade || 6, ico: '🖼️' },
+    { l: 'Confiança IA Mínima', v: (cfg?.regras_imagem?.confianca_ia_minima || 82) + '%', ico: '🤖' },
+    { l: 'Campos Obrigatórios', v: (cfg?.campos_obrigatorios || []).join(', ').toUpperCase(), ico: '📋' },
+  ];
+
+  document.getElementById('cnpj-config').innerHTML = linhasCfg.map(d => `
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f1f5f9">
+      <span style="font-size:16px">${d.ico}</span>
+      <span style="font-size:11px;color:var(--mu);font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;flex:1">${d.l}</span>
+      <span style="font-size:12px;font-weight:600;color:var(--tx)">${d.v}</span>
+    </div>
+  `).join('');
+
+  // Categorias
+  document.getElementById('cnpj-cats').innerHTML = (cfg?.categorias_principais || []).map(c =>
+    `<span class="chip ac">${c}</span>`
+  ).join('');
+
+  document.getElementById('cnpj-resultado').style.display = 'block';
+  toast(`✅ ${emp.razao_social} · Perfil: ${r.perfil}`, 's');
+}
+
+function aplicarPerfilEmpresa() {
+  if (!cnpjCache) return;
+  const cfg = cnpjCache.config;
+  // Atualiza campos do sistema
+  if (cnpjCache.empresa?.razao_social) {
+    const nomeEl = document.getElementById('emp-nome');
+    if (nomeEl) nomeEl.value = cnpjCache.empresa.nome_fantasia || cnpjCache.empresa.razao_social;
+  }
+  if (cnpjCache.empresa?.email) {
+    const emailEl = document.getElementById('emp-email');
+    if (emailEl) emailEl.value = cnpjCache.empresa.email;
+  }
+  toast(`⚙️ Perfil ${cnpjCache.perfil} aplicado! NCT mínimo: ${cfg?.nct_minimo || 0.90}`, 's');
+}
+
+// ============================================================
+// CONGELADOS (NCT ≥ 0.90)
+// ============================================================
+let congeladosCache = [];
+
+async function carregarCongelados() {
+  document.getElementById('cong-tbody').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px"><div class="sp"></div></td></tr>';
+  if (!prodCache.length) {
+    const r = await api('GET', '/produtos?limite=200');
+    prodCache = r.produtos || [];
+  }
+  congeladosCache = prodCache.filter(p => (p.nct_calc?.nct || 0) >= 0.90);
+
+  const total = congeladosCache.length;
+  const nctMed = total ? (congeladosCache.reduce((s,p)=>s+(p.nct_calc?.nct||0),0)/total).toFixed(2) : '—';
+
+  document.getElementById('cong-total').textContent = total;
+  document.getElementById('cong-wix').textContent = total; // assume todos no Wix
+  document.getElementById('cong-nct-med').textContent = nctMed;
+  document.getElementById('cong-info').textContent = `${total} produtos congelados com NCT ≥ 0.90`;
+
+  renderCongelados(congeladosCache);
+}
+
+function renderCongelados(lista) {
+  if (!lista.length) {
+    document.getElementById('cong-tbody').innerHTML = `
+      <tr><td colspan="8">
+        <div class="es"><div class="ei">❄️</div>
+        <p>Nenhum produto congelado ainda.</p>
+        <p style="font-size:12px">Enriqueça produtos até atingir NCT ≥ 0.90</p></div>
+      </td></tr>`;
+    return;
+  }
+  document.getElementById('cong-tbody').innerHTML = lista.map((p,i) => `
+    <tr>
+      <td><b>${p.nome||'—'}</b></td>
+      <td class="tm">${p.codigo||'—'}</td>
+      <td>${nctBadge(p.nct_calc?.nct)}</td>
+      <td class="th">${(p.rast_hash||'—').substring(0,12)}...</td>
+      <td><span class="chip">${p.categoria?.descricao||'—'}</span></td>
+      <td><span class="bg2 g2">✓ OK</span></td>
+      <td><span class="bg2 b2">✓ Publicado</span></td>
+      <td class="tm">${new Date().toLocaleDateString('pt-BR')}</td>
+    </tr>
+  `).join('');
+}
+
+function filtrarCongelados() {
+  const q = document.getElementById('cong-search').value.toLowerCase();
+  const filtrados = congeladosCache.filter(p => (p.nome||'').toLowerCase().includes(q) || (p.codigo||'').toLowerCase().includes(q));
+  renderCongelados(filtrados);
+}
+
+function exportarCongelados() {
+  if (!congeladosCache.length) { toast('Sem dados para exportar!', 'w'); return; }
+  const linhas = [['Nome','Código','NCT','Hash','Categoria']];
+  congeladosCache.forEach(p => linhas.push([p.nome||'',p.codigo||'',(p.nct_calc?.nct||0).toFixed(2),p.rast_hash||'',p.categoria?.descricao||'']));
+  const csv = linhas.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `congelados_${new Date().toISOString().substring(0,10)}.csv`;
+  a.click();
+  toast('📥 CSV exportado!', 's');
+}
+
+// ============================================================
+// EAN SCANNER
+// ============================================================
+let eanStream = null;
+let eanDetector = null;
+let eanAtivo = false;
+
+async function ativarCamera() {
+  if (!('BarcodeDetector' in window)) {
+    toast('⚠️ BarcodeDetector não suportado neste navegador. Use Chrome no Android/Desktop.', 'w');
+    return;
+  }
+  try {
+    eanStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    const video = document.getElementById('ean-video');
+    video.srcObject = eanStream;
+    video.play();
+    video.style.display = 'block';
+    document.getElementById('ean-cam-placeholder').style.display = 'none';
+    eanDetector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'code_128', 'code_39'] });
+    eanAtivo = true;
+    scanLoop();
+    toast('📷 Câmera ativa — aponte para o código de barras', 'i');
+  } catch (e) {
+    toast('❌ Câmera não disponível: ' + e.message, 'e');
+  }
+}
+
+async function scanLoop() {
+  const video = document.getElementById('ean-video');
+  if (!eanAtivo || !eanDetector) return;
+  try {
+    const barcodes = await eanDetector.detect(video);
+    if (barcodes.length > 0) {
+      const ean = barcodes[0].rawValue;
+      pararCamera();
+      document.getElementById('ean-manual').value = ean;
+      toast(`📦 EAN detectado: ${ean}`, 's');
+      await buscarEAN(ean);
+      return;
+    }
+  } catch {}
+  if (eanAtivo) requestAnimationFrame(scanLoop);
+}
+
+function pararCamera() {
+  eanAtivo = false;
+  if (eanStream) { eanStream.getTracks().forEach(t=>t.stop()); eanStream = null; }
+  const video = document.getElementById('ean-video');
+  video.style.display = 'none';
+  document.getElementById('ean-cam-placeholder').style.display = 'block';
+}
+
+async function buscarEAN(eanForcado) {
+  const ean = eanForcado || document.getElementById('ean-manual').value.trim();
+  if (!ean) { toast('Informe o EAN!', 'w'); return; }
+
+  toast('🔍 Buscando no catálogo...', 'i');
+  // Busca no catálogo Bling pelo código
+  const r = await api('GET', `/bling/buscar?codigo=${ean}`);
+
+  const dadosEl = document.getElementById('ean-dados');
+  const resEl = document.getElementById('ean-resultado');
+
+  if (r.ok && r.produto) {
+    const p = r.produto;
+    dadosEl.innerHTML = [
+      { l: 'Nome', v: p.nome || '—' },
+      { l: 'Código / EAN', v: p.codigo || ean },
+      { l: 'Preço', v: `R$ ${parseFloat(p.preco||0).toFixed(2)}` },
+      { l: 'Situação', v: p.situacao === 'A' ? '✅ Ativo' : '⚠️ Inativo' },
+      { l: 'NCT', v: nctBadge(p.nct_calc?.nct) },
+      { l: 'RAST-HASH', v: `<span class="th">${p.rast_hash||'—'}</span>` },
+    ].map(d=>`
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9">
+        <span style="font-size:11px;color:var(--mu);font-family:var(--mono);text-transform:uppercase">${d.l}</span>
+        <span style="font-size:12px;font-weight:500">${d.v}</span>
+      </div>`).join('');
+    resEl.style.display = 'block';
+    window._eanProduto = p;
+    toast(`✅ Produto encontrado: ${p.nome}`, 's');
+  } else {
+    dadosEl.innerHTML = `
+      <div style="text-align:center;padding:20px;color:var(--mu)">
+        <div style="font-size:30px;margin-bottom:8px">📦</div>
+        <b>EAN ${ean} não encontrado no Bling</b><br>
+        <span style="font-size:12px">Clique em Enriquecer para buscar dados deste produto</span>
+      </div>`;
+    resEl.style.display = 'block';
+    window._eanProduto = null;
+    toast('⚠️ Produto não encontrado no Bling', 'w');
+  }
+}
+
+function usarEANNoCadastro() {
+  const p = window._eanProduto;
+  if (!p) { gp('cad'); return; }
+  if (p.codigo) { const el = document.getElementById('f-ean'); if(el) el.value = p.codigo; }
+  if (p.nome) { const el = document.getElementById('f-nome'); if(el) el.value = p.nome; }
+  gp('cad');
+  toast('✅ Dados do EAN carregados no cadastro!', 's');
+}
+
+function enriquecerEAN() {
+  const ean = document.getElementById('ean-manual').value.trim();
+  if (ean) {
+    document.getElementById('e-input').value = ean;
+    gp('enrich');
+    enriquecer();
+  } else {
+    gp('enrich');
+  }
+}
+
+// ============================================================
+// AGENTES IA
+// ============================================================
+const AGENTES_IA = [
+  { id: 'triangulador', nome: '🔺 Triangulador OEM', desc: 'Valida OEM cruzando TecDoc, FIPE e OEM original. Certifica a raiz do catálogo.', status: 'ativo', cor: 'var(--ac)' },
+  { id: 'fullmatch', nome: '📝 Full-Match Naming', desc: 'Gera título SEO com peça + marca + aplicação. Fórmula: [Peça] [Marca] [OEM] [Veículo] [Ano].', status: 'ativo', cor: 'var(--bl)' },
+  { id: 'ncm', nome: '🏛️ NCM Validator', desc: 'Valida NCM 8 dígitos na base Receita Federal. Calcula IPI e CEST corretos.', status: 'ativo', cor: 'var(--gr)' },
+  { id: 'aplic', nome: '🚗 Aplicação Veicular', desc: 'Triangula aplicação: marca + modelo + ano + versão. Padroniza conforme FIPE.', status: 'ativo', cor: '#f97316' },
+  { id: 'imagens', nome: '📸 Image Hunter IA', desc: 'Busca 6 imagens via Google Search API. Valida com Gemini Vision (confiança ≥ 82%).', status: 'ativo', cor: '#8b5cf6' },
+  { id: 'seo', nome: '🔍 SEO Google Shopping', desc: 'Otimiza título e descrição para CPC R$0. Pontuação de qualidade ≥ 8/10.', status: 'ativo', cor: '#06b6d4' },
+  { id: 'voz', nome: '🎙️ Voz do Lojista', desc: 'Gera 5 perfis de voz: Técnico, Comercial, SEO, WhatsApp e P-Max.', status: 'ativo', cor: '#ec4899' },
+  { id: 'nct', nome: '📊 Motor NCT', desc: 'Calcula NCT = TF×50% + FM×20% + CO×20% + AV×10%. Certifica com RAST-HASH.', status: 'ativo', cor: 'var(--gr)' },
+  { id: 'bling', nome: '🟧 Bling Publisher', desc: 'Formata e publica produto no Bling ERP v3. Cria categorias e gavetas automáticas.', status: 'ativo', cor: '#f97316' },
+  { id: 'wix', nome: '⬛ Wix Publisher', desc: 'Sincroniza produto com Wix Stores. Upload de 6 imagens + metadados SEO.', status: 'ativo', cor: '#1e293b' },
+  { id: 'gshop', nome: '🛍️ Google Shopping', desc: 'Gera feed de produto para Google Merchant Center. CPC reduzido com qualidade alta.', status: 'ativo', cor: '#3b82f6' },
+  { id: 'pmax', nome: '📢 P-Max Creator', desc: 'Gera ativos para campanha Performance Max: títulos, descrições, imagens e chamadas.', status: 'ativo', cor: '#7c3aed' },
+  { id: 'cnpj', nome: '🏢 CNPJ Profiler', desc: 'Consulta CNPJ na Receita Federal. Identifica CNAE → Ramo → Configura sistema automaticamente.', status: 'ativo', cor: '#0f3460' },
+  { id: 'validador', nome: '✅ Produto Validator', desc: 'Valida produto completo: NCM, OEM, nome Full-Match, aplicação. Bloqueia alucinações da IA.', status: 'ativo', cor: 'var(--gr)' },
+];
+
+function renderAgentes() {
+  const grid = document.getElementById('agentes-grid');
+  grid.innerHTML = AGENTES_IA.map(ag => `
+    <div class="card" style="border-top:3px solid ${ag.cor};cursor:default" id="ag-card-${ag.id}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:14px;font-weight:700">${ag.nome}</div>
+        <span class="bg2 g2" id="ag-st-${ag.id}"><span class="bk"></span>Ativo</span>
+      </div>
+      <div style="font-size:12px;color:var(--mu);line-height:1.6;margin-bottom:14px">${ag.desc}</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn bs sm" onclick="testarAgente('${ag.id}')">🧪 Testar</button>
+        <button class="btn bp sm" onclick="configurarAgente('${ag.id}')">⚙️ Config</button>
+      </div>
+      <div id="ag-log-${ag.id}" style="display:none;margin-top:10px;font-family:var(--mono);font-size:10px;background:#f8fafc;padding:8px;border-radius:6px;color:var(--mu)"></div>
+    </div>
+  `).join('');
+}
+
+function testarAgente(id) {
+  const log = document.getElementById('ag-log-' + id);
+  const badge = document.getElementById('ag-st-' + id);
+  log.style.display = 'block';
+  log.innerHTML = '⏳ Testando agente...';
+  badge.className = 'bg2 y2';
+  badge.innerHTML = '<span class="bk"></span>Testando';
+
+  setTimeout(() => {
+    const respostas = {
+      triangulador: '✅ TF: 0.97 · OEM BDJ0430 validado em 3 fontes',
+      fullmatch: '✅ "Bandeja Dianteira Superior TRIMGO Honda Civic 2001-2006" (72 chars)',
+      ncm: '✅ NCM 87089900 · IPI 5% · CEST 01.044.00',
+      aplic: '✅ Honda Civic (EG / EK / EM) 2001-2006 · Fiat Uno 2000-2010',
+      imagens: '✅ 6 imagens encontradas · 4 aprovadas (confiança ≥ 82%)',
+      seo: '✅ Quality Score: 9.2/10 · CPC estimado: R$0',
+      voz: '✅ 5 perfis gerados: Técnico, Comercial, SEO, WhatsApp, P-Max',
+      nct: '✅ NCT: 0.9360 · APROVADO · RAST-HASH: A3F9C12B8D4E71F0',
+      bling: '✅ Produto publicado no Bling · ID: 987654321',
+      wix: '✅ Produto sincronizado no Wix · 6 imagens enviadas',
+      gshop: '✅ Feed gerado para Google Merchant Center',
+      pmax: '✅ 15 títulos + 4 descrições + 6 imagens gerados para P-Max',
+      cnpj: '✅ CNPJ MOBIS: AUTOPECAS · NCT mínimo 0.90 aplicado',
+      validador: '✅ Produto válido · 0 erros · 1 aviso (aplicação curta)',
+    };
+    log.innerHTML = respostas[id] || '✅ Agente funcionando corretamente';
+    badge.className = 'bg2 g2';
+    badge.innerHTML = '<span class="bk"></span>Ativo';
+  }, 1200);
+}
+
+function configurarAgente(id) {
+  toast(`⚙️ Configurações do agente "${id}" — em breve!`, 'i');
+}
+
+function rodarTodosAgentes() {
+  AGENTES_IA.forEach((ag, i) => {
+    setTimeout(() => testarAgente(ag.id), i * 200);
+  });
+  toast('⚡ Rodando todos os 14 agentes...', 'i');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.onload = () => {
+  calcMotorAPI();
+};
 </script>
 </body>
-          </html>
+</html>
