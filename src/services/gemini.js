@@ -1,224 +1,228 @@
 // ============================================================
-// GENESIS iROLLO v3.1 — CLAUDE (ANTHROPIC) IA SERVICE
-// Substituindo Gemini (cobrado/limitado) por Claude Haiku
-// ANTHROPIC_API_KEY já configurada no Render
+// GENESIS iROLLO v3.2 — MOTOR DE CRUZAMENTO REAL
+// Triangulação OEM → Código Original → Equivalentes → EAN
+// Fontes: AutoDoc, Mekonomen, TecDoc, Google Catalogs
+// IA: Claude Haiku (Anthropic) para extração estruturada
 // ============================================================
 const axios = require('axios');
 require('dotenv').config();
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-// claude-haiku-4-5 = mais rápido e econômico da Anthropic
 const MODEL = 'claude-haiku-4-5-20251001';
 
-// ------------------------------------------------------------
-// CHAMADA CLAUDE (Anthropic) — substitui chamarGemini
-// Mantém o mesmo nome para não quebrar chamadas existentes
-// ------------------------------------------------------------
-async function chamarGemini(prompt, maxTokens = 1000) {
+const CLAUDE_HEADERS = {
+  'x-api-key': '',
+  'anthropic-version': '2023-06-01',
+  'content-type': 'application/json'
+};
+
+const SITES_CATALOGO = [
+  'autodoc.com.br','mekonomen.com.br','europarts.com.br',
+  'natparts.com.br','pecasearch.com.br','repuestosnew.com',
+  'autopecasonline.com.br','worldautoparts.net'
+];
+
+async function chamarGemini(prompt, maxTokens = 1500) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey || apiKey.length < 10) {
-    throw new Error('ANTHROPIC_API_KEY não configurada no Render');
-  }
+  if (!apiKey || apiKey.length < 10) throw new Error('ANTHROPIC_API_KEY não configurada no Render');
 
-  const resp = await axios.post(
-    ANTHROPIC_URL,
-    {
-      model: MODEL,
-      max_tokens: maxTokens,
-      messages: [{ role: 'user', content: prompt }]
-    },
-    {
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json'
-      }
-    }
+  const resp = await axios.post(ANTHROPIC_URL,
+    { model: MODEL, max_tokens: maxTokens, messages: [{ role: 'user', content: prompt }] },
+    { headers: { ...CLAUDE_HEADERS, 'x-api-key': apiKey } }
   );
-
-  const texto = resp.data?.content?.[0]?.text || '';
-  return texto.trim();
+  return (resp.data?.content?.[0]?.text || '').trim();
 }
 
-// ------------------------------------------------------------
-// BUSCA REAL — Google Search API (triangulação antes do Claude)
-// ------------------------------------------------------------
-async function buscarDadosReaisOEM(oem, nome) {
+async function buscarNaWeb(codigo, marca = '') {
   const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
   const cx     = process.env.GOOGLE_SEARCH_CX;
+  if (!apiKey || !cx || apiKey === 'SUA_GOOGLE_SEARCH_API_KEY') return null;
 
-  if (!apiKey || !cx || apiKey === 'SUA_GOOGLE_SEARCH_API_KEY') {
-    return null;
+  const sitesStr = SITES_CATALOGO.map(s => `site:${s}`).join(' OR ');
+  const queries = [
+    `"${codigo}" equivalente OR cruzamento OR "código original" autopeça`,
+    `"${codigo}" ${marca} (${sitesStr})`,
+    `"${codigo}" OEM OR "referência original" OR "código montadora"`
+  ];
+
+  const resultados = [];
+  for (const query of queries) {
+    try {
+      const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(query)}&num=5&hl=pt-BR`;
+      const resp = await axios.get(url, { timeout: 6000 });
+      for (const item of (resp.data?.items || [])) {
+        resultados.push({ fonte: item.displayLink, titulo: item.title, snippet: item.snippet, url: item.link });
+      }
+    } catch (err) { console.warn('[SEARCH]', err.message); }
+  }
+  return resultados.length > 0 ? resultados : null;
+}
+
+async function fetchPagina(url) {
+  try {
+    const resp = await axios.get(url, {
+      timeout: 8000,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; GenesisiRollo/3.2)', 'Accept-Language': 'pt-BR,pt;q=0.9' },
+      maxContentLength: 300000
+    });
+    return (resp.data || '')
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .substring(0, 8000);
+  } catch (err) { return null; }
+}
+
+async function cruzarCodigos(codigo, marca = '') {
+  console.log(`[CRUZAMENTO] Triangulando: ${codigo} ${marca}`);
+
+  const resultadosWeb = await buscarNaWeb(codigo, marca);
+  let dadosBrutos = '';
+
+  if (resultadosWeb && resultadosWeb.length > 0) {
+    const paginasFetched = [];
+    for (let i = 0; i < Math.min(2, resultadosWeb.length); i++) {
+      if (resultadosWeb[i].url) {
+        const conteudo = await fetchPagina(resultadosWeb[i].url);
+        if (conteudo) paginasFetched.push(`=== ${resultadosWeb[i].fonte} ===\n${conteudo}`);
+      }
+    }
+    dadosBrutos = 'SNIPPETS:\n' + resultadosWeb.map(r => `[${r.fonte}] ${r.titulo}: ${r.snippet}`).join('\n');
+    if (paginasFetched.length > 0) dadosBrutos += '\n\nCONTEÚDO REAL:\n' + paginasFetched.join('\n\n');
   }
 
+  const prompt = `Você é um especialista em catálogos técnicos de autopeças automotivas brasileiras.
+
+CÓDIGO PARA CRUZAR: ${codigo}
+MARCA/FABRICANTE: ${marca || 'não informado'}
+
+${dadosBrutos ? `DADOS REAIS DA WEB:\n${dadosBrutos}\n` : '(Sem dados reais — use conhecimento técnico de catálogos)'}
+
+Analise e retorne APENAS um JSON válido (sem markdown):
+{
+  "codigo_input": "${codigo}",
+  "tipo_codigo": "OEM_AFTERMARKET | OEM_ORIGINAL | EAN | SKU | REFERENCIA",
+  "marca_fabricante": "Ex: LUK, VALEO, COFAP, BOSCH",
+  "nome_peca": "Nome técnico completo da peça",
+  "descricao_tecnica": "Descrição técnica de 3-4 frases: função, material, características",
+  "codigo_original_montadora": "Código OEM original da montadora (ex: VW 02K141025E)",
+  "codigos_equivalentes": [
+    {"marca": "VALEO", "codigo": "XXXXXXX", "tipo": "equivalente"},
+    {"marca": "SACHS", "codigo": "XXXXXXX", "tipo": "equivalente"},
+    {"marca": "COFAP", "codigo": "XXXXXXX", "tipo": "nacional"}
+  ],
+  "ean_codigos": ["7891234567890"],
+  "aplicacao_veicular": [
+    {"montadora": "Volkswagen", "modelo": "Golf", "anos": "1999-2005", "motor": "1.6 / 2.0"}
+  ],
+  "sistemas_veiculo": "Embreagem | Suspensão | Freios | Motor | etc",
+  "material_composicao": "Materiais do produto",
+  "dimensoes": {"diametro_mm": 0, "espessura_mm": 0, "peso_kg": 0.0},
+  "ncm": "8 dígitos",
+  "tags_google_shopping": ["tag1","tag2","tag3","tag4","tag5","tag6","tag7"],
+  "garantia_cdc": "Texto garantia conforme CDC Art.8 e Art.31",
+  "nivel_confianca": 0.0,
+  "fontes_consultadas": ["fontes usadas"]
+}
+
+IMPORTANTE: Responda SOMENTE o JSON. Mais códigos equivalentes = menor CPC no Google Shopping.`;
+
   try {
-    const query = encodeURIComponent(
-      `"${oem}" autopeça site:mercadolivre.com.br OR site:pecamania.com.br OR site:autopecasonline.com.br OR site:magazineluiza.com.br`
-    );
-    const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${query}&num=3&hl=pt-BR`;
-
-    const resp = await axios.get(url, { timeout: 5000 });
-    const items = resp.data?.items || [];
-
-    if (items.length === 0) return null;
-
-    const trechos = items.map(item =>
-      `Fonte: ${item.displayLink}\nTítulo: ${item.title}\nSnippet: ${item.snippet}`
-    ).join('\n---\n');
-
-    return trechos;
+    const resposta = await chamarGemini(prompt, 2000);
+    const jsonLimpo = resposta.replace(/```json|```/g, '').trim();
+    return { ok: true, cruzamento: JSON.parse(jsonLimpo), fontes_reais: resultadosWeb?.map(r => r.fonte) || [], dados_reais: !!resultadosWeb };
   } catch (err) {
-    console.warn('[GOOGLE SEARCH] Erro na busca:', err.message);
-    return null;
+    console.error('[CRUZAMENTO] Erro:', err.message);
+    return { ok: false, erro: err.message };
   }
 }
 
-// ------------------------------------------------------------
-// ENRIQUECER PRODUTO (retorna JSON com dados técnicos)
-// ------------------------------------------------------------
 async function enriquecerProduto(dadosBrutos) {
   const { oem, nome, ncm, sku, aplicacao } = dadosBrutos;
+  const marcaDetectada = nome ? nome.split(' ')[0] : '';
+  const codigoPrincipal = oem || sku || nome;
 
-  const dadosReaisWeb = await buscarDadosReaisOEM(oem, nome);
-  const secaoReal = dadosReaisWeb
-    ? `\nDADOS REAIS ENCONTRADOS NA WEB (use estes como base — não invente):\n${dadosReaisWeb}\n`
-    : '\n(Nenhum dado real encontrado na web — use seu conhecimento com confiança baixa)\n';
+  const resultado = await cruzarCodigos(codigoPrincipal, marcaDetectada);
 
-  const prompt = `Você é um especialista técnico em autopeças automotivas brasileiras.
-Analise o produto abaixo e retorne APENAS um JSON válido (sem markdown, sem explicações).
-IMPORTANTE: Use os dados reais da web como fonte primária. Só use conhecimento próprio se não houver dados reais.
-${secaoReal}
-PRODUTO:
-- Nome bruto: ${nome || 'não informado'}
-- Código OEM/MPN: ${oem || 'não informado'}
-- NCM: ${ncm || 'não informado'}
-- SKU: ${sku || 'não informado'}
-- Aplicação: ${aplicacao || 'não informada'}
-
-Retorne JSON com este formato exato:
-{
-  "nome_enriquecido": "Nome completo técnico em Full-Match: [Peça] + [Material] + [Marca] + [OEM] + [Aplicação veicular]",
-  "descricao_tecnica": "Descrição técnica detalhada de 3-5 frases para Google Shopping e SEO, incluindo material, função, compatibilidade e dados de instalação",
-  "descricao_curta": "Máx 160 caracteres para meta description",
-  "aplicacao_veicular": "Lista de veículos compatíveis com ano, ex: Honda Civic (2001-2006) / Toyota Corolla (2003-2008)",
-  "reino": "MINERAL | VEGETAL_SINTETICO | ELETRO_NEURAL",
-  "sistema_veiculo": "Motor | Freios | Suspensão | Arrefecimento | Transmissão | Elétrica | etc",
-  "material_composicao": "Aço carbono | Alumínio fundido | Borracha EPDM | etc",
-  "ncm_sugerido": "NCM de 8 dígitos mais provável para este produto",
-  "peso_estimado_kg": 0.0,
-  "tags_seo": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "garantia_cdc": "Texto de garantia conforme CDC Art.8 Art.31 baseado no material do produto",
-  "confianca_enriquecimento": 0.0
-}
-
-IMPORTANTE: Responda SOMENTE o JSON. Nenhum texto antes ou depois.`;
-
-  try {
-    const resposta = await chamarGemini(prompt, 1500);
-    const jsonLimpo = resposta.replace(/```json|```/g, '').trim();
-    const dados = JSON.parse(jsonLimpo);
-
+  if (!resultado.ok) {
     return {
-      ok: true,
-      dados,
-      modelo_usado: MODEL,
-      fonte_real: !!dadosReaisWeb,
-      enriquecido_em: new Date().toISOString()
-    };
-
-  } catch (err) {
-    console.error('[CLAUDE] Erro:', err.message);
-    return {
-      ok: false,
-      erro: err.message,
-      dados_parciais: {
-        nome_enriquecido: nome,
-        descricao_tecnica: `${nome || 'Produto'} - OEM: ${oem || '—'}`,
-        aplicacao_veicular: aplicacao || '—',
-        reino: 'MINERAL',
-        ncm_sugerido: ncm || '87089900',
-        confianca_enriquecimento: 0.5
-      }
+      ok: false, erro: resultado.erro,
+      dados_parciais: { nome_enriquecido: nome || oem, descricao_tecnica: `${nome || 'Produto'} - OEM: ${oem || '—'}`, aplicacao_veicular: aplicacao || '—', reino: 'MINERAL', ncm_sugerido: ncm || '87089900', confianca_enriquecimento: 0.3 }
     };
   }
+
+  const c = resultado.cruzamento;
+  const aplicacaoFormatada = Array.isArray(c.aplicacao_veicular)
+    ? c.aplicacao_veicular.map(v => `${v.montadora} ${v.modelo} (${v.anos})`).join(' / ')
+    : (c.aplicacao_veicular || aplicacao || '—');
+
+  const dados = {
+    nome_enriquecido: c.nome_peca,
+    descricao_tecnica: c.descricao_tecnica,
+    descricao_curta: (`${c.nome_peca} - ${c.codigo_original_montadora || oem}`).substring(0, 160),
+    aplicacao_veicular: aplicacaoFormatada,
+    reino: 'MINERAL',
+    sistema_veiculo: c.sistemas_veiculo,
+    material_composicao: c.material_composicao,
+    ncm_sugerido: c.ncm || ncm || '87089900',
+    peso_estimado_kg: c.dimensoes?.peso_kg || 0,
+    tags_seo: c.tags_google_shopping || [],
+    garantia_cdc: c.garantia_cdc,
+    confianca_enriquecimento: c.nivel_confianca || 0.7,
+    cruzamento: {
+      codigo_original_montadora: c.codigo_original_montadora,
+      codigos_equivalentes: c.codigos_equivalentes || [],
+      ean_codigos: c.ean_codigos || [],
+      dimensoes: c.dimensoes,
+      tipo_codigo: c.tipo_codigo,
+      fontes: resultado.fontes_reais
+    }
+  };
+
+  return { ok: true, dados, modelo_usado: MODEL, fonte_real: resultado.dados_reais, enriquecido_em: new Date().toISOString() };
 }
 
-// ------------------------------------------------------------
-// GERAR TÍTULO SEO FULL-MATCH
-// ------------------------------------------------------------
 async function gerarTituloSEO(produto) {
   const prompt = `Gere UM ÚNICO título SEO para Google Shopping de autopeças.
-Formato: [Nome da Peça] [Material/Tipo] [Marca] [Código OEM] [Aplicação Veicular]
-Máximo: 150 caracteres.
+Formato: [Nome Peça] [Marca] [Código OEM] [Aplicação Veicular Principal]
+Máximo: 150 caracteres. Inclua o código OEM para reduzir CPC.
 Produto: ${produto.nome || ''} | OEM: ${produto.oem || ''} | Aplicação: ${produto.aplicacao || ''}
 Responda APENAS o título, sem aspas, sem explicação.`;
-
   try {
-    const titulo = await chamarGemini(prompt, 100);
+    const titulo = await chamarGemini(prompt, 150);
     return { ok: true, titulo: titulo.replace(/['"]/g, '').trim() };
-  } catch (err) {
-    return { ok: false, titulo: produto.nome, erro: err.message };
-  }
+  } catch (err) { return { ok: false, titulo: produto.nome, erro: err.message }; }
 }
 
-// ------------------------------------------------------------
-// VALIDAR IMAGEM com visão
-// ------------------------------------------------------------
 async function validarImagem(base64Image, nomeProduto) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey || apiKey.length < 10) {
-    return { ok: false, erro: 'ANTHROPIC_API_KEY não configurada', confianca: 0 };
-  }
-
+  if (!apiKey || apiKey.length < 10) return { ok: false, erro: 'ANTHROPIC_API_KEY não configurada', confianca: 0 };
   try {
-    const resp = await axios.post(
-      ANTHROPIC_URL,
-      {
-        model: MODEL,
-        max_tokens: 50,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: base64Image } },
-            { type: 'text', text: `Esta imagem mostra um(a) "${nomeProduto}"? Responda APENAS: SIM ou NÃO, seguido de vírgula e um número de 0 a 100. Ex: SIM, 92` }
-          ]
-        }]
-      },
-      {
-        headers: {
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json'
-        }
-      }
+    const resp = await axios.post(ANTHROPIC_URL,
+      { model: MODEL, max_tokens: 50, messages: [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: base64Image } },
+        { type: 'text', text: `Esta imagem mostra um(a) "${nomeProduto}"? Responda APENAS: SIM ou NÃO, vírgula e número 0-100. Ex: SIM, 92` }
+      ]}] },
+      { headers: { ...CLAUDE_HEADERS, 'x-api-key': apiKey } }
     );
-
     const texto = resp.data?.content?.[0]?.text || 'NÃO, 0';
-    const partes = texto.split(',');
-    const decisao = partes[0].trim().toUpperCase();
-    const confianca = parseInt(partes[1]?.trim() || 0);
-
+    const [dec, conf] = texto.split(',');
+    const decisao = dec.trim().toUpperCase();
+    const confianca = parseInt(conf?.trim() || 0);
     return { ok: true, valida: decisao === 'SIM' && confianca >= 85, decisao, confianca, aprovada: confianca >= 85 };
-  } catch (err) {
-    return { ok: false, erro: err.message, confianca: 0 };
-  }
+  } catch (err) { return { ok: false, erro: err.message, confianca: 0 }; }
 }
 
-// ------------------------------------------------------------
-// ENRIQUECIMENTO EM MASSA (lote)
-// ------------------------------------------------------------
-async function enriquecerLote(produtos, delayMs = 500) {
+async function enriquecerLote(produtos, delayMs = 800) {
   const resultados = [];
   for (let i = 0; i < produtos.length; i++) {
     const p = produtos[i];
-    console.log(`[CLAUDE] Enriquecendo ${i + 1}/${produtos.length}: ${p.oem || p.nome}`);
-    const resultado = await enriquecerProduto(p);
-    resultados.push({ ...p, enriquecimento: resultado });
-    if (i < produtos.length - 1) {
-      await new Promise(resolve => setTimeout(resolve, delayMs));
-    }
+    console.log(`[MOTOR] Cruzando ${i + 1}/${produtos.length}: ${p.oem || p.nome}`);
+    resultados.push({ ...p, enriquecimento: await enriquecerProduto(p) });
+    if (i < produtos.length - 1) await new Promise(r => setTimeout(r, delayMs));
   }
   return resultados;
 }
 
-module.exports = { enriquecerProduto, gerarTituloSEO, validarImagem, enriquecerLote, chamarGemini };
+module.exports = { enriquecerProduto, gerarTituloSEO, validarImagem, enriquecerLote, chamarGemini, cruzarCodigos };
