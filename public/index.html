@@ -256,7 +256,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 <div id="login-screen">
   <div class="lc">
     <h2>Genesis<span>iRollo</span> 360</h2>
-    <div class="sub">Motor iRollo v3.0 · MOBIS Peças</div>
+    <div class="sub">Motor iRollo v3.4 · MOBIS Peças</div>
     <div class="err" id="lerr">Usuário ou senha inválidos.</div>
     <label>E-mail</label>
     <input type="email" id="lem" placeholder="seu@email.com" autocomplete="username">
@@ -596,7 +596,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
             <button class="btn bs" onclick="copiarVozAtual()">📋 Copiar</button>
             <button class="btn bs" onclick="proximaVariacao()">🔄 Nova variação</button>
           </div>
-          <div id="voz-loading" style="display:none;font-size:12px;color:var(--mu);margin-top:8px;display:none">⏳ Gemini Flash gerando descrição...</div>
+          <div id="voz-loading" style="display:none;font-size:12px;color:var(--mu);margin-top:8px;display:none">⏳ Claude Haiku gerando descrição...</div>
         </div>
 
         <!-- GAVETAS DE INDEXAÇÃO -->
@@ -1868,7 +1868,7 @@ async function enriquecer() {
     ['Peso', e.peso_estimado_kg ? e.peso_estimado_kg + ' kg' : null],
     ['Reino', e.reino],
     ['Composição', e.material_composicao],
-    ['Modelo IA', r.modelo_usado ? '🤖 ' + r.modelo_usado : null],
+    ['Modelo IA', r.modelo_ia ? '🤖 ' + r.modelo_ia : null],
     ['Confiança', e.confianca_enriquecimento ? (e.confianca_enriquecimento * 100).toFixed(0) + '%' : null],
   ].filter(([,v])=>v).map(([k,v]) => '<div style="display:flex;gap:8px;font-size:12px;padding:4px 0;border-bottom:1px solid #f1f5f9"><span style="color:var(--mu);font-family:var(--mono);min-width:110px">' + k + '</span><span style="color:var(--tx);font-weight:500;flex:1">' + v + '</span></div>').join('') + (cruzHtml ? '<div style="margin-top:10px">' + cruzHtml + '</div>' : '');
 
