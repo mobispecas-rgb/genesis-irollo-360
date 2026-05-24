@@ -1,8 +1,8 @@
 // ============================================================
-// GENESIS iROLLO v3.3 - MOTOR DE CRUZAMENTO REAL
-// Triangulacao OEM -> Codigo Original -> Equivalentes -> EAN
-// IA: Claude Haiku (Anthropic) - NAO ALUCINA, so usa dados reais
-// Imagem: extracao real de paginas de catalogos
+// GENESIS iROLLO v3.4 - MOTOR DE CRUZAMENTO REAL + FALLBACK TECNICO
+// IA: Claude Haiku (Anthropic)
+// Modo 1 (Google Search ON): usa dados reais da web - confianca 0.9
+// Modo 2 (Google Search OFF): usa base tecnica do Claude - confianca 0.7
 // ============================================================
 const axios = require('axios');
 require('dotenv').config();
@@ -17,16 +17,9 @@ const CLAUDE_HEADERS = {
 };
 
 const SITES_REAIS = [
-  'krambeck.com.br',
-  'zenoautopecas.com.br',
-  'autoz.com.br',
-  'enviapecas.com.br',
-  'natparts.com.br',
-  'autopecascomp.com.br',
-  'mercadolivre.com.br',
-  'autodoc.com.br',
-  'grupopecasecia.com.br',
-  'pecashonda.com.br'
+  'krambeck.com.br', 'zenoautopecas.com.br', 'autoz.com.br',
+  'enviapecas.com.br', 'natparts.com.br', 'autopecascomp.com.br',
+  'mercadolivre.com.br', 'autodoc.com.br', 'grupopecasecia.com.br', 'pecashonda.com.br'
 ];
 
 async function chamarClaude(prompt, maxTokens) {
@@ -100,19 +93,19 @@ async function fetchPaginaComImagem(item) {
   try {
     const resp = await axios.get(item.url, {
       timeout: 8000,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; GenesisiRollo/3.3)', 'Accept': 'text/html', 'Accept-Language': 'pt-BR,pt;q=0.9' },
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; GenesisiRollo/3.4)', 'Accept': 'text/html', 'Accept-Language': 'pt-BR,pt;q=0.9' },
       maxContentLength: 300000
     });
     const html = resp.data || '';
     const imagem = extrairImagemDaPagina(html, item.url);
     const texto = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi,'').replace(/<style[^>]*>[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').substring(0,8000);
-    return { texto: texto, imagem: imagem, fonte: item.fonte || item.displayLink };
+    return { texto: texto, imagem: imagem };
   } catch(err) { return null; }
 }
 
 async function cruzarCodigos(codigo, marca) {
   marca = marca || '';
-  console.log('[CRUZAMENTO] Iniciando: ' + codigo + ' ' + marca);
+  console.log('[CRUZAMENTO] v3.4 - Iniciando: ' + codigo + ' ' + marca);
   const webResult = await buscarNaWeb(codigo, marca);
   const resultadosWeb = webResult ? webResult.resultados : null;
   const imagemPagemap = webResult ? webResult.imagem_pagemap : null;
@@ -135,37 +128,44 @@ async function cruzarCodigos(codigo, marca) {
     dadosBrutos = 'SNIPPETS DE BUSCA:\n' + snippets;
     if (paginasFetched.length > 0) dadosBrutos += '\n\nCONTEUDO REAL DE PAGINAS:\n' + paginasFetched.join('\n\n');
   }
+  // Prompt diferente dependendo se tem dados reais ou nao
+  var instrucaoFonte, nivelConfiancaBase;
+  if (temDadosReais) {
+    instrucaoFonte = 'USE PRIORITARIAMENTE os dados reais abaixo. Complemente com conhecimento tecnico quando necessario.\n\nDADOS REAIS DA WEB:\n' + dadosBrutos;
+    nivelConfiancaBase = '0.9';
+  } else {
+    instrucaoFonte = 'Sem dados da web. Use seu conhecimento tecnico de catalogos de autopecas (TecDoc, Mahle, LUK, SACHS, VALEO etc).\nSe tiver alta confianca no dado (peca conhecida), preencha. Se nao tiver certeza, coloque null.';
+    nivelConfiancaBase = '0.7';
+  }
   const prompt = [
-    'Voce e um motor de catalogacao de autopecas. NUNCA invente dados.',
-    'USE SOMENTE os dados abaixo. Se um campo nao estiver nos dados, coloque null.',
+    'Voce e um especialista em catalogos tecnicos de autopecas automotivas.',
+    instrucaoFonte,
     '',
     'CODIGO: ' + codigo + ' | MARCA: ' + (marca || 'nao informado'),
-    '',
-    temDadosReais ? 'DADOS REAIS ENCONTRADOS NA WEB:\n' + dadosBrutos : '(Sem dados reais — use APENAS conhecimento tecnico confirmado. Se nao tiver certeza, coloque null.)',
     '',
     'Retorne APENAS um JSON valido (sem markdown):',
     '{',
     '  "codigo_input": "' + codigo + '",',
-    '  "tipo_codigo": "OEM_AFTERMARKET",',
-    '  "marca_fabricante": null,',
-    '  "nome_peca": null,',
-    '  "descricao_tecnica": null,',
-    '  "codigo_original_montadora": null,',
+    '  "tipo_codigo": "OEM_AFTERMARKET | OEM_ORIGINAL | EAN | SKU",',
+    '  "marca_fabricante": "ex: LUK, VALEO, SACHS",',
+    '  "nome_peca": "Nome tecnico completo da peca",',
+    '  "descricao_tecnica": "Descricao tecnica 2-3 frases",',
+    '  "codigo_original_montadora": "Codigo OEM da montadora ou null",',
     '  "codigos_equivalentes": [],',
     '  "ean_codigos": [],',
     '  "aplicacao_veicular": [],',
-    '  "sistemas_veiculo": null,',
-    '  "material_composicao": null,',
+    '  "sistemas_veiculo": "Embreagem | Suspensao | Freios | Motor",',
+    '  "material_composicao": "materiais ou null",',
     '  "dimensoes": {"diametro_mm": null, "espessura_mm": null, "peso_kg": null},',
-    '  "ncm": null,',
+    '  "ncm": "8 digitos ou null",',
     '  "tags_google_shopping": [],',
-    '  "garantia_cdc": null,',
-    '  "nivel_confianca": ' + (temDadosReais ? '0.9' : '0.3') + ',',
+    '  "garantia_cdc": "Garantia conforme CDC ou null",',
+    '  "nivel_confianca": ' + nivelConfiancaBase + ',',
     '  "fontes_consultadas": []',
     '}',
     '',
     'codigos_equivalentes: [{"marca":"VALEO","codigo":"XXX","tipo":"equivalente"}]',
-    'aplicacao_veicular: [{"montadora":"VW","modelo":"Golf","anos":"1999-2005","motor":"1.6"}]',
+    'aplicacao_veicular: [{"montadora":"Hyundai","modelo":"HR","anos":"2006-2012","motor":"2.5 8V Diesel"}]',
     'IMPORTANTE: Responda SOMENTE o JSON.'
   ].join('\n');
   try {
