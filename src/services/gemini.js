@@ -1,5 +1,5 @@
 // ============================================================
-// GENESIS iROLLO v3.4 - MOTOR DE CRUZAMENTO REAL + FALLBACK TECNICO
+// GENESIS iROLLO v3.5 - MOTOR DE CRUZAMENTO REAL + FALLBACK TECNICO
 // IA: Claude Haiku (Anthropic)
 // Modo 1 (Google Search ON): usa dados reais da web - confianca 0.9
 // Modo 2 (Google Search OFF): usa base tecnica do Claude - confianca 0.7
@@ -112,6 +112,12 @@ async function cruzarCodigos(codigo, marca) {
   let dadosBrutos = '';
   let imagemReal = imagemPagemap || null;
   const temDadosReais = !!(resultadosWeb && resultadosWeb.length > 0);
+  // Se nao tem Google Search API, tenta busca direta nos catalogos
+  if (!imagemReal && !temDadosReais) {
+    try {
+      imagemReal = await buscarImagemCatalogoDireto(codigo, marca);
+    } catch(e) { /* continua sem imagem */ }
+  }
   if (temDadosReais) {
     const paginasFetched = [];
     for (let i = 0; i < Math.min(2, resultadosWeb.length); i++) {
