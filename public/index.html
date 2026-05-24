@@ -1790,6 +1790,14 @@ async function enriquecer() {
   document.getElementById('e-btn').textContent = '🔍 Enriquecer';
   document.getElementById('e-btn').disabled = false;
 
+  if (!r || r.ok === false || r.erro) {
+    const msg = r?.erro || 'Erro desconhecido no Motor iRollo';
+    const dica = msg.includes('429') ? ' Aguarde 1 min e tente novamente.' :
+                 msg.includes('API Key') ? ' Configure a GEMINI_API_KEY no Render.' : '';
+    toast(`❌ ${msg}${dica}`, 'e');
+    return;
+  }
+
   enrichCache = { ...payload, ...r };
   const e = r.enriquecimento || {};
   const cor = r.nct >= .90 ? '#22c55e' : r.nct >= .60 ? '#f59e0b' : '#ef4444';
@@ -1798,7 +1806,8 @@ async function enriquecer() {
   // Cabeçalho
   document.getElementById('e-breadcrumb').textContent = `Início › ${e.sistema_veiculo||'Autopeças'} › ${nomeF.split(' ')[0]}`;
   document.getElementById('e-nome').textContent = nomeF;
-  document.getElementById('e-subtitulo').textContent = `${payload.oem||''} · ${e.reino||'MINERAL'} · Motor iRollo v3.0`;
+  const fonteLabel = r.fonte_real ? '🌐 Dados Reais Web' : '🤖 IA Estimada';
+  document.getElementById('e-subtitulo').textContent = `${payload.oem||''} · ${e.reino||'MINERAL'} · ${fonteLabel}`;
   document.getElementById('e-preco').textContent = payload.preco ? 'R$ ' + payload.preco : 'Consultar';
   document.getElementById('e-estoque').textContent = 'Verificar estoque no Bling';
   document.getElementById('e-tags').innerHTML = [
