@@ -200,7 +200,7 @@ async function enriquecerProduto(dadosBrutos) {
   const codigoPrincipal = oem || sku || nome;
   const resultado = await cruzarCodigos(codigoPrincipal, marcaDetectada);
   if (!resultado.ok) {
-    return { ok: false, erro: resultado.erro, dados_parciais: { nome_enriquecido: nome||oem, descricao_tecnica: (nome||'Produto')+' - OEM: '+(oem||'-'), aplicacao_veicular: aplicacao||'-', reino:'MINERAL', ncm_sugerido: ncm||'87089900', confianca_enriquecimento: 0.3 } };
+    return { ok: false, erro: resultado.erro, dados_parciais: { nome_enriquecido: nome||oem, descricao_tecnica: (nome||'Produto')+' - OEM: '+(oem||'-'), aplicacao_veicular: aplicacao||'-', reino:'MINERAL', ncm_sugerido: ncm||null, confianca_enriquecimento: 0.3 } };
   }
   const c = resultado.cruzamento;
   const aplicacaoFormatada = Array.isArray(c.aplicacao_veicular) && c.aplicacao_veicular.length > 0
@@ -215,7 +215,7 @@ async function enriquecerProduto(dadosBrutos) {
     reino: 'MINERAL',
     sistema_veiculo: c.sistemas_veiculo,
     material_composicao: c.material_composicao,
-    ncm_sugerido: c.ncm||ncm||'87089900',
+    ncm_sugerido: c.ncm||(resultado.dados_reais?(ncm||null):null),
     peso_estimado_kg: (c.dimensoes && c.dimensoes.peso_kg) || 0,
     tags_seo: c.tags_google_shopping || [],
     garantia_cdc: c.garantia_cdc,
