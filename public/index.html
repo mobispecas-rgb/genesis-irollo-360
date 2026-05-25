@@ -2,7 +2,17 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#f59e0b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="iRollo 360">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="description" content="Motor de Catalogacao e Enriquecimento de Autopecas — MOBIS">
+
 <title>Genesis iRollo 360 — MOBIS</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -321,6 +331,10 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
       </ul>
     </li>
   </ul>
+  <!-- Botao instalar PWA -->
+  <button id="btn-instalar-pwa" onclick="instalarPWA()" style="display:none;align-items:center;gap:8px;margin:8px 12px;padding:10px 14px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.5px;">
+    📲 Instalar App
+  </button>
   <div class="m-prof">
     <div class="pav">JN</div>
     <div><div class="pnm">Jose Nunes Jr.</div><div class="pco">MOBIS Peças</div></div>
@@ -2641,7 +2655,33 @@ function rodarTodosAgentes() {
 // ============================================================
 window.onload = () => {
   calcMotorAPI();
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(r => console.log('[PWA] SW:', r.scope))
+      .catch(e => console.warn('[PWA] SW erro:', e));
+  }
 };
+
+// Prompt instalar PWA
+let _deferredInstall = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); _deferredInstall = e;
+  const btn = document.getElementById('btn-instalar-pwa');
+  if (btn) btn.style.display = 'flex';
+});
+window.addEventListener('appinstalled', () => {
+  const btn = document.getElementById('btn-instalar-pwa');
+  if (btn) btn.style.display = 'none';
+  _deferredInstall = null;
+});
+function instalarPWA() {
+  if (!_deferredInstall) {
+    alert('Para instalar: menu do navegador → "Adicionar à tela inicial" ou "Instalar app".');
+    return;
+  }
+  _deferredInstall.prompt();
+  _deferredInstall.userChoice.then(r => { _deferredInstall = null; });
+}
 </script>
 </body>
 </html>
