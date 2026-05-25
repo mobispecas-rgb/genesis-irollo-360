@@ -140,8 +140,18 @@ async function cruzarCodigos(codigo, marca) {
     instrucaoFonte = 'USE PRIORITARIAMENTE os dados reais abaixo. Complemente com conhecimento tecnico quando necessario.\n\nDADOS REAIS DA WEB:\n' + dadosBrutos;
     nivelConfiancaBase = '0.9';
   } else {
-    instrucaoFonte = 'Sem dados da web. Use seu conhecimento tecnico de catalogos de autopecas (TecDoc, Mahle, LUK, SACHS, VALEO etc).\nSe tiver alta confianca no dado (peca conhecida), preencha. Se nao tiver certeza, coloque null.';
-    nivelConfiancaBase = '0.7';
+    instrucaoFonte = 'NAO HA dados da web para este codigo.';
+    nivelConfiancaBase = '0.5';
+    restricaoSemWeb = [
+      '',
+      'REGRA CRITICA iRollo v3.5:',
+      'aplicacao_veicular: [] OBRIGATORIO - NUNCA inventar aplicacoes sem fonte real',
+      'codigos_equivalentes: [] OBRIGATORIO - NUNCA inventar equivalentes',
+      'ean_codigos: [] OBRIGATORIO - NUNCA inventar EANs',
+      'codigo_original_montadora: null - OBRIGATORIO sem fonte',
+      'Pode preencher: nome_peca, marca_fabricante, sistemas_veiculo, material_composicao',
+      'ncm: null se houver qualquer duvida sobre o codigo correto'
+    ].join('\n');
   }
   const prompt = [
     'Voce e um especialista em catalogos tecnicos de autopecas automotivas.',
