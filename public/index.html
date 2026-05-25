@@ -584,7 +584,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
         <!-- NCT + DADOS -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
           <div class="card">
-            <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Motor NCT — iRollo v3.0</div>
+            <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Motor NCT — iRollo v3.5</div>
             <div class="nw">
               <div class="nt-lbl">NCT Score</div>
               <div class="nt-sc" id="e-nct">—</div>
@@ -1774,7 +1774,7 @@ async function congelarIndexar() {
     { txt: '⚠ Bling — aguardando CLIENT_SECRET no .env', delay: 400, warn: true },
     { txt: '⚠ Wix — aguardando WIX_API_KEY no .env', delay: 350, warn: true },
     { txt: '✓ 6 slots de imagem estruturados — Gemini validará quando API key configurada', delay: 400 },
-    { txt: '✓ Produto congelado no Motor iRollo v3.0 — pronto para indexação!', delay: 300 },
+    { txt: '✓ Produto congelado no Motor iRollo v3.5 — pronto para indexação!', delay: 300 },
   ];
 
   for (const p of passos) {
@@ -2056,24 +2056,17 @@ function setTab(el) {
 // ============================================================
 let motorDebounce;
 function calcMotorAPI() {
-  clearTimeout(motorDebounce);
-  motorDebounce = setTimeout(async () => {
-    const tf = parseFloat(document.getElementById('m-tf').value||0);
-    const fm = parseFloat(document.getElementById('m-fm').value||0);
-    const co = parseFloat(document.getElementById('m-co').value||0);
-    const av = parseFloat(document.getElementById('m-av').value||0);
-    const r = await api('POST', '/motor/nct', { _manual:true, tf, fm, co, av,
-      oem: tf>=0.7?'BDJ0430':'x', ncm: co>=0.9?'87089900':'0',
-      nome: fm>=0.7?'Produto Teste Motor iRollo TRIMGO BDJ0430 Honda Civic':'x',
-      aplicacao: av>=0.8?'Honda Civic 2001-2006 / Toyota 2003-2008':'x'
-    });
-    if (!r.ok) return;
-    const cor = r.nct>=.90?'#22c55e':r.nct>=.60?'#f59e0b':'#ef4444';
-    document.getElementById('m-nct').textContent = r.nct.toFixed(4);
-    document.getElementById('m-nct').style.color = cor;
-    document.getElementById('m-vd').textContent = r.decisao;
-    document.getElementById('m-vd').style.color = cor;
-  }, 300);
+  const tf = Math.min(Math.max(parseFloat(document.getElementById('m-tf').value||0),0),1);
+  const fm = Math.min(Math.max(parseFloat(document.getElementById('m-fm').value||0),0),1);
+  const co = Math.min(Math.max(parseFloat(document.getElementById('m-co').value||0),0),1);
+  const av = Math.min(Math.max(parseFloat(document.getElementById('m-av').value||0),0),1);
+  const nct = Math.min((tf*0.50)+(fm*0.20)+(co*0.20)+(av*0.10),1.0);
+  const decisao = nct>=0.90?'APROVADO':nct>=0.60?'PENDENTE':'BLOQUEADO';
+  const cor = nct>=0.90?'#22c55e':nct>=0.60?'#f59e0b':'#ef4444';
+  document.getElementById('m-nct').textContent = nct.toFixed(4);
+  document.getElementById('m-nct').style.color = cor;
+  document.getElementById('m-vd').textContent = decisao;
+  document.getElementById('m-vd').style.color = cor;
 }
 
 let hashDebounce;
@@ -2199,7 +2192,7 @@ const pageTitles = {
   ecatalog:'Enriquecimento <span>por Catálogo</span>',
   aprov:'Aprovação <span>de Cadastro</span>',
   aprovados:'<span>Aprovados</span> — Histórico',
-  motor:'Motor <span>iRollo v3.0</span>',
+  motor:'Motor <span>iRollo v3.5</span>',
   imagens:'Sistema de <span>Imagens</span>',
   bling:'Integração <span>Bling ERP v3</span>',
   wix:'Integração <span>Wix Studio</span>',
