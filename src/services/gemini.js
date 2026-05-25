@@ -205,7 +205,7 @@ async function enriquecerProduto(dadosBrutos) {
   const c = resultado.cruzamento;
   const aplicacaoFormatada = Array.isArray(c.aplicacao_veicular) && c.aplicacao_veicular.length > 0
     ? c.aplicacao_veicular.map(function(v){return (v.montadora||'')+' '+(v.modelo||'')+' ('+(v.anos||'')+')'}).join(' / ')
-    : (c.aplicacao_veicular || aplicacao || '-');
+    : (resultado.dados_reais ? (aplicacao || '') : '')
   const dados = {
     nome_enriquecido: c.nome_peca,
     descricao_tecnica: c.descricao_tecnica,
