@@ -1,5 +1,5 @@
 // ============================================================
-// ROUTES — /api/motor (NCT, RAST-HASH, Enriquecimento, Cruzamento)
+// ROUTES — /api/motor (NCT, RAST-HASH, Enriquecimento)
 // ============================================================
 const express = require('express');
 const router = express.Router();
@@ -34,23 +34,41 @@ router.post('/hash', (req, res) => {
   res.json({ ok: true, rast_hash: hash, input: `md5(${sku}+${oem}+${empresa||'MOBIS'})[:16]` });
 });
 
-// POST /api/motor/enriquecer — Enriquecimento completo com cruzamento real
+// POST /api/motor/enriquecer — Enriquecer produto via Claude Haiku
 router.post('/enriquecer', async (req, res) => {
   try {
     const enrich = await gemini.enriquecerProduto(req.body);
     if (!enrich.ok) return res.status(500).json({ erro: enrich.erro, parcial: enrich.dados_parciais });
 
-    const dadosMerged = { ...req.body, ...enrich.dados, aplicacao: enrich.dados.aplicacao_veicular };
-    const nctCalc = motor.calcularNCT(dadosMerged);
+    const d = enrich.dados;
+
+    // Mapeamento correto: campos enriquecidos → campos do NCT
+    // nome_enriquecido → nome | ncm_sugerido → ncm | aplicacao_veicular → aplicacao
+    const dadosParaNCT = {
+      oem:      req.body.oem  || req.body.codigo,
+      sku:      req.body.sku,
+      ean:      req.body.ean  || (d.cruzamento && d.cruzamento.ean_codigos && d.cruzamento.ean_codigos[0]),
+      nome:     d.nome_enriquecido || req.body.nome,
+      ncm:      d.ncm_sugerido    || req.body.ncm,
+      aplicacao: d.aplicacao_veicular,
+      peso_bruto: d.peso_estimado_kg,
+      // Passa confiança da IA para o motor penalizar TF quando necessário
+      confianca_ia:  d.confianca_enriquecimento || 0.5,
+      dados_reais:   enrich.fonte_real || false,
+      codigos_equivalentes_count: (d.cruzamento && d.cruzamento.codigos_equivalentes && d.cruzamento.codigos_equivalentes.length) || 0
+    };
+
+    const nctCalc = motor.calcularNCT(dadosParaNCT);
 
     res.json({
       ok: true,
-      enriquecimento: enrich.dados,
+      enriquecimento: d,
       nct: nctCalc.nct,
+      nct_componentes: nctCalc.componentes,   // ← FIX: retorna componentes para as barras
       decisao: nctCalc.decisao,
       rast_hash: nctCalc.rast_hash,
       modelo_ia: enrich.modelo_usado,
-      fonte_real: enrich.fonte_real
+      fonte_real: enrich.fonte_real || false
     });
   } catch (err) {
     res.status(500).json({ erro: err.message });
@@ -87,11 +105,20 @@ router.post('/lote', async (req, res) => {
     if (!Array.isArray(produtos) || produtos.length === 0) {
       return res.status(400).json({ erro: 'Envie um array "produtos"' });
     }
+
     const resultados = produtos.map(p => motor.processarProduto(p));
-    const aprovados  = resultados.filter(p => p.decisao === 'APROVADO').length;
-    const pendentes  = resultados.filter(p => p.decisao === 'PENDENTE').length;
+    const aprovados = resultados.filter(p => p.decisao === 'APROVADO').length;
+    const pendentes = resultados.filter(p => p.decisao === 'PENDENTE').length;
     const bloqueados = resultados.filter(p => p.decisao === 'BLOQUEADO').length;
-    res.json({ ok: true, total: resultados.length, aprovados, pendentes, bloqueados, produtos: resultados });
+
+    res.json({
+      ok: true,
+      total: resultados.length,
+      aprovados,
+      pendentes,
+      bloqueados,
+      produtos: resultados
+    });
   } catch (err) {
     res.status(500).json({ erro: err.message });
   }
@@ -103,11 +130,13 @@ router.post('/lote', async (req, res) => {
 const blingRouter = express.Router();
 const bling = require('../services/bling');
 
+// GET /api/bling/status — Testar conexão Bling
 blingRouter.get('/status', async (req, res) => {
   const result = await bling.testarConexao();
   res.json(result);
 });
 
+// POST /api/bling/token/renovar
 blingRouter.post('/token/renovar', async (req, res) => {
   try {
     await bling.renovarToken();
@@ -117,12 +146,14 @@ blingRouter.post('/token/renovar', async (req, res) => {
   }
 });
 
+// GET /api/bling/categorias
 blingRouter.get('/categorias', async (req, res) => {
   const result = await bling.listarCategorias();
   if (!result.ok) return res.status(500).json({ erro: result.error });
   res.json({ ok: true, categorias: result.data?.data || [] });
 });
 
+// GET /api/bling/buscar?codigo=BDJ0430
 blingRouter.get('/buscar', async (req, res) => {
   const { codigo } = req.query;
   if (!codigo) return res.status(400).json({ erro: 'Informe o codigo' });
