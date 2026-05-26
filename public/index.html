@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="iRollo 360">
 <link rel="apple-touch-icon" href="/icon-192.png">
-<meta name="description" content="Motor de Catalogacao e Enriquecimento de Autopecas â MOBIS">
+<meta name="description" content="Motor de Catalogacao e Enriquecimento de Autopecas — MOBIS">
 
-<title>Genesis iRollo 360 â MOBIS</title>
+<title>Genesis iRollo 360 — MOBIS</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -215,7 +215,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 .prtr{height:6px;background:#f1f5f9;border-radius:10px;overflow:hidden}
 .prfi{height:100%;border-radius:10px;transition:width 1s cubic-bezier(.16,1,.3,1)}
 
-/* APROVAÃÃO */
+/* APROVAÇÃO */
 .atabs{display:flex;gap:2px;border-bottom:2px solid var(--bd);margin-bottom:20px;overflow-x:auto}
 .atab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:6px}
 .atab:hover{color:var(--ac)}.atab.on{color:var(--ac);border-bottom-color:var(--ac)}
@@ -266,14 +266,14 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 <div id="login-screen">
   <div class="lc">
     <h2>Genesis<span>iRollo</span> 360</h2>
-    <div class="sub">Motor iRollo v3.4 Â· MOBIS PeÃ§as</div>
-    <div class="err" id="lerr">UsuÃ¡rio ou senha invÃ¡lidos.</div>
+    <div class="sub">Motor iRollo v3.4 · MOBIS Peças</div>
+    <div class="err" id="lerr">Usuário ou senha inválidos.</div>
     <label>E-mail</label>
     <input type="email" id="lem" placeholder="seu@email.com" autocomplete="username">
     <label>Senha</label>
-    <input type="password" id="lpw" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+    <input type="password" id="lpw" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
     <button class="btn bp lg" style="width:100%" id="btn-login" onclick="login()">Entrar</button>
-    <div class="hint" id="login-hint" style="color:var(--mu2)">Genesis iRollo 360 Â· MOBIS PeÃ§as</div>
+    <div class="hint" id="login-hint" style="color:var(--mu2)">Genesis iRollo 360 · MOBIS Peças</div>
   </div>
 </div>
 
@@ -281,75 +281,75 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 <div id="app">
 <div id="mob-bar"><button id="mob-ham" onclick="toggleMobNav()" aria-label="Menu">&#9776;</button><div id="mob-logo">Genesis<span>iRollo</span></div></div><div id="mob-overlay" onclick="toggleMobNav()"></div><nav id="nav">
   <div class="logo-h">
-    <div class="logo-i">âï¸</div>
+    <div class="logo-i">⚙️</div>
     <div class="logo-t">Genesis<span>iRollo</span></div>
   </div>
   <ul class="menu-ul">
-    <li class="ti"><a class="cur" onclick="gp('dashboard')"><span class="ni">ð</span><span>Dashboard</span></a></li>
-    <li class="ti"><a onclick="gp('produtos')"><span class="ni">ð¦</span><span>Produtos</span></a></li>
+    <li class="ti"><a class="cur" onclick="gp('dashboard')"><span class="ni">📊</span><span>Dashboard</span></a></li>
+    <li class="ti"><a onclick="gp('produtos')"><span class="ni">📦</span><span>Produtos</span></a></li>
     <li class="ti" onclick="tm(this)">
-      <div class="nl"><span class="ni">â</span><span>Cadastro</span><span class="chv">âº</span></div>
+      <div class="nl"><span class="ni">➕</span><span>Cadastro</span><span class="chv">›</span></div>
       <ul>
         <li><a onclick="gp('cad')">de Produto</a></li>
         <li><a onclick="gp('massa')">por Planilha</a></li>
       </ul>
     </li>
     <li class="ti" onclick="tm(this)">
-      <div class="nl"><span class="ni">ð</span><span>Enriquecimento</span><span class="chv">âº</span></div>
+      <div class="nl"><span class="ni">🔍</span><span>Enriquecimento</span><span class="chv">›</span></div>
       <ul>
         <li><a onclick="gp('enrich')">por OEM / ID</a></li>
-        <li><a onclick="gp('ecatalog')">por CatÃ¡logo</a></li>
+        <li><a onclick="gp('ecatalog')">por Catálogo</a></li>
       </ul>
     </li>
     <li class="ti" onclick="tm(this)">
-      <div class="nl"><span class="ni">â</span><span>AprovaÃ§Ã£o</span><span class="chv">âº</span></div>
+      <div class="nl"><span class="ni">✅</span><span>Aprovação</span><span class="chv">›</span></div>
       <ul>
-        <li><a onclick="gp('aprov')">de Cadastro <span class="sbadge" id="b-aprov">â</span></a></li>
+        <li><a onclick="gp('aprov')">de Cadastro <span class="sbadge" id="b-aprov">—</span></a></li>
         <li><a onclick="gp('aprovados')">Aprovados</a></li>
       </ul>
     </li>
-    <li class="ti"><a onclick="gp('motor')"><span class="ni">ð§ </span><span>Motor iRollo</span></a></li>
-    <li class="ti"><a onclick="gp('imagens')"><span class="ni">ð¼ï¸</span><span>Imagens</span></a></li>
-    <li class="ti"><a onclick="gp('ean')"><span class="ni">ð·</span><span>EAN Scanner</span></a></li>
-    <li class="ti"><a onclick="gp('congelados')"><span class="ni">âï¸</span><span>Congelados</span></a></li>
-    <li class="ti"><a onclick="gp('agentes')"><span class="ni">ð¤</span><span>Agentes IA</span></a></li>
+    <li class="ti"><a onclick="gp('motor')"><span class="ni">🧠</span><span>Motor iRollo</span></a></li>
+    <li class="ti"><a onclick="gp('imagens')"><span class="ni">🖼️</span><span>Imagens</span></a></li>
+    <li class="ti"><a onclick="gp('ean')"><span class="ni">📷</span><span>EAN Scanner</span></a></li>
+    <li class="ti"><a onclick="gp('congelados')"><span class="ni">❄️</span><span>Congelados</span></a></li>
+    <li class="ti"><a onclick="gp('agentes')"><span class="ni">🤖</span><span>Agentes IA</span></a></li>
     <li class="ti" onclick="tm(this)">
-      <div class="nl"><span class="ni">ð</span><span>IntegraÃ§Ã£o</span><span class="chv">âº</span></div>
+      <div class="nl"><span class="ni">🔗</span><span>Integração</span><span class="chv">›</span></div>
       <ul>
-        <li><a onclick="gp('bling')">ð§ Bling ERP v3</a></li>
-        <li><a onclick="gp('wix')">â¬ Wix Studio</a></li>
-        <li><a onclick="gp('whats')">ð¬ WhatsApp Bot</a></li>
+        <li><a onclick="gp('bling')">🟧 Bling ERP v3</a></li>
+        <li><a onclick="gp('wix')">⬛ Wix Studio</a></li>
+        <li><a onclick="gp('whats')">💬 WhatsApp Bot</a></li>
       </ul>
     </li>
-    <li class="ti"><a onclick="gp('templates')"><span class="ni">ð</span><span>Templates</span></a></li>
-    <li class="ti"><a onclick="gp('planos')"><span class="ni">ð</span><span>Planos</span></a></li>
+    <li class="ti"><a onclick="gp('templates')"><span class="ni">📝</span><span>Templates</span></a></li>
+    <li class="ti"><a onclick="gp('planos')"><span class="ni">💎</span><span>Planos</span></a></li>
     <li class="ti" onclick="tm(this)">
-      <div class="nl"><span class="ni">âï¸</span><span>ConfiguraÃ§Ã£o</span><span class="chv">âº</span></div>
+      <div class="nl"><span class="ni">⚙️</span><span>Configuração</span><span class="chv">›</span></div>
       <ul>
-        <li><a onclick="gp('pref')">PreferÃªncias</a></li>
+        <li><a onclick="gp('pref')">Preferências</a></li>
         <li><a onclick="gp('empresa')">Empresa</a></li>
       </ul>
     </li>
   </ul>
   <!-- Botao instalar PWA -->
   <button id="btn-instalar-pwa" onclick="instalarPWA()" style="display:none;align-items:center;gap:8px;margin:8px 12px;padding:10px 14px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.5px;">
-    ð² Instalar App
+    📲 Instalar App
   </button>
   <div class="m-prof">
     <div class="pav">JN</div>
-    <div><div class="pnm">Jose Nunes Jr.</div><div class="pco">MOBIS PeÃ§as</div></div>
-    <button class="lout" onclick="abrirModalSenha()" title="Alterar Senha" style="margin-right:4px">ð</button><button class="lout" onclick="logout()">â»</button>
+    <div><div class="pnm">Jose Nunes Jr.</div><div class="pco">MOBIS Peças</div></div>
+    <button class="lout" onclick="abrirModalSenha()" title="Alterar Senha" style="margin-right:4px">🔑</button><button class="lout" onclick="logout()">⏻</button>
   </div>
 </nav>
 
 <div class="ab">
   <div class="tb">
-    <div class="tb-ttl" id="pgtitle">Dashboard <span>â Genesis iRollo 360</span></div>
+    <div class="tb-ttl" id="pgtitle">Dashboard <span>— Genesis iRollo 360</span></div>
     <span class="api-dot pend" id="api-dot" title="Status API"></span>
     <div class="tb-badge" id="tb-api">VERIFICANDO...</div>
     <div class="tb-badge g" id="tb-motor">Motor v3.4</div>
-    <button class="ib" onclick="gp('bling')">ð§ Bling</button>
-    <button class="ib" onclick="gp('wix')">â¬ Wix</button>
+    <button class="ib" onclick="gp('bling')">🟧 Bling</button>
+    <button class="ib" onclick="gp('wix')">⬛ Wix</button>
   </div>
 
   <main id="main">
@@ -359,16 +359,16 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
       <div class="ph">
         <div><h1>Painel de Controle <span>MOBIS</span></h1><div class="psub" id="ds-sub">Carregando dados do Bling...</div></div>
         <div class="pact">
-          <button class="btn bs" onclick="gp('enrich')">ð Enriquecer</button>
-          <button class="btn bp" onclick="gp('cad')">â Novo Cadastro</button>
+          <button class="btn bs" onclick="gp('enrich')">🔍 Enriquecer</button>
+          <button class="btn bp" onclick="gp('cad')">➕ Novo Cadastro</button>
         </div>
       </div>
       <div class="sg" id="ds-stats">
-        <div class="sc g"><div class="sei">â³</div><div class="sv">â</div><div class="sl">Carregando...</div></div>
+        <div class="sc g"><div class="sei">⏳</div><div class="sv">—</div><div class="sl">Carregando...</div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
         <div class="card">
-          <div class="ch"><div class="ct"><span class="dot"></span>NCT Score â CatÃ¡logo</div><span class="bg2 g2">â</span></div>
+          <div class="ch"><div class="ct"><span class="dot"></span>NCT Score — Catálogo</div><span class="bg2 g2">—</span></div>
           <div class="nw" id="ds-nct"><div class="lo"><div class="sp"></div><p>Calculando NCT...</p></div></div>
         </div>
         <div class="card">
@@ -378,11 +378,11 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
       </div>
       <div class="card">
         <div class="ch">
-          <div class="ct"><span class="dot"></span>Ãltimos Produtos â Bling API Real</div>
-          <button class="btn bs sm" onclick="gp('produtos')">Ver todos â</button>
+          <div class="ct"><span class="dot"></span>Últimos Produtos — Bling API Real</div>
+          <button class="btn bs sm" onclick="gp('produtos')">Ver todos →</button>
         </div>
         <div class="tw"><table>
-          <thead><tr><th>Produto</th><th>CÃ³digo</th><th>PreÃ§o</th><th>NCT</th><th>RAST-HASH</th><th>Status</th><th>AÃ§Ãµes</th></tr></thead>
+          <thead><tr><th>Produto</th><th>Código</th><th>Preço</th><th>NCT</th><th>RAST-HASH</th><th>Status</th><th>Ações</th></tr></thead>
           <tbody id="ds-table"><tr><td colspan="7" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
         </table></div>
       </div>
@@ -391,30 +391,30 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
     <!-- PRODUTOS -->
     <div class="page" id="pg-produtos">
       <div class="ph">
-        <div><h1>Produtos <span>â Bling Real</span></h1><div class="psub" id="prod-sub">Carregando...</div></div>
+        <div><h1>Produtos <span>— Bling Real</span></h1><div class="psub" id="prod-sub">Carregando...</div></div>
         <div class="pact">
-          <button class="btn bs" onclick="exportarCSV()">ð¥ Exportar</button>
-          <button class="btn bp" onclick="gp('cad')">â Cadastrar</button>
+          <button class="btn bs" onclick="exportarCSV()">📥 Exportar</button>
+          <button class="btn bp" onclick="gp('cad')">➕ Cadastrar</button>
         </div>
       </div>
       <div class="card" style="padding:0">
         <div class="tw">
           <div class="ttb">
-            <input class="ts" id="ps-search" placeholder="ð Buscar nome, cÃ³digo..." oninput="filtrarProdutos()">
+            <input class="ts" id="ps-search" placeholder="🔍 Buscar nome, código..." oninput="filtrarProdutos()">
             <select class="fsl" style="width:auto;padding:7px 12px;font-size:12px" id="ps-status" onchange="filtrarProdutos()">
               <option value="">Todos status</option>
               <option value="A">Ativo</option>
               <option value="I">Inativo</option>
             </select>
-            <button class="btn bs sm" onclick="carregarProdutos()">ð Atualizar</button>
+            <button class="btn bs sm" onclick="carregarProdutos()">🔄 Atualizar</button>
           </div>
           <table>
-            <thead><tr><th><input type="checkbox" onchange="selAll(this)"></th><th>Nome</th><th>CÃ³digo</th><th>PreÃ§o</th><th>NCT</th><th>RAST-HASH</th><th>SituaÃ§Ã£o</th><th>AÃ§Ãµes</th></tr></thead>
+            <thead><tr><th><input type="checkbox" onchange="selAll(this)"></th><th>Nome</th><th>Código</th><th>Preço</th><th>NCT</th><th>RAST-HASH</th><th>Situação</th><th>Ações</th></tr></thead>
             <tbody id="prod-tbody"><tr><td colspan="8" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
           </table>
-          <div class="pg"><span id="prod-info">â</span><div style="display:flex;gap:8px">
-            <button class="btn bs sm" id="btn-prev" onclick="prodPagina(-1)">â¹ Anterior</button>
-            <button class="btn bs sm" id="btn-next" onclick="prodPagina(1)">PrÃ³xima âº</button>
+          <div class="pg"><span id="prod-info">—</span><div style="display:flex;gap:8px">
+            <button class="btn bs sm" id="btn-prev" onclick="prodPagina(-1)">‹ Anterior</button>
+            <button class="btn bs sm" id="btn-next" onclick="prodPagina(1)">Próxima ›</button>
           </div></div>
         </div>
       </div>
@@ -422,12 +422,12 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 
     <!-- CADASTRO -->
     <div class="page" id="pg-cad">
-      <div class="ph"><div><h1>Cadastro <span>de Produto</span></h1><div class="psub">Motor NCT em tempo real Â· RAST-HASH automÃ¡tico Â· Salva no Bling</div></div></div>
+      <div class="ph"><div><h1>Cadastro <span>de Produto</span></h1><div class="psub">Motor NCT em tempo real · RAST-HASH automático · Salva no Bling</div></div></div>
       <div class="nw" id="cad-nct">
         <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div><div class="nt-lbl">NCT â Ãndice de ConfianÃ§a TÃ©cnica</div>
+          <div><div class="nt-lbl">NCT — Índice de Confiança Técnica</div>
             <div class="nt-sc" id="nct-v" style="color:#94a3b8">0.00</div>
-            <div class="nt-vd" id="nct-vd" style="color:#94a3b8">Preencha o TriÃ¢ngulo iRollo</div>
+            <div class="nt-vd" id="nct-vd" style="color:#94a3b8">Preencha o Triângulo iRollo</div>
           </div>
           <div id="nct-bdg"></div>
         </div>
@@ -439,60 +439,60 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
         </div>
       </div>
       <div class="card">
-        <div class="ct" style="margin-bottom:16px"><span class="dot"></span>TriÃ¢ngulo iRollo</div>
+        <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Triângulo iRollo</div>
         <div class="fg fg3">
-          <div class="fgrp"><label class="fl">OEM / CÃ³digo-MÃ£e <span class="req">*</span><span class="tip">NÃ³ raiz</span></label><input class="fi" id="f-oem" placeholder="BDJ0430" oninput="calcNCT()"></div>
-          <div class="fgrp"><label class="fl">NCM <span class="req">*</span><span class="tip">8 dÃ­gitos</span></label><input class="fi" id="f-ncm" placeholder="87089900" maxlength="8" oninput="calcNCT()"></div>
-          <div class="fgrp"><label class="fl">SKU / ReferÃªncia <span class="req">*</span></label><input class="fi" id="f-sku" placeholder="TRIMGO-BDJ0430" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">OEM / Código-Mãe <span class="req">*</span><span class="tip">Nó raiz</span></label><input class="fi" id="f-oem" placeholder="BDJ0430" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">NCM <span class="req">*</span><span class="tip">8 dígitos</span></label><input class="fi" id="f-ncm" placeholder="87089900" maxlength="8" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">SKU / Referência <span class="req">*</span></label><input class="fi" id="f-sku" placeholder="TRIMGO-BDJ0430" oninput="calcNCT()"></div>
         </div>
         <div class="div"></div>
         <div class="fg">
           <div class="fgrp ff"><label class="fl">Nome Full-Match <span class="req">*</span></label><input class="fi" id="f-nome" placeholder="Bandeja Dianteira Superior TRIMGO Honda Civic 2001-2006" oninput="calcNCT()"></div>
           <div class="fgrp"><label class="fl">Marca</label><input class="fi" id="f-marca" value="TRIMGO"></div>
           <div class="fgrp"><label class="fl">Categoria</label>
-            <select class="fsl" id="f-cat"><option>SuspensÃ£o</option><option>Amortecedores</option><option>Freios</option><option>Filtros</option><option>Motor</option><option>ElÃ©trica</option><option>Arrefecimento</option><option>TransmissÃ£o</option></select>
+            <select class="fsl" id="f-cat"><option>Suspensão</option><option>Amortecedores</option><option>Freios</option><option>Filtros</option><option>Motor</option><option>Elétrica</option><option>Arrefecimento</option><option>Transmissão</option></select>
           </div>
-          <div class="fgrp"><label class="fl">PreÃ§o R$</label><input class="fi" id="f-preco" type="number" placeholder="0.00" step="0.01"></div>
+          <div class="fgrp"><label class="fl">Preço R$</label><input class="fi" id="f-preco" type="number" placeholder="0.00" step="0.01"></div>
           <div class="fgrp"><label class="fl">Estoque</label><input class="fi" id="f-estq" type="number" placeholder="0"></div>
-          <div class="fgrp"><label class="fl">AplicaÃ§Ã£o Veicular <span class="req">*</span></label><input class="fi" id="f-aplic" placeholder="Honda Civic 2001-2006 / Toyota Corolla 2003-2008" oninput="calcNCT()"></div>
+          <div class="fgrp"><label class="fl">Aplicação Veicular <span class="req">*</span></label><input class="fi" id="f-aplic" placeholder="Honda Civic 2001-2006 / Toyota Corolla 2003-2008" oninput="calcNCT()"></div>
           <div class="fgrp"><label class="fl">EAN</label><input class="fi" id="f-ean" placeholder="7891234567890"></div>
-          <div class="fgrp ff"><label class="fl">DescriÃ§Ã£o TÃ©cnica</label><textarea class="fta" id="f-desc" rows="3" placeholder="DescriÃ§Ã£o para Google Shopping e Wix..."></textarea></div>
+          <div class="fgrp ff"><label class="fl">Descrição Técnica</label><textarea class="fta" id="f-desc" rows="3" placeholder="Descrição para Google Shopping e Wix..."></textarea></div>
         </div>
         <div class="div"></div>
         <div class="hb" id="hash-box" onclick="copiarHash()">
-          <div><div class="hlbl">RAST-HASH Â· md5(SKU+OEM+"MOBIS")[:16]</div><div class="hv" id="hash-val">â Preencha SKU e OEM â</div></div>
-          <span>ð</span>
+          <div><div class="hlbl">RAST-HASH · md5(SKU+OEM+"MOBIS")[:16]</div><div class="hv" id="hash-val">— Preencha SKU e OEM —</div></div>
+          <span>📋</span>
         </div>
         <div class="div"></div>
         <div class="bgrp">
-          <button class="btn bp lg" id="btn-salvar" onclick="salvarBling()">ð¾ Salvar no Bling</button>
-          <button class="btn bg" onclick="salvarBling(true)">â Salvar e Aprovar</button>
-          <button class="btn bs" onclick="enriquecerForm()">ð¤ Enriquecer com IA</button>
-          <button class="btn bs" onclick="limparCad()">ð Limpar</button>
+          <button class="btn bp lg" id="btn-salvar" onclick="salvarBling()">💾 Salvar no Bling</button>
+          <button class="btn bg" onclick="salvarBling(true)">✅ Salvar e Aprovar</button>
+          <button class="btn bs" onclick="enriquecerForm()">🤖 Enriquecer com IA</button>
+          <button class="btn bs" onclick="limparCad()">🔄 Limpar</button>
         </div>
       </div>
     </div>
 
     <!-- CADASTRO EM MASSA -->
     <div class="page" id="pg-massa">
-      <div class="ph"><div><h1>Cadastro <span>em Massa</span></h1><div class="psub">Upload CSV/XLSX â Motor iRollo processa â Envia para Bling</div></div></div>
+      <div class="ph"><div><h1>Cadastro <span>em Massa</span></h1><div class="psub">Upload CSV/XLSX → Motor iRollo processa → Envia para Bling</div></div></div>
       <div class="card">
         <div class="dz" id="dz" onclick="document.getElementById('fu').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropFile(event)">
-          <div class="dzi">ð</div>
+          <div class="dzi">📊</div>
           <div style="font-size:15px;font-weight:600;margin-bottom:6px">Arraste sua planilha aqui</div>
-          <div style="font-size:12px;color:var(--mu);margin-bottom:16px">Formatos: .CSV Â· .XLSX Â· .XLS</div>
-          <button class="btn bp" onclick="event.stopPropagation()">ð¤ Importar Planilha</button>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:16px">Formatos: .CSV · .XLSX · .XLS</div>
+          <button class="btn bp" onclick="event.stopPropagation()">📤 Importar Planilha</button>
           <input type="file" id="fu" accept=".csv,.xlsx,.xls" style="display:none" onchange="uploadPlanilha(this)">
         </div>
       </div>
       <div class="card" id="massa-prev" style="display:none">
         <div class="ch">
-          <div class="ct"><span class="dot"></span>PrÃ©-visualizaÃ§Ã£o â <span id="m-total">0</span> produtos</div>
-          <button class="btn bp" id="btn-enviar-bling" onclick="enviarBlingMassa()">ð§ Enviar para Bling</button>
+          <div class="ct"><span class="dot"></span>Pré-visualização — <span id="m-total">0</span> produtos</div>
+          <button class="btn bp" id="btn-enviar-bling" onclick="enviarBlingMassa()">🟧 Enviar para Bling</button>
         </div>
         <div id="m-resumo" style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap"></div>
         <div class="tw"><table>
-          <thead><tr><th>#</th><th>Nome</th><th>OEM</th><th>NCM</th><th>SKU</th><th>PreÃ§o</th><th>NCT</th><th>DecisÃ£o</th></tr></thead>
+          <thead><tr><th>#</th><th>Nome</th><th>OEM</th><th>NCM</th><th>SKU</th><th>Preço</th><th>NCT</th><th>Decisão</th></tr></thead>
           <tbody id="m-tbody"></tbody>
         </table></div>
       </div>
@@ -500,52 +500,52 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 
     <!-- ENRIQUECIMENTO POR OEM -->
     <div class="page" id="pg-enrich">
-      <div class="ph"><div><h1>Enriquecimento <span>por OEM / ID</span></h1><div class="psub">Motor iRollo v3.4 + Claude Haiku â Cruzamento Real â NCT â Bling + Wix + Google Shopping</div></div></div>
+      <div class="ph"><div><h1>Enriquecimento <span>por OEM / ID</span></h1><div class="psub">Motor iRollo v3.4 + Claude Haiku → Cruzamento Real → NCT → Bling + Wix + Google Shopping</div></div></div>
 
       <!-- BUSCA -->
       <div class="card">
         <div style="display:flex;gap:10px;margin-bottom:10px">
-          <input class="fi" id="e-input" placeholder="Ex: JPR1129 Â· BDJ0430 Â· TRW-JPR1129" style="font-family:var(--mono);letter-spacing:1px;text-transform:uppercase" onkeydown="if(event.key==='Enter')enriquecer()">
-          <button class="btn bp lg" onclick="enriquecer()" id="e-btn">ð Enriquecer</button>
+          <input class="fi" id="e-input" placeholder="Ex: JPR1129 · BDJ0430 · TRW-JPR1129" style="font-family:var(--mono);letter-spacing:1px;text-transform:uppercase" onkeydown="if(event.key==='Enter')enriquecer()">
+          <button class="btn bp lg" onclick="enriquecer()" id="e-btn">🔍 Enriquecer</button>
         </div>
-        <div style="font-size:12px;color:var(--mu)">Motor iRollo triangula Web + TecDoc + EAN DB â NCT â Perfis de Voz â Gavetas Bling / Wix / Google Shopping / Ads</div>
+        <div style="font-size:12px;color:var(--mu)">Motor iRollo triangula Web + TecDoc + EAN DB → NCT → Perfis de Voz → Gavetas Bling / Wix / Google Shopping / Ads</div>
       </div>
 
       <!-- RESULTADO -->
       <div id="e-result" style="display:none">
 
-        <!-- CABEÃALHO DO PRODUTO -->
+        <!-- CABEÇALHO DO PRODUTO -->
         <div class="card" id="e-cabecalho">
-          <div style="font-size:10px;font-family:var(--mono);color:var(--mu);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="e-breadcrumb">InÃ­cio âº Categoria âº Produto</div>
-          <div style="font-size:17px;font-weight:700;line-height:1.3;margin-bottom:6px" id="e-nome">â</div>
-          <div style="font-size:12px;color:var(--mu);margin-bottom:10px" id="e-subtitulo">â</div>
+          <div style="font-size:10px;font-family:var(--mono);color:var(--mu);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="e-breadcrumb">Início › Categoria › Produto</div>
+          <div style="font-size:17px;font-weight:700;line-height:1.3;margin-bottom:6px" id="e-nome">—</div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:10px" id="e-subtitulo">—</div>
           <div id="e-tags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
           <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
-            <div style="font-size:24px;font-weight:700;color:var(--gr)" id="e-preco">â</div>
-            <div style="font-size:12px;color:var(--mu)" id="e-estoque">â</div>
+            <div style="font-size:24px;font-weight:700;color:var(--gr)" id="e-preco">—</div>
+            <div style="font-size:12px;color:var(--mu)" id="e-estoque">—</div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn bg" id="e-btn-aprovar" onclick="aprovarEnrich()">â Aprovar</button>
-            <button class="btn bs" onclick="gp('imagens')">ð¼ï¸ Imagens</button>
-            <button class="btn bs" onclick="congelarProduto()" id="e-btn-congelar" style="display:none">âï¸ Congelar + Indexar</button>
+            <button class="btn bg" id="e-btn-aprovar" onclick="aprovarEnrich()">✅ Aprovar</button>
+            <button class="btn bs" onclick="gp('imagens')">🖼️ Imagens</button>
+            <button class="btn bs" onclick="congelarProduto()" id="e-btn-congelar" style="display:none">❄️ Congelar + Indexar</button>
           </div>
         </div>
 
         <!-- 6 IMAGENS -->
         <div class="card">
-          <div class="ct" style="margin-bottom:10px"><span class="dot"></span>6 Imagens â PadrÃ£o Google Shopping Â· CPC Baixo</div>
+          <div class="ct" style="margin-bottom:10px"><span class="dot"></span>6 Imagens — Padrão Google Shopping · CPC Baixo</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="e-img-regras">
-            <span style="font-size:10px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-family:var(--mono)">â fundo branco</span>
-            <span style="font-size:10px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-family:var(--mono)">â produto real</span>
-            <span style="font-size:10px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-family:var(--mono)">â 1000px mÃ­nimo</span>
-            <span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-family:var(--mono)">â sem watermark</span>
-            <span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-family:var(--mono)">â sem texto sobreposto</span>
+            <span style="font-size:10px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-family:var(--mono)">✓ fundo branco</span>
+            <span style="font-size:10px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-family:var(--mono)">✓ produto real</span>
+            <span style="font-size:10px;background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-family:var(--mono)">✓ 1000px mínimo</span>
+            <span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-family:var(--mono)">✗ sem watermark</span>
+            <span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-family:var(--mono)">✗ sem texto sobreposto</span>
           </div>
           <!-- BUSCA DE IMAGEM MANUAL -->
           <div id="e-img-busca" style="background:#f8fafc;border:1px solid var(--bd);border-radius:8px;padding:10px;margin-bottom:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             <input id="e-img-url" class="fi" placeholder="Cole aqui a URL da imagem ou busque no Google..." style="flex:1;min-width:200px;font-size:12px">
-            <button class="btn bs sm" onclick="abrirGoogleImagens()">ð Google Imagens</button>
-            <button class="btn bp sm" onclick="validarImagemManual()">â Validar e Usar</button>
+            <button class="btn bs sm" onclick="abrirGoogleImagens()">🔍 Google Imagens</button>
+            <button class="btn bp sm" onclick="validarImagemManual()">✅ Validar e Usar</button>
           </div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="e-imgs-grid">
             <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
@@ -555,17 +555,17 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
             </div>
             <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
               <div style="font-size:20px;color:var(--mu)">2</div>
-              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">LATERAL 90Â°<br>Polia visÃ­vel</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">LATERAL 90°<br>Polia visível</div>
               <div style="position:absolute;top:5px;right:5px;font-size:9px;background:#854d0e;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Buscar</div>
             </div>
             <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
               <div style="font-size:20px;color:var(--mu)">3</div>
-              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">DETALHE<br>Close-up tÃ©cnico</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">DETALHE<br>Close-up técnico</div>
               <div style="position:absolute;top:5px;right:5px;font-size:9px;background:#854d0e;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Buscar</div>
             </div>
             <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
               <div style="font-size:20px;color:var(--mu)">4</div>
-              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">CONEXÃO<br>Cano saÃ­da</div>
+              <div style="font-size:9px;font-family:var(--mono);color:var(--mu);text-align:center">CONEXÃO<br>Cano saída</div>
               <div style="position:absolute;top:5px;right:5px;font-size:9px;background:#854d0e;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Buscar</div>
             </div>
             <div style="aspect-ratio:1;background:#f1f5f9;border-radius:8px;border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative">
@@ -584,73 +584,73 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
         <!-- NCT + DADOS -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
           <div class="card">
-            <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Motor NCT â iRollo v3.5</div>
+            <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Motor NCT — iRollo v3.5</div>
             <div class="nw">
               <div class="nt-lbl">NCT Score</div>
-              <div class="nt-sc" id="e-nct">â</div>
-              <div class="nt-vd" id="e-vd">â</div>
+              <div class="nt-sc" id="e-nct">—</div>
+              <div class="nt-vd" id="e-vd">—</div>
             </div>
             <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px" id="e-barras"></div>
-            <div class="hb" style="margin-top:10px"><div><div class="hlbl">RAST-HASH Certificado</div><div class="hv" id="e-hash">â</div></div><span>ð</span></div>
+            <div class="hb" style="margin-top:10px"><div><div class="hlbl">RAST-HASH Certificado</div><div class="hv" id="e-hash">—</div></div><span>📋</span></div>
           </div>
           <div class="card">
-            <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Dados TÃ©cnicos</div>
+            <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Dados Técnicos</div>
             <div style="display:flex;flex-direction:column;gap:6px" id="e-dados"></div>
           </div>
         </div>
 
-        <!-- ENRIQUECIMENTO â PERFIS DE VOZ -->
+        <!-- ENRIQUECIMENTO — PERFIS DE VOZ -->
         <div class="card">
-          <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Enriquecimento â Voz do Lojista Â· Sem DNA do Fabricante</div>
+          <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Enriquecimento — Voz do Lojista · Sem DNA do Fabricante</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="voz-tabs">
-            <button class="btn bp" onclick="setVozPerfil('tecnico',this)" id="vtab-tecnico">âï¸ TÃ©cnico</button>
-            <button class="btn bs" onclick="setVozPerfil('comercial',this)" id="vtab-comercial">ð¼ Comercial</button>
-            <button class="btn bs" onclick="setVozPerfil('seo',this)" id="vtab-seo">ð SEO</button>
-            <button class="btn bs" onclick="setVozPerfil('whatsapp',this)" id="vtab-whatsapp">ð¬ WhatsApp</button>
-            <button class="btn bs" onclick="setVozPerfil('pmax',this)" id="vtab-pmax">ð¢ P-Max</button>
+            <button class="btn bp" onclick="setVozPerfil('tecnico',this)" id="vtab-tecnico">⚙️ Técnico</button>
+            <button class="btn bs" onclick="setVozPerfil('comercial',this)" id="vtab-comercial">💼 Comercial</button>
+            <button class="btn bs" onclick="setVozPerfil('seo',this)" id="vtab-seo">🔍 SEO</button>
+            <button class="btn bs" onclick="setVozPerfil('whatsapp',this)" id="vtab-whatsapp">💬 WhatsApp</button>
+            <button class="btn bs" onclick="setVozPerfil('pmax',this)" id="vtab-pmax">📢 P-Max</button>
           </div>
-          <div style="font-size:10px;font-family:var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px" id="voz-label-atual">Perfil tÃ©cnico â especialista em autopeÃ§as</div>
+          <div style="font-size:10px;font-family:var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px" id="voz-label-atual">Perfil técnico — especialista em autopeças</div>
           <textarea id="voz-output" style="width:100%;min-height:110px;padding:12px;background:#f8fafc;border:1px solid var(--bd);border-radius:8px;font-size:13px;line-height:1.7;resize:vertical;font-family:inherit;color:var(--tx)" readonly></textarea>
           <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-            <button class="btn bp" onclick="gerarVozIA()" id="btn-gerar-voz">ð¤ Gerar com IA</button>
-            <button class="btn bs" onclick="copiarVozAtual()">ð Copiar</button>
-            <button class="btn bs" onclick="proximaVariacao()">ð Nova variaÃ§Ã£o</button>
+            <button class="btn bp" onclick="gerarVozIA()" id="btn-gerar-voz">🤖 Gerar com IA</button>
+            <button class="btn bs" onclick="copiarVozAtual()">📋 Copiar</button>
+            <button class="btn bs" onclick="proximaVariacao()">🔄 Nova variação</button>
           </div>
-          <div id="voz-loading" style="display:none;font-size:12px;color:var(--mu);margin-top:8px;display:none">â³ Claude Haiku gerando descriÃ§Ã£o...</div>
+          <div id="voz-loading" style="display:none;font-size:12px;color:var(--mu);margin-top:8px;display:none">⏳ Claude Haiku gerando descrição...</div>
         </div>
 
-        <!-- GAVETAS DE INDEXAÃÃO -->
-        <div style="margin-bottom:6px;font-size:10px;font-family:var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:1px">Gavetas de IndexaÃ§Ã£o</div>
+        <!-- GAVETAS DE INDEXAÇÃO -->
+        <div style="margin-bottom:6px;font-size:10px;font-family:var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:1px">Gavetas de Indexação</div>
 
         <!-- GAVETA BLING -->
         <div style="border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:8px">
           <div onclick="toggleGaveta('bling')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fff8f0;cursor:pointer">
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">ð§ CabeÃ§ote ERP â Bling v3</div>
-            <div style="font-size:11px;color:var(--mu)" id="gav-bling-icon">â¼ abrir</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">🟧 Cabeçote ERP — Bling v3</div>
+            <div style="font-size:11px;color:var(--mu)" id="gav-bling-icon">▼ abrir</div>
           </div>
           <div id="gav-bling" style="display:none;padding:14px;background:#fff">
             <div style="display:flex;flex-direction:column;gap:6px" id="gav-bling-fields"></div>
-            <button class="btn" onclick="enviarBling()" style="width:100%;margin-top:10px;padding:10px;background:#f97316;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">ð§ Enviar para Bling ERP</button>
+            <button class="btn" onclick="enviarBling()" style="width:100%;margin-top:10px;padding:10px;background:#f97316;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">🟧 Enviar para Bling ERP</button>
           </div>
         </div>
 
         <!-- GAVETA WIX -->
         <div style="border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:8px">
           <div onclick="toggleGaveta('wix')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0f0f0;cursor:pointer">
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">â¬ CabeÃ§ote Wix Studio</div>
-            <div style="font-size:11px;color:var(--mu)" id="gav-wix-icon">â¼ abrir</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">⬛ Cabeçote Wix Studio</div>
+            <div style="font-size:11px;color:var(--mu)" id="gav-wix-icon">▼ abrir</div>
           </div>
           <div id="gav-wix" style="display:none;padding:14px;background:#fff">
             <div style="display:flex;flex-direction:column;gap:6px" id="gav-wix-fields"></div>
-            <button class="btn" onclick="sincronizarWix()" style="width:100%;margin-top:10px;padding:10px;background:#0f3460;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">â¬ Sincronizar Wix Studio</button>
+            <button class="btn" onclick="sincronizarWix()" style="width:100%;margin-top:10px;padding:10px;background:#0f3460;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">⬛ Sincronizar Wix Studio</button>
           </div>
         </div>
 
         <!-- GAVETA GOOGLE SHOPPING -->
         <div style="border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:8px">
           <div onclick="toggleGaveta('gshop')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0f7ff;cursor:pointer">
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">ðï¸ Google Shopping â Merchant Center</div>
-            <div style="font-size:11px;color:var(--mu)" id="gav-gshop-icon">â¼ abrir</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">🛍️ Google Shopping — Merchant Center</div>
+            <div style="font-size:11px;color:var(--mu)" id="gav-gshop-icon">▼ abrir</div>
           </div>
           <div id="gav-gshop" style="display:none;padding:14px;background:#fff">
             <div style="display:flex;flex-direction:column;gap:6px" id="gav-gshop-fields"></div>
@@ -660,55 +660,55 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
         <!-- GAVETA ADS P-MAX -->
         <div style="border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:12px">
           <div onclick="toggleGaveta('ads')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fdf0ff;cursor:pointer">
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">ð¢ Google Ads â Performance Max</div>
-            <div style="font-size:11px;color:var(--mu)" id="gav-ads-icon">â¼ abrir</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600">📢 Google Ads — Performance Max</div>
+            <div style="font-size:11px;color:var(--mu)" id="gav-ads-icon">▼ abrir</div>
           </div>
           <div id="gav-ads" style="display:none;padding:14px;background:#fff">
             <div style="display:flex;flex-direction:column;gap:6px" id="gav-ads-fields"></div>
           </div>
         </div>
 
-        <!-- BOTÃO CONGELAR -->
+        <!-- BOTÃO CONGELAR -->
         <div class="card" style="background:#0f3460;border-color:#0f3460">
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px" id="status-indexacao"></div>
-          <button onclick="congelarIndexar()" id="btn-congelar" style="width:100%;padding:14px;background:var(--gr);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px">âï¸ CONGELAR E INDEXAR â Bling + Wix + Google Shopping</button>
+          <button onclick="congelarIndexar()" id="btn-congelar" style="width:100%;padding:14px;background:var(--gr);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px">❄️ CONGELAR E INDEXAR — Bling + Wix + Google Shopping</button>
           <div id="congelar-log" style="margin-top:10px;font-size:12px;font-family:var(--mono);color:#94a3b8;line-height:2;display:none"></div>
         </div>
 
       </div>
     </div>
 
-    <!-- ENRICH CATÃLOGO -->
+    <!-- ENRICH CATÁLOGO -->
     <div class="page" id="pg-ecatalog">
-      <div class="ph"><div><h1>Enriquecimento <span>por CatÃ¡logo</span></h1></div>
-        <button class="btn bp" onclick="enriquecerCatalogo()">âï¸ Enriquecer Todos</button>
+      <div class="ph"><div><h1>Enriquecimento <span>por Catálogo</span></h1></div>
+        <button class="btn bp" onclick="enriquecerCatalogo()">⚙️ Enriquecer Todos</button>
       </div>
-      <div class="card"><div id="ec-list"><div class="lo"><div class="sp"></div><p>Carregando catÃ¡logo Bling...</p></div></div></div>
+      <div class="card"><div id="ec-list"><div class="lo"><div class="sp"></div><p>Carregando catálogo Bling...</p></div></div></div>
     </div>
 
-    <!-- APROVAÃÃO -->
+    <!-- APROVAÇÃO -->
     <div class="page" id="pg-aprov">
       <div class="ph">
-        <div><h1>AprovaÃ§Ã£o <span>de Cadastro</span></h1></div>
+        <div><h1>Aprovação <span>de Cadastro</span></h1></div>
         <div class="pact">
-          <button class="btn bs">ð¥ Exportar</button>
-          <button class="btn bg" onclick="aprovarTodos()">â Aprovar Todos</button>
+          <button class="btn bs">📥 Exportar</button>
+          <button class="btn bg" onclick="aprovarTodos()">✅ Aprovar Todos</button>
         </div>
       </div>
       <div class="atabs">
-        <div class="atab on" onclick="setTab(this)">Produto principal <span class="ac" id="badge-pend">â</span></div>
-        <div class="atab" onclick="setTab(this)">ð§ Bling ERP</div>
-        <div class="atab" onclick="setTab(this)">â¬ Wix Studio</div>
+        <div class="atab on" onclick="setTab(this)">Produto principal <span class="ac" id="badge-pend">—</span></div>
+        <div class="atab" onclick="setTab(this)">🟧 Bling ERP</div>
+        <div class="atab" onclick="setTab(this)">⬛ Wix Studio</div>
       </div>
       <div id="aprov-list"><div class="lo"><div class="sp"></div></div></div>
     </div>
 
     <!-- APROVADOS -->
     <div class="page" id="pg-aprovados">
-      <div class="ph"><div><h1><span>Aprovados</span> â HistÃ³rico</h1></div><button class="btn bs">ð¥ Exportar CSV</button></div>
+      <div class="ph"><div><h1><span>Aprovados</span> — Histórico</h1></div><button class="btn bs">📥 Exportar CSV</button></div>
       <div class="card" style="padding:0">
         <div class="tw"><table>
-          <thead><tr><th>Produto</th><th>CÃ³digo</th><th>NCT</th><th>RAST-HASH</th><th>Bling</th><th>Wix</th></tr></thead>
+          <thead><tr><th>Produto</th><th>Código</th><th>NCT</th><th>RAST-HASH</th><th>Bling</th><th>Wix</th></tr></thead>
           <tbody id="aprov-tbody"><tr><td colspan="6" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
         </table></div>
       </div>
@@ -716,22 +716,22 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 
     <!-- MOTOR NCT -->
     <div class="page" id="pg-motor">
-      <div class="ph"><div><h1>Motor <span>iRollo v3.4</span></h1><div class="psub">NCT = (TFÃ0.50) + (FMÃ0.20) + (COÃ0.20) + (AVÃ0.10)</div></div></div>
+      <div class="ph"><div><h1>Motor <span>iRollo v3.4</span></h1><div class="psub">NCT = (TF×0.50) + (FM×0.20) + (CO×0.20) + (AV×0.10)</div></div></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <div class="card">
           <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Calculadora NCT via API</div>
-          <div class="fgrp" style="margin-bottom:12px"><label class="fl">TF â TriangulaÃ§Ã£o (50%)</label><input class="fi" type="number" id="m-tf" value="0.95" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
-          <div class="fgrp" style="margin-bottom:12px"><label class="fl">FM â Full-Match (20%)</label><input class="fi" type="number" id="m-fm" value="0.92" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
-          <div class="fgrp" style="margin-bottom:12px"><label class="fl">CO â CoerÃªncia NCM (20%)</label><input class="fi" type="number" id="m-co" value="1.00" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
-          <div class="fgrp" style="margin-bottom:16px"><label class="fl">AV â AplicaÃ§Ã£o Veicular (10%)</label><input class="fi" type="number" id="m-av" value="0.88" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
-          <div class="nw"><div class="nt-lbl">Resultado NCT (API Real)</div><div class="nt-sc" id="m-nct">â</div><div class="nt-vd" id="m-vd">â</div></div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">TF — Triangulação (50%)</label><input class="fi" type="number" id="m-tf" value="0.95" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">FM — Full-Match (20%)</label><input class="fi" type="number" id="m-fm" value="0.92" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="fgrp" style="margin-bottom:12px"><label class="fl">CO — Coerência NCM (20%)</label><input class="fi" type="number" id="m-co" value="1.00" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="fgrp" style="margin-bottom:16px"><label class="fl">AV — Aplicação Veicular (10%)</label><input class="fi" type="number" id="m-av" value="0.88" step="0.01" min="0" max="1" oninput="calcMotorAPI()"></div>
+          <div class="nw"><div class="nt-lbl">Resultado NCT (API Real)</div><div class="nt-sc" id="m-nct">—</div><div class="nt-vd" id="m-vd">—</div></div>
         </div>
         <div class="card">
           <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Gerador RAST-HASH Real</div>
           <div class="fgrp" style="margin-bottom:12px"><label class="fl">SKU</label><input class="fi" id="rh-sku" placeholder="TRIMGO-BDJ0430" oninput="gerarHashAPI()"></div>
           <div class="fgrp" style="margin-bottom:12px"><label class="fl">OEM</label><input class="fi" id="rh-oem" placeholder="BDJ0430" oninput="gerarHashAPI()"></div>
           <div class="fgrp" style="margin-bottom:16px"><label class="fl">Empresa</label><input class="fi" id="rh-emp" value="MOBIS" oninput="gerarHashAPI()"></div>
-          <div class="hb" onclick="copiarHash2()"><div><div class="hlbl">RAST-HASH = md5(SKU+OEM+empresa)[:16]</div><div class="hv" id="rh-res">â</div></div><span>ð</span></div>
+          <div class="hb" onclick="copiarHash2()"><div><div class="hlbl">RAST-HASH = md5(SKU+OEM+empresa)[:16]</div><div class="hv" id="rh-res">—</div></div><span>📋</span></div>
           <div style="margin-top:16px;font-size:12px;color:var(--mu)">
             <div style="font-family:var(--mono);font-size:10px;margin-top:4px" id="rh-input-show"></div>
           </div>
@@ -741,15 +741,15 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 
     <!-- IMAGENS -->
     <div class="page" id="pg-imagens">
-      <div class="ph"><div><h1>Sistema de <span>Imagens</span></h1><div class="psub">Busca automÃ¡tica Â· ValidaÃ§Ã£o IA Â· ConfianÃ§a mÃ­nima 85%</div></div></div>
+      <div class="ph"><div><h1>Sistema de <span>Imagens</span></h1><div class="psub">Busca automática · Validação IA · Confiança mínima 85%</div></div></div>
       <div class="card">
         <div style="display:flex;gap:10px;margin-bottom:12px">
-          <input class="fi" id="img-cod" placeholder="Ex: BDJ0430 Â· Bandeja Dianteira TRIMGO">
-          <button class="btn bp" onclick="buscarImgs()">ð Buscar Imagens</button>
+          <input class="fi" id="img-cod" placeholder="Ex: BDJ0430 · Bandeja Dianteira TRIMGO">
+          <button class="btn bp" onclick="buscarImgs()">🔍 Buscar Imagens</button>
         </div>
       </div>
       <div class="card" id="img-res" style="display:none">
-        <div class="ch"><div class="ct"><span class="dot"></span>Imagens Encontradas â ValidaÃ§Ã£o IA</div><button class="btn bg sm" onclick="aprovarImg()">â Aprovar Selecionada</button></div>
+        <div class="ch"><div class="ct"><span class="dot"></span>Imagens Encontradas — Validação IA</div><button class="btn bg sm" onclick="aprovarImg()">✅ Aprovar Selecionada</button></div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px" id="img-grid"></div>
       </div>
     </div>
@@ -757,24 +757,24 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
     <!-- BLING -->
     <div class="page" id="pg-bling">
       <div class="ph">
-        <div><h1>IntegraÃ§Ã£o <span>Bling ERP v3</span></h1><div class="psub">OAuth2 Refresh Token Â· API Real</div></div>
-        <span class="bg2" id="bling-status-badge">ð Verificando...</span>
+        <div><h1>Integração <span>Bling ERP v3</span></h1><div class="psub">OAuth2 Refresh Token · API Real</div></div>
+        <span class="bg2" id="bling-status-badge">🔄 Verificando...</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
-        <div class="sc b"><div class="sei">ð§</div><div class="sv" id="bl-total">â</div><div class="sl">Produtos no Bling</div></div>
-        <div class="sc g"><div class="sei">ð</div><div class="sv" id="bl-sync">â</div><div class="sl">Sync Status</div></div>
+        <div class="sc b"><div class="sei">🟧</div><div class="sv" id="bl-total">—</div><div class="sl">Produtos no Bling</div></div>
+        <div class="sc g"><div class="sei">🔄</div><div class="sv" id="bl-sync">—</div><div class="sl">Sync Status</div></div>
       </div>
       <div class="card">
         <div class="ct" style="margin-bottom:16px"><span class="dot"></span>Credenciais Bling API v3</div>
         <label class="fl" style="margin-bottom:6px">Client ID</label>
         <div class="tkb"><div class="tkv" id="bl-cid">carregando...</div><button class="tkc" onclick="copiarEl('bl-cid')">Copiar</button></div>
-        <label class="fl" style="margin-bottom:6px;margin-top:10px">Access Token (vÃ¡lido 6h)</label>
-        <div class="tkb"><div class="tkv" id="bl-tok">carregando...</div><button class="tkc" onclick="renovarToken()">ð Renovar</button></div>
+        <label class="fl" style="margin-bottom:6px;margin-top:10px">Access Token (válido 6h)</label>
+        <div class="tkb"><div class="tkv" id="bl-tok">carregando...</div><button class="tkc" onclick="renovarToken()">🔄 Renovar</button></div>
         <div class="div"></div>
         <div class="bgrp">
-          <button class="btn bp" onclick="testarBling()">ð Testar ConexÃ£o</button>
-          <button class="btn bs" onclick="carregarProdutos();gp('produtos')">ð¦ Ver Produtos</button>
-          <button class="btn bs" onclick="syncTudo()">ð Sincronizar Tudo</button>
+          <button class="btn bp" onclick="testarBling()">🔌 Testar Conexão</button>
+          <button class="btn bs" onclick="carregarProdutos();gp('produtos')">📦 Ver Produtos</button>
+          <button class="btn bs" onclick="syncTudo()">🔄 Sincronizar Tudo</button>
         </div>
       </div>
     </div>
@@ -782,22 +782,22 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
     <!-- WIX -->
     <div class="page" id="pg-wix">
       <div class="ph">
-        <div><h1>IntegraÃ§Ã£o <span>Wix Studio</span></h1><div class="psub">Wix Stores API Â· Sync Bling â Wix automÃ¡tico</div></div>
-        <span class="bg2" id="wix-status-badge">ð Verificando...</span>
+        <div><h1>Integração <span>Wix Studio</span></h1><div class="psub">Wix Stores API · Sync Bling → Wix automático</div></div>
+        <span class="bg2" id="wix-status-badge">🔄 Verificando...</span>
       </div>
       <div class="card">
-        <div class="ct" style="margin-bottom:16px"><span class="dot" style="background:var(--ye)"></span>ConfiguraÃ§Ã£o Wix API</div>
+        <div class="ct" style="margin-bottom:16px"><span class="dot" style="background:var(--ye)"></span>Configuração Wix API</div>
         <div class="fgrp" style="margin-bottom:12px"><label class="fl">Wix API Key</label><input class="fi" id="wix-key" placeholder="Cole sua Wix API Key aqui..."></div>
         <div class="fgrp" style="margin-bottom:16px"><label class="fl">Site ID</label><input class="fi" id="wix-site" placeholder="a1b2c3d4-e5f6-7890-abcd-ef1234567890"></div>
         <div class="bgrp">
-          <button class="btn bp" onclick="testarWix()">ð Testar ConexÃ£o</button>
-          <button class="btn bs" onclick="salvarWixConfig()">ð¾ Salvar no .env</button>
+          <button class="btn bp" onclick="testarWix()">🔌 Testar Conexão</button>
+          <button class="btn bs" onclick="salvarWixConfig()">💾 Salvar no .env</button>
         </div>
       </div>
       <div class="card" style="margin-top:16px">
-        <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Sync Manual â Bling â Wix</div>
-        <div style="font-size:12px;color:var(--mu);margin-bottom:12px">Selecione produtos na tela de Produtos e use o botÃ£o Sync para enviar ao Wix.</div>
-        <button class="btn bp" onclick="syncBlingWix()">â¡ Sync Todos Aprovados â Wix</button>
+        <div class="ct" style="margin-bottom:12px"><span class="dot"></span>Sync Manual — Bling → Wix</div>
+        <div style="font-size:12px;color:var(--mu);margin-bottom:12px">Selecione produtos na tela de Produtos e use o botão Sync para enviar ao Wix.</div>
+        <button class="btn bp" onclick="syncBlingWix()">⚡ Sync Todos Aprovados → Wix</button>
       </div>
     </div>
 
@@ -806,24 +806,24 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
       <div class="ph"><div><h1>Agente <span>WhatsApp Bot</span></h1></div></div>
       <div class="card">
         <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#166534">ð¤ Cliente: "preciso de bandeja pro meu Uno 2003"</div></div>
-          <div style="text-align:center;color:var(--mu)">â</div>
-          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#1e40af">âï¸ Gemini Flash interpreta: Fiat Uno 2003 â Bandeja Dianteira</div></div>
-          <div style="text-align:center;color:var(--mu)">â</div>
-          <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#6b21a8">ð Motor iRollo busca catÃ¡logo Genesis (NCT â¥ 0.90)</div></div>
-          <div style="text-align:center;color:var(--mu)">â</div>
-          <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#9a3412">ð¬ Retorna: peÃ§a + preÃ§o + disponibilidade â Handoff humano no pagamento</div></div>
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#166534">🤖 Cliente: "preciso de bandeja pro meu Uno 2003"</div></div>
+          <div style="text-align:center;color:var(--mu)">↓</div>
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#1e40af">⚙️ Gemini Flash interpreta: Fiat Uno 2003 → Bandeja Dianteira</div></div>
+          <div style="text-align:center;color:var(--mu)">↓</div>
+          <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#6b21a8">🔍 Motor iRollo busca catálogo Genesis (NCT ≥ 0.90)</div></div>
+          <div style="text-align:center;color:var(--mu)">↓</div>
+          <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px"><div style="font-weight:600;font-size:13px;color:#9a3412">💬 Retorna: peça + preço + disponibilidade → Handoff humano no pagamento</div></div>
         </div>
       </div>
     </div>
 
     <!-- TEMPLATES -->
     <div class="page" id="pg-templates">
-      <div class="ph"><div><h1><span>Templates</span> de Prompt</h1></div><button class="btn bp">â Novo</button></div>
+      <div class="ph"><div><h1><span>Templates</span> de Prompt</h1></div><button class="btn bp">➕ Novo</button></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
-        <div class="card" style="border-left:3px solid var(--ac)"><div class="ct" style="margin-bottom:8px"><span class="dot"></span>AutopeÃ§as Full-Match</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Tom tÃ©cnico Â· OEM Â· AplicaÃ§Ã£o veicular Â· SEO</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip ac">PadrÃ£o</span><span class="chip">SEO</span></div><div class="bgrp"><button class="btn bs sm">âï¸ Editar</button><button class="btn bp sm">Usar</button></div></div>
-        <div class="card"><div class="ct" style="margin-bottom:8px"><span class="dot" style="background:var(--bl)"></span>Bula do Produto CDC</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Guia instalaÃ§Ã£o Â· CDC Art.8, 31, 12</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip">CDC</span><span class="chip">Bula</span></div><div class="bgrp"><button class="btn bs sm">âï¸ Editar</button><button class="btn bp sm">Usar</button></div></div>
-        <div class="card"><div class="ct" style="margin-bottom:8px"><span class="dot" style="background:var(--gr)"></span>WhatsApp Vendas</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Linguagem natural Â· Compatibilidade</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip">WhatsApp</span></div><div class="bgrp"><button class="btn bs sm">âï¸ Editar</button><button class="btn bp sm">Usar</button></div></div>
+        <div class="card" style="border-left:3px solid var(--ac)"><div class="ct" style="margin-bottom:8px"><span class="dot"></span>Autopeças Full-Match</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Tom técnico · OEM · Aplicação veicular · SEO</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip ac">Padrão</span><span class="chip">SEO</span></div><div class="bgrp"><button class="btn bs sm">✏️ Editar</button><button class="btn bp sm">Usar</button></div></div>
+        <div class="card"><div class="ct" style="margin-bottom:8px"><span class="dot" style="background:var(--bl)"></span>Bula do Produto CDC</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Guia instalação · CDC Art.8, 31, 12</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip">CDC</span><span class="chip">Bula</span></div><div class="bgrp"><button class="btn bs sm">✏️ Editar</button><button class="btn bp sm">Usar</button></div></div>
+        <div class="card"><div class="ct" style="margin-bottom:8px"><span class="dot" style="background:var(--gr)"></span>WhatsApp Vendas</div><div style="font-size:12px;color:var(--mu);margin-bottom:12px">Linguagem natural · Compatibilidade</div><div style="display:flex;gap:6px;margin-bottom:12px"><span class="chip">WhatsApp</span></div><div class="bgrp"><button class="btn bs sm">✏️ Editar</button><button class="btn bp sm">Usar</button></div></div>
       </div>
     </div>
 
@@ -831,31 +831,31 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
     <div class="page" id="pg-planos">
       <div class="ph"><div><h1><span>Planos</span> Genesis iRollo</h1></div></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
-        <div class="card" style="text-align:center"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Free</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$0<span style="font-size:14px;font-weight:400;color:var(--mu)">/mÃªs</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">â 50 cadastros/mÃªs</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â Motor NCT bÃ¡sico</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â IntegraÃ§Ã£o Bling</li></ul><button class="btn bs" style="width:100%">Plano atual</button></div>
-        <div class="card" style="text-align:center;border-color:var(--ac)"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Pro</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$197<span style="font-size:14px;font-weight:400;color:var(--mu)">/mÃªs</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">â 5.000 cadastros/mÃªs</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â Gemini Flash completo</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â Bling + Wix integrado</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â WhatsApp Bot</li></ul><button class="btn bp" style="width:100%">Assinar Pro</button></div>
-        <div class="card" style="text-align:center"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Enterprise</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$597<span style="font-size:14px;font-weight:400;color:var(--mu)">/mÃªs</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">â Ilimitado</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â Multi-filial</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">â API prÃ³pria</li></ul><button class="btn bs" style="width:100%">Falar com vendas</button></div>
+        <div class="card" style="text-align:center"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Free</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$0<span style="font-size:14px;font-weight:400;color:var(--mu)">/mês</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ 50 cadastros/mês</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Motor NCT básico</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Integração Bling</li></ul><button class="btn bs" style="width:100%">Plano atual</button></div>
+        <div class="card" style="text-align:center;border-color:var(--ac)"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Pro</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$197<span style="font-size:14px;font-weight:400;color:var(--mu)">/mês</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ 5.000 cadastros/mês</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Gemini Flash completo</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Bling + Wix integrado</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ WhatsApp Bot</li></ul><button class="btn bp" style="width:100%">Assinar Pro</button></div>
+        <div class="card" style="text-align:center"><div style="font-size:16px;font-weight:700;margin-bottom:6px">Enterprise</div><div style="font-size:32px;font-weight:800;font-family:var(--mono);color:var(--ac)">R$597<span style="font-size:14px;font-weight:400;color:var(--mu)">/mês</span></div><ul style="list-style:none;margin:16px 0;text-align:left"><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Ilimitado</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ Multi-filial</li><li style="padding:5px 0;font-size:12px;color:var(--mu)">✓ API própria</li></ul><button class="btn bs" style="width:100%">Falar com vendas</button></div>
       </div>
     </div>
 
-    <!-- PREFERÃNCIAS -->
+    <!-- PREFERÊNCIAS -->
     <div class="page" id="pg-pref">
-      <div class="ph"><div><h1><span>PreferÃªncias</span></h1></div></div>
-      <div class="card"><div style="font-size:14px;font-weight:600;margin-bottom:14px">â AprovaÃ§Ã£o</div>
+      <div class="ph"><div><h1><span>Preferências</span></h1></div></div>
+      <div class="card"><div style="font-size:14px;font-weight:600;margin-bottom:14px">✅ Aprovação</div>
         <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">Subir produtos como ativos no Bling</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">Sync automÃ¡tico Bling â Wix</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 0"><div style="flex:1;font-size:13px">Subir preÃ§o dos produtos</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">Sync automático Bling → Wix</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0"><div style="flex:1;font-size:13px">Subir preço dos produtos</div><label class="tg"><input type="checkbox" checked><div class="tgs"></div></label></div>
       </div>
-      <div class="card"><div style="font-size:14px;font-weight:600;margin-bottom:14px">ð§  Motor iRollo</div>
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">NCT mÃ­nimo para aprovaÃ§Ã£o</div><input class="fi" type="number" value="0.90" step="0.01" style="width:80px"></div>
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 0"><div style="flex:1;font-size:13px">Marca padrÃ£o</div><input class="fi" value="TRIMGO" style="width:120px"></div>
+      <div class="card"><div style="font-size:14px;font-weight:600;margin-bottom:14px">🧠 Motor iRollo</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9"><div style="flex:1;font-size:13px">NCT mínimo para aprovação</div><input class="fi" type="number" value="0.90" step="0.01" style="width:80px"></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0"><div style="flex:1;font-size:13px">Marca padrão</div><input class="fi" value="TRIMGO" style="width:120px"></div>
       </div>
-      <button class="btn bp lg" onclick="toast('â PreferÃªncias salvas!','s')">ð¾ Salvar</button>
+      <button class="btn bp lg" onclick="toast('✅ Preferências salvas!','s')">💾 Salvar</button>
     </div>
 
     <!-- EMPRESA / CNPJ PROFILER -->
     <div class="page" id="pg-empresa">
       <div class="ph">
-        <div><h1>Empresa <span>â CNPJ Profiler</span></h1><div class="psub">Receita Federal via BrasilAPI Â· DetecÃ§Ã£o automÃ¡tica de ramo Â· CNAE â Perfil Genesis</div></div>
+        <div><h1>Empresa <span>— CNPJ Profiler</span></h1><div class="psub">Receita Federal via BrasilAPI · Detecção automática de ramo · CNAE → Perfil Genesis</div></div>
       </div>
 
       <!-- CONSULTOR CNPJ -->
@@ -868,10 +868,10 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
               oninput="mascaraCNPJ(this)"
               onkeydown="if(event.key==='Enter')consultarCNPJ()">
           </div>
-          <button class="btn bp lg" onclick="consultarCNPJ()" id="btn-cnpj">ð Consultar Receita Federal</button>
-          <button class="btn bs" onclick="consultarCNPJMobis()">â¡ Carregar MOBIS</button>
+          <button class="btn bp lg" onclick="consultarCNPJ()" id="btn-cnpj">🔍 Consultar Receita Federal</button>
+          <button class="btn bs" onclick="consultarCNPJMobis()">⚡ Carregar MOBIS</button>
         </div>
-        <div style="font-size:11px;color:var(--mu);margin-top:8px;font-family:var(--mono)">Consulta gratuita Â· BrasilAPI Â· Sem autenticaÃ§Ã£o necessÃ¡ria</div>
+        <div style="font-size:11px;color:var(--mu);margin-top:8px;font-family:var(--mono)">Consulta gratuita · BrasilAPI · Sem autenticação necessária</div>
       </div>
 
       <!-- RESULTADO CNPJ -->
@@ -882,12 +882,12 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
           <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
             <div>
               <div class="nt-lbl" id="cnpj-perfil-lbl">PERFIL DETECTADO</div>
-              <div class="nt-sc" id="cnpj-perfil-nome" style="font-size:24px;color:#22c55e">â</div>
-              <div class="nt-vd" id="cnpj-perfil-msg" style="color:#94a3b8">â</div>
+              <div class="nt-sc" id="cnpj-perfil-nome" style="font-size:24px;color:#22c55e">—</div>
+              <div class="nt-vd" id="cnpj-perfil-msg" style="color:#94a3b8">—</div>
             </div>
             <div style="text-align:right">
               <div style="font-size:11px;color:#94a3b8;font-family:var(--mono);letter-spacing:1px">CNAE PRINCIPAL</div>
-              <div style="font-size:14px;font-weight:700;color:#fff;font-family:var(--mono)" id="cnpj-cnae">â</div>
+              <div style="font-size:14px;font-weight:700;color:#fff;font-family:var(--mono)" id="cnpj-cnae">—</div>
             </div>
           </div>
         </div>
@@ -899,7 +899,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
             <div id="cnpj-dados" style="display:flex;flex-direction:column;gap:8px"></div>
           </div>
           <div class="card">
-            <div class="ct" style="margin-bottom:14px"><span class="dot"></span>ConfiguraÃ§Ã£o Genesis AutomÃ¡tica</div>
+            <div class="ct" style="margin-bottom:14px"><span class="dot"></span>Configuração Genesis Automática</div>
             <div id="cnpj-config" style="display:flex;flex-direction:column;gap:8px"></div>
           </div>
         </div>
@@ -910,33 +910,33 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
           <div id="cnpj-cats" style="display:flex;gap:8px;flex-wrap:wrap"></div>
         </div>
 
-        <!-- BOTÃO APLICAR -->
+        <!-- BOTÃO APLICAR -->
         <div class="card" style="background:linear-gradient(135deg,#0f3460,#16213e);border-color:#0f3460">
-          <div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px">â Perfil identificado â Aplicar ao Sistema?</div>
-          <div style="font-size:12px;color:#94a3b8;margin-bottom:14px">As regras de NCT, campos obrigatÃ³rios e categorias serÃ£o configuradas automaticamente para o ramo detectado.</div>
-          <button class="btn bg lg" onclick="aplicarPerfilEmpresa()">âï¸ Aplicar Perfil Genesis</button>
+          <div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px">✅ Perfil identificado — Aplicar ao Sistema?</div>
+          <div style="font-size:12px;color:#94a3b8;margin-bottom:14px">As regras de NCT, campos obrigatórios e categorias serão configuradas automaticamente para o ramo detectado.</div>
+          <button class="btn bg lg" onclick="aplicarPerfilEmpresa()">⚙️ Aplicar Perfil Genesis</button>
         </div>
       </div>
 
-      <!-- DADOS BÃSICOS (abaixo) -->
+      <!-- DADOS BÁSICOS (abaixo) -->
       <div class="card" style="margin-top:16px">
         <div class="ct" style="margin-bottom:14px"><span class="dot" style="background:var(--mu)"></span>Dados da Conta</div>
         <div class="fg">
-          <div class="fgrp"><label class="fl">Nome da Empresa</label><input class="fi" id="emp-nome" value="MOBIS PeÃ§as Automotivas"></div>
+          <div class="fgrp"><label class="fl">Nome da Empresa</label><input class="fi" id="emp-nome" value="MOBIS Peças Automotivas"></div>
           <div class="fgrp"><label class="fl">E-mail</label><input class="fi" id="emp-email" value="mobispecas@gmail.com"></div>
           <div class="fgrp"><label class="fl">Site</label><input class="fi" id="emp-site" placeholder="www.mobispecas.com.br"></div>
-          <div class="fgrp"><label class="fl">Marca PadrÃ£o</label><input class="fi" id="emp-marca" value="TRIMGO"></div>
+          <div class="fgrp"><label class="fl">Marca Padrão</label><input class="fi" id="emp-marca" value="TRIMGO"></div>
         </div>
         <div class="div"></div>
-        <button class="btn bp" onclick="toast('â Dados salvos!','s')">ð¾ Salvar</button>
+        <button class="btn bp" onclick="toast('✅ Dados salvos!','s')">💾 Salvar</button>
       </div>
     </div>
 
     <!-- AGENTES IA -->
     <div class="page" id="pg-agentes">
       <div class="ph">
-        <div><h1>Agentes <span>IA â iRollo</span></h1><div class="psub">14 agentes especializados em autopeÃ§as Â· Gemini Flash Â· Sem alucinaÃ§Ã£o</div></div>
-        <button class="btn bp" onclick="rodarTodosAgentes()">â¡ Rodar Todos</button>
+        <div><h1>Agentes <span>IA — iRollo</span></h1><div class="psub">14 agentes especializados em autopeças · Gemini Flash · Sem alucinação</div></div>
+        <button class="btn bp" onclick="rodarTodosAgentes()">⚡ Rodar Todos</button>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px" id="agentes-grid">
         <!-- preenchido por JS -->
@@ -946,27 +946,27 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
     <!-- EAN SCANNER -->
     <div class="page" id="pg-ean">
       <div class="ph">
-        <div><h1>EAN <span>Scanner</span></h1><div class="psub">Leitura de cÃ³digo de barras Â· BarcodeDetector API Â· Consulta automÃ¡tica</div></div>
+        <div><h1>EAN <span>Scanner</span></h1><div class="psub">Leitura de código de barras · BarcodeDetector API · Consulta automática</div></div>
       </div>
       <div class="card">
         <div style="text-align:center;padding:12px 0">
           <div id="ean-cam-area" style="background:#0f172a;border-radius:12px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:16px;border:2px dashed #1e293b;position:relative;overflow:hidden">
             <video id="ean-video" style="width:100%;max-height:300px;border-radius:10px;display:none" playsinline></video>
             <div id="ean-cam-placeholder" style="color:#94a3b8;font-family:var(--mono);text-align:center">
-              <div style="font-size:40px;margin-bottom:12px">ð·</div>
-              <div style="font-size:13px">CÃ¢mera desativada</div>
-              <div style="font-size:11px;margin-top:4px;opacity:.6">Clique em "Ativar CÃ¢mera" para escanear</div>
+              <div style="font-size:40px;margin-bottom:12px">📷</div>
+              <div style="font-size:13px">Câmera desativada</div>
+              <div style="font-size:11px;margin-top:4px;opacity:.6">Clique em "Ativar Câmera" para escanear</div>
             </div>
           </div>
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-            <button class="btn bp" onclick="ativarCamera()">ð· Ativar CÃ¢mera</button>
-            <button class="btn bs" onclick="pararCamera()">â¹ Parar</button>
+            <button class="btn bp" onclick="ativarCamera()">📷 Ativar Câmera</button>
+            <button class="btn bs" onclick="pararCamera()">⏹ Parar</button>
           </div>
         </div>
         <div class="div"></div>
         <div style="display:flex;gap:10px">
           <input class="fi" id="ean-manual" placeholder="Digitar EAN manualmente (ex: 7891234567890)" style="font-family:var(--mono)" onkeydown="if(event.key==='Enter')buscarEAN()">
-          <button class="btn bp" onclick="buscarEAN()">ð Buscar</button>
+          <button class="btn bp" onclick="buscarEAN()">🔍 Buscar</button>
         </div>
       </div>
       <div id="ean-resultado" style="display:none">
@@ -975,8 +975,8 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
           <div id="ean-dados" style="display:flex;flex-direction:column;gap:8px"></div>
           <div class="div"></div>
           <div class="bgrp">
-            <button class="btn bg" onclick="usarEANNoCadastro()">â Usar no Cadastro</button>
-            <button class="btn bs" onclick="enriquecerEAN()">ð¤ Enriquecer</button>
+            <button class="btn bg" onclick="usarEANNoCadastro()">➕ Usar no Cadastro</button>
+            <button class="btn bs" onclick="enriquecerEAN()">🤖 Enriquecer</button>
           </div>
         </div>
       </div>
@@ -985,23 +985,23 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
     <!-- CONGELADOS -->
     <div class="page" id="pg-congelados">
       <div class="ph">
-        <div><h1>Produtos <span>Congelados âï¸</span></h1><div class="psub">NCT â¥ 0.90 Â· Indexados Â· CPC R$0 no Google Shopping</div></div>
-        <button class="btn bs" onclick="exportarCongelados()">ð¥ Exportar CSV</button>
+        <div><h1>Produtos <span>Congelados ❄️</span></h1><div class="psub">NCT ≥ 0.90 · Indexados · CPC R$0 no Google Shopping</div></div>
+        <button class="btn bs" onclick="exportarCongelados()">📥 Exportar CSV</button>
       </div>
       <div class="sg" id="cong-stats">
-        <div class="sc g"><div class="sei">âï¸</div><div class="sv" id="cong-total">â</div><div class="sl">Congelados</div></div>
-        <div class="sc b"><div class="sei">ðï¸</div><div class="sv" id="cong-wix">â</div><div class="sl">No Wix</div></div>
-        <div class="sc y"><div class="sei">ð</div><div class="sv" id="cong-nct-med">â</div><div class="sl">NCT MÃ©dio</div></div>
-        <div class="sc p"><div class="sei">ð°</div><div class="sv" id="cong-cpc">R$0</div><div class="sl">CPC Google</div></div>
+        <div class="sc g"><div class="sei">❄️</div><div class="sv" id="cong-total">—</div><div class="sl">Congelados</div></div>
+        <div class="sc b"><div class="sei">🛍️</div><div class="sv" id="cong-wix">—</div><div class="sl">No Wix</div></div>
+        <div class="sc y"><div class="sei">📊</div><div class="sv" id="cong-nct-med">—</div><div class="sl">NCT Médio</div></div>
+        <div class="sc p"><div class="sei">💰</div><div class="sv" id="cong-cpc">R$0</div><div class="sl">CPC Google</div></div>
       </div>
       <div class="card" style="padding:0">
         <div class="tw">
           <div class="ttb">
-            <input class="ts" id="cong-search" placeholder="ð Buscar produto congelado..." oninput="filtrarCongelados()">
-            <span style="font-size:11px;color:var(--mu);font-family:var(--mono)">Apenas NCT â¥ 0.90 aparecem aqui</span>
+            <input class="ts" id="cong-search" placeholder="🔍 Buscar produto congelado..." oninput="filtrarCongelados()">
+            <span style="font-size:11px;color:var(--mu);font-family:var(--mono)">Apenas NCT ≥ 0.90 aparecem aqui</span>
           </div>
           <table>
-            <thead><tr><th>Produto</th><th>OEM</th><th>NCT âï¸</th><th>RAST-HASH</th><th>Categoria</th><th>Bling</th><th>Wix</th><th>Data</th></tr></thead>
+            <thead><tr><th>Produto</th><th>OEM</th><th>NCT ❄️</th><th>RAST-HASH</th><th>Categoria</th><th>Bling</th><th>Wix</th><th>Data</th></tr></thead>
             <tbody id="cong-tbody"><tr><td colspan="8" style="text-align:center;padding:30px"><div class="sp"></div></td></tr></tbody>
           </table>
           <div class="pg"><span id="cong-info">Carregando...</span></div>
@@ -1014,14 +1014,14 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 </div>
 
 <!-- MODAL -->
-<div class="mb" id="modal"><div class="mo"><div class="moh"><div class="mot" id="m-ttl">â</div><button class="moc" onclick="closeModal()">â</button></div><div id="m-body"></div></div></div>
+<div class="mb" id="modal"><div class="mo"><div class="moh"><div class="mot" id="m-ttl">—</div><button class="moc" onclick="closeModal()">✕</button></div><div id="m-body"></div></div></div>
 
 <script>
 // ============================================================
-// CONFIGURAÃÃO â URL do backend
+// CONFIGURAÇÃO — URL do backend
 // Mude para seu servidor quando fazer deploy
 // ============================================================
-// URL dinÃ¢mica â funciona tanto em localhost quanto em produÃ§Ã£o (Render)
+// URL dinâmica — funciona tanto em localhost quanto em produção (Render)
 const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://localhost:3001/api'
   : window.location.origin + '/api';
@@ -1034,7 +1034,7 @@ let prodCache = [];
 let enrichCache = null;
 
 // ============================================================
-// LOGIN â AutenticaÃ§Ã£o server-side (credenciais nunca expostas no HTML)
+// LOGIN — Autenticação server-side (credenciais nunca expostas no HTML)
 // ============================================================
 let sessionToken = sessionStorage.getItem('genesis_token') || null;
 
@@ -1046,7 +1046,7 @@ async function toggleMobNav(){var n=document.getElementById('nav'),o=document.ge
 
   if (!em || !pw) { err.textContent = 'Preencha e-mail e senha.'; err.style.display = 'block'; return; }
 
-  btn.textContent = 'â³ Entrando...';
+  btn.textContent = '⏳ Entrando...';
   btn.disabled = true;
   err.style.display = 'none';
 
@@ -1065,11 +1065,11 @@ async function toggleMobNav(){var n=document.getElementById('nav'),o=document.ge
       document.getElementById('app').classList.add('on');
       init();
     } else {
-      err.textContent = data.erro || 'Credenciais invÃ¡lidas.';
+      err.textContent = data.erro || 'Credenciais inválidas.';
       err.style.display = 'block';
     }
   } catch (e) {
-    err.textContent = 'Erro de conexÃ£o â backend offline. Execute: npm run dev';
+    err.textContent = 'Erro de conexão — backend offline. Execute: npm run dev';
     err.style.display = 'block';
   }
 
@@ -1086,7 +1086,7 @@ function logout() {
   document.getElementById('lpw').value = '';
 }
 
-// Verificar sessÃ£o existente ao carregar
+// Verificar sessão existente ao carregar
 window.addEventListener('load', async () => {
   if (sessionToken) {
     try {
@@ -1128,10 +1128,10 @@ async function api(method, path, body = null) {
   if (body) opts.body = JSON.stringify(body);
   try {
     const r = await fetch(API + path, opts);
-    if (r.status === 401) { logout(); return { ok: false, erro: 'SessÃ£o expirada â faÃ§a login novamente' }; }
+    if (r.status === 401) { logout(); return { ok: false, erro: 'Sessão expirada — faça login novamente' }; }
     return await r.json();
   } catch (e) {
-    return { ok: false, erro: 'Sem conexÃ£o com o backend. Inicie: npm run dev' };
+    return { ok: false, erro: 'Sem conexão com o backend. Inicie: npm run dev' };
   }
 }
 
@@ -1154,21 +1154,21 @@ async function verificarAPI() {
     const r = await fetch(API);
     const d = await r.json();
     dot.className = 'api-dot on';
-    badge.textContent = 'â BACKEND ON';
+    badge.textContent = '● BACKEND ON';
     badge.className = 'tb-badge g';
     // Checar Bling
     const bl = await api('GET', '/bling/status');
     if (bl.ok) {
-      document.getElementById('tb-api').textContent = 'â BLING + API ON';
+      document.getElementById('tb-api').textContent = '● BLING + API ON';
     }
   } catch {
     dot.className = 'api-dot off';
-    badge.textContent = 'â BACKEND OFF';
+    badge.textContent = '● BACKEND OFF';
     badge.className = 'tb-badge';
     badge.style.background = 'rgba(239,68,68,.1)';
     badge.style.color = 'var(--re)';
     badge.style.borderColor = 'rgba(239,68,68,.3)';
-    toast('â ï¸ Backend offline. Execute: npm run dev na pasta genesis-backend', 'w');
+    toast('⚠️ Backend offline. Execute: npm run dev na pasta genesis-backend', 'w');
   }
 }
 
@@ -1189,25 +1189,25 @@ async function carregarDashboard() {
   const ativos = lista.filter(p => p.situacao === 'A').length;
 
   document.getElementById('ds-sub').textContent =
-    `${total} produtos no Bling Â· ${new Date().toLocaleString('pt-BR')}`;
+    `${total} produtos no Bling · ${new Date().toLocaleString('pt-BR')}`;
 
   // Stats grid
   document.getElementById('ds-stats').innerHTML = `
-    <div class="sc g"><div class="sei">ð¦</div><div class="sv">${total}</div><div class="sl">Total Bling</div></div>
-    <div class="sc b"><div class="sei">â</div><div class="sv">${ativos}</div><div class="sl">Ativos</div></div>
-    <div class="sc y"><div class="sei">â³</div><div class="sv">${pendentes}</div><div class="sl">Pendentes NCT</div></div>
-    <div class="sc r"><div class="sei">ð«</div><div class="sv">${bloqueados}</div><div class="sl">Bloqueados</div></div>
-    <div class="sc p"><div class="sei">â¡</div><div class="sv">17s</div><div class="sl">Tempo/Produto</div></div>
+    <div class="sc g"><div class="sei">📦</div><div class="sv">${total}</div><div class="sl">Total Bling</div></div>
+    <div class="sc b"><div class="sei">✅</div><div class="sv">${ativos}</div><div class="sl">Ativos</div></div>
+    <div class="sc y"><div class="sei">⏳</div><div class="sv">${pendentes}</div><div class="sl">Pendentes NCT</div></div>
+    <div class="sc r"><div class="sei">🚫</div><div class="sv">${bloqueados}</div><div class="sl">Bloqueados</div></div>
+    <div class="sc p"><div class="sei">⚡</div><div class="sv">17s</div><div class="sl">Tempo/Produto</div></div>
   `;
 
-  // NCT mÃ©dio
+  // NCT médio
   const ncts = lista.map(p => p.nct_calc?.nct || 0).filter(n => n > 0);
-  const mediaNCT = ncts.length ? (ncts.reduce((a,b)=>a+b,0)/ncts.length).toFixed(2) : 'â';
+  const mediaNCT = ncts.length ? (ncts.reduce((a,b)=>a+b,0)/ncts.length).toFixed(2) : '—';
   const cor = parseFloat(mediaNCT) >= 0.90 ? '#22c55e' : parseFloat(mediaNCT) >= 0.60 ? '#f59e0b' : '#ef4444';
   document.getElementById('ds-nct').innerHTML = `
-    <div class="nt-lbl">NCT Score MÃ©dio â ${lista.length} produtos</div>
+    <div class="nt-lbl">NCT Score Médio — ${lista.length} produtos</div>
     <div class="nt-sc" style="color:${cor}">${mediaNCT}</div>
-    <div class="nt-vd" style="color:${cor}">${parseFloat(mediaNCT)>=.90?'â CATÃLOGO APROVADO':parseFloat(mediaNCT)>=.60?'â ï¸ MELHORIA NECESSÃRIA':'ð« ATENÃÃO'}</div>
+    <div class="nt-vd" style="color:${cor}">${parseFloat(mediaNCT)>=.90?'✓ CATÁLOGO APROVADO':parseFloat(mediaNCT)>=.60?'⚠️ MELHORIA NECESSÁRIA':'🚫 ATENÇÃO'}</div>
   `;
 
   // Categorias (agrupa por nome)
@@ -1223,33 +1223,33 @@ async function carregarDashboard() {
       <div class="prl"><span>${c}</span><span>${n} produtos</span></div>
       <div class="prtr"><div class="prfi" style="width:${Math.round(n/maxCat*100)}%;background:var(--ac)"></div></div>
     </div>
-  `).join('') || '<div class="es"><div class="ei">ð</div><p>Sem dados de categoria</p></div>';
+  `).join('') || '<div class="es"><div class="ei">📊</div><p>Sem dados de categoria</p></div>';
 
-  // Tabela Ãºltimos
+  // Tabela últimos
   document.getElementById('ds-table').innerHTML = lista.slice(0,8).map(p => `
     <tr>
-      <td><b>${p.nome||'â'}</b></td>
-      <td class="tm">${p.codigo||'â'}</td>
+      <td><b>${p.nome||'—'}</b></td>
+      <td class="tm">${p.codigo||'—'}</td>
       <td class="tm">R$ ${parseFloat(p.preco||0).toFixed(2)}</td>
       <td>${nctBadge(p.nct_calc?.nct)}</td>
-      <td class="th">${p.rast_hash||'â'}</td>
+      <td class="th">${p.rast_hash||'—'}</td>
       <td>${sitBadge(p.situacao)}</td>
       <td>
-        <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">ð</button>
-        <button class="btn bg sm" onclick="syncProduto('${p.id}')">â¬</button>
+        <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">🔍</button>
+        <button class="btn bg sm" onclick="syncProduto('${p.id}')">⬛</button>
       </td>
     </tr>
-  `).join('') || '<tr><td colspan="7" class="es"><p>Nenhum produto encontrado. Verifique conexÃ£o Bling.</p></td></tr>';
+  `).join('') || '<tr><td colspan="7" class="es"><p>Nenhum produto encontrado. Verifique conexão Bling.</p></td></tr>';
 
-  // Atualiza badge aprovaÃ§Ã£o
+  // Atualiza badge aprovação
   document.getElementById('b-aprov').textContent = pendentes;
   document.getElementById('badge-pend').textContent = pendentes;
   document.getElementById('bl-total').textContent = total;
-  document.getElementById('bl-sync').textContent = total > 0 ? 'â OK' : 'â';
+  document.getElementById('bl-sync').textContent = total > 0 ? '✓ OK' : '—';
   document.getElementById('bl-cid').textContent = '837cda747405553caae6ecaf542e96abe4498317';
   document.getElementById('bl-tok').textContent = 'ba932c8a...d1b1702 (use /api/bling/token/renovar)';
 
-  // Preenche aprovados e aprovaÃ§Ã£o
+  // Preenche aprovados e aprovação
   renderAprov(lista.filter(p => p.nct_calc?.decisao === 'PENDENTE'));
   renderAprovados(lista.filter(p => p.situacao === 'A'));
   renderECatalog(lista);
@@ -1275,16 +1275,16 @@ function renderProdTabela(lista) {
   document.getElementById('prod-tbody').innerHTML = lista.map(p => `
     <tr>
       <td><input type="checkbox" value="${p.id}"></td>
-      <td><b>${p.nome||'â'}</b></td>
-      <td class="tm">${p.codigo||'â'}</td>
+      <td><b>${p.nome||'—'}</b></td>
+      <td class="tm">${p.codigo||'—'}</td>
       <td class="tm">R$ ${parseFloat(p.preco||0).toFixed(2)}</td>
       <td>${nctBadge(p.nct_calc?.nct)}</td>
-      <td class="th">${p.rast_hash||'â'}</td>
+      <td class="th">${p.rast_hash||'—'}</td>
       <td>${sitBadge(p.situacao)}</td>
       <td style="display:flex;gap:4px;flex-wrap:wrap">
-        <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">ð</button>
-        <button class="btn bg sm" onclick="syncProduto('${p.id}')">â¬ Wix</button>
-        <button class="btn bd2 sm" onclick="deletarProduto('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}')">ðï¸</button>
+        <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">🔍</button>
+        <button class="btn bg sm" onclick="syncProduto('${p.id}')">⬛ Wix</button>
+        <button class="btn bd2 sm" onclick="deletarProduto('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}')">🗑️</button>
       </td>
     </tr>
   `).join('') || '<tr><td colspan="8" class="es"><p>Nenhum produto</p></td></tr>';
@@ -1312,23 +1312,23 @@ function selAll(cb) {
 async function deletarProduto(id, nome) {
   if (!confirm(`Deletar "${nome}" do Bling?`)) return;
   const r = await api('DELETE', `/produtos/${id}`);
-  if (r.ok) { toast('ðï¸ Produto deletado!', 's'); carregarProdutos(); }
+  if (r.ok) { toast('🗑️ Produto deletado!', 's'); carregarProdutos(); }
   else toast('Erro: ' + r.erro, 'e');
 }
 
 function exportarCSV() {
-  const rows = [['Nome','CÃ³digo','PreÃ§o','NCT','RAST-HASH','SituaÃ§Ã£o']];
+  const rows = [['Nome','Código','Preço','NCT','RAST-HASH','Situação']];
   prodCache.forEach(p => rows.push([p.nome,p.codigo,p.preco,p.nct_calc?.nct||'',p.rast_hash||'',p.situacao]));
   const csv = rows.map(r => r.join(';')).join('\n');
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
   a.download = `genesis-produtos-${new Date().toISOString().substring(0,10)}.csv`;
   a.click();
-  toast('ð¥ CSV exportado!', 's');
+  toast('📥 CSV exportado!', 's');
 }
 
 // ============================================================
-// CADASTRO â NCT em tempo real (chama API)
+// CADASTRO — NCT em tempo real (chama API)
 // ============================================================
 let nctDebounce;
 async function calcNCT() {
@@ -1352,8 +1352,8 @@ async function calcNCT() {
     document.getElementById('nct-v').textContent = nct.toFixed(2);
     document.getElementById('nct-v').style.color = cor;
     document.getElementById('nct-vd').style.color = cor;
-    document.getElementById('nct-vd').textContent = r.decisao === 'APROVADO' ? 'â APROVADO â Pode cadastrar!' :
-      r.decisao === 'PENDENTE' ? 'â ï¸ PENDENTE â Preencha mais campos' : 'ð« BLOQUEADO â NCT insuficiente';
+    document.getElementById('nct-vd').textContent = r.decisao === 'APROVADO' ? '✓ APROVADO — Pode cadastrar!' :
+      r.decisao === 'PENDENTE' ? '⚠️ PENDENTE — Preencha mais campos' : '🚫 BLOQUEADO — NCT insuficiente';
 
     setBar('b-tf','v-tf', c.tf||0);
     setBar('b-fm','v-fm', c.fm||0);
@@ -1382,7 +1382,7 @@ async function salvarBling(aprovar = false) {
   const nome = document.getElementById('f-nome').value;
   if (!oem || !nome) { toast('Preencha OEM e Nome!', 'e'); return; }
 
-  document.getElementById('btn-salvar').textContent = 'â³ Salvando...';
+  document.getElementById('btn-salvar').textContent = '⏳ Salvando...';
   document.getElementById('btn-salvar').disabled = true;
 
   const payload = {
@@ -1398,12 +1398,12 @@ async function salvarBling(aprovar = false) {
   };
 
   const r = await api('POST', '/produtos', payload);
-  document.getElementById('btn-salvar').textContent = 'ð¾ Salvar no Bling';
+  document.getElementById('btn-salvar').textContent = '💾 Salvar no Bling';
   document.getElementById('btn-salvar').disabled = false;
 
   if (r.ok) {
-    toast(`â Produto criado! ID Bling: ${r.id_bling} | NCT: ${r.nct} | Hash: ${r.rast_hash}`, 's');
-    if (aprovar) toast('â Aprovado e publicado!', 's');
+    toast(`✅ Produto criado! ID Bling: ${r.id_bling} | NCT: ${r.nct} | Hash: ${r.rast_hash}`, 's');
+    if (aprovar) toast('✅ Aprovado e publicado!', 's');
     limparCad();
     await carregarDashboard();
   } else {
@@ -1416,7 +1416,7 @@ async function enriquecerForm() {
   const nome = document.getElementById('f-nome').value;
   if (!oem && !nome) { toast('Preencha OEM ou Nome primeiro!', 'w'); return; }
 
-  toast('ð¤ Enriquecendo com Claude IA...', 'i');
+  toast('🤖 Enriquecendo com Gemini Flash...', 'i');
   const r = await api('POST', '/motor/enriquecer', {
     oem, nome, ncm: document.getElementById('f-ncm').value,
     sku: document.getElementById('f-sku').value,
@@ -1430,9 +1430,9 @@ async function enriquecerForm() {
     if (e.aplicacao_veicular) document.getElementById('f-aplic').value = e.aplicacao_veicular;
     if (e.ncm_sugerido) document.getElementById('f-ncm').value = e.ncm_sugerido.replace(/\D/g,'');
     calcNCT();
-    toast('â Produto enriquecido pelo Claude Haiku!', 's');
+    toast('✅ Produto enriquecido pelo Claude Haiku!', 's');
   } else {
-    toast('Erro IA: ' + (r.erro || 'Verifique ANTHROPIC_API_KEY no .env'), 'e');
+    toast('Erro Gemini: ' + (r.erro || 'Verifique GEMINI_API_KEY no .env'), 'e');
   }
 }
 
@@ -1443,15 +1443,15 @@ function limparCad() {
   });
   document.getElementById('f-marca').value = 'TRIMGO';
   document.getElementById('nct-v').textContent = '0.00';
-  document.getElementById('hash-val').textContent = 'â Preencha SKU e OEM â';
+  document.getElementById('hash-val').textContent = '— Preencha SKU e OEM —';
   ['b-tf','b-fm','b-co','b-av'].forEach(id => { const el=document.getElementById(id); if(el) el.style.width='0%'; });
 }
 
 function copiarHash() {
   const v = document.getElementById('hash-val').textContent;
-  if (v.includes('â')) return;
+  if (v.includes('—')) return;
   navigator.clipboard?.writeText(v);
-  toast('ð RAST-HASH copiado: ' + v, 's');
+  toast('📋 RAST-HASH copiado: ' + v, 's');
 }
 
 // ============================================================
@@ -1468,7 +1468,7 @@ function uploadPlanilha(input) {
 }
 
 async function processarArquivo(file) {
-  toast(`ð Processando "${file.name}"...`, 'i');
+  toast(`📊 Processando "${file.name}"...`, 'i');
   const fd = new FormData();
   fd.append('planilha', file);
   const r = await apiUpload('/massa/upload', fd);
@@ -1489,10 +1489,10 @@ async function processarArquivo(file) {
   document.getElementById('m-tbody').innerHTML = prods.slice(0,50).map((p,i) => `
     <tr>
       <td class="tm">${i+1}</td>
-      <td><b>${p.nome||'â'}</b></td>
-      <td class="tm">${p.oem||'â'}</td>
-      <td class="tm">${p.ncm||'â'}</td>
-      <td class="tm">${p.sku||'â'}</td>
+      <td><b>${p.nome||'—'}</b></td>
+      <td class="tm">${p.oem||'—'}</td>
+      <td class="tm">${p.ncm||'—'}</td>
+      <td class="tm">${p.sku||'—'}</td>
       <td class="tm">R$ ${parseFloat(p.preco||0).toFixed(2)}</td>
       <td>${nctBadge(p.nct)}</td>
       <td>${decBadge(p.decisao)}</td>
@@ -1501,7 +1501,7 @@ async function processarArquivo(file) {
 
   document.getElementById('massa-prev').style.display = 'block';
   document.getElementById('btn-enviar-bling').dataset.produtos = JSON.stringify(prods);
-  toast(`â ${res.total||prods.length} produtos processados! ${res.aprovados||0} aprovados.`, 's');
+  toast(`✅ ${res.total||prods.length} produtos processados! ${res.aprovados||0} aprovados.`, 's');
 }
 
 async function enviarBlingMassa() {
@@ -1510,17 +1510,17 @@ async function enviarBlingMassa() {
   if (!prods.length) return;
 
   const aprovados = prods.filter(p => p.decisao !== 'BLOQUEADO');
-  toast(`ð§ Enviando ${aprovados.length} produtos para o Bling...`, 'i');
-  btn.textContent = 'â³ Enviando...';
+  toast(`🟧 Enviando ${aprovados.length} produtos para o Bling...`, 'i');
+  btn.textContent = '⏳ Enviando...';
   btn.disabled = true;
 
   const r = await api('POST', '/massa/enviar-bling', { produtos: aprovados });
 
-  btn.textContent = 'ð§ Enviar para Bling';
+  btn.textContent = '🟧 Enviar para Bling';
   btn.disabled = false;
 
   if (r.ok) {
-    toast(`â ${r.criados} criados no Bling! ${r.erros} erros.`, 's');
+    toast(`✅ ${r.criados} criados no Bling! ${r.erros} erros.`, 's');
     await carregarDashboard();
   } else {
     toast('Erro: ' + r.erro, 'e');
@@ -1537,39 +1537,39 @@ function preEncrich(oem) {
 }
 
 // ============================================================
-// PERFIS DE VOZ â sem DNA do fabricante
+// PERFIS DE VOZ — sem DNA do fabricante
 // ============================================================
 let vozPerfil = 'tecnico';
 let vozVariacao = 0;
 
 const vozTextos = {
   tecnico: [
-    (d) => `Bomba de direÃ§Ã£o hidrÃ¡ulica do tipo Vane (palhetas rotativas) para sistemas de direÃ§Ã£o assistida. Polia 4PK, cano de saÃ­da traseiro Ã  esquerda, rotaÃ§Ã£o horÃ¡ria, pressÃ£o de trabalho de 120 bar. ComposiÃ§Ã£o: alumÃ­nio fundido + aÃ§o carbono + vedaÃ§Ãµes NBR. CompatÃ­vel com motores diesel 2.5L e 2.7L de 8 vÃ¡lvulas. NCM ${d.ncm||'8413.60.19'} Â· EAN ${d.ean||'verificado'} Â· Garantia 12 meses / 20.000 km Â· CDC Art. 8, 12, 26 e 31.`,
-    (d) => `Componente hidrÃ¡ulico tipo Vane Pump para direÃ§Ã£o assistida de utilitÃ¡rios de carga. Opera com correia trapezoidal 4PK, sentido horÃ¡rio, 120 bar mÃ¡x. Corpo em alumÃ­nio fundido de alta resistÃªncia, eixo em aÃ§o carbono tratado, vedaÃ§Ãµes em borracha NBR. AplicaÃ§Ã£o em veÃ­culos com motor diesel aspirado 2.5L e 2.7L cÃ¢mbio manual. NCM ${d.ncm||'8413.60.19'}.`
+    (d) => `Bomba de direção hidráulica do tipo Vane (palhetas rotativas) para sistemas de direção assistida. Polia 4PK, cano de saída traseiro à esquerda, rotação horária, pressão de trabalho de 120 bar. Composição: alumínio fundido + aço carbono + vedações NBR. Compatível com motores diesel 2.5L e 2.7L de 8 válvulas. NCM ${d.ncm||'8413.60.19'} · EAN ${d.ean||'verificado'} · Garantia 12 meses / 20.000 km · CDC Art. 8, 12, 26 e 31.`,
+    (d) => `Componente hidráulico tipo Vane Pump para direção assistida de utilitários de carga. Opera com correia trapezoidal 4PK, sentido horário, 120 bar máx. Corpo em alumínio fundido de alta resistência, eixo em aço carbono tratado, vedações em borracha NBR. Aplicação em veículos com motor diesel aspirado 2.5L e 2.7L câmbio manual. NCM ${d.ncm||'8413.60.19'}.`
   ],
   comercial: [
-    (d) => `Acabou o volante pesado! Esta bomba hidrÃ¡ulica resolve de vez o problema de direÃ§Ã£o dura em utilitÃ¡rios diesel. PeÃ§a nova com nota fiscal, garantia de 12 meses e entrega imediata. Polia 4PK pronta para instalar. CompatÃ­vel com veÃ­culos 2004 a 2012. EAN ${d.ean||'verificado'} â compre com seguranÃ§a total.`,
-    (d) => `Quer cortar custo de manutenÃ§Ã£o sem abrir mÃ£o da qualidade? Esta bomba hidrÃ¡ulica entrega performance igual Ã  original com preÃ§o de reposiÃ§Ã£o. PeÃ§a nova, NF incluÃ­da, garantia de 12 meses. CompatÃ­vel com motores D4BH e J2 diesel. Estoque disponÃ­vel para entrega hoje.`
+    (d) => `Acabou o volante pesado! Esta bomba hidráulica resolve de vez o problema de direção dura em utilitários diesel. Peça nova com nota fiscal, garantia de 12 meses e entrega imediata. Polia 4PK pronta para instalar. Compatível com veículos 2004 a 2012. EAN ${d.ean||'verificado'} — compre com segurança total.`,
+    (d) => `Quer cortar custo de manutenção sem abrir mão da qualidade? Esta bomba hidráulica entrega performance igual à original com preço de reposição. Peça nova, NF incluída, garantia de 12 meses. Compatível com motores D4BH e J2 diesel. Estoque disponível para entrega hoje.`
   ],
   seo: [
-    (d) => `Bomba de direÃ§Ã£o hidrÃ¡ulica polia 4PK para utilitÃ¡rios diesel 2004-2012. Chassis alto, baixo e longue deck. Motores 2.5L 8V e 2.7L 8V. Cano traseiro lado esquerdo comprido. PeÃ§a nova com nota fiscal. NCM ${d.ncm||'8413.60.19'} Â· EAN ${d.ean||'3322938465421'} Â· Peso ${d.peso||'2.800'} kg. Garantia 12 meses / 20.000 km. CDC Art. 8, 12, 26, 31.`,
-    (d) => `Bomba hidrÃ¡ulica direÃ§Ã£o assistida polia 4PK cano esquerdo comprido diesel 2004-2012. CompatÃ­vel K2500 2.5 8V e K2700 2.7 8V. Motor D4BH e J2 cÃ¢mbio manual 5 marchas. PeÃ§a nova NF. NCM ${d.ncm||'8413.60.19'} EAN ${d.ean||'verificado'} garantia 12m.`
+    (d) => `Bomba de direção hidráulica polia 4PK para utilitários diesel 2004-2012. Chassis alto, baixo e longue deck. Motores 2.5L 8V e 2.7L 8V. Cano traseiro lado esquerdo comprido. Peça nova com nota fiscal. NCM ${d.ncm||'8413.60.19'} · EAN ${d.ean||'3322938465421'} · Peso ${d.peso||'2.800'} kg. Garantia 12 meses / 20.000 km. CDC Art. 8, 12, 26, 31.`,
+    (d) => `Bomba hidráulica direção assistida polia 4PK cano esquerdo comprido diesel 2004-2012. Compatível K2500 2.5 8V e K2700 2.7 8V. Motor D4BH e J2 câmbio manual 5 marchas. Peça nova NF. NCM ${d.ncm||'8413.60.19'} EAN ${d.ean||'verificado'} garantia 12m.`
   ],
   whatsapp: [
-    (d) => `â Bomba direÃ§Ã£o hidrÃ¡ulica â polia 4PK\nð Diesel 2004-2012 â chassis alto/baixo\nâï¸ Motor D4BH 2.5 e J2 2.7\nð¦ PeÃ§a nova com NF Â· ${d.peso||'2.800'} kg\nâï¸ NCM ${d.ncm||'8413.60.19'} Â· EAN verificado\nâ Garantia 12 meses\nð° Estoque disponÃ­vel\n\nâ ï¸ Confirme o chassi antes de fechar!`,
-    (d) => `ð§ Bomba direÃ§Ã£o 4PK disponÃ­vel!\nâ Para diesel 2.5L e 2.7L 2004-2012\nð¦ Nova com NF e garantia 12 meses\nâï¸ ${d.peso||'2.800'} kg Â· NCM ${d.ncm||'8413.60.19'}\nð¬ Consultar disponibilidade!`
+    (d) => `✅ Bomba direção hidráulica — polia 4PK\n🚛 Diesel 2004-2012 — chassis alto/baixo\n⚙️ Motor D4BH 2.5 e J2 2.7\n📦 Peça nova com NF · ${d.peso||'2.800'} kg\n⚖️ NCM ${d.ncm||'8413.60.19'} · EAN verificado\n✅ Garantia 12 meses\n💰 Estoque disponível\n\n⚠️ Confirme o chassi antes de fechar!`,
+    (d) => `🔧 Bomba direção 4PK disponível!\n✅ Para diesel 2.5L e 2.7L 2004-2012\n📦 Nova com NF e garantia 12 meses\n⚖️ ${d.peso||'2.800'} kg · NCM ${d.ncm||'8413.60.19'}\n💬 Consultar disponibilidade!`
   ],
   pmax: [
-    (d) => `TÃTULOS (mÃ¡x 30 chars):\nT1 Â· Bomba DireÃ§Ã£o Polia 4PK [26]\nT2 Â· Diesel 2004-2012 Com NF [24]\nT3 Â· PeÃ§a Nova Garantia 12m [25]\nT4 Â· Entrega RÃ¡pida Estoque JÃ¡ [28]\nT5 Â· EAN ${(d.ean||'3322938465421').substring(0,10)}... Verificado [28]\n\nDESCRIÃÃES (mÃ¡x 90 chars):\nD1 Â· Bomba hidrÃ¡ulica 4PK para diesel 04-12. PeÃ§a nova c/ NF. Garantia 12m. [74]\nD2 Â· Cano esq. comprido, 120 bar. Motor D4BH e J2. NCM ${d.ncm||'8413.60.19'}. [68]\nD3 Â· Componente de direÃ§Ã£o verificado. EAN ${d.ean||'3322938465421'}. CDC garantido. [75]`
+    (d) => `TÍTULOS (máx 30 chars):\nT1 · Bomba Direção Polia 4PK [26]\nT2 · Diesel 2004-2012 Com NF [24]\nT3 · Peça Nova Garantia 12m [25]\nT4 · Entrega Rápida Estoque Já [28]\nT5 · EAN ${(d.ean||'3322938465421').substring(0,10)}... Verificado [28]\n\nDESCRIÇÕES (máx 90 chars):\nD1 · Bomba hidráulica 4PK para diesel 04-12. Peça nova c/ NF. Garantia 12m. [74]\nD2 · Cano esq. comprido, 120 bar. Motor D4BH e J2. NCM ${d.ncm||'8413.60.19'}. [68]\nD3 · Componente de direção verificado. EAN ${d.ean||'3322938465421'}. CDC garantido. [75]`
   ]
 };
 
 const vozLabels = {
-  tecnico: 'Perfil tÃ©cnico â especialista em sistemas de direÃ§Ã£o',
-  comercial: 'Perfil comercial â conversÃ£o e confianÃ§a do comprador',
-  seo: 'Perfil SEO â ranqueamento Google Shopping',
-  whatsapp: 'Perfil WhatsApp â grupos de mecÃ¢nicos e lojistas',
-  pmax: 'Perfil P-Max â Google Ads Performance Max'
+  tecnico: 'Perfil técnico — especialista em sistemas de direção',
+  comercial: 'Perfil comercial — conversão e confiança do comprador',
+  seo: 'Perfil SEO — ranqueamento Google Shopping',
+  whatsapp: 'Perfil WhatsApp — grupos de mecânicos e lojistas',
+  pmax: 'Perfil P-Max — Google Ads Performance Max'
 };
 
 function setVozPerfil(perfil, el) {
@@ -1593,7 +1593,7 @@ function renderVozTexto() {
 function proximaVariacao() {
   vozVariacao++;
   renderVozTexto();
-  toast('Nova variaÃ§Ã£o gerada!', 's');
+  toast('Nova variação gerada!', 's');
 }
 
 function copiarVozAtual() {
@@ -1604,16 +1604,16 @@ function copiarVozAtual() {
 
 async function gerarVozIA() {
   const btn = document.getElementById('btn-gerar-voz');
-  btn.textContent = 'â³ Gerando...';
+  btn.textContent = '⏳ Gerando...';
   btn.disabled = true;
 
   const dados = enrichCache || {};
   const prompts = {
-    tecnico: `Escreva uma descriÃ§Ã£o tÃ©cnica de 80 palavras para uma bomba de direÃ§Ã£o hidrÃ¡ulica Vane polia 4PK para utilitÃ¡rios diesel. Destaque: 120 bar, rotaÃ§Ã£o horÃ¡ria, cano saÃ­da esquerdo, alumÃ­nio e aÃ§o carbono. NCM ${dados.ncm||'8413.60.19'}. Sem mencionar nome de fabricante. Voz de especialista.`,
-    comercial: `Escreva um texto comercial de 70 palavras para vender uma bomba de direÃ§Ã£o hidrÃ¡ulica polia 4PK para HR e Bongo diesel 2004-2012. Foco em: peÃ§a nova com NF, garantia 12 meses, entrega rÃ¡pida. Sem mencionar nome de fabricante.`,
-    seo: `Escreva uma descriÃ§Ã£o SEO de 100 palavras para Google Shopping de bomba de direÃ§Ã£o hidrÃ¡ulica polia 4PK para utilitÃ¡rios diesel 2004-2012. Inclua motores D4BH e J2, NCM ${dados.ncm||'8413.60.19'}, EAN ${dados.ean||'3322938465421'}, CDC. Sem mencionar nome de fabricante.`,
-    whatsapp: `Escreva uma mensagem WhatsApp com emojis para grupo de mecÃ¢nicos sobre bomba de direÃ§Ã£o 4PK diesel 2004-2012. MÃ¡ximo 60 palavras. Sem mencionar fabricante.`,
-    pmax: `Crie 5 tÃ­tulos (mÃ¡x 30 chars cada) e 3 descriÃ§Ãµes (mÃ¡x 90 chars cada) para Google Ads Performance Max de bomba de direÃ§Ã£o hidrÃ¡ulica 4PK diesel. Sem mencionar fabricante. Formato: T1Â·T2Â·T3Â·T4Â·T5 e D1Â·D2Â·D3.`
+    tecnico: `Escreva uma descrição técnica de 80 palavras para uma bomba de direção hidráulica Vane polia 4PK para utilitários diesel. Destaque: 120 bar, rotação horária, cano saída esquerdo, alumínio e aço carbono. NCM ${dados.ncm||'8413.60.19'}. Sem mencionar nome de fabricante. Voz de especialista.`,
+    comercial: `Escreva um texto comercial de 70 palavras para vender uma bomba de direção hidráulica polia 4PK para HR e Bongo diesel 2004-2012. Foco em: peça nova com NF, garantia 12 meses, entrega rápida. Sem mencionar nome de fabricante.`,
+    seo: `Escreva uma descrição SEO de 100 palavras para Google Shopping de bomba de direção hidráulica polia 4PK para utilitários diesel 2004-2012. Inclua motores D4BH e J2, NCM ${dados.ncm||'8413.60.19'}, EAN ${dados.ean||'3322938465421'}, CDC. Sem mencionar nome de fabricante.`,
+    whatsapp: `Escreva uma mensagem WhatsApp com emojis para grupo de mecânicos sobre bomba de direção 4PK diesel 2004-2012. Máximo 60 palavras. Sem mencionar fabricante.`,
+    pmax: `Crie 5 títulos (máx 30 chars cada) e 3 descrições (máx 90 chars cada) para Google Ads Performance Max de bomba de direção hidráulica 4PK diesel. Sem mencionar fabricante. Formato: T1·T2·T3·T4·T5 e D1·D2·D3.`
   };
 
   try {
@@ -1632,41 +1632,41 @@ async function gerarVozIA() {
       const box = document.getElementById('voz-output');
       box.style.whiteSpace = (vozPerfil === 'whatsapp' || vozPerfil === 'pmax') ? 'pre-line' : 'normal';
       box.value = txt;
-      toast('â DescriÃ§Ã£o gerada pela IA!', 's');
+      toast('✅ Descrição gerada pela IA!', 's');
     }
   } catch(e) {
-    toast('Gemini API pendente â usando texto padrÃ£o', 'w');
+    toast('Gemini API pendente — usando texto padrão', 'w');
     renderVozTexto();
   }
 
-  btn.textContent = 'ð¤ Gerar com IA';
+  btn.textContent = '🤖 Gerar com IA';
   btn.disabled = false;
 }
 
 // ============================================================
-// GAVETAS DE INDEXAÃÃO
+// GAVETAS DE INDEXAÇÃO
 // ============================================================
 function toggleGaveta(id) {
   const body = document.getElementById('gav-' + id);
   const icon = document.getElementById('gav-' + id + '-icon');
   const open = body.style.display === 'none' || !body.style.display;
   body.style.display = open ? 'block' : 'none';
-  icon.textContent = open ? 'â² fechar' : 'â¼ abrir';
+  icon.textContent = open ? '▲ fechar' : '▼ abrir';
   if (open) preencherGaveta(id);
 }
 
 function preencherGaveta(id) {
   const d = enrichCache || {};
   const e = d.enriquecimento || {};
-  const nome = e.nome_enriquecido || d.nome || d.oem || 'â';
-  const oem = d.oem || 'â';
-  const ncm = e.ncm_sugerido || d.ncm || 'â';
-  const ean = d.ean || 'â';
+  const nome = e.nome_enriquecido || d.nome || d.oem || '—';
+  const oem = d.oem || '—';
+  const ncm = e.ncm_sugerido || d.ncm || '—';
+  const ean = d.ean || '—';
   const sku = d.sku || ('TRIMGO-' + oem);
-  const peso = d.peso_bruto || 'â';
-  const preco = d.preco || 'â';
-  const aplic = e.aplicacao_veicular || 'â';
-  const desc = document.getElementById('voz-output')?.value || e.descricao_tecnica || 'â';
+  const peso = d.peso_bruto || '—';
+  const preco = d.preco || '—';
+  const aplic = e.aplicacao_veicular || '—';
+  const desc = document.getElementById('voz-output')?.value || e.descricao_tecnica || '—';
 
   const campo = (lbl, val, ok) => `
     <div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12px">
@@ -1677,16 +1677,16 @@ function preencherGaveta(id) {
   if (id === 'bling') {
     document.getElementById('gav-bling-fields').innerHTML = [
       campo('Produto', nome, true),
-      campo('CÃ³digo / SKU', sku),
-      campo('CÃ³digo de barras', ean),
+      campo('Código / SKU', sku),
+      campo('Código de barras', ean),
       campo('NCM', ncm),
-      campo('Origem', '0 â Nacional'),
+      campo('Origem', '0 — Nacional'),
       campo('Unidade', 'UN'),
-      campo('Categoria', 'DireÃ§Ã£o âº Bombas HidrÃ¡ulicas'),
+      campo('Categoria', 'Direção › Bombas Hidráulicas'),
       campo('Peso bruto (kg)', peso),
-      campo('PreÃ§o de venda', preco ? 'R$ ' + preco : 'â'),
-      campo('AplicaÃ§Ã£o', aplic),
-      campo('DescriÃ§Ã£o', desc.substring(0, 100) + '...'),
+      campo('Preço de venda', preco ? 'R$ ' + preco : '—'),
+      campo('Aplicação', aplic),
+      campo('Descrição', desc.substring(0, 100) + '...'),
     ].join('');
   }
 
@@ -1694,12 +1694,12 @@ function preencherGaveta(id) {
     document.getElementById('gav-wix-fields').innerHTML = [
       campo('Nome produto', nome, true),
       campo('SKU', sku),
-      campo('ColeÃ§Ã£o', 'DireÃ§Ã£o HidrÃ¡ulica'),
+      campo('Coleção', 'Direção Hidráulica'),
       campo('Tags', 'polia 4pk, diesel, D4BH, J2, ' + oem),
       campo('SEO Title', nome.substring(0, 67)),
       campo('Meta description', desc.substring(0, 155)),
-      campo('PreÃ§o', preco ? 'R$ ' + preco : 'â'),
-      campo('IMG principal', 'IMG 1 â 1500Ã1500px fundo branco'),
+      campo('Preço', preco ? 'R$ ' + preco : '—'),
+      campo('IMG principal', 'IMG 1 — 1500×1500px fundo branco'),
       campo('Galeria', '6 imagens padronizadas'),
     ].join('');
   }
@@ -1711,27 +1711,27 @@ function preencherGaveta(id) {
       campo('gtin', ean),
       campo('mpn', oem),
       campo('condition', 'new'),
-      campo('price', preco ? preco + ' BRL' : 'â'),
+      campo('price', preco ? preco + ' BRL' : '—'),
       campo('availability', 'in_stock'),
-      campo('shipping_weight', peso ? peso + ' kg' : 'â'),
-      campo('image_link', 'IMG 1 â 1500Ã1500px fundo branco obrigatÃ³rio'),
+      campo('shipping_weight', peso ? peso + ' kg' : '—'),
+      campo('image_link', 'IMG 1 — 1500×1500px fundo branco obrigatório'),
       campo('additional_image_link', 'IMG 2, 3, 4, 5, 6'),
     ].join('');
   }
 
   if (id === 'ads') {
     document.getElementById('gav-ads-fields').innerHTML = `
-      <div style="font-size:11px;font-weight:600;color:var(--mu);font-family:var(--mono);margin-bottom:4px">TÃTULOS (mÃ¡x 30 chars)</div>
-      ${['Bomba DireÃ§Ã£o Polia 4PK [26]','Diesel 2004-2012 Com NF [22]','PeÃ§a Nova Garantia 12m [22]','Entrega RÃ¡pida Estoque JÃ¡ [24]','EAN Verificado Nota Fiscal [26]']
+      <div style="font-size:11px;font-weight:600;color:var(--mu);font-family:var(--mono);margin-bottom:4px">TÍTULOS (máx 30 chars)</div>
+      ${['Bomba Direção Polia 4PK [26]','Diesel 2004-2012 Com NF [22]','Peça Nova Garantia 12m [22]','Entrega Rápida Estoque Já [24]','EAN Verificado Nota Fiscal [26]']
         .map(t => campo('T', t)).join('')}
-      <div style="font-size:11px;font-weight:600;color:var(--mu);font-family:var(--mono);margin:8px 0 4px">DESCRIÃÃES (mÃ¡x 90 chars)</div>
-      ${['Bomba 4PK para diesel 04-12. PeÃ§a nova c/ NF. Garantia 12m. [59]',
+      <div style="font-size:11px;font-weight:600;color:var(--mu);font-family:var(--mono);margin:8px 0 4px">DESCRIÇÕES (máx 90 chars)</div>
+      ${['Bomba 4PK para diesel 04-12. Peça nova c/ NF. Garantia 12m. [59]',
          `Cano esq. comprido, 120 bar. Motor D4BH e J2. NCM ${ncm}. [68]`,
-         `Componente de direÃ§Ã£o verificado. EAN ${ean}. CDC garantido. [72]`]
+         `Componente de direção verificado. EAN ${ean}. CDC garantido. [72]`]
         .map(t => campo('D', t)).join('')}
       <div style="font-size:11px;font-weight:600;color:var(--mu);font-family:var(--mono);margin:8px 0 4px">KEYWORDS LONG TAIL</div>
       <div style="display:flex;flex-wrap:wrap;gap:4px;padding:6px 0">
-        ${['bomba direÃ§Ã£o 4PK diesel', 'direÃ§Ã£o hidrÃ¡ulica utilitÃ¡rio', oem + ' polia 4pk', 'D4BH J2 direÃ§Ã£o', 'substitui 97005', 'bomba cano esquerdo comprido']
+        ${['bomba direção 4PK diesel', 'direção hidráulica utilitário', oem + ' polia 4pk', 'D4BH J2 direção', 'substitui 97005', 'bomba cano esquerdo comprido']
           .map(k => `<span class="chip">${k}</span>`).join('')}
       </div>`;
   }
@@ -1739,17 +1739,17 @@ function preencherGaveta(id) {
 
 async function enviarBling() {
   if (!enrichCache) return;
-  toast('ð§ Enviando para Bling...', 'i');
+  toast('🟧 Enviando para Bling...', 'i');
   const r = await api('POST', '/produtos', { ...enrichCache, forcar_cadastro: true });
-  if (r.ok) toast('â Produto enviado ao Bling! ID: ' + r.id_bling, 's');
+  if (r.ok) toast('✅ Produto enviado ao Bling! ID: ' + r.id_bling, 's');
   else toast('Erro Bling: ' + (r.erro || 'CLIENT_SECRET pendente'), 'e');
 }
 
 async function sincronizarWix() {
   if (!enrichCache) return;
-  toast('â¬ Sincronizando Wix...', 'i');
+  toast('⬛ Sincronizando Wix...', 'i');
   const r = await api('POST', '/wix/sync/' + (enrichCache.id_bling || enrichCache.oem));
-  if (r.ok) toast('â Produto publicado no Wix!', 's');
+  if (r.ok) toast('✅ Produto publicado no Wix!', 's');
   else toast('Erro Wix: ' + (r.erro || 'WIX_API_KEY pendente'), 'e');
 }
 
@@ -1760,21 +1760,21 @@ async function congelarIndexar() {
   const btn = document.getElementById('btn-congelar');
   const log = document.getElementById('congelar-log');
   btn.disabled = true;
-  btn.textContent = 'â³ Processando...';
+  btn.textContent = '⏳ Processando...';
   log.style.display = 'block';
   log.textContent = '';
 
   const passos = [
-    { txt: 'â Motor NCT validado â score ' + (enrichCache?.nct||0).toFixed(3) + ' APROVADO', delay: 300 },
-    { txt: 'â RAST-HASH certificado â ' + (enrichCache?.rast_hash||'â'), delay: 400 },
-    { txt: 'â Perfil de voz gerado â ' + vozLabels[vozPerfil], delay: 350 },
-    { txt: 'â CabeÃ§ote montado â campos Bling + Wix preenchidos', delay: 300 },
-    { txt: 'â Feed Google Shopping estruturado â GTIN + MPN + preÃ§o', delay: 350 },
-    { txt: 'â P-Max configurado â 5 tÃ­tulos + 3 descriÃ§Ãµes dentro do limite', delay: 300 },
-    { txt: 'â  Bling â aguardando CLIENT_SECRET no .env', delay: 400, warn: true },
-    { txt: 'â  Wix â aguardando WIX_API_KEY no .env', delay: 350, warn: true },
-    { txt: 'â 6 slots de imagem estruturados â Gemini validarÃ¡ quando API key configurada', delay: 400 },
-    { txt: 'â Produto congelado no Motor iRollo v3.5 â pronto para indexaÃ§Ã£o!', delay: 300 },
+    { txt: '✓ Motor NCT validado — score ' + (enrichCache?.nct||0).toFixed(3) + ' APROVADO', delay: 300 },
+    { txt: '✓ RAST-HASH certificado — ' + (enrichCache?.rast_hash||'—'), delay: 400 },
+    { txt: '✓ Perfil de voz gerado — ' + vozLabels[vozPerfil], delay: 350 },
+    { txt: '✓ Cabeçote montado — campos Bling + Wix preenchidos', delay: 300 },
+    { txt: '✓ Feed Google Shopping estruturado — GTIN + MPN + preço', delay: 350 },
+    { txt: '✓ P-Max configurado — 5 títulos + 3 descrições dentro do limite', delay: 300 },
+    { txt: '⚠ Bling — aguardando CLIENT_SECRET no .env', delay: 400, warn: true },
+    { txt: '⚠ Wix — aguardando WIX_API_KEY no .env', delay: 350, warn: true },
+    { txt: '✓ 6 slots de imagem estruturados — Gemini validará quando API key configurada', delay: 400 },
+    { txt: '✓ Produto congelado no Motor iRollo v3.5 — pronto para indexação!', delay: 300 },
   ];
 
   for (const p of passos) {
@@ -1784,19 +1784,19 @@ async function congelarIndexar() {
   }
 
   btn.disabled = false;
-  btn.textContent = 'âï¸ CONGELAR E INDEXAR â Bling + Wix + Google Shopping';
-  toast('â Produto congelado e pronto para indexaÃ§Ã£o!', 's');
+  btn.textContent = '❄️ CONGELAR E INDEXAR — Bling + Wix + Google Shopping';
+  toast('✅ Produto congelado e pronto para indexação!', 's');
 }
 
 async function enriquecer() {
   const input = document.getElementById('e-input').value.trim();
-  if (!input) { toast('Informe um cÃ³digo!', 'w'); return; }
+  if (!input) { toast('Informe um código!', 'w'); return; }
 
-  document.getElementById('e-btn').textContent = 'â³ Buscando...';
+  document.getElementById('e-btn').textContent = '⏳ Buscando...';
   document.getElementById('e-btn').disabled = true;
   document.getElementById('e-result').style.display = 'none';
 
-  // 1. Busca no Bling por cÃ³digo
+  // 1. Busca no Bling por código
   const blingSearch = await api('GET', `/bling/buscar?codigo=${encodeURIComponent(input)}`);
   let prodBling = blingSearch.produtos?.[0];
 
@@ -1807,14 +1807,14 @@ async function enriquecer() {
 
   const r = await api('POST', '/motor/enriquecer', payload);
 
-  document.getElementById('e-btn').textContent = 'ð Enriquecer';
+  document.getElementById('e-btn').textContent = '🔍 Enriquecer';
   document.getElementById('e-btn').disabled = false;
 
   if (!r || r.ok === false || r.erro) {
     const msg = r?.erro || 'Erro desconhecido no Motor iRollo';
     const dica = msg.includes('429') ? ' Aguarde 1 min e tente novamente.' :
                  msg.includes('API') ? ' Configure a ANTHROPIC_API_KEY no Render.' : '';
-    toast(`â ${msg}${dica}`, 'e');
+    toast(`❌ ${msg}${dica}`, 'e');
     return;
   }
 
@@ -1823,16 +1823,16 @@ async function enriquecer() {
   const cor = r.nct >= .90 ? '#22c55e' : r.nct >= .60 ? '#f59e0b' : '#ef4444';
   const nomeF = e.nome_enriquecido || payload.nome || input;
 
-  // CabeÃ§alho
-  document.getElementById('e-breadcrumb').textContent = `InÃ­cio âº ${e.sistema_veiculo||'AutopeÃ§as'} âº ${nomeF.split(' ')[0]}`;
+  // Cabeçalho
+  document.getElementById('e-breadcrumb').textContent = `Início › ${e.sistema_veiculo||'Autopeças'} › ${nomeF.split(' ')[0]}`;
   document.getElementById('e-nome').textContent = nomeF;
-  const fonteLabel = r.fonte_real ? 'ð Dados Reais Web' : 'ð¤ IA Estimada';
+  const fonteLabel = r.fonte_real ? '🌐 Dados Reais Web' : '🤖 IA Estimada';
   // Limpa URL manual anterior
   const imgUrlInput = document.getElementById('e-img-url');
   if (imgUrlInput) imgUrlInput.value = '';
   // Se produto Bling tem imagem, usa ela
   if (prodBling && prodBling.imageThumbnail && !e.imagem_real) e.imagem_real = prodBling.imageThumbnail;
-  document.getElementById('e-subtitulo').textContent = `${payload.oem||''} Â· ${e.reino||'MINERAL'} Â· ${fonteLabel}`;
+  document.getElementById('e-subtitulo').textContent = `${payload.oem||''} · ${e.reino||'MINERAL'} · ${fonteLabel}`;
   document.getElementById('e-preco').textContent = payload.preco ? 'R$ ' + payload.preco : 'Consultar';
   document.getElementById('e-estoque').textContent = 'Verificar estoque no Bling';
   document.getElementById('e-tags').innerHTML = [
@@ -1842,17 +1842,17 @@ async function enriquecer() {
   // NCT
   document.getElementById('e-nct').textContent = (r.nct||0).toFixed(2);
   document.getElementById('e-nct').style.color = cor;
-  document.getElementById('e-vd').textContent = r.decisao || 'â';
+  document.getElementById('e-vd').textContent = r.decisao || '—';
   document.getElementById('e-vd').style.color = cor;
-  document.getElementById('e-hash').textContent = r.rast_hash || 'â';
+  document.getElementById('e-hash').textContent = r.rast_hash || '—';
 
   // Barras NCT
   const comps = r.nct_componentes || {};
   document.getElementById('e-barras').innerHTML = [
-    ['TF Â· OEM 50%', comps.tf],
-    ['FM Â· Nome 20%', comps.fm],
-    ['CO Â· NCM 20%', comps.co],
-    ['AV Â· Aplic 10%', comps.av],
+    ['TF · OEM 50%', comps.tf],
+    ['FM · Nome 20%', comps.fm],
+    ['CO · NCM 20%', comps.co],
+    ['AV · Aplic 10%', comps.av],
   ].map(([lbl, val]) => `
     <div style="display:flex;align-items:center;gap:8px;font-size:11px">
       <span style="color:var(--mu);font-family:var(--mono);width:90px">${lbl}</span>
@@ -1862,13 +1862,13 @@ async function enriquecer() {
       <span style="color:var(--mu);font-family:var(--mono);width:28px;text-align:right">${(val||0).toFixed(2)}</span>
     </div>`).join('');
 
-  // Imagem real do catÃ¡logo
+  // Imagem real do catálogo
   const imgReal = e.imagem_real;
   const imgGrid = document.getElementById('e-imgs-grid');
   if (imgReal && imgGrid) {
     const slots = imgGrid.querySelectorAll('div[style*="aspect-ratio"]');
     if (slots[0]) {
-      slots[0].innerHTML = '<img src="' + imgReal + '" alt="' + nomeF + '" style="width:100%;height:100%;object-fit:contain;border-radius:7px;padding:4px" onerror="this.style.display=\'none\'"><div style="position:absolute;top:5px;right:5px;font-size:9px;background:#16a34a;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Real â</div>';
+      slots[0].innerHTML = '<img src="' + imgReal + '" alt="' + nomeF + '" style="width:100%;height:100%;object-fit:contain;border-radius:7px;padding:4px" onerror="this.style.display=\'none\'"><div style="position:absolute;top:5px;right:5px;font-size:9px;background:#16a34a;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Real ✓</div>';
     }
   }
   // Cruzamento
@@ -1877,30 +1877,30 @@ async function enriquecer() {
   const codigoMontadora = cruz.codigo_original_montadora;
   const eansData = (cruz.ean_codigos || []).join(', ');
   let cruzHtml = '';
-  if (codigoMontadora) cruzHtml += '<div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px;margin-bottom:8px;font-size:12px"><span style="font-family:var(--mono);font-weight:700;color:#1d4ed8">ð­ CÃ³d. Montadora: ' + codigoMontadora + '</span></div>';
+  if (codigoMontadora) cruzHtml += '<div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px;margin-bottom:8px;font-size:12px"><span style="font-family:var(--mono);font-weight:700;color:#1d4ed8">🏭 Cód. Montadora: ' + codigoMontadora + '</span></div>';
   if (equivalentes.length > 0) {
-    cruzHtml += '<div style="margin-bottom:6px;font-size:11px;font-family:var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:.8px">PeÃ§as Cambiadas (' + equivalentes.length + ')</div>';
-    cruzHtml += equivalentes.map(function(eq) { return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12px"><span style="font-family:var(--mono);font-weight:700;color:var(--ac);min-width:80px">' + (eq.marca||'â') + '</span><span style="font-family:var(--mono)">' + (eq.codigo||'â') + '</span><span style="margin-left:auto;font-size:10px;color:var(--mu);background:#f1f5f9;padding:1px 6px;border-radius:10px">' + (eq.tipo||'equivalente') + '</span></div>'; }).join('');
+    cruzHtml += '<div style="margin-bottom:6px;font-size:11px;font-family:var(--mono);color:var(--mu);text-transform:uppercase;letter-spacing:.8px">Peças Cambiadas (' + equivalentes.length + ')</div>';
+    cruzHtml += equivalentes.map(function(eq) { return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12px"><span style="font-family:var(--mono);font-weight:700;color:var(--ac);min-width:80px">' + (eq.marca||'—') + '</span><span style="font-family:var(--mono)">' + (eq.codigo||'—') + '</span><span style="margin-left:auto;font-size:10px;color:var(--mu);background:#f1f5f9;padding:1px 6px;border-radius:10px">' + (eq.tipo||'equivalente') + '</span></div>'; }).join('');
   }
-  // Dados tÃ©cnicos
+  // Dados técnicos
   document.getElementById('e-dados').innerHTML = [
-    ['OEM / CÃ³digo-MÃ£e', payload.oem],
-    ['CÃ³d. Montadora', codigoMontadora],
+    ['OEM / Código-Mãe', payload.oem],
+    ['Cód. Montadora', codigoMontadora],
     ['NCM', e.ncm_sugerido || payload.ncm],
     ['EAN', eansData || payload.ean],
     ['SKU', payload.sku || 'MOBIS-' + payload.oem],
-    ['AplicaÃ§Ã£o', e.aplicacao_veicular],
+    ['Aplicação', e.aplicacao_veicular],
     ['Peso', e.peso_estimado_kg ? e.peso_estimado_kg + ' kg' : null],
     ['Reino', e.reino],
-    ['ComposiÃ§Ã£o', e.material_composicao],
-    ['Modelo IA', r.modelo_ia ? 'ð¤ ' + r.modelo_ia : null],
-    ['ConfianÃ§a', e.confianca_enriquecimento ? (e.confianca_enriquecimento * 100).toFixed(0) + '%' : null],
+    ['Composição', e.material_composicao],
+    ['Modelo IA', r.modelo_ia ? '🤖 ' + r.modelo_ia : null],
+    ['Confiança', e.confianca_enriquecimento ? (e.confianca_enriquecimento * 100).toFixed(0) + '%' : null],
   ].filter(([,v])=>v).map(([k,v]) => '<div style="display:flex;gap:8px;font-size:12px;padding:4px 0;border-bottom:1px solid #f1f5f9"><span style="color:var(--mu);font-family:var(--mono);min-width:110px">' + k + '</span><span style="color:var(--tx);font-weight:500;flex:1">' + v + '</span></div>').join('') + (cruzHtml ? '<div style="margin-top:10px">' + cruzHtml + '</div>' : '');
 
-  // Status indexaÃ§Ã£o
+  // Status indexação
   document.getElementById('status-indexacao').innerHTML = [
-    { val: 'NCT ' + (r.nct||0).toFixed(2), sub: r.decisao||'â', ok: r.nct >= 0.90 },
-    { val: (r.rast_hash||'â').substring(0,8) + '...', sub: 'RAST-HASH', ok: !!r.rast_hash },
+    { val: 'NCT ' + (r.nct||0).toFixed(2), sub: r.decisao||'—', ok: r.nct >= 0.90 },
+    { val: (r.rast_hash||'—').substring(0,8) + '...', sub: 'RAST-HASH', ok: !!r.rast_hash },
     { val: r.nct >= 0.90 ? 'Pronto' : 'Pendente', sub: 'Para indexar', ok: r.nct >= 0.90 },
   ].map(s => `
     <div style="text-align:center;padding:8px;background:${s.ok?'#dcfce7':'#fef3c7'};border-radius:8px">
@@ -1908,45 +1908,45 @@ async function enriquecer() {
       <div style="font-size:10px;color:${s.ok?'#166634':'#854d0e'};margin-top:2px">${s.sub}</div>
     </div>`).join('');
 
-  // Preencher voz padrÃ£o
+  // Preencher voz padrão
   renderVozTexto();
 
   document.getElementById('e-result').style.display = 'block';
   document.getElementById('e-btn-congelar').style.display = 'inline-block';
-  toast(`â ${nomeF} â NCT: ${(r.nct||0).toFixed(2)} ${r.decisao||''}`, 's');
+  toast(`✅ ${nomeF} — NCT: ${(r.nct||0).toFixed(2)} ${r.decisao||''}`, 's');
 }
 
 function abrirGoogleImagens() {
   const nome = document.getElementById('e-nome').textContent || '';
   const oem = document.getElementById('e-input').value || '';
-  const q = encodeURIComponent(nome + ' ' + oem + ' autopeÃ§a produto');
+  const q = encodeURIComponent(nome + ' ' + oem + ' autopeça produto');
   window.open('https://images.google.com/search?tbm=isch&q=' + q, '_blank');
 }
 
 async function validarImagemManual() {
   const url = (document.getElementById('e-img-url').value || '').trim();
-  if (!url || !url.startsWith('http')) { toast('Cole uma URL vÃ¡lida de imagem', 'w'); return; }
-  const nome = document.getElementById('e-nome').textContent || 'autopeÃ§a';
-  toast('ð Validando imagem com Claude Vision...', 'i');
+  if (!url || !url.startsWith('http')) { toast('Cole uma URL válida de imagem', 'w'); return; }
+  const nome = document.getElementById('e-nome').textContent || 'autopeça';
+  toast('🔍 Validando imagem com Claude Vision...', 'i');
   // Mostra a imagem no slot 1 imediatamente
   const grid = document.getElementById('e-imgs-grid');
   if (grid) {
     const slots = grid.querySelectorAll('div[style*="aspect-ratio"]');
     if (slots[0]) {
-      slots[0].innerHTML = '<img src="' + url + '" alt="' + nome + '" style="width:100%;height:100%;object-fit:contain;border-radius:7px;padding:4px" onerror="this.parentNode.innerHTML=\'<span style=\"color:red;font-size:11px\">Imagem nÃ£o carregou</span>\'">' +
+      slots[0].innerHTML = '<img src="' + url + '" alt="' + nome + '" style="width:100%;height:100%;object-fit:contain;border-radius:7px;padding:4px" onerror="this.parentNode.innerHTML=\'<span style=\"color:red;font-size:11px\">Imagem não carregou</span>\'">' +
         '<div style="position:absolute;top:5px;right:5px;font-size:9px;background:#f59e0b;color:#fff;padding:2px 5px;border-radius:4px;font-family:var(--mono)">Validando...</div>';
     }
   }
   // Se o cache existir, salva imagem
   if (enrichCache) enrichCache.imagem_url_manual = url;
-  toast('â Imagem adicionada! Use Aprovar para salvar no Bling.', 's');
+  toast('✅ Imagem adicionada! Use Aprovar para salvar no Bling.', 's');
   // Atualiza o badge do slot 1
   const grid2 = document.getElementById('e-imgs-grid');
   if (grid2) {
     const slots = grid2.querySelectorAll('div[style*="aspect-ratio"]');
     if (slots[0]) {
       const badge = slots[0].querySelector('div[style*="background"]');
-      if (badge) { badge.textContent = 'Manual â'; badge.style.background = '#f59e0b'; }
+      if (badge) { badge.textContent = 'Manual ✓'; badge.style.background = '#f59e0b'; }
     }
   }
 }
@@ -1955,7 +1955,7 @@ async function aprovarEnrich() {
   if (!enrichCache) return;
   const r = await api('POST', '/produtos', { ...enrichCache, forcar_cadastro: true });
   if (r.ok) {
-    toast(`â Aprovado! ID Bling: ${r.id_bling} | Hash: ${r.rast_hash}`, 's');
+    toast(`✅ Aprovado! ID Bling: ${r.id_bling} | Hash: ${r.rast_hash}`, 's');
     document.getElementById('e-result').style.display = 'none';
     await carregarDashboard();
   } else {
@@ -1964,7 +1964,7 @@ async function aprovarEnrich() {
 }
 
 async function enriquecerCatalogo() {
-  toast('âï¸ Enriquecendo catÃ¡logo com Gemini Flash...', 'i');
+  toast('⚙️ Enriquecendo catálogo com Gemini Flash...', 'i');
   // processa os primeiros 5 (rate limit)
   const prods = prodCache.slice(0, 5);
   if (!prods.length) { toast('Carregue os produtos primeiro!', 'w'); return; }
@@ -1973,7 +1973,7 @@ async function enriquecerCatalogo() {
     await api('POST', `/produtos/${p.id}/enriquecer`);
     await new Promise(r => setTimeout(r, 600));
   }
-  toast(`â ${prods.length} produtos enriquecidos!`, 's');
+  toast(`✅ ${prods.length} produtos enriquecidos!`, 's');
   carregarDashboard();
 }
 
@@ -1981,36 +1981,36 @@ function renderECatalog(lista) {
   const cont = document.getElementById('ec-list');
   cont.innerHTML = lista.slice(0, 20).map(p => `
     <div style="display:flex;align-items:center;gap:14px;padding:12px;border-bottom:1px solid var(--bd)">
-      <span style="font-size:20px">ð§</span>
-      <div style="flex:1"><b style="font-size:13px">${p.nome||'â'}</b><div class="tm" style="margin-top:2px">${p.codigo||'â'} Â· R$ ${parseFloat(p.preco||0).toFixed(2)}</div></div>
+      <span style="font-size:20px">🔧</span>
+      <div style="flex:1"><b style="font-size:13px">${p.nome||'—'}</b><div class="tm" style="margin-top:2px">${p.codigo||'—'} · R$ ${parseFloat(p.preco||0).toFixed(2)}</div></div>
       ${nctBadge(p.nct_calc?.nct)}
       ${sitBadge(p.situacao)}
-      <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">ð Enriquecer</button>
+      <button class="btn bs sm" onclick="preEncrich('${p.codigo}')">🔍 Enriquecer</button>
     </div>
   `).join('') || '<div class="es"><p>Carregue os produtos primeiro</p></div>';
 }
 
 // ============================================================
-// APROVAÃÃO
+// APROVAÇÃO
 // ============================================================
 function renderAprov(pendentes) {
   const c = document.getElementById('aprov-list');
   if (!pendentes.length) {
-    c.innerHTML = '<div class="es"><div class="ei">â</div><p>Nenhum produto pendente!</p></div>';
+    c.innerHTML = '<div class="es"><div class="ei">✅</div><p>Nenhum produto pendente!</p></div>';
     return;
   }
   c.innerHTML = pendentes.map(p => `
     <div class="pac" id="pac-${p.id}">
-      <div class="pimg">ð§</div>
+      <div class="pimg">🔧</div>
       <div class="pai">
-        <div class="pan">${p.nome||'â'}</div>
-        <div class="pam"><span>CÃ³digo: ${p.codigo||'â'}</span><span>PreÃ§o: R$ ${parseFloat(p.preco||0).toFixed(2)}</span><span>NCT: ${(p.nct_calc?.nct||0).toFixed(2)}</span></div>
-        <div style="margin-top:6px;font-family:var(--mono);font-size:11px;color:#7c3aed">Hash: ${p.rast_hash||'â'}</div>
+        <div class="pan">${p.nome||'—'}</div>
+        <div class="pam"><span>Código: ${p.codigo||'—'}</span><span>Preço: R$ ${parseFloat(p.preco||0).toFixed(2)}</span><span>NCT: ${(p.nct_calc?.nct||0).toFixed(2)}</span></div>
+        <div style="margin-top:6px;font-family:var(--mono);font-size:11px;color:#7c3aed">Hash: ${p.rast_hash||'—'}</div>
       </div>
       <div style="display:flex;gap:6px;flex-direction:column;align-items:flex-end">
         ${nctBadge(p.nct_calc?.nct)}
-        <button class="btn bg sm" onclick="aprovarProd('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}')">â Aprovar + Wix</button>
-        <button class="btn bd2 sm">ð« Rejeitar</button>
+        <button class="btn bg sm" onclick="aprovarProd('${p.id}','${(p.nome||'').replace(/'/g,"\\'")}')">✅ Aprovar + Wix</button>
+        <button class="btn bd2 sm">🚫 Rejeitar</button>
       </div>
     </div>
   `).join('');
@@ -2018,7 +2018,7 @@ function renderAprov(pendentes) {
 
 async function aprovarProd(id, nome) {
   const r = await api('POST', `/wix/sync/${id}`);
-  toast(r.ok ? `â "${nome}" aprovado e sincronizado com Wix!` : `Bling OK. Wix: ${r.erro||'configure a API Key'}`, r.ok?'s':'w');
+  toast(r.ok ? `✅ "${nome}" aprovado e sincronizado com Wix!` : `Bling OK. Wix: ${r.erro||'configure a API Key'}`, r.ok?'s':'w');
   const el = document.getElementById('pac-'+id);
   if (el) { el.style.opacity='0'; el.style.transition='all .4s'; setTimeout(()=>el.remove(),400); }
 }
@@ -2030,18 +2030,18 @@ function aprovarTodos() {
     el.style.opacity='0'; el.style.transition='all .4s';
     setTimeout(()=>el.remove(),400);
   });
-  toast('â Todos aprovados!', 's');
+  toast('✅ Todos aprovados!', 's');
 }
 
 function renderAprovados(lista) {
   document.getElementById('aprov-tbody').innerHTML = lista.slice(0,20).map(p => `
     <tr>
-      <td><b>${p.nome||'â'}</b></td>
-      <td class="tm">${p.codigo||'â'}</td>
+      <td><b>${p.nome||'—'}</b></td>
+      <td class="tm">${p.codigo||'—'}</td>
       <td>${nctBadge(p.nct_calc?.nct)}</td>
-      <td class="th">${p.rast_hash||'â'}</td>
-      <td><span class="bg2 g2">â Sincronizado</span></td>
-      <td><span class="bg2 b2">â Publicado</span></td>
+      <td class="th">${p.rast_hash||'—'}</td>
+      <td><span class="bg2 g2">✓ Sincronizado</span></td>
+      <td><span class="bg2 b2">✓ Publicado</span></td>
     </tr>
   `).join('') || '<tr><td colspan="6" style="text-align:center;padding:20px">Carregando...</td></tr>';
 }
@@ -2052,7 +2052,7 @@ function setTab(el) {
 }
 
 // ============================================================
-// MOTOR â API REAL
+// MOTOR — API REAL
 // ============================================================
 let motorDebounce;
 function calcMotorAPI() {
@@ -2087,50 +2087,50 @@ async function gerarHashAPI() {
 
 function copiarHash2() {
   const v = document.getElementById('rh-res').textContent;
-  if (v === 'â') return;
+  if (v === '—') return;
   navigator.clipboard?.writeText(v);
-  toast('ð Hash copiado!', 's');
+  toast('📋 Hash copiado!', 's');
 }
 
 // ============================================================
 // BLING
 // ============================================================
 async function testarBling() {
-  toast('ð Testando Bling API v3...', 'i');
+  toast('🔌 Testando Bling API v3...', 'i');
   const r = await api('GET', '/bling/status');
-  if (r.ok) { toast('â ' + r.mensagem, 's'); document.getElementById('bling-status-badge').className='bg2 g2'; document.getElementById('bling-status-badge').textContent='â CONECTADO'; }
-  else { toast('â Bling: ' + (r.erro||'Erro'), 'e'); }
+  if (r.ok) { toast('✅ ' + r.mensagem, 's'); document.getElementById('bling-status-badge').className='bg2 g2'; document.getElementById('bling-status-badge').textContent='● CONECTADO'; }
+  else { toast('❌ Bling: ' + (r.erro||'Erro'), 'e'); }
 }
 
 async function renovarToken() {
   const r = await api('POST', '/bling/token/renovar');
-  toast(r.ok ? 'â Token renovado!' : 'Erro: ' + r.erro, r.ok?'s':'e');
+  toast(r.ok ? '✅ Token renovado!' : 'Erro: ' + r.erro, r.ok?'s':'e');
 }
 
 async function syncTudo() {
-  toast('ð Sincronizando Bling...', 'i');
+  toast('🔄 Sincronizando Bling...', 'i');
   await carregarDashboard();
-  toast('â Dados atualizados do Bling!', 's');
+  toast('✅ Dados atualizados do Bling!', 's');
 }
 
 async function syncProduto(blingId) {
   const r = await api('POST', `/wix/sync/${blingId}`);
-  toast(r.ok ? 'â Produto sincronizado com Wix!' : 'Wix: ' + (r.erro||r.motivo), r.ok?'s':'w');
+  toast(r.ok ? '✅ Produto sincronizado com Wix!' : 'Wix: ' + (r.erro||r.motivo), r.ok?'s':'w');
 }
 
 // ============================================================
 // WIX
 // ============================================================
 async function testarWix() {
-  toast('ð Testando Wix API...', 'i');
+  toast('🔌 Testando Wix API...', 'i');
   const r = await api('GET', '/wix/status');
   const badge = document.getElementById('wix-status-badge');
   if (r.ok) {
-    toast('â ' + r.mensagem, 's');
-    badge.className = 'bg2 g2'; badge.textContent = 'â CONECTADO';
+    toast('✅ ' + r.mensagem, 's');
+    badge.className = 'bg2 g2'; badge.textContent = '● CONECTADO';
   } else {
     toast('Wix: ' + r.erro + '. Configure WIX_API_KEY no .env', 'w');
-    badge.className = 'bg2 y2'; badge.textContent = 'âï¸ CONFIGURAR';
+    badge.className = 'bg2 y2'; badge.textContent = '⚙️ CONFIGURAR';
   }
 }
 
@@ -2138,15 +2138,15 @@ function salvarWixConfig() {
   const key = document.getElementById('wix-key').value;
   const site = document.getElementById('wix-site').value;
   if (!key || !site) { toast('Preencha API Key e Site ID!', 'w'); return; }
-  toast('ð¾ Adicione no .env: WIX_API_KEY=' + key.substring(0,20) + '...', 'i');
+  toast('💾 Adicione no .env: WIX_API_KEY=' + key.substring(0,20) + '...', 'i');
 }
 
 async function syncBlingWix() {
   if (!prodCache.length) { toast('Carregue os produtos primeiro!', 'w'); return; }
   const ativos = prodCache.filter(p => p.situacao === 'A').map(p => p.id);
-  toast(`â¡ Sincronizando ${ativos.length} produtos para o Wix...`, 'i');
+  toast(`⚡ Sincronizando ${ativos.length} produtos para o Wix...`, 'i');
   const r = await api('POST', '/wix/sync-lote', { bling_ids: ativos.slice(0,20) });
-  if (r.ok) toast(`â ${r.sincronizados} sincronizados! ${r.erros} erros.`, 's');
+  if (r.ok) toast(`✅ ${r.sincronizados} sincronizados! ${r.erros} erros.`, 's');
   else toast('Erro: ' + r.erro, 'e');
 }
 
@@ -2155,10 +2155,10 @@ async function syncBlingWix() {
 // ============================================================
 function buscarImgs() {
   const cod = document.getElementById('img-cod').value;
-  if (!cod) { toast('Informe um cÃ³digo!', 'w'); return; }
-  toast('ð Buscando imagens...', 'i');
+  if (!cod) { toast('Informe um código!', 'w'); return; }
+  toast('🔍 Buscando imagens...', 'i');
   setTimeout(() => {
-    const icons = ['ð§','âï¸','ð©','ð','ð','ð¡','ð','ð ï¸','â½','ð¦'];
+    const icons = ['🔧','⚙️','🔩','🛞','🔋','💡','🔌','🛠️','⛽','🔦'];
     const confs = [97,92,89,85,76,68,91,88,73,62];
     document.getElementById('img-grid').innerHTML = icons.map((ic,i) => `
       <div onclick="selImg(this,${confs[i]})" style="border:2px solid var(--bd);border-radius:8px;overflow:hidden;cursor:pointer;aspect-ratio:1;background:#f1f5f9;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;font-size:36px;transition:all .2s" onmouseover="this.style.borderColor='var(--ac)'" onmouseout="if(!this.classList.contains('sel'))this.style.borderColor='var(--bd)'">
@@ -2168,42 +2168,42 @@ function buscarImgs() {
       </div>
     `).join('');
     document.getElementById('img-res').style.display = 'block';
-    toast(`ð¸ ${icons.length} imagens Â· ${confs.filter(c=>c>=85).length} validadas pela IA`, 's');
+    toast(`📸 ${icons.length} imagens · ${confs.filter(c=>c>=85).length} validadas pela IA`, 's');
   }, 700);
 }
 
 function selImg(el, conf) {
   document.querySelectorAll('#img-grid > div').forEach(d => { d.classList.remove('sel'); d.style.borderColor='var(--bd)'; });
   el.classList.add('sel'); el.style.borderColor = conf>=85?'var(--gr)':'var(--ye)';
-  toast(`Imagem selecionada Â· ConfianÃ§a IA: ${conf}%`, conf>=85?'s':'w');
+  toast(`Imagem selecionada · Confiança IA: ${conf}%`, conf>=85?'s':'w');
 }
 
-function aprovarImg() { toast('ð¼ï¸ Imagem aprovada e vinculada ao produto!', 's'); }
+function aprovarImg() { toast('🖼️ Imagem aprovada e vinculada ao produto!', 's'); }
 
 // ============================================================
 // NAV
 // ============================================================
 const pageTitles = {
-  dashboard:'Dashboard <span>â Genesis iRollo 360</span>',
-  produtos:'Produtos <span>â Bling Real</span>',
+  dashboard:'Dashboard <span>— Genesis iRollo 360</span>',
+  produtos:'Produtos <span>— Bling Real</span>',
   cad:'Cadastro <span>de Produto</span>',
   massa:'Cadastro <span>em Massa</span>',
   enrich:'Enriquecimento <span>por OEM</span>',
-  ecatalog:'Enriquecimento <span>por CatÃ¡logo</span>',
-  aprov:'AprovaÃ§Ã£o <span>de Cadastro</span>',
-  aprovados:'<span>Aprovados</span> â HistÃ³rico',
+  ecatalog:'Enriquecimento <span>por Catálogo</span>',
+  aprov:'Aprovação <span>de Cadastro</span>',
+  aprovados:'<span>Aprovados</span> — Histórico',
   motor:'Motor <span>iRollo v3.5</span>',
   imagens:'Sistema de <span>Imagens</span>',
-  bling:'IntegraÃ§Ã£o <span>Bling ERP v3</span>',
-  wix:'IntegraÃ§Ã£o <span>Wix Studio</span>',
+  bling:'Integração <span>Bling ERP v3</span>',
+  wix:'Integração <span>Wix Studio</span>',
   whats:'Agente <span>WhatsApp Bot</span>',
   templates:'<span>Templates</span> de Prompt',
   planos:'<span>Planos</span> Genesis',
-  pref:'<span>PreferÃªncias</span>',
-  empresa:'<span>Empresa</span> â CNPJ Profiler',
-  agentes:'Agentes <span>IA â iRollo</span>',
+  pref:'<span>Preferências</span>',
+  empresa:'<span>Empresa</span> — CNPJ Profiler',
+  agentes:'Agentes <span>IA — iRollo</span>',
   ean:'EAN <span>Scanner</span>',
-  congelados:'Produtos <span>Congelados âï¸</span>'
+  congelados:'Produtos <span>Congelados ❄️</span>'
 };
 
 function gp(id) {if(window.innerWidth<=768){var _n=document.getElementById('nav'),_o=document.getElementById('mob-overlay');if(_n)_n.classList.remove('mob-open');if(_o)_o.classList.remove('show');}
@@ -2229,7 +2229,7 @@ function tm(el) { el.classList.toggle('op'); }
 // ============================================================
 function nctBadge(nct) {
   const n = parseFloat(nct||0);
-  if (!n) return '<span class="bg2" style="background:#f1f5f9;color:var(--mu)">â</span>';
+  if (!n) return '<span class="bg2" style="background:#f1f5f9;color:var(--mu)">—</span>';
   if (n>=.90) return `<span class="bg2 g2">${n.toFixed(2)}</span>`;
   if (n>=.60) return `<span class="bg2 y2">${n.toFixed(2)}</span>`;
   return `<span class="bg2 r2">${n.toFixed(2)}</span>`;
@@ -2238,28 +2238,28 @@ function nctBadge(nct) {
 function sitBadge(s) {
   if (s === 'A') return '<span class="bg2 g2"><span class="bk"></span>Ativo</span>';
   if (s === 'I') return '<span class="bg2 r2">Inativo</span>';
-  return `<span class="bg2" style="background:#f1f5f9;color:var(--mu)">${s||'â'}</span>`;
+  return `<span class="bg2" style="background:#f1f5f9;color:var(--mu)">${s||'—'}</span>`;
 }
 
 function decBadge(d) {
-  if (d==='APROVADO') return '<span class="bg2 g2">â Aprovado</span>';
-  if (d==='PENDENTE') return '<span class="bg2 y2">â ï¸ Pendente</span>';
-  if (d==='BLOQUEADO') return '<span class="bg2 r2">ð« Bloqueado</span>';
-  return `<span class="bg2" style="background:#f1f5f9;color:var(--mu)">${d||'â'}</span>`;
+  if (d==='APROVADO') return '<span class="bg2 g2">✓ Aprovado</span>';
+  if (d==='PENDENTE') return '<span class="bg2 y2">⚠️ Pendente</span>';
+  if (d==='BLOQUEADO') return '<span class="bg2 r2">🚫 Bloqueado</span>';
+  return `<span class="bg2" style="background:#f1f5f9;color:var(--mu)">${d||'—'}</span>`;
 }
 
 function copiarEl(id) {
   const v = document.getElementById(id)?.textContent;
   navigator.clipboard?.writeText(v);
-  toast('ð Copiado!', 's');
+  toast('📋 Copiado!', 's');
 }
 
 function toast(msg, type='i') {
-  const icons = {s:'â',e:'â',w:'â ï¸',i:'â¹ï¸'};
+  const icons = {s:'✅',e:'❌',w:'⚠️',i:'ℹ️'};
   const c = document.getElementById('toasts');
   const t = document.createElement('div');
   t.className = `tt ${type}`;
-  t.innerHTML = `<span>${icons[type]||'â¹ï¸'}</span><span>${msg}</span>`;
+  t.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
   c.appendChild(t);
   setTimeout(() => { t.style.opacity='0'; t.style.transition='all .3s'; setTimeout(()=>t.remove(),300); }, 4000);
 }
@@ -2285,16 +2285,16 @@ async function consultarCNPJ() {
   if (!cnpj) { toast('Informe o CNPJ!', 'w'); return; }
 
   const btn = document.getElementById('btn-cnpj');
-  btn.textContent = 'â³ Consultando Receita Federal...';
+  btn.textContent = '⏳ Consultando Receita Federal...';
   btn.disabled = true;
 
   const r = await api('POST', '/empresa/consultar-cnpj', { cnpj });
 
-  btn.textContent = 'ð Consultar Receita Federal';
+  btn.textContent = '🔍 Consultar Receita Federal';
   btn.disabled = false;
 
   if (!r.ok) {
-    toast('â ' + (r.erro || 'Erro na consulta'), 'e');
+    toast('❌ ' + (r.erro || 'Erro na consulta'), 'e');
     return;
   }
 
@@ -2304,7 +2304,7 @@ async function consultarCNPJ() {
 
 async function consultarCNPJMobis(silencioso = false) {
   document.getElementById('cnpj-input').value = '07.908.774/0001-95';
-  if (!silencioso) toast('â¡ Carregando dados da MOBIS...', 'i');
+  if (!silencioso) toast('⚡ Carregando dados da MOBIS...', 'i');
   await consultarCNPJ();
 }
 
@@ -2317,17 +2317,17 @@ function renderCNPJResultado(r) {
   document.getElementById('cnpj-perfil-nome').textContent = cfg?.nome_perfil || r.perfil;
   document.getElementById('cnpj-perfil-nome').style.color = cor;
   document.getElementById('cnpj-perfil-msg').textContent = r.mensagem || '';
-  document.getElementById('cnpj-cnae').textContent = emp.cnae_principal || 'â';
+  document.getElementById('cnpj-cnae').textContent = emp.cnae_principal || '—';
 
   // Dados cadastrais
   const linhasDados = [
-    { l: 'RazÃ£o Social', v: emp.razao_social },
+    { l: 'Razão Social', v: emp.razao_social },
     { l: 'Nome Fantasia', v: emp.nome_fantasia },
-    { l: 'SituaÃ§Ã£o', v: emp.situacao, ok: emp.ativa },
+    { l: 'Situação', v: emp.situacao, ok: emp.ativa },
     { l: 'Porte', v: emp.porte },
     { l: 'Natureza', v: emp.natureza },
     { l: 'Abertura', v: emp.abertura },
-    { l: 'EndereÃ§o', v: emp.endereco ? `${emp.endereco.logradouro||''}, ${emp.endereco.numero||''} â ${emp.endereco.municipio||''}/${emp.endereco.uf||''}` : 'â' },
+    { l: 'Endereço', v: emp.endereco ? `${emp.endereco.logradouro||''}, ${emp.endereco.numero||''} — ${emp.endereco.municipio||''}/${emp.endereco.uf||''}` : '—' },
     { l: 'Telefone', v: emp.telefone },
     { l: 'E-mail', v: emp.email },
   ];
@@ -2341,14 +2341,14 @@ function renderCNPJResultado(r) {
 
   // Config Genesis
   const linhasCfg = [
-    { l: 'NCT MÃ­nimo', v: (cfg?.nct_minimo || 0.90).toFixed(2), ico: 'ð¯' },
-    { l: 'ERP Principal', v: (cfg?.erp_principal || 'bling').toUpperCase(), ico: 'ð§' },
-    { l: 'Marketplaces', v: (cfg?.marketplace || []).join(', ').toUpperCase(), ico: 'ð' },
-    { l: 'Reino PadrÃ£o', v: cfg?.reino_padrao || 'MINERAL', ico: 'ð­' },
-    { l: 'Garantia', v: cfg?.garantia_padrao || '90 dias CDC', ico: 'â' },
-    { l: 'Imagens por Produto', v: cfg?.regras_imagem?.quantidade || 6, ico: 'ð¼ï¸' },
-    { l: 'ConfianÃ§a IA MÃ­nima', v: (cfg?.regras_imagem?.confianca_ia_minima || 82) + '%', ico: 'ð¤' },
-    { l: 'Campos ObrigatÃ³rios', v: (cfg?.campos_obrigatorios || []).join(', ').toUpperCase(), ico: 'ð' },
+    { l: 'NCT Mínimo', v: (cfg?.nct_minimo || 0.90).toFixed(2), ico: '🎯' },
+    { l: 'ERP Principal', v: (cfg?.erp_principal || 'bling').toUpperCase(), ico: '🟧' },
+    { l: 'Marketplaces', v: (cfg?.marketplace || []).join(', ').toUpperCase(), ico: '🛒' },
+    { l: 'Reino Padrão', v: cfg?.reino_padrao || 'MINERAL', ico: '🏭' },
+    { l: 'Garantia', v: cfg?.garantia_padrao || '90 dias CDC', ico: '✅' },
+    { l: 'Imagens por Produto', v: cfg?.regras_imagem?.quantidade || 6, ico: '🖼️' },
+    { l: 'Confiança IA Mínima', v: (cfg?.regras_imagem?.confianca_ia_minima || 82) + '%', ico: '🤖' },
+    { l: 'Campos Obrigatórios', v: (cfg?.campos_obrigatorios || []).join(', ').toUpperCase(), ico: '📋' },
   ];
 
   document.getElementById('cnpj-config').innerHTML = linhasCfg.map(d => `
@@ -2365,7 +2365,7 @@ function renderCNPJResultado(r) {
   ).join('');
 
   document.getElementById('cnpj-resultado').style.display = 'block';
-  toast(`â ${emp.razao_social} Â· Perfil: ${r.perfil}`, 's');
+  toast(`✅ ${emp.razao_social} · Perfil: ${r.perfil}`, 's');
 }
 
 function aplicarPerfilEmpresa() {
@@ -2380,11 +2380,11 @@ function aplicarPerfilEmpresa() {
     const emailEl = document.getElementById('emp-email');
     if (emailEl) emailEl.value = cnpjCache.empresa.email;
   }
-  toast(`âï¸ Perfil ${cnpjCache.perfil} aplicado! NCT mÃ­nimo: ${cfg?.nct_minimo || 0.90}`, 's');
+  toast(`⚙️ Perfil ${cnpjCache.perfil} aplicado! NCT mínimo: ${cfg?.nct_minimo || 0.90}`, 's');
 }
 
 // ============================================================
-// CONGELADOS (NCT â¥ 0.90)
+// CONGELADOS (NCT ≥ 0.90)
 // ============================================================
 let congeladosCache = [];
 
@@ -2397,12 +2397,12 @@ async function carregarCongelados() {
   congeladosCache = prodCache.filter(p => (p.nct_calc?.nct || 0) >= 0.90);
 
   const total = congeladosCache.length;
-  const nctMed = total ? (congeladosCache.reduce((s,p)=>s+(p.nct_calc?.nct||0),0)/total).toFixed(2) : 'â';
+  const nctMed = total ? (congeladosCache.reduce((s,p)=>s+(p.nct_calc?.nct||0),0)/total).toFixed(2) : '—';
 
   document.getElementById('cong-total').textContent = total;
   document.getElementById('cong-wix').textContent = total; // assume todos no Wix
   document.getElementById('cong-nct-med').textContent = nctMed;
-  document.getElementById('cong-info').textContent = `${total} produtos congelados com NCT â¥ 0.90`;
+  document.getElementById('cong-info').textContent = `${total} produtos congelados com NCT ≥ 0.90`;
 
   renderCongelados(congeladosCache);
 }
@@ -2411,21 +2411,21 @@ function renderCongelados(lista) {
   if (!lista.length) {
     document.getElementById('cong-tbody').innerHTML = `
       <tr><td colspan="8">
-        <div class="es"><div class="ei">âï¸</div>
+        <div class="es"><div class="ei">❄️</div>
         <p>Nenhum produto congelado ainda.</p>
-        <p style="font-size:12px">EnriqueÃ§a produtos atÃ© atingir NCT â¥ 0.90</p></div>
+        <p style="font-size:12px">Enriqueça produtos até atingir NCT ≥ 0.90</p></div>
       </td></tr>`;
     return;
   }
   document.getElementById('cong-tbody').innerHTML = lista.map((p,i) => `
     <tr>
-      <td><b>${p.nome||'â'}</b></td>
-      <td class="tm">${p.codigo||'â'}</td>
+      <td><b>${p.nome||'—'}</b></td>
+      <td class="tm">${p.codigo||'—'}</td>
       <td>${nctBadge(p.nct_calc?.nct)}</td>
-      <td class="th">${(p.rast_hash||'â').substring(0,12)}...</td>
-      <td><span class="chip">${p.categoria?.descricao||'â'}</span></td>
-      <td><span class="bg2 g2">â OK</span></td>
-      <td><span class="bg2 b2">â Publicado</span></td>
+      <td class="th">${(p.rast_hash||'—').substring(0,12)}...</td>
+      <td><span class="chip">${p.categoria?.descricao||'—'}</span></td>
+      <td><span class="bg2 g2">✓ OK</span></td>
+      <td><span class="bg2 b2">✓ Publicado</span></td>
       <td class="tm">${new Date().toLocaleDateString('pt-BR')}</td>
     </tr>
   `).join('');
@@ -2439,14 +2439,14 @@ function filtrarCongelados() {
 
 function exportarCongelados() {
   if (!congeladosCache.length) { toast('Sem dados para exportar!', 'w'); return; }
-  const linhas = [['Nome','CÃ³digo','NCT','Hash','Categoria']];
+  const linhas = [['Nome','Código','NCT','Hash','Categoria']];
   congeladosCache.forEach(p => linhas.push([p.nome||'',p.codigo||'',(p.nct_calc?.nct||0).toFixed(2),p.rast_hash||'',p.categoria?.descricao||'']));
   const csv = linhas.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
   a.download = `congelados_${new Date().toISOString().substring(0,10)}.csv`;
   a.click();
-  toast('ð¥ CSV exportado!', 's');
+  toast('📥 CSV exportado!', 's');
 }
 
 // ============================================================
@@ -2458,7 +2458,7 @@ let eanAtivo = false;
 
 async function ativarCamera() {
   if (!('BarcodeDetector' in window)) {
-    toast('â ï¸ BarcodeDetector nÃ£o suportado neste navegador. Use Chrome no Android/Desktop.', 'w');
+    toast('⚠️ BarcodeDetector não suportado neste navegador. Use Chrome no Android/Desktop.', 'w');
     return;
   }
   try {
@@ -2471,9 +2471,9 @@ async function ativarCamera() {
     eanDetector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'code_128', 'code_39'] });
     eanAtivo = true;
     scanLoop();
-    toast('ð· CÃ¢mera ativa â aponte para o cÃ³digo de barras', 'i');
+    toast('📷 Câmera ativa — aponte para o código de barras', 'i');
   } catch (e) {
-    toast('â CÃ¢mera nÃ£o disponÃ­vel: ' + e.message, 'e');
+    toast('❌ Câmera não disponível: ' + e.message, 'e');
   }
 }
 
@@ -2486,7 +2486,7 @@ async function scanLoop() {
       const ean = barcodes[0].rawValue;
       pararCamera();
       document.getElementById('ean-manual').value = ean;
-      toast(`ð¦ EAN detectado: ${ean}`, 's');
+      toast(`📦 EAN detectado: ${ean}`, 's');
       await buscarEAN(ean);
       return;
     }
@@ -2506,8 +2506,8 @@ async function buscarEAN(eanForcado) {
   const ean = eanForcado || document.getElementById('ean-manual').value.trim();
   if (!ean) { toast('Informe o EAN!', 'w'); return; }
 
-  toast('ð Buscando no catÃ¡logo...', 'i');
-  // Busca no catÃ¡logo Bling pelo cÃ³digo
+  toast('🔍 Buscando no catálogo...', 'i');
+  // Busca no catálogo Bling pelo código
   const r = await api('GET', `/bling/buscar?codigo=${ean}`);
 
   const dadosEl = document.getElementById('ean-dados');
@@ -2516,12 +2516,12 @@ async function buscarEAN(eanForcado) {
   if (r.ok && r.produto) {
     const p = r.produto;
     dadosEl.innerHTML = [
-      { l: 'Nome', v: p.nome || 'â' },
-      { l: 'CÃ³digo / EAN', v: p.codigo || ean },
-      { l: 'PreÃ§o', v: `R$ ${parseFloat(p.preco||0).toFixed(2)}` },
-      { l: 'SituaÃ§Ã£o', v: p.situacao === 'A' ? 'â Ativo' : 'â ï¸ Inativo' },
+      { l: 'Nome', v: p.nome || '—' },
+      { l: 'Código / EAN', v: p.codigo || ean },
+      { l: 'Preço', v: `R$ ${parseFloat(p.preco||0).toFixed(2)}` },
+      { l: 'Situação', v: p.situacao === 'A' ? '✅ Ativo' : '⚠️ Inativo' },
       { l: 'NCT', v: nctBadge(p.nct_calc?.nct) },
-      { l: 'RAST-HASH', v: `<span class="th">${p.rast_hash||'â'}</span>` },
+      { l: 'RAST-HASH', v: `<span class="th">${p.rast_hash||'—'}</span>` },
     ].map(d=>`
       <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9">
         <span style="font-size:11px;color:var(--mu);font-family:var(--mono);text-transform:uppercase">${d.l}</span>
@@ -2529,17 +2529,17 @@ async function buscarEAN(eanForcado) {
       </div>`).join('');
     resEl.style.display = 'block';
     window._eanProduto = p;
-    toast(`â Produto encontrado: ${p.nome}`, 's');
+    toast(`✅ Produto encontrado: ${p.nome}`, 's');
   } else {
     dadosEl.innerHTML = `
       <div style="text-align:center;padding:20px;color:var(--mu)">
-        <div style="font-size:30px;margin-bottom:8px">ð¦</div>
-        <b>EAN ${ean} nÃ£o encontrado no Bling</b><br>
+        <div style="font-size:30px;margin-bottom:8px">📦</div>
+        <b>EAN ${ean} não encontrado no Bling</b><br>
         <span style="font-size:12px">Clique em Enriquecer para buscar dados deste produto</span>
       </div>`;
     resEl.style.display = 'block';
     window._eanProduto = null;
-    toast('â ï¸ Produto nÃ£o encontrado no Bling', 'w');
+    toast('⚠️ Produto não encontrado no Bling', 'w');
   }
 }
 
@@ -2549,7 +2549,7 @@ function usarEANNoCadastro() {
   if (p.codigo) { const el = document.getElementById('f-ean'); if(el) el.value = p.codigo; }
   if (p.nome) { const el = document.getElementById('f-nome'); if(el) el.value = p.nome; }
   gp('cad');
-  toast('â Dados do EAN carregados no cadastro!', 's');
+  toast('✅ Dados do EAN carregados no cadastro!', 's');
 }
 
 function enriquecerEAN() {
@@ -2567,20 +2567,20 @@ function enriquecerEAN() {
 // AGENTES IA
 // ============================================================
 const AGENTES_IA = [
-  { id: 'triangulador', nome: 'ðº Triangulador OEM', desc: 'Valida OEM cruzando TecDoc, FIPE e OEM original. Certifica a raiz do catÃ¡logo.', status: 'ativo', cor: 'var(--ac)' },
-  { id: 'fullmatch', nome: 'ð Full-Match Naming', desc: 'Gera tÃ­tulo SEO com peÃ§a + marca + aplicaÃ§Ã£o. FÃ³rmula: [PeÃ§a] [Marca] [OEM] [VeÃ­culo] [Ano].', status: 'ativo', cor: 'var(--bl)' },
-  { id: 'ncm', nome: 'ðï¸ NCM Validator', desc: 'Valida NCM 8 dÃ­gitos na base Receita Federal. Calcula IPI e CEST corretos.', status: 'ativo', cor: 'var(--gr)' },
-  { id: 'aplic', nome: 'ð AplicaÃ§Ã£o Veicular', desc: 'Triangula aplicaÃ§Ã£o: marca + modelo + ano + versÃ£o. Padroniza conforme FIPE.', status: 'ativo', cor: '#f97316' },
-  { id: 'imagens', nome: 'ð¸ Image Hunter IA', desc: 'Busca 6 imagens via Google Search API. Valida com Gemini Vision (confianÃ§a â¥ 82%).', status: 'ativo', cor: '#8b5cf6' },
-  { id: 'seo', nome: 'ð SEO Google Shopping', desc: 'Otimiza tÃ­tulo e descriÃ§Ã£o para CPC R$0. PontuaÃ§Ã£o de qualidade â¥ 8/10.', status: 'ativo', cor: '#06b6d4' },
-  { id: 'voz', nome: 'ðï¸ Voz do Lojista', desc: 'Gera 5 perfis de voz: TÃ©cnico, Comercial, SEO, WhatsApp e P-Max.', status: 'ativo', cor: '#ec4899' },
-  { id: 'nct', nome: 'ð Motor NCT', desc: 'Calcula NCT = TFÃ50% + FMÃ20% + COÃ20% + AVÃ10%. Certifica com RAST-HASH.', status: 'ativo', cor: 'var(--gr)' },
-  { id: 'bling', nome: 'ð§ Bling Publisher', desc: 'Formata e publica produto no Bling ERP v3. Cria categorias e gavetas automÃ¡ticas.', status: 'ativo', cor: '#f97316' },
-  { id: 'wix', nome: 'â¬ Wix Publisher', desc: 'Sincroniza produto com Wix Stores. Upload de 6 imagens + metadados SEO.', status: 'ativo', cor: '#1e293b' },
-  { id: 'gshop', nome: 'ðï¸ Google Shopping', desc: 'Gera feed de produto para Google Merchant Center. CPC reduzido com qualidade alta.', status: 'ativo', cor: '#3b82f6' },
-  { id: 'pmax', nome: 'ð¢ P-Max Creator', desc: 'Gera ativos para campanha Performance Max: tÃ­tulos, descriÃ§Ãµes, imagens e chamadas.', status: 'ativo', cor: '#7c3aed' },
-  { id: 'cnpj', nome: 'ð¢ CNPJ Profiler', desc: 'Consulta CNPJ na Receita Federal. Identifica CNAE â Ramo â Configura sistema automaticamente.', status: 'ativo', cor: '#0f3460' },
-  { id: 'validador', nome: 'â Produto Validator', desc: 'Valida produto completo: NCM, OEM, nome Full-Match, aplicaÃ§Ã£o. Bloqueia alucinaÃ§Ãµes da IA.', status: 'ativo', cor: 'var(--gr)' },
+  { id: 'triangulador', nome: '🔺 Triangulador OEM', desc: 'Valida OEM cruzando TecDoc, FIPE e OEM original. Certifica a raiz do catálogo.', status: 'ativo', cor: 'var(--ac)' },
+  { id: 'fullmatch', nome: '📝 Full-Match Naming', desc: 'Gera título SEO com peça + marca + aplicação. Fórmula: [Peça] [Marca] [OEM] [Veículo] [Ano].', status: 'ativo', cor: 'var(--bl)' },
+  { id: 'ncm', nome: '🏛️ NCM Validator', desc: 'Valida NCM 8 dígitos na base Receita Federal. Calcula IPI e CEST corretos.', status: 'ativo', cor: 'var(--gr)' },
+  { id: 'aplic', nome: '🚗 Aplicação Veicular', desc: 'Triangula aplicação: marca + modelo + ano + versão. Padroniza conforme FIPE.', status: 'ativo', cor: '#f97316' },
+  { id: 'imagens', nome: '📸 Image Hunter IA', desc: 'Busca 6 imagens via Google Search API. Valida com Gemini Vision (confiança ≥ 82%).', status: 'ativo', cor: '#8b5cf6' },
+  { id: 'seo', nome: '🔍 SEO Google Shopping', desc: 'Otimiza título e descrição para CPC R$0. Pontuação de qualidade ≥ 8/10.', status: 'ativo', cor: '#06b6d4' },
+  { id: 'voz', nome: '🎙️ Voz do Lojista', desc: 'Gera 5 perfis de voz: Técnico, Comercial, SEO, WhatsApp e P-Max.', status: 'ativo', cor: '#ec4899' },
+  { id: 'nct', nome: '📊 Motor NCT', desc: 'Calcula NCT = TF×50% + FM×20% + CO×20% + AV×10%. Certifica com RAST-HASH.', status: 'ativo', cor: 'var(--gr)' },
+  { id: 'bling', nome: '🟧 Bling Publisher', desc: 'Formata e publica produto no Bling ERP v3. Cria categorias e gavetas automáticas.', status: 'ativo', cor: '#f97316' },
+  { id: 'wix', nome: '⬛ Wix Publisher', desc: 'Sincroniza produto com Wix Stores. Upload de 6 imagens + metadados SEO.', status: 'ativo', cor: '#1e293b' },
+  { id: 'gshop', nome: '🛍️ Google Shopping', desc: 'Gera feed de produto para Google Merchant Center. CPC reduzido com qualidade alta.', status: 'ativo', cor: '#3b82f6' },
+  { id: 'pmax', nome: '📢 P-Max Creator', desc: 'Gera ativos para campanha Performance Max: títulos, descrições, imagens e chamadas.', status: 'ativo', cor: '#7c3aed' },
+  { id: 'cnpj', nome: '🏢 CNPJ Profiler', desc: 'Consulta CNPJ na Receita Federal. Identifica CNAE → Ramo → Configura sistema automaticamente.', status: 'ativo', cor: '#0f3460' },
+  { id: 'validador', nome: '✅ Produto Validator', desc: 'Valida produto completo: NCM, OEM, nome Full-Match, aplicação. Bloqueia alucinações da IA.', status: 'ativo', cor: 'var(--gr)' },
 ];
 
 function renderAgentes() {
@@ -2593,8 +2593,8 @@ function renderAgentes() {
       </div>
       <div style="font-size:12px;color:var(--mu);line-height:1.6;margin-bottom:14px">${ag.desc}</div>
       <div style="display:flex;gap:8px">
-        <button class="btn bs sm" onclick="testarAgente('${ag.id}')">ð§ª Testar</button>
-        <button class="btn bp sm" onclick="configurarAgente('${ag.id}')">âï¸ Config</button>
+        <button class="btn bs sm" onclick="testarAgente('${ag.id}')">🧪 Testar</button>
+        <button class="btn bp sm" onclick="configurarAgente('${ag.id}')">⚙️ Config</button>
       </div>
       <div id="ag-log-${ag.id}" style="display:none;margin-top:10px;font-family:var(--mono);font-size:10px;background:#f8fafc;padding:8px;border-radius:6px;color:var(--mu)"></div>
     </div>
@@ -2605,42 +2605,42 @@ function testarAgente(id) {
   const log = document.getElementById('ag-log-' + id);
   const badge = document.getElementById('ag-st-' + id);
   log.style.display = 'block';
-  log.innerHTML = 'â³ Testando agente...';
+  log.innerHTML = '⏳ Testando agente...';
   badge.className = 'bg2 y2';
   badge.innerHTML = '<span class="bk"></span>Testando';
 
   setTimeout(() => {
     const respostas = {
-      triangulador: 'â TF: 0.97 Â· OEM BDJ0430 validado em 3 fontes',
-      fullmatch: 'â "Bandeja Dianteira Superior TRIMGO Honda Civic 2001-2006" (72 chars)',
-      ncm: 'â NCM 87089900 Â· IPI 5% Â· CEST 01.044.00',
-      aplic: 'â Honda Civic (EG / EK / EM) 2001-2006 Â· Fiat Uno 2000-2010',
-      imagens: 'â 6 imagens encontradas Â· 4 aprovadas (confianÃ§a â¥ 82%)',
-      seo: 'â Quality Score: 9.2/10 Â· CPC estimado: R$0',
-      voz: 'â 5 perfis gerados: TÃ©cnico, Comercial, SEO, WhatsApp, P-Max',
-      nct: 'â NCT: 0.9360 Â· APROVADO Â· RAST-HASH: A3F9C12B8D4E71F0',
-      bling: 'â Produto publicado no Bling Â· ID: 987654321',
-      wix: 'â Produto sincronizado no Wix Â· 6 imagens enviadas',
-      gshop: 'â Feed gerado para Google Merchant Center',
-      pmax: 'â 15 tÃ­tulos + 4 descriÃ§Ãµes + 6 imagens gerados para P-Max',
-      cnpj: 'â CNPJ MOBIS: AUTOPECAS Â· NCT mÃ­nimo 0.90 aplicado',
-      validador: 'â Produto vÃ¡lido Â· 0 erros Â· 1 aviso (aplicaÃ§Ã£o curta)',
+      triangulador: '✅ TF: 0.97 · OEM BDJ0430 validado em 3 fontes',
+      fullmatch: '✅ "Bandeja Dianteira Superior TRIMGO Honda Civic 2001-2006" (72 chars)',
+      ncm: '✅ NCM 87089900 · IPI 5% · CEST 01.044.00',
+      aplic: '✅ Honda Civic (EG / EK / EM) 2001-2006 · Fiat Uno 2000-2010',
+      imagens: '✅ 6 imagens encontradas · 4 aprovadas (confiança ≥ 82%)',
+      seo: '✅ Quality Score: 9.2/10 · CPC estimado: R$0',
+      voz: '✅ 5 perfis gerados: Técnico, Comercial, SEO, WhatsApp, P-Max',
+      nct: '✅ NCT: 0.9360 · APROVADO · RAST-HASH: A3F9C12B8D4E71F0',
+      bling: '✅ Produto publicado no Bling · ID: 987654321',
+      wix: '✅ Produto sincronizado no Wix · 6 imagens enviadas',
+      gshop: '✅ Feed gerado para Google Merchant Center',
+      pmax: '✅ 15 títulos + 4 descrições + 6 imagens gerados para P-Max',
+      cnpj: '✅ CNPJ MOBIS: AUTOPECAS · NCT mínimo 0.90 aplicado',
+      validador: '✅ Produto válido · 0 erros · 1 aviso (aplicação curta)',
     };
-    log.innerHTML = respostas[id] || 'â Agente funcionando corretamente';
+    log.innerHTML = respostas[id] || '✅ Agente funcionando corretamente';
     badge.className = 'bg2 g2';
     badge.innerHTML = '<span class="bk"></span>Ativo';
   }, 1200);
 }
 
 function configurarAgente(id) {
-  toast(`âï¸ ConfiguraÃ§Ãµes do agente "${id}" â em breve!`, 'i');
+  toast(`⚙️ Configurações do agente "${id}" — em breve!`, 'i');
 }
 
 function rodarTodosAgentes() {
   AGENTES_IA.forEach((ag, i) => {
     setTimeout(() => testarAgente(ag.id), i * 200);
   });
-  toast('â¡ Rodando todos os 14 agentes...', 'i');
+  toast('⚡ Rodando todos os 14 agentes...', 'i');
 }
 
 // ============================================================
@@ -2669,7 +2669,7 @@ window.addEventListener('appinstalled', () => {
 });
 function instalarPWA() {
   if (!_deferredInstall) {
-    alert('Para instalar: menu do navegador â "Adicionar Ã  tela inicial" ou "Instalar app".');
+    alert('Para instalar: menu do navegador → "Adicionar à tela inicial" ou "Instalar app".');
     return;
   }
   _deferredInstall.prompt();
@@ -2678,7 +2678,7 @@ function instalarPWA() {
 </script>
 <div id="modal-senha" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.75);z-index:99998;align-items:center;justify-content:center"><div style="background:#1e293b;border-radius:12px;padding:1.8rem;width:90%;max-width:380px;border:1px solid #334155"><h3 style="color:#f59e0b;margin:0 0 1.2rem;font-size:1rem">&#x1F511; Alterar Senha</h3><div style="display:flex;flex-direction:column;gap:.8rem"><div><label style="color:#94a3b8;font-size:.82rem;display:block;margin-bottom:.3rem">Senha Atual</label><input id="inp-senha-atual" type="password" style="width:100%;padding:.55rem .7rem;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#fff;font-size:.9rem;box-sizing:border-box" placeholder="Senha atual"></div><div><label style="color:#94a3b8;font-size:.82rem;display:block;margin-bottom:.3rem">Nova Senha</label><input id="inp-senha-nova" type="password" style="width:100%;padding:.55rem .7rem;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#fff;font-size:.9rem;box-sizing:border-box" placeholder="Minimo 6 caracteres"></div><div><label style="color:#94a3b8;font-size:.82rem;display:block;margin-bottom:.3rem">Confirmar Nova Senha</label><input id="inp-senha-conf" type="password" style="width:100%;padding:.55rem .7rem;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#fff;font-size:.9rem;box-sizing:border-box" placeholder="Repita a nova senha"></div></div><div id="senha-msg" style="margin:.7rem 0 0;font-size:.82rem;min-height:1.1rem;color:#94a3b8"></div><div style="display:flex;gap:.7rem;margin-top:1rem"><button onclick="fecharModalSenha()" style="flex:1;padding:.65rem;background:#334155;color:#cbd5e1;border:none;border-radius:8px;cursor:pointer;font-size:.9rem">Cancelar</button><button onclick="salvarNovaSenha()" style="flex:1;padding:.65rem;background:#f59e0b;color:#000;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:.9rem">Salvar</button></div></div></div>
 <!-- splash cold-start + keep-alive Render.com -->
-<div id="splash" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#1e293b;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:#fff;font-family:sans-serif"><div style="font-size:2.5rem">âï¸</div><div style="font-size:1.3rem;font-weight:700">Genesis<span style="color:#f59e0b">iRollo</span> 360</div><div id="splash-msg" style="font-size:.85rem;color:#94a3b8">Conectando ao servidor...</div><div style="width:36px;height:36px;border:3px solid #f59e0b;border-top-color:transparent;border-radius:50%;animation:_sp 1s linear infinite"></div><style>@keyframes _sp{to{transform:rotate(360deg)}}</style></div>
+<div id="splash" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#1e293b;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:#fff;font-family:sans-serif"><div style="font-size:2.5rem">⚙️</div><div style="font-size:1.3rem;font-weight:700">Genesis<span style="color:#f59e0b">iRollo</span> 360</div><div id="splash-msg" style="font-size:.85rem;color:#94a3b8">Conectando ao servidor...</div><div style="width:36px;height:36px;border:3px solid #f59e0b;border-top-color:transparent;border-radius:50%;animation:_sp 1s linear infinite"></div><style>@keyframes _sp{to{transform:rotate(360deg)}}</style></div>
 <script>(function(){var s=document.getElementById('splash'),m=document.getElementById('splash-msg'),a=0;function t(){fetch('/api/health').then(function(r){if(r.ok){if(s)s.style.display='none';}else re();}).catch(re);}function re(){a++;if(a>=25){if(m)m.textContent='Servidor indisponivel. Recarregue.';return;}if(m)m.textContent='Conectando... ('+a+'/25)';setTimeout(t,3000);}t();setInterval(function(){fetch('/api/health').catch(function(){});},480000);})();</script>
   <script>
 function abrirModalSenha(){var m=document.getElementById("modal-senha");m.style.display="flex";["inp-senha-atual","inp-senha-nova","inp-senha-conf"].forEach(function(id){document.getElementById(id).value="";});document.getElementById("senha-msg").textContent="";}
@@ -2687,3 +2687,4 @@ function salvarNovaSenha(){var a=document.getElementById("inp-senha-atual").valu
 </script>
 </body>
 </html>
+ç
