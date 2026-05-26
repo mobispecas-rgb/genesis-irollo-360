@@ -1,5 +1,5 @@
 // ============================================================
-// GENESIS iROLLO 360 — SERVER PRINCIPAL
+// GENESIS iROLLO 360 – SERVER PRINCIPAL
 // Node.js + Express | MOBIS Peças Automotivas
 // Porta: 3001 | http://localhost:3001
 // ============================================================
@@ -9,15 +9,15 @@ const cors = require('cors');
 const path = require('path');
 const crypto = require('crypto');
 
+// Banco de dados SQLite próprio
+const { sessoes: dbSessoes } = require('./database');
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Sessões simples em memória (validade 8h)
-const sessoes = new Map();
-
-// ------------------------------------------------------------
+// -----------------------------------------------------------
 // MIDDLEWARES
-// ------------------------------------------------------------
+// -----------------------------------------------------------
 const origensPermitidas = (process.env.CORS_ORIGINS || 'http://localhost:3001,http://localhost:3000').split(',');
 app.use(cors({
   origin: (origin, callback) => {
@@ -44,9 +44,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// ------------------------------------------------------------
-// AUTENTICAÇÃO — Login server-side (sem credenciais no HTML)
-// ------------------------------------------------------------
+// -----------------------------------------------------------
+// AUTENTICAÇÃO – Login server-side (sem credenciais no HTML)
+// -----------------------------------------------------------
 app.post('/api/auth/login', (req, res) => {
   const { email, senha } = req.body;
   const usuarioOk = process.env.AUTH_USUARIO || 'mobispecas@gmail.com';
@@ -61,15 +61,10 @@ app.post('/api/auth/login', (req, res) => {
     return res.status(401).json({ ok: false, erro: 'Credenciais inválidas' });
   }
 
-  // Gera token seguro
   const token = crypto.randomBytes(32).toString('hex');
-  const expira = Date.now() + (8 * 60 * 60 * 1000); // 8 horas
-  sessoes.set(token, { email, expira });
-
-  // Limpa sessões expiradas
-  for (const [t, s] of sessoes.entries()) {
-    if (s.expira < Date.now()) sessoes.delete(t);
-  }
+  const expira = Date.now() + (8 * 60 * 60 * 1000);
+  dbSessoes.set.run(token, email, expira);
+  dbSessoes.limpar.run(Date.now());
 
   console.log(`[AUTH] Login OK: ${email}`);
   res.json({ ok: true, token, expira, usuario: email });
@@ -78,16 +73,16 @@ app.post('/api/auth/login', (req, res) => {
 // Verificar token
 app.get('/api/auth/verificar', (req, res) => {
   const token = (req.headers.authorization || '').replace('Bearer ', '');
-  const sessao = sessoes.get(token);
+  const sessao = dbSessoes.get.get(token);
   if (!sessao || sessao.expira < Date.now()) {
     return res.status(401).json({ ok: false, erro: 'Sessão expirada' });
   }
   res.json({ ok: true, usuario: sessao.email });
 });
 
-// ------------------------------------------------------------
+// -----------------------------------------------------------
 // ROTAS
-// ------------------------------------------------------------
+// -----------------------------------------------------------
 const produtosRouter = require('./routes/produtos');
 const { motorRouter, blingRouter } = require('./routes/motor');
 const massaRouter = require('./routes/massa');
@@ -101,48 +96,47 @@ app.use('/api/massa', massaRouter);
 app.use('/api/wix', wixRouter);
 app.use('/api/empresa', empresaRouter);
 
-// ------------------------------------------------------------
-// GET /api — Health check
-// ------------------------------------------------------------
+// -----------------------------------------------------------
+// GET /api – Health check
+// -----------------------------------------------------------
 app.get('/api', (req, res) => {
   res.json({
     sistema: 'Genesis iRollo 360',
-    versao: '3.1.0',
-    motor: 'iRollo v3.1',
+    versao: '3.2.0',
+    motor: 'iRollo v3.2',
     empresa: 'MOBIS Peças Automotivas',
     status: 'online',
+    banco: 'SQLite (genesis.db)',
     timestamp: new Date().toISOString()
   });
 });
 
-// GET /* — Serve o frontend HTML
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-// 404 para rotas não encontradas
 app.use('/api/*', (req, res) => {
   res.status(404).json({ erro: `Rota ${req.path} não encontrada` });
 });
 
-// Handler de erros global
 app.use((err, req, res, next) => {
   console.error('[ERRO]', err.message);
   res.status(500).json({ erro: err.message });
 });
 
-// ------------------------------------------------------------
+// -----------------------------------------------------------
 // START
-// ------------------------------------------------------------
+// -----------------------------------------------------------
 app.listen(PORT, () => {
   console.log('');
-  console.log('╔══════════════════════════════════════════════╗');
-  console.log('║  GENESIS iROLLO 360 — BACKEND ONLINE          ║');
-  console.log('║  MOBIS Peças Automotivas                       ║');
-  console.log(`║  http://localhost:${PORT}                        ║`);
-  console.log('╚══════════════════════════════════════════════╝');
+  console.log('╔══════════════════════════════════════════════════╗');
+  console.log('║  GENESIS iROLLO 360 – BACKEND ONLINE             ║');
+  console.log('║  MOBIS Peças Automotivas                          ║');
+  console.log(`║  http://localhost:${PORT}                            ║`);
+  console.log('╚══════════════════════════════════════════════════╝');
   console.log('');
-  console.log(`  Motor iRollo v3.1 ativo`);
+  console.log(`  Motor iRollo v3.2 ativo`);
+  console.log(`  Banco: SQLite (genesis.db)`);
   console.log(`  Bling API: ${process.env.BLING_BASE_URL}`);
   console.log(`  NCT mínimo: ${process.env.NCT_MINIMO || 0.90}`);
   console.log(`  Marca padrão: ${process.env.MARCA_PADRAO || 'TRIMGO'}`);
