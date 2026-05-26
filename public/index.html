@@ -256,7 +256,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 .div{height:1px;background:var(--bd);margin:20px 0}
 .chip{display:inline-block;background:#f1f5f9;color:var(--mu);font-size:11px;padding:3px 9px;border-radius:20px;font-family:var(--mono);border:1px solid var(--bd)}
 .chip.ac{background:rgba(233,69,96,.08);color:var(--ac);border-color:rgba(233,69,96,.2)}
-</style>
+/* MOBILE */#mob-bar{display:none}#mob-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.55)}#mob-overlay.show{display:block}@media(max-width:768px){#app{flex-direction:column!important;height:100svh}#mob-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--nav);min-height:52px;position:sticky;top:0;z-index:100;box-sizing:border-box;border-bottom:1px solid rgba(255,255,255,.08)}#mob-ham{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0;-webkit-tap-highlight-color:transparent}#mob-ham:active{background:rgba(255,255,255,.12)}#mob-logo{font-size:15px;font-weight:700;color:#fff}#mob-logo span{color:var(--ac)}nav{position:fixed;top:0;left:-290px;width:280px!important;height:100%;z-index:1000;transition:left .28s cubic-bezier(.4,0,.2,1);box-shadow:4px 0 24px rgba(0,0,0,.3)}nav.mob-open{left:0}nav.slim{width:280px!important}.ab{flex:1;overflow-y:auto;overflow-x:hidden;min-width:0;flex-direction:column}.tb{flex-wrap:wrap;gap:6px;padding:10px 14px}li.ti>a,li.ti>.nl{padding:14px 16px;min-height:48px;font-size:14px}input,select,textarea{font-size:16px!important}button{touch-action:manipulation}table{min-width:600px}.lc{width:calc(100% - 32px)!important;padding:28px 20px!important;max-width:400px}#main{padding:12px!important}.cards,.grid-3,.grid-2{grid-template-columns:1fr!important}.tabela-wrap,.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}}</style>
 </head>
 <body>
 
@@ -279,7 +279,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:middle}
 
 <!-- APP -->
 <div id="app">
-<nav id="nav">
+<div id="mob-bar"><button id="mob-ham" onclick="toggleMobNav()" aria-label="Menu">&#9776;</button><div id="mob-logo">Genesis<span>iRollo</span></div></div><div id="mob-overlay" onclick="toggleMobNav()"></div><nav id="nav">
   <div class="logo-h">
     <div class="logo-i">⚙️</div>
     <div class="logo-t">Genesis<span>iRollo</span></div>
@@ -1038,7 +1038,7 @@ let enrichCache = null;
 // ============================================================
 let sessionToken = sessionStorage.getItem('genesis_token') || null;
 
-async function login() {
+async function toggleMobNav(){var n=document.getElementById('nav'),o=document.getElementById('mob-overlay');n.classList.toggle('mob-open');o.classList.toggle('show')}function login() {
   const em  = document.getElementById('lem').value.trim();
   const pw  = document.getElementById('lpw').value;
   const btn = document.getElementById('btn-login');
@@ -2206,7 +2206,7 @@ const pageTitles = {
   congelados:'Produtos <span>Congelados ❄️</span>'
 };
 
-function gp(id) {
+function gp(id) {if(window.innerWidth<=768){var _n=document.getElementById('nav'),_o=document.getElementById('mob-overlay');if(_n)_n.classList.remove('mob-open');if(_o)_o.classList.remove('show');}
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
   const pg = document.getElementById('pg-'+id);
   if (pg) pg.classList.add('on');
