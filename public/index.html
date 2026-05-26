@@ -2676,5 +2676,8 @@ function instalarPWA() {
   _deferredInstall.userChoice.then(r => { _deferredInstall = null; });
 }
 </script>
-</body>
+<!-- splash cold-start + keep-alive Render.com -->
+<div id="splash" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#1e293b;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:#fff;font-family:sans-serif"><div style="font-size:2.5rem">⚙️</div><div style="font-size:1.3rem;font-weight:700">Genesis<span style="color:#f59e0b">iRollo</span> 360</div><div id="splash-msg" style="font-size:.85rem;color:#94a3b8">Conectando ao servidor...</div><div style="width:36px;height:36px;border:3px solid #f59e0b;border-top-color:transparent;border-radius:50%;animation:_sp 1s linear infinite"></div><style>@keyframes _sp{to{transform:rotate(360deg)}}</style></div>
+<script>(function(){var s=document.getElementById('splash'),m=document.getElementById('splash-msg'),a=0;function t(){fetch('/api/health').then(function(r){if(r.ok){if(s)s.style.display='none';}else re();}).catch(re);}function re(){a++;if(a>=25){if(m)m.textContent='Servidor indisponivel. Recarregue.';return;}if(m)m.textContent='Conectando... ('+a+'/25)';setTimeout(t,3000);}t();setInterval(function(){fetch('/api/health').catch(function(){});},480000);})();</script>
+  </body>
 </html>
