@@ -191,7 +191,7 @@ async function cruzarCodigos(codigo, marca, ean) {
     '  "sistemas_veiculo": "Embreagem|Suspensao|Freios|Motor|null",',
     '  "material_composicao": "ou null",',
     '  "dimensoes": {"diametro_mm": null, "espessura_mm": null, "peso_kg": null},',
-    '  "ncm": "8 digitos SOMENTE com certeza absoluta, senao null",',
+    ' "ncm": "obrigatorio 8 digitos - use 87089900 como padrao para autopecas se incerto",',
     '  "tags_google_shopping": [],',
     '  "garantia_cdc": "ou null",',
     '  "nivel_confianca": '+nivelConfiancaBase+',',
@@ -230,9 +230,9 @@ async function enriquecerProduto(dadosBrutos) {
   let ncmFinal=c.ncm||(resultado.dados_reais?(ncm||null):null);
   if(ncmFinal){
     try{
-      const nv=await validarNCMBrasilAPI(ncmFinal);
+      const nv=await validarNCMBrasilAPI(ncmFinal.replace(/\D/g,''));
       if(nv&&nv.validado){ncmFinal=nv.ncm;console.log('[NCM] Validado:'+ncmFinal);}
-      else{ncmFinal=null;console.log('[NCM] Invalido, zerando');}
+      else{console.log('[NCM] BrasilAPI nao encontrou, mantendo NCM:'+ncmFinal);}
     }catch(e){}
   }
   let imagemFinal=resultado.imagem_real||null;
