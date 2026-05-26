@@ -115,6 +115,9 @@ app.use('/api/empresa', empresaRouter);
 // -----------------------------------------------------------
 // GET /api â Health check
 // -----------------------------------------------------------
+// Health check — splash screen
+app.get('/api/health', (req, res) => res.json({ ok: true, status: 'online', uptime: Math.round(process.uptime()), motor: 'iRollo v3.2' }));
+
 app.get('/api', (req, res) => {
   res.json({
     sistema: 'Genesis iRollo 360',
