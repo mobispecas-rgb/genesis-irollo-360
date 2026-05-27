@@ -6,91 +6,156 @@ from typing import List
 
 app = FastAPI(
     title="Genesis iRollo 360",
-    description="Barramento Unificado — Proteção de Base de Dados contra Concorrência",
-    version="3.5"
+    description="Barramento Mestre — Cross-Data e Otimização de CPC Google Ads",
+    version="4.0"
 )
 
+MARCAS_AUTOPECAS = [
+    "MERITOR", "NAKATA", "MAHLE", "METAL LEVE", "BOSCH", "MAGNETI MARELLI", "SABO", "FRAS-LE",
+    "TRW", "COFAP", "VALEO", "DELPHI", "MONROE", "MTE-THOMSON", "CORTECO", "DAYCO", "CONTITECH",
+    "REINZ", "ELRING", "TARANTO", "SPAAL", "TAKAO", "SCHADEK", "BROSOL", "URBA", "INDISA"
+]
+
+MONTADORAS_VEICULOS = {
+    "VW": ["GOL", "FOX", "VOYAGE", "SAVEIRO", "AMAROK", "CONSTELLATION", "DELIVERY", "GOLF", "POLO"],
+    "FIAT": ["UNO", "PALIO", "STRADA", "TORO", "DUCATO", "FIORINO", "CRONOS", "ARGO", "MOBI"],
+    "CHEVROLET": ["ONIX", "PRISMA", "CELTA", "CORSA", "S10", "TRACKER", "CRUZE", "MONTANA"],
+    "FORD": ["KA", "FIESTA", "ECOSPORT", "RANGER", "CARGO", "F1000"],
+    "TOYOTA": ["COROLLA", "HILUX", "ETIOS", "YARIS", "SW4"],
+    "HYUNDAI": ["HB20", "CRETA", "TUCSON", "I30", "IX35", "HR"],
+    "RENAULT": ["SANDERO", "LOGAN", "DUSTER", "KWID", "MASTER", "OROCH"],
+    "HONDA": ["CIVIC", "FIT", "CITY", "HR-V"],
+    "VOLVO": ["VM", "FH", "NH"],
+    "IVECO": ["DAILY", "STRALIS", "TECTOR"],
+    "DAF": ["XF105", "XF", "CF"],
+    "MERCEDES-BENZ": ["ACCELO", "ATEGO", "AXOR", "ACTROS", "SPRINTER"]
+}
+
+DICIONARIO_PRODUTOS = {
+    "CABEÇOTE": {"ncm": "87089990", "peso": 14.50, "dimensoes": {"c": 55, "l": 25, "a": 20}},
+    "ANEL": {"ncm": "73182900", "peso": 0.05, "dimensoes": {"c": 10, "l": 10, "a": 2}},
+    "TRAVA": {"ncm": "73182900", "peso": 0.03, "dimensoes": {"c": 8, "l": 8, "a": 1}},
+    "BIELA": {"ncm": "87089990", "peso": 1.20, "dimensoes": {"c": 22, "l": 8, "a": 5}},
+    "FILTRO": {"ncm": "84212300", "peso": 0.40, "dimensoes": {"c": 12, "l": 12, "a": 15}},
+    "AMORTECEDOR": {"ncm": "87088000", "peso": 3.80, "dimensoes": {"c": 60, "l": 15, "a": 15}},
+    "JUNTA": {"ncm": "84841000", "peso": 0.25, "dimensoes": {"c": 50, "l": 30, "a": 2}},
+    "PISTÃO": {"ncm": "84099190", "peso": 0.80, "dimensoes": {"c": 12, "l": 12, "a": 12}},
+    "VALVULA": {"ncm": "84099110", "peso": 0.15, "dimensoes": {"c": 15, "l": 5, "a": 5}}
+}
+
+REGISTROS_PROCESSADOS = set()
+
 class ProdutoInput(BaseModel):
-    sku: str = Field(..., description="Chave única do produto para evitar concorrência")
-    oem: str = Field(..., description="Número Original do Fabricante")
-    ean: str = Field(default="", description="Código de barras EAN")
-    descricao_bruta: str = Field(..., description="Texto bruto do fornecedor")
+    sku: str = Field(..., description="SKU Único da Mobis")
+    oem: str = Field(..., description="OEM / Código do Fabricante")
+    ean: str = Field(default="", description="Código de barras EAN-13")
+    descricao_bruta: str = Field(..., description="Texto cru do fornecedor")
     cnpj: str = "00.000.000/0001-00"
     cod_referencia: str = ""
     dados_origem: str = ""
 
-REGISTROS_PROCESSADOS = set()
-
-class MidwayEngineUnificada:
+class MidwayMestreEngine:
     def __init__(self, produto: ProdutoInput):
         self.sku = produto.sku.strip()
         self.oem = re.sub(r'[^a-zA-Z0-9]', '', produto.oem).upper()
         self.ean = produto.ean.strip()
-        self.descricao_bruta = produto.descricao_bruta.strip()
+        self.descricao_bruta = produto.descricao_bruta.upper()
         self.cod_referencia = produto.cod_referencia.strip().upper()
-        self.ramo_identificado = "GERAL"
-        self.ncm_validado = "00000000"
-        self.nome_puro = ""
+        self.nome_peca = "COMPONENTE AUTOMOTIVO"
+        self.marca_fabricante = "IMPORTADO MOBIS"
+        self.montadora_aplicacao = "MULTIMARCAS"
+        self.veiculo_aplicacao = "LINHA GERAL"
+        self.ncm = "87089990"
+        self.peso = 1.00
+        self.dimensoes = {"c": 20, "l": 20, "a": 20}
 
-    def processar_identidade_pura(self):
-        desc = self.descricao_bruta.upper()
-        if any(k in desc for k in ["FREIO", "DIREÇÃO", "MOTOR", "SUSPENSÃO", "AMORTECEDOR", "FILTRO", "BIELA", "CABEÇOTE", "PISTÃO"]):
-            self.ramo_identificado = "AUTOMOTIVO"
-            self.ncm_validado = "87089990"
-        elif any(k in desc for k in ["PLACA", "PROCESSADOR", "RESISTOR", "LED", "CONECTOR", "CABO", "FONTE"]):
-            self.ramo_identificado = "ELETRÔNICOS"
-            self.ncm_validado = "85423190"
-        else:
-            self.ramo_identificado = "MERCADORIA GERAL"
-            self.ncm_validado = "00000000"
+    def processar_cross_data(self):
+        for chave, dados in DICIONARIO_PRODUTOS.items():
+            if chave in self.descricao_bruta:
+                self.nome_peca = chave
+                self.ncm = dados["ncm"]
+                self.peso = dados["peso"]
+                self.dimensoes = dados["dimensoes"]
+                break
+        for marca in MARCAS_AUTOPECAS:
+            if marca in self.descricao_bruta:
+                self.marca_fabricante = marca
+                break
+        encontrou_aplicacao = False
+        for montadora, modelos in MONTADORAS_VEICULOS.items():
+            if montadora in self.descricao_bruta:
+                self.montadora_aplicacao = montadora
+                for modelo in modelos:
+                    if modelo in self.descricao_bruta:
+                        self.veiculo_aplicacao = modelo
+                        encontrou_aplicacao = True
+                        break
+            if encontrou_aplicacao:
+                break
 
-        nome_limpo = self.descricao_bruta
-        if self.oem and self.oem in nome_limpo.upper():
-            nome_limpo = re.sub(re.escape(self.oem), '', nome_limpo, flags=re.IGNORECASE)
-        self.nome_puro = re.sub(r'\s+', ' ', nome_limpo).strip().title()
-
-    def gerar_links_carrossel_hd(self) -> List[str]:
+    def gerar_6_imagens_hd(self) -> List[str]:
         slug_oem = self.oem.lower()
-        slots = ["REAL", "LATERAL_90", "DETALHE_CONSTRUTIVO", "MEDIDAS_ESPECIFICACOES", "EMBALAGEM_LOGISTICA", "CONTEXTO_USO"]
+        slots = ["REAL_FUNDO_BRANCO", "LATERAL_90_GRAUS", "DETALHE_TECNICO_PROXIMO", "MEDIDAS_E_ESPECIFICACOES", "EMBALAGEM_LOGISTICA", "APLICACAO_CONVENIADA"]
         return [f"https://images.mobisautopecas.com.br/produtos/{slug_oem}_{sufixo}.jpg" for sufixo in slots]
 
-    def executar(self) -> dict:
-        self.processar_identidade_pura()
-        imagens = self.gerar_links_carrossel_hd()
-        banco_cambialidade = [self.oem]
-        if self.cod_referencia:
-            banco_cambialidade.extend([c.strip() for c in self.cod_referencia.split("|") if c.strip()])
-
-        titulo_final = f"{self.nome_puro} {self.oem}"
-        string_hash = f"{self.sku}-{self.ncm_validado}-{self.oem}"
+    def estruturar_gavetas(self) -> dict:
+        self.processar_cross_data()
+        imagens = self.gerar_6_imagens_hd()
+        titulo_limpo = f"{self.nome_peca.title()} {self.oem} {self.marca_fabricante}"
+        if self.veiculo_aplicacao != "LINHA GERAL":
+            titulo_limpo += f" Aplicável em {self.montadora_aplicacao} {self.veiculo_aplicacao}"
+        string_hash = f"{self.sku}-{self.ncm}-{self.oem}"
         rast_hash = f"NCT-{hashlib.md5(string_hash.encode('utf-8')).hexdigest()[:16].upper()}-OK"
 
         return {
             "integridade_database": "DADO_UNICO_CONFIRMADO",
+            "status_NCT": "SINAL VERDE - LIBERADO",
             "rast_hash_certified": rast_hash,
-            "ramo_processamento": self.ramo_identificado,
-            "imagens_carrossel": {
-                "img_principal": imagens[0] if imagens else "",
-                "galeria_6_slots": imagens
-            },
+            "nome_comercial_geral": titulo_limpo,
+            "imagens_6_slots_hd": imagens,
             "gaveta_bling_v3": {
-                "nome": titulo_final[:120],
+                "nome": titulo_limpo[:120],
                 "codigo_sku": self.sku,
                 "codigo_barras": self.ean,
-                "ncm": self.ncm_validado,
+                "ncm": self.ncm,
                 "origem": "0",
                 "unidade": "UN",
-                "descricao_curta": f"Produto Técnico Certificado. Identificador de Fábrica: {self.oem}. Matriz de Cambialidade: {', '.join(banco_cambialidade)}."
+                "peso_liquido": self.peso,
+                "peso_bruto": round(self.peso * 1.05, 2),
+                "largura": self.dimensoes["l"],
+                "altura": self.dimensoes["a"],
+                "comprimento": self.dimensoes["c"],
+                "descricao_curta": f"Componente Técnico Homologado. Código: {self.oem}. Fabricante: {self.marca_fabricante}. Aplicação técnica cruzada para {self.montadora_aplicacao} {self.veiculo_aplicacao}."
+            },
+            "gaveta_wix_studio": {
+                "nome_produto": f"{titulo_limpo} — Linha Pura Certificada",
+                "url_slug": re.sub(r'[^a-zA-Z0-9-]', '-', titulo_limpo.lower().replace(" ", "-")),
+                "seo_title": f"{titulo_limpo} Original | Mobis Autopeças",
+                "meta_description": f"Compre {titulo_limpo} com procedência garantida, dimensões oficiais e nota fiscal integral.",
+                "peso_kg": self.peso,
+                "galeria_imagens": imagens
+            },
+            "gaveta_google_shopping_ads": {
+                "id": self.sku,
+                "title": f"{titulo_limpo} - Envio Imediato",
+                "mpn": self.oem,
+                "gtin": self.ean if self.ean else "Sem Cód. Barras",
+                "image_link": imagens[0],
+                "additional_image_links": imagens[1:],
+                "perfil_de_voz_ads": [
+                    f"Onde comprar {self.nome_peca.lower()} do {self.veiculo_aplicacao.lower()} código {self.oem}",
+                    f"{titulo_limpo[:30]}"
+                ]
             }
         }
 
 @app.get("/")
-async def rota_raiz_servidor():
+async def health_check():
     return {
         "status": "online",
         "ambiente": "Production — Render",
-        "projeto": "Genesis iRollo 360",
-        "politica_duplicidade": "Bloqueio por SKU/OEM Ativo"
+        "engine_version": "4.0 Mestre",
+        "politica_duplicidade": "Bloqueio Anticoncorrência Ativo"
     }
 
 @app.post("/processar", status_code=status.HTTP_200_OK)
@@ -99,12 +164,11 @@ async def pipeline_processamento(produto: ProdutoInput):
     if chave_identificadora in REGISTROS_PROCESSADOS:
         return {
             "status_NCT": "PRODUTO JÁ EXISTENTE — CONCORRÊNCIA IMPEDIDA",
-            "mensagem": "Este SKU/OEM já foi processado e indexado na base. Cadastro protegido contra duplicidade.",
             "sku": produto.sku
         }
     try:
-        motor = MidwayEngineUnificada(produto=produto)
-        resultado = motor.executar()
+        motor = MidwayMestreEngine(produto=produto)
+        resultado = motor.estruturar_gavetas()
         REGISTROS_PROCESSADOS.add(chave_identificadora)
         return resultado
     except Exception as e:
