@@ -162,4 +162,31 @@ blingRouter.get('/buscar', async (req, res) => {
   res.json({ ok: true, produtos: result.data?.data || [] });
 });
 
+// GET /api/bling/token — OAuth2 callback (troca authorization_code por access+refresh token)
+blingRouter.get('/token', async (req, res) => {
+    const { code, error } = req.query;
+    if (error) return res.redirect('/?bling_error=' + encodeURIComponent(error));
+    if (!code) return res.status(400).json({ erro: 'code ausente' });
+    try {
+          const axios = require('axios');
+          const clientId = process.env.BLING_CLIENT_ID;
+          const clientSecret = process.env.BLING_CLIENT_SECRET;
+          const redirectUri = process.env.BLING_REDIRECT_URI || 'https://genesis-irollo-360.onrender.com/api/bling/token';
+          const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+          const resp = await axios.post('https://www.bling.com.br/Api/v3/oauth/token',
+                                              new URLSearchParams({ grant_type: 'authorization_code', code, redirect_uri: redirectUri }),
+                                        { headers: { 'Authorization': `Basic ${credentials}`, 'Content-Type': 'application/x-www-form-urlencoded' } }
+                                            );
+          process.env.BLING_ACCESS_TOKEN = resp.data.access_token;
+          if (resp.data.refresh_token) process.env.BLING_REFRESH_TOKEN = resp.data.refresh_token;
+          const bling = require('../services/bling');
+          bling.tokenCache = { access_token: resp.data.access_token, expires_at: Date.now() + (resp.data.expires_in * 1000) };
+          console.log('[BLING] OAuth token exchange OK!');
+          res.redirect('/?bling_ok=1');
+    } catch (err) {
+          console.error('[BLING] OAuth error:', err.response?.data || err.message);
+          res.redirect('/?bling_error=' + encodeURIComponent(JSON.stringify(err.response?.data || err.message)));
+    }
+});
+
 module.exports = { motorRouter: router, blingRouter };
