@@ -1,12 +1,16 @@
-// GENESIS iROLLO v3.6 — TRIANGULACAO MULTI-FONTE + IMAGENS REAIS
-// DNA = EAN > OEM > SKU > Nome  (nunca inventa, sempre prova)
+// ============================================================
+// GENESIS iROLLO v3.7 — TRIANGULACAO MULTI-FONTE + IMAGENS REAIS
+// DNA = EAN > OEM > SKU > Nome (nunca inventa, sempre prova)
+// REGRA ABSOLUTA: O NOME DO PRODUTO e o DNA principal sempre
 // Buscadores: Serper.dev (2500 gratis/mes) + Google CSE (backup) + BrasilAPI NCM (gratis)
-// Imagens: Serper Images + Google pagemap + extracao HTML
+// Imagens: Serper Images — 6 imagens normais, sem bloqueio por angulo
 // IA: Claude Haiku (Anthropic)
+// FIX v3.7: reconhece DNA em TODAS as etapas — sem alucinacao
+// ============================================================
 const axios = require('axios');
 require('dotenv').config();
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-const MODEL = 'claude-haiku-4-5-20251001';
+const MODEL = 'claude-haiku-4-5';
 const CLAUDE_HEADERS = {
   'x-api-key': '',
   'anthropic-version': '2023-06-01',
@@ -59,7 +63,8 @@ async function buscarComSerper(query, tipo) {
       {headers:{'X-API-KEY':apiKey,'Content-Type':'application/json'},timeout:6000});
     if(tipo==='images'){
       const imgs=(resp.data&&resp.data.images)||[];
-      return imgs.length>0?(imgs[0].imageUrl||imgs[0].thumbnailUrl):null;
+      // Retorna array de ate 6 URLs de imagem — sem validacao por angulo
+      return imgs.slice(0,6).map(function(img){return img.imageUrl||img.thumbnailUrl;}).filter(Boolean);
     }
     const items=(resp.data&&resp.data.organic)||[];
     return items.map(function(item){
@@ -68,15 +73,16 @@ async function buscarComSerper(query, tipo) {
   }catch(err){console.warn('[SERPER]',err.message);return null;}
 }
 
-async function buscarComGoogle(codigo, marca) {
+async function buscarComGoogle(codigo, nome, marca) {
   marca=marca||'';
   const apiKey=process.env.GOOGLE_SEARCH_API_KEY;
   const cx=process.env.GOOGLE_SEARCH_CX;
   if(!apiKey||!cx||apiKey==='SUA_GOOGLE_SEARCH_API_KEY')return null;
   const sitesStr=SITES_REAIS.slice(0,5).map(function(s){return 'site:'+s;}).join(' OR ');
+  // Usa NOME do produto (DNA) como query principal
   const queries=[
-    '"'+codigo+'" equivalente OR cruzamento OR OEM autopeca',
-    '"'+codigo+'" '+marca+' ('+sitesStr+')'
+    '"'+nome+'" equivalente OR cruzamento OR OEM autopeca',
+    '"'+(codigo||nome)+'" '+marca+' ('+sitesStr+')'
   ];
   const resultados=[];const imgs=[];
   for(var q=0;q<queries.length;q++){
@@ -109,7 +115,7 @@ async function validarNCMBrasilAPI(ncmCode) {
 async function fetchPaginaComImagem(item) {
   try{
     const resp=await axios.get(item.url,{timeout:8000,
-      headers:{'User-Agent':'Mozilla/5.0 (compatible; GenesisiRollo/3.6)','Accept':'text/html','Accept-Language':'pt-BR,pt;q=0.9'},
+      headers:{'User-Agent':'Mozilla/5.0 (compatible; GenesisiRollo/3.7)','Accept':'text/html','Accept-Language':'pt-BR,pt;q=0.9'},
       maxContentLength:300000});
     const html=resp.data||'';
     const imagem=extrairImagemDaPagina(html,item.url);
@@ -118,36 +124,47 @@ async function fetchPaginaComImagem(item) {
   }catch(err){return null;}
 }
 
-async function buscarNaWeb(codigo, marca, ean) {
-  marca=marca||'';ean=ean||'';
-  let resultados=[],imagemPagemap=null,fonteUsada='nenhuma';
+// FIX v3.7: busca usando NOME do produto como DNA principal
+async function buscarNaWeb(codigo, nome, marca, ean) {
+  marca=marca||'';ean=ean||'';nome=nome||'';
+  let resultados=[],imagensReais=[],fonteUsada='nenhuma';
   const serperKey=process.env.SERPER_API_KEY;
   if(serperKey&&serperKey.length>10){
-    const queryWeb=ean
-      ?'"'+ean+'" autopeca OR "peca automotiva" OR equivalente'
-      :'"'+codigo+'" '+marca+' equivalente OR OEM OR cruzamento autopeca';
-    const webItems=await buscarComSerper(queryWeb,'search');
+    // PRIORIDADE: busca pelo NOME completo do produto (DNA)
+    // Se o codigo e puramente numerico (SKU), usa o nome como identidade
+    const codigoEhSKUNumerico = /^\d+$/.test((codigo||'').trim());
+    const queryIdentidade = codigoEhSKUNumerico
+      ? '"'+nome+'" autopeca OR "peca automotiva"'
+      : (ean
+          ? '"'+ean+'" autopeca OR "peca automotiva" OR equivalente'
+          : '"'+nome+'" "'+(codigo||'')+'" equivalente OR OEM OR cruzamento autopeca');
+    console.log('[BUSCA v3.7] DNA query:', queryIdentidade);
+    const webItems=await buscarComSerper(queryIdentidade,'search');
     if(webItems&&webItems.length>0){
       resultados=webItems;fonteUsada='serper';
-      const queryImg=(ean||codigo)+' '+marca+' autopeca';
-      imagemPagemap=await buscarComSerper(queryImg.trim(),'images');
+      // Busca imagens usando nome + codigo
+      const queryImg=(nome+' '+(codigoEhSKUNumerico?'':codigo)+' autopeca').trim();
+      const imgsArr=await buscarComSerper(queryImg,'images');
+      if(Array.isArray(imgsArr))imagensReais=imgsArr;
+      else if(imgsArr)imagensReais=[imgsArr];
     }
   }
   if(resultados.length===0){
-    const gr=await buscarComGoogle(codigo,marca);
-    if(gr){resultados=gr.resultados;imagemPagemap=gr.imagem_pagemap;fonteUsada='google_cse';}
+    const gr=await buscarComGoogle(codigo,nome,marca);
+    if(gr){resultados=gr.resultados;if(gr.imagem_pagemap)imagensReais=[gr.imagem_pagemap];fonteUsada='google_cse';}
   }
-  return resultados.length>0?{resultados:resultados,imagem_pagemap:imagemPagemap,fonte:fonteUsada}:null;
+  return resultados.length>0?{resultados:resultados,imagensReais:imagensReais,fonte:fonteUsada}:null;
 }
 
-async function cruzarCodigos(codigo, marca, ean) {
-  marca=marca||'';ean=ean||'';
-  console.log('[CRUZAMENTO v3.6] DNA='+(ean||codigo)+' marca='+marca);
-  const webResult=await buscarNaWeb(codigo,marca,ean);
+// FIX v3.7: cruzarCodigos recebe nome do produto e propaga DNA em todo prompt
+async function cruzarCodigos(codigo, nome, marca, ean) {
+  marca=marca||'';ean=ean||'';nome=nome||codigo||'';
+  console.log('[CRUZAMENTO v3.7] DNA nome='+nome+' codigo='+codigo+' marca='+marca);
+  const webResult=await buscarNaWeb(codigo,nome,marca,ean);
   const resultadosWeb=webResult?webResult.resultados:null;
-  const imagemPagemap=webResult?webResult.imagem_pagemap:null;
+  const imagensReais=webResult?webResult.imagensReais:[];
   const fonteUsada=webResult?webResult.fonte:'nenhuma';
-  let dadosBrutos='',imagemReal=imagemPagemap||null;
+  let dadosBrutos='',imagemReal=(imagensReais&&imagensReais[0])||null;
   const temDadosReais=!!(resultadosWeb&&resultadosWeb.length>0);
   if(temDadosReais){
     const paginasFetched=[];
@@ -163,58 +180,70 @@ async function cruzarCodigos(codigo, marca, ean) {
   }
   let instrucaoFonte,nivelConfiancaBase,restricaoSemWeb;
   if(temDadosReais){
-    instrucaoFonte='USE os dados reais abaixo. Extraia SOMENTE o que esta confirmado.\n\nDADOS REAIS DA WEB:\n'+dadosBrutos;
+    instrucaoFonte='USE os dados reais abaixo. Extraia SOMENTE o que esta confirmado sobre o produto "'+nome+'".\n\nDADOS REAIS DA WEB:\n'+dadosBrutos;
     nivelConfiancaBase='0.9';restricaoSemWeb='';
   }else{
-    instrucaoFonte='NAO HA dados da web para este codigo.';
+    instrucaoFonte='NAO HA dados da web para este produto.';
     nivelConfiancaBase='0.5';
-    restricaoSemWeb='\nREGRA CRITICA — SEM DADOS WEB:\napplicacao_veicular: [] OBRIGATORIO — NUNCA inventar.\ncodigos_equivalentes: [] OBRIGATORIO — NUNCA inventar.\nean_codigos: [] OBRIGATORIO.\ncodigo_original_montadora: null.\nncm: null se qualquer duvida.\nnivel_confianca: maximo 0.5.';
+    restricaoSemWeb='\nREGRA CRITICA — SEM DADOS WEB:\napplicacao_veicular: [] OBRIGATORIO — NUNCA inventar.\ncodigos_equivalentes: [] OBRIGATORIO — NUNCA inventar.\nean_codigos: [] OBRIGATORIO.\ncodigo_original_montadora: null.\nncm: use 87089900 apenas se autopeca; null se incerto.\nnivel_confianca: maximo 0.5.';
   }
   const eannInfo=ean?'\nEAN: '+ean:'';
+  // FIX v3.7: o NOME do produto esta sempre no topo do prompt — DNA absoluto
   const prompt=[
     'Voce e especialista em catalogos tecnicos de autopecas automotivas.',
-    'PRINCIPIO ABSOLUTO: Dados inventados destroem o catalogo e aumentam CPC do Google.',
-    'NUNCA invente aplicacoes veiculares, equivalentes ou EANs sem fonte verificada.',
-    instrucaoFonte,restricaoSemWeb,'',
-    'CODIGO (DNA): '+codigo+eannInfo+' | MARCA: '+(marca||'nao informado'),'',
+    'PRINCIPIO ABSOLUTO: O NOME DO PRODUTO abaixo e a identidade (DNA) desta peca.',
+    'NUNCA substitua o produto por outro. NUNCA invente aplicacoes, equivalentes ou EANs sem fonte.',
+    '',
+    'PRODUTO (DNA ABSOLUTO): "'+nome+'"',
+    'CODIGO: '+(codigo||'nao informado')+eannInfo,
+    'MARCA: '+(marca||'nao informado'),
+    '',
+    instrucaoFonte,
+    restricaoSemWeb,
+    '',
+    'VERIFICACAO OBRIGATORIA: Os dados da web acima sao sobre "'+nome+'"?',
+    'SE NAO forem sobre este produto especifico, use nivel_confianca <= 0.3 e deixe campos em branco.',
+    '',
     'Retorne APENAS JSON valido (sem markdown):',
     '{',
-    '  "codigo_input": "'+codigo+'",',
-    '  "tipo_codigo": "OEM_AFTERMARKET|OEM_ORIGINAL|EAN|SKU|REFERENCIA",',
-    '  "marca_fabricante": "ou null",',
-    '  "nome_peca": "Nome tecnico ou null",',
-    '  "descricao_tecnica": "2-3 frases ou null",',
-    '  "codigo_original_montadora": null,',
-    '  "codigos_equivalentes": [],',
-    '  "ean_codigos": [],',
-    '  "aplicacao_veicular": [],',
-    '  "sistemas_veiculo": "Embreagem|Suspensao|Freios|Motor|null",',
-    '  "material_composicao": "ou null",',
-    '  "dimensoes": {"diametro_mm": null, "espessura_mm": null, "peso_kg": null},',
-    ' "ncm": "obrigatorio 8 digitos - use 87089900 como padrao para autopecas se incerto",',
-    '  "tags_google_shopping": [],',
-    '  "garantia_cdc": "ou null",',
-    '  "nivel_confianca": '+nivelConfiancaBase+',',
-    '  "fontes_consultadas": []',
+    ' "codigo_input": "'+(codigo||nome)+'",',
+    ' "tipo_codigo": "OEM_AFTERMARKET|OEM_ORIGINAL|EAN|SKU|REFERENCIA",',
+    ' "marca_fabricante": "ou null",',
+    ' "nome_peca": "Nome tecnico EXATO baseado em: '+nome+' — ou null se nao confirmado",',
+    ' "descricao_tecnica": "2-3 frases especificas sobre '+nome+' — ou null",',
+    ' "codigo_original_montadora": null,',
+    ' "codigos_equivalentes": [],',
+    ' "ean_codigos": [],',
+    ' "aplicacao_veicular": [],',
+    ' "sistemas_veiculo": "Embreagem|Suspensao|Freios|Motor|Fixacao|null",',
+    ' "material_composicao": "ou null",',
+    ' "dimensoes": {"diametro_mm": null, "espessura_mm": null, "peso_kg": null},',
+    ' "ncm": "8 digitos — use 87089900 como padrao para autopecas se incerto",',
+    ' "tags_google_shopping": [],',
+    ' "garantia_cdc": "ou null",',
+    ' "nivel_confianca": '+nivelConfiancaBase+',',
+    ' "fontes_consultadas": []',
     '}',
-    'SE dados_reais=true: codigos_equivalentes=[{"marca":"VALEO","codigo":"XXXXX","tipo":"equivalente"}]',
-    'SE dados_reais=true: aplicacao_veicular=[{"montadora":"Hyundai","modelo":"HR","anos":"2006-2012","motor":"2.5 8V"}]',
+    'SE dados_reais=true E fontes confirmam o produto: codigos_equivalentes=[{"marca":"VALEO","codigo":"XXXXX","tipo":"equivalente"}]',
+    'SE dados_reais=true E fontes confirmam o produto: aplicacao_veicular=[{"montadora":"Hyundai","modelo":"HR","anos":"2006-2012","motor":"2.5 8V"}]',
     'Responda SOMENTE o JSON.'
   ].join('\n');
   try{
     const resp=await chamarClaude(prompt,2000);
     const jl=resp.replace(/```json|```/g,'').trim();
-    return{ok:true,cruzamento:JSON.parse(jl),imagem_real:imagemReal,fontes_reais:resultadosWeb?resultadosWeb.map(function(r){return r.fonte;}):[],dados_reais:temDadosReais,buscador_usado:fonteUsada};
+    return{ok:true,cruzamento:JSON.parse(jl),imagensReais:imagensReais,imagemReal:imagemReal,fontes_reais:resultadosWeb?resultadosWeb.map(function(r){return r.fonte;}):[],dados_reais:temDadosReais,buscador_usado:fonteUsada};
   }catch(err){console.error('[CRUZAMENTO]',err.message);return{ok:false,erro:err.message};}
 }
 
+// FIX v3.7: passa NOME como DNA para cruzarCodigos e busca 6 imagens reais
 async function enriquecerProduto(dadosBrutos) {
   const oem=dadosBrutos.oem,nome=dadosBrutos.nome,ncm=dadosBrutos.ncm;
   const sku=dadosBrutos.sku,ean=dadosBrutos.ean||dadosBrutos.ean_codigo||'';
   const aplicacao=dadosBrutos.aplicacao;
-  const marcaDetectada=nome?nome.split(' ')[0]:'';
-  const codigoPrincipal=oem||sku||ean||nome;
-  const resultado=await cruzarCodigos(codigoPrincipal,marcaDetectada,ean);
+  // DNA: usa codigo OEM real se nao for puramente numerico; caso contrario usa SKU/EAN
+  const codigoPrincipal=oem&&!/^\d+$/.test(oem.trim())?oem:(sku&&!/^\d+$/.test(sku.trim())?sku:(ean||''));
+  // Passa NOME como segundo argumento — DNA absoluto da peca
+  const resultado=await cruzarCodigos(codigoPrincipal,nome,'',ean);
   if(!resultado.ok){
     return{ok:false,erro:resultado.erro,dados_parciais:{
       nome_enriquecido:nome||oem,
@@ -235,23 +264,47 @@ async function enriquecerProduto(dadosBrutos) {
       else{console.log('[NCM] BrasilAPI nao encontrou, mantendo NCM:'+ncmFinal);}
     }catch(e){}
   }
-  let imagemFinal=resultado.imagem_real||null;
-  if(!imagemFinal&&process.env.SERPER_API_KEY){
-    const qi=((oem||sku)+' '+(nome||'')+' autopeca').trim();
-    imagemFinal=await buscarComSerper(qi,'images');
+  // FIX v3.7: usa array de 6 imagens reais (sem validacao por angulo que bloqueava tudo)
+  const imagensReais=resultado.imagensReais||[];
+  let imagemFinal=resultado.imagemReal||null;
+  // Se nao tem imagem, busca por serper usando nome do produto
+  if(imagensReais.length===0&&process.env.SERPER_API_KEY){
+    const qi=(nome+' '+(oem&&!/^\d+$/.test(oem)?oem:'')+' autopeca').trim();
+    const imgsArr=await buscarComSerper(qi,'images');
+    if(Array.isArray(imgsArr)&&imgsArr.length>0){
+      imagensReais.push.apply(imagensReais,imgsArr);
+      imagemFinal=imagensReais[0];
+    }else if(imgsArr){imagemFinal=imgsArr;}
   }
+  // Monta galeria de ate 6 imagens normais (sem bloqueio por angulo)
+  const galeria=imagensReais.slice(0,6).map(function(url,idx){
+    return{url:url,slot:idx+1,status:'DISPONIVEL'};
+  });
   const dados={
-    nome_enriquecido:c.nome_peca,descricao_tecnica:c.descricao_tecnica,
-    descricao_curta:((c.nome_peca||'')+' - '+(c.codigo_original_montadora||oem||'')).substring(0,160),
-    aplicacao_veicular:aplicacaoFormatada,imagem_real:imagemFinal,reino:'MINERAL',
-    sistema_veiculo:c.sistemas_veiculo,material_composicao:c.material_composicao,
-    ncm_sugerido:ncmFinal,peso_estimado_kg:(c.dimensoes&&c.dimensoes.peso_kg)||0,
-    tags_seo:c.tags_google_shopping||[],garantia_cdc:c.garantia_cdc,
+    nome_enriquecido:c.nome_peca||nome,// nunca perde o nome original
+    descricao_tecnica:c.descricao_tecnica,
+    descricao_curta:((c.nome_peca||nome)+' - '+(c.codigo_original_montadora||oem||'')).substring(0,160),
+    aplicacao_veicular:aplicacaoFormatada,
+    imagem_real:imagemFinal,
+    galeria_imagens:galeria,// 6 imagens normais sem validacao por angulo
+    total_imagens:galeria.length,
+    reino:'MINERAL',
+    sistema_veiculo:c.sistemas_veiculo,
+    material_composicao:c.material_composicao,
+    ncm_sugerido:ncmFinal,
+    peso_estimado_kg:(c.dimensoes&&c.dimensoes.peso_kg)||0,
+    tags_seo:c.tags_google_shopping||[],
+    garantia_cdc:c.garantia_cdc,
     confianca_enriquecimento:c.nivel_confianca||0.5,
     buscador_usado:resultado.buscador_usado||'nenhum',
-    cruzamento:{codigo_original_montadora:c.codigo_original_montadora,
-      codigos_equivalentes:c.codigos_equivalentes||[],ean_codigos:c.ean_codigos||[],
-      dimensoes:c.dimensoes,tipo_codigo:c.tipo_codigo,fontes:resultado.fontes_reais}
+    cruzamento:{
+      codigo_original_montadora:c.codigo_original_montadora,
+      codigos_equivalentes:c.codigos_equivalentes||[],
+      ean_codigos:c.ean_codigos||[],
+      dimensoes:c.dimensoes,
+      tipo_codigo:c.tipo_codigo,
+      fontes:resultado.fontes_reais
+    }
   };
   return{ok:true,dados:dados,modelo_usado:MODEL,fonte_real:resultado.dados_reais,
     buscador:resultado.buscador_usado||'nenhum',enriquecido_em:new Date().toISOString()};
